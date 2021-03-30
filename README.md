@@ -10,7 +10,7 @@ of any concepts within a project.
 - [ ] migrate from mustache to handlebars
 - [ ] template language to support in target file type
   - [ ] js: loops using comments `/* #each domain */`, variables underscore `_name_`
-  - [ ] json: loops dollar sign "`each$domain`", etc
+  - [ ] json: loops dollar sign `each$domain`, etc
 - [ ] remove views, transform directly to schema (todoServer, todoClient)
 - [ ] parent support in transformation views for further transformation possibilities
 - [ ] support /# in meta schema -> json merger
@@ -20,7 +20,9 @@ of any concepts within a project.
   - [ ] builder pattern may be applied
 - [ ] ui sample project
   - [ ] business (dotnet)
-  - [ ] http:business (dotnet)
+    - [ ] http:business (dotnet)
+  - [ ] database (mongo)
+    - [ ] business:database (dotnet)
   - [ ] rest:http (go)
   - [ ] graphql:http (node)
   - [ ] feed:rest (react)
