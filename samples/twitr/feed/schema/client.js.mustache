@@ -1,20 +1,23 @@
+{{! auto generation warning }}
+// ---------------------------
+// this file is generated
+// DO NOT modify code here
+// ---------------------------
+{{! auto generation warning }}
+
 {{#domain}}
 const {{name}} = {};
 {{/domain}}
 
 module.exports = { {{#domain}}{{name}}{{^_last}}, {{/_last}}{{/domain}} };
 
-let domain = null;
-
 // begin services
 {{#domain}}
 // begin {{name}}
-domain = {{name}};
-domain.services = {
-    "$": {{name}},
+{{name}}.services = {
     {{#service}}
     "{{name}}": function ({{#parameter}}{{name}}{{^_last}}, {{/_last}}{{/parameter}}) {
-        console.log("{{name}} called"{{#parameter}}+ " ({{name}}: " + {{name}} + ")"{{/parameter}});
+        return "{{name}} called"{{#parameter}} + " ({{name}}: " + {{name}} + ")"{{/parameter}};
     }{{^_last}}, {{/_last}}
     {{/service}}
 };
@@ -25,12 +28,10 @@ domain.services = {
 // begin events
 {{#domain}}
 // begin {{name}}
-domain = {{name}};
-domain.events = {
-    "$": {{name}},
+{{name}}.events = {
     {{#event}}
     "{{name}}": function (callback) {
-        this.$.events.{{service}}.callbacks.push(callback);
+        {{domain_name}}.events.{{service}}.callbacks.push(callback);
     },
     "{{service}}": {
         callbacks: [],
@@ -45,15 +46,15 @@ domain.events = {
     {{/event}}
 };
 
-domain._services = {
-    "$": {{name}}
-};
 {{#event}}
-domain._services.{{service}} = domain.services.{{service}};
-domain.services.{{service}} = function({{#parameter}}{{name}}{{^_last}}, {{/_last}}{{/parameter}}) {
-    this.$._services.{{service}}({{#parameter}}{{name}}{{^_last}}, {{/_last}}{{/parameter}});
+{{domain_name}}._services = {};
+{{domain_name}}._services.{{service}} = {{domain_name}}.services.{{service}};
+{{domain_name}}.services.{{service}} = function({{#parameter}}{{name}}{{^_last}}, {{/_last}}{{/parameter}}) {
+    const result = {{domain_name}}._services.{{service}}({{#parameter}}{{name}}{{^_last}}, {{/_last}}{{/parameter}});
     
-    this.$.events.{{service}}.raise({{#parameter}}{{name}}{{^_last}}, {{/_last}}{{/parameter}});
+    {{domain_name}}.events.{{service}}.raise({{#parameter}}{{name}}{{^_last}}, {{/_last}}{{/parameter}});
+
+    return result;
 }
 {{/event}}
 // end {{name}}

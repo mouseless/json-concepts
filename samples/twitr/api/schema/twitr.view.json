@@ -1,0 +1,137 @@
+{
+  "domain": [
+    {
+      "_first": true,
+      "name": "todo",
+      "entity": [
+        {
+          "_first": true,
+          "name": "task",
+          "event": [
+            {
+              "_first": true,
+              "name": "onUpdate",
+              "parameter": [
+                {
+                  "_first": true,
+                  "name": "done",
+                  "type": "boolean",
+                  "_last": true
+                }
+              ],
+              "_last": true
+            }
+          ],
+          "property": [
+            {
+              "_first": true,
+              "name": "id",
+              "type": "string",
+              "_last": false
+            },
+            {
+              "_first": false,
+              "name": "description",
+              "type": "string",
+              "_last": false
+            },
+            {
+              "_first": false,
+              "name": "done",
+              "type": "boolean",
+              "_last": true
+            }
+          ],
+          "_last": true
+        }
+      ],
+      "service": [
+        {
+          "_first": true,
+          "name": "update",
+          "type": "void",
+          "parameter": [
+            {
+              "_first": true,
+              "name": "done",
+              "type": "boolean",
+              "_last": true
+            }
+          ],
+          "_last": false
+        },
+        {
+          "_first": false,
+          "name": "delete",
+          "type": "void",
+          "parameter": [],
+          "_last": true
+        }
+      ],
+      "_last": false
+    },
+    {
+      "_first": false,
+      "name": "crm",
+      "entity": [
+        {
+          "_first": true,
+          "name": "customer",
+          "event": [
+            {
+              "_first": true,
+              "name": "onNegotiate",
+              "parameter": [
+                {
+                  "_first": true,
+                  "name": "price",
+                  "type": "double",
+                  "_last": true
+                }
+              ],
+              "_last": true
+            }
+          ],
+          "property": [
+            {
+              "_first": true,
+              "name": "id",
+              "type": "string",
+              "_last": false
+            },
+            {
+              "_first": false,
+              "name": "name",
+              "type": "string",
+              "_last": false
+            },
+            {
+              "_first": false,
+              "name": "surname",
+              "type": "string",
+              "_last": true
+            }
+          ],
+          "_last": true
+        }
+      ],
+      "service": [
+        {
+          "_first": true,
+          "name": "negotiate",
+          "type": "boolean",
+          "parameter": [
+            {
+              "_first": true,
+              "name": "price",
+              "type": "double",
+              "_last": true
+            }
+          ],
+          "_last": true
+        }
+      ],
+      "_last": true
+    }
+  ]
+}

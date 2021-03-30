@@ -1,5 +1,7 @@
 module.exports = {
-    build,
+    concepts,
+    schema,
+    code,
     transform,
     readJson,
     readString,
@@ -63,49 +65,70 @@ function renderString({ template, templatePath, view }) {
     return ms.render(template, view);
 }
 
-function build({
-    concepts,
-    schema,
-    code
-}) {
-    if (concepts != null) {
-        const result = {};
+/**
+ * @param {Object}  options
+ * @param {String}  options.name
+ * @param {String}  options.ref
+ */
+function concepts({ ref, name = ref }) {
+    const result = {};
 
-        result.name = concepts;
-        result.concepts = readJson(`./layers/${result.name}/schema/concepts.json`);
-        result.schema = buildSchema({ concepts: result.concepts })
-        result.template = buildTemplate({ schema: result.schema });
+    result.name = name;
 
-        return result;
-    }
-
-    if (schema != null) {
-        const result = {};
-
-        result.meta = schema.target;
-        result.schemaView = transform({
-            schema: schema.target.schema,
-            transformationsPath: `./layers/${schema.target.name}/schema/transformations/from.${schema.source.meta.name}.json`,
-            source: schema.source.schemaView
-        });
-        result.schema = renderJson({
-            template: schema.target.template,
-            view: result.schemaView
-        });
-
-        writeJson(`./layers/${schema.target.name}/src/${schema.name}.json`, result.schema);
+    if (ref != null) {
+        result.isRef = true;
 
         return result;
     }
 
-    if (code != null) {
-        const result = {};
+    result.concepts = readJson(`./${name}.concepts.json`);
+    result.schema = buildSchema({ concepts: result.concepts });
+    result.template = buildTemplate({ schema: result.schema });
 
-        result.code = renderString({ templatePath: `./layers/${code.schema.meta.name}/schema/${code.template.name}.mustache`, view: code.schema.schemaView });
-        writeString(`./layers/${code.schema.meta.name}/src/${code.name}.js`, result.code);
+    return result;
+}
+
+/**
+ * @param {Object}  options
+ * @param {String}  options.name
+ * @param {Object}  options.from
+ * @param {Object}  options.concept
+ */
+function schema({ name, from, concept }) {
+    const result = {};
+
+    result.name = name;
+    result.concept = concept;
+
+    if (concept.isRef) {
+        result.schemaView = readJson(`../../${concept.name}/schema/${name}.view.json`);
 
         return result;
     }
+
+    result.schemaView = transform({
+        schema: concept.schema,
+        transformationsPath: `./transformations/from.${from.concept.name}.json`,
+        source: from.schemaView
+    });
+    result.schema = renderJson({
+        template: concept.template,
+        view: result.schemaView
+    });
+
+    writeJson(`${name}.view.json`, result.schemaView);
+    writeJson(`${name}.json`, result.schema);
+
+    return result;
+}
+
+function code({ file, template, schema }) {
+    const result = {};
+
+    result.code = renderString({ templatePath: `./${template}.mustache`, view: schema.schemaView });
+    writeString(`${file}`, result.code);
+
+    return result;
 }
 
 // end public
@@ -292,6 +315,7 @@ function transform({
                         const value = transformation[key];
 
                         targetItem[key] = eval(`sourceItem.${value}`);
+                        targetItem[`${concept}_${key}`] = targetItem[key];
                     }
 
                     if (typeof schema === 'object') {

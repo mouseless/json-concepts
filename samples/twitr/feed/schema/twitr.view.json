@@ -1,0 +1,105 @@
+{
+  "domain": [
+    {
+      "_first": true,
+      "name": "todo",
+      "domain_name": "todo",
+      "service": [
+        {
+          "_first": true,
+          "name": "update",
+          "service_name": "update",
+          "type": "void",
+          "service_type": "void",
+          "parameter": [
+            {
+              "_first": true,
+              "name": "done",
+              "parameter_name": "done",
+              "type": "boolean",
+              "parameter_type": "boolean",
+              "_last": true
+            }
+          ],
+          "_last": false
+        },
+        {
+          "_first": false,
+          "name": "delete",
+          "service_name": "delete",
+          "type": "void",
+          "service_type": "void",
+          "parameter": [],
+          "_last": true
+        }
+      ],
+      "event": [
+        {
+          "_first": true,
+          "name": "onUpdate",
+          "event_name": "onUpdate",
+          "service": "update",
+          "event_service": "update",
+          "parameter": [
+            {
+              "_first": true,
+              "name": "done",
+              "parameter_name": "done",
+              "type": "boolean",
+              "parameter_type": "boolean",
+              "_last": true
+            }
+          ],
+          "_last": true
+        }
+      ],
+      "_last": false
+    },
+    {
+      "_first": false,
+      "name": "crm",
+      "domain_name": "crm",
+      "service": [
+        {
+          "_first": true,
+          "name": "negotiate",
+          "service_name": "negotiate",
+          "type": "boolean",
+          "service_type": "boolean",
+          "parameter": [
+            {
+              "_first": true,
+              "name": "price",
+              "parameter_name": "price",
+              "type": "double",
+              "parameter_type": "double",
+              "_last": true
+            }
+          ],
+          "_last": true
+        }
+      ],
+      "event": [
+        {
+          "_first": true,
+          "name": "onNegotiate",
+          "event_name": "onNegotiate",
+          "service": "negotiate",
+          "event_service": "negotiate",
+          "parameter": [
+            {
+              "_first": true,
+              "name": "price",
+              "parameter_name": "price",
+              "type": "double",
+              "parameter_type": "double",
+              "_last": true
+            }
+          ],
+          "_last": true
+        }
+      ],
+      "_last": true
+    }
+  ]
+}

@@ -12,6 +12,7 @@
     "web-vitals": "^1.1.1"
   },
   "scripts": {
+    "prestart": "sh ./schema/build.sh",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",

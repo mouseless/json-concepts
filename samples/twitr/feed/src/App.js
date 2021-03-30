@@ -1,22 +1,18 @@
-import logo from './logo.svg';
+// ---------------------------
+// this file is generated
+// DO NOT modify code here
+// ---------------------------
+
 import './App.css';
+import { todo, crm } from './client/services';
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <p>{ todo.services.update("test-update") }</p>
+        <p>{ todo.services.delete("test-delete") }</p>
+        <p>{ crm.services.negotiate("test-negotiate") }</p>
       </header>
     </div>
   );

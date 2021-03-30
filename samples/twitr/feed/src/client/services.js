@@ -1,29 +1,28 @@
+// ---------------------------
+// this file is generated
+// DO NOT modify code here
+// ---------------------------
+
 const todo = {};
 const crm = {};
 
 module.exports = { todo, crm };
 
-let domain = null;
-
 // begin services
 // begin todo
-domain = todo;
-domain.services = {
-    "$": todo,
+todo.services = {
     "update": function (done) {
-        console.log("update called"+ " (done: " + done + ")");
+        return "update called" + " (done: " + done + ")";
     }, 
     "delete": function () {
-        console.log("delete called");
+        return "delete called";
     }
 };
 // end todo
 // begin crm
-domain = crm;
-domain.services = {
-    "$": crm,
+crm.services = {
     "negotiate": function (price) {
-        console.log("negotiate called"+ " (price: " + price + ")");
+        return "negotiate called" + " (price: " + price + ")";
     }
 };
 // end crm
@@ -31,11 +30,9 @@ domain.services = {
 
 // begin events
 // begin todo
-domain = todo;
-domain.events = {
-    "$": todo,
+todo.events = {
     "onUpdate": function (callback) {
-        this.$.events.update.callbacks.push(callback);
+        todo.events.update.callbacks.push(callback);
     },
     "update": {
         callbacks: [],
@@ -49,22 +46,20 @@ domain.events = {
     }
 };
 
-domain._services = {
-    "$": todo
-};
-domain._services.update = domain.services.update;
-domain.services.update = function(done) {
-    this.$._services.update(done);
+todo._services = {};
+todo._services.update = todo.services.update;
+todo.services.update = function(done) {
+    const result = todo._services.update(done);
     
-    this.$.events.update.raise(done);
+    todo.events.update.raise(done);
+
+    return result;
 }
 // end todo
 // begin crm
-domain = crm;
-domain.events = {
-    "$": crm,
+crm.events = {
     "onNegotiate": function (callback) {
-        this.$.events.negotiate.callbacks.push(callback);
+        crm.events.negotiate.callbacks.push(callback);
     },
     "negotiate": {
         callbacks: [],
@@ -78,14 +73,14 @@ domain.events = {
     }
 };
 
-domain._services = {
-    "$": crm
-};
-domain._services.negotiate = domain.services.negotiate;
-domain.services.negotiate = function(price) {
-    this.$._services.negotiate(price);
+crm._services = {};
+crm._services.negotiate = crm.services.negotiate;
+crm.services.negotiate = function(price) {
+    const result = crm._services.negotiate(price);
     
-    this.$.events.negotiate.raise(price);
+    crm.events.negotiate.raise(price);
+
+    return result;
 }
 // end crm
 // end events
