@@ -1,16 +1,18 @@
 const { build, readJson } = require('./gazel-build');
 
-const businesslogic = { name: 'business' };
+const business = { name: 'business' };
 const server = build({ concepts: 'server' });
 const client = build({ concepts: 'client' });
 const js = { name: 'js' };
+const testJs = { name: 'test.js' };
 
 const app = {};
 
-app.businesslogic = { meta: businesslogic, schemaView: readJson('./layers/business/src/app.json') };
-app.server = build({ schema: { source: app.businesslogic, target: server, name: 'app' } });
+app.business = { meta: business, schemaView: readJson('./layers/business/src/app.json') };
+app.server = build({ schema: { source: app.business, target: server, name: 'app' } });
 app.client = build({ schema: { source: app.server, target: client, name: 'app' } });
-app.client.js = build({ code: { source: app.client, target: js, name: 'app' } });
+app.client.js = build({ code: { schema: app.client, template: js, name: 'app' } });
+app.client.testJs = build({ code: { schema: app.client, template: testJs, name: 'test' } });
 
 // --- in progress ---
 // folder refactoring

@@ -1,0 +1,21 @@
+module.exports = { run };
+
+const { {{#domain}}{{name}}{{^_last}}, {{/_last}}{{/domain}} } = require('./app');
+
+function run() {
+    let domain = null;
+    {{#domain}}
+    domain = {{name}};
+
+    {{#event}}
+    domain.events.{{name}}(function ({{#parameter}}{{name}}{{^_last}}, {{/_last}}{{/parameter}}) {
+        console.log("my callback: "{{#parameter}}+ "({{name}}: " + {{name}} + ")"{{/parameter}});
+    });
+    {{/event}}
+
+    {{#service}}
+    domain.services.{{name}}({{#parameter}}"test - {{name}}"{{^_last}}, {{/_last}}{{/parameter}});
+    {{/service}}
+
+    {{/domain}}
+};

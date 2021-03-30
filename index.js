@@ -1,10 +1,3 @@
-const { todo, crm } = require('./client/src/app');
+const test = require('./layers/client/src/test');
 
-todo.events.onUpdate(function (done) {
-    console.log("my callback: " + done);
-});
-
-todo.services.update(true);
-todo.services.delete();
-
-crm.services.negotiate(3);
+test.run();

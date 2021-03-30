@@ -101,8 +101,8 @@ function build({
     if (code != null) {
         const result = {};
 
-        result.code = renderString({ templatePath: `./layers/${code.source.meta.name}/schema/${code.target.name}.mustache`, view: code.source.schemaView });
-        writeString(`./layers/${code.source.meta.name}/src/${code.name}.js`, result.code);
+        result.code = renderString({ templatePath: `./layers/${code.schema.meta.name}/schema/${code.template.name}.mustache`, view: code.schema.schemaView });
+        writeString(`./layers/${code.schema.meta.name}/src/${code.name}.js`, result.code);
 
         return result;
     }
