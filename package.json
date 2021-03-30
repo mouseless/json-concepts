@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "camel-case": "^4.1.2",
+    "create-react-app": "^4.0.3",
     "json-format": "^1.0.1",
     "jsonpath": "^1.1.0",
     "mustache": "^4.1.0"
