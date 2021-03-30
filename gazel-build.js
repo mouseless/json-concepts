@@ -116,8 +116,8 @@ function schema({ name, from, concept }) {
         view: result.schemaView
     });
 
-    writeJson(`${name}.view.json`, result.schemaView);
-    writeJson(`${name}.json`, result.schema);
+    writeJson(`../schema/${name}.view.json`, result.schemaView);
+    writeJson(`../schema/${name}.json`, result.schema);
 
     return result;
 }

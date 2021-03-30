@@ -3,19 +3,24 @@
     {
       "_first": true,
       "name": "todo",
+      "domain_name": "todo",
       "entity": [
         {
           "_first": true,
           "name": "task",
+          "entity_name": "task",
           "event": [
             {
               "_first": true,
               "name": "onUpdate",
+              "event_name": "onUpdate",
               "parameter": [
                 {
                   "_first": true,
                   "name": "done",
+                  "parameter_name": "done",
                   "type": "boolean",
+                  "parameter_type": "boolean",
                   "_last": true
                 }
               ],
@@ -26,19 +31,25 @@
             {
               "_first": true,
               "name": "id",
+              "property_name": "id",
               "type": "string",
+              "property_type": "string",
               "_last": false
             },
             {
               "_first": false,
               "name": "description",
+              "property_name": "description",
               "type": "string",
+              "property_type": "string",
               "_last": false
             },
             {
               "_first": false,
               "name": "done",
+              "property_name": "done",
               "type": "boolean",
+              "property_type": "boolean",
               "_last": true
             }
           ],
@@ -49,12 +60,16 @@
         {
           "_first": true,
           "name": "update",
+          "service_name": "update",
           "type": "void",
+          "service_type": "void",
           "parameter": [
             {
               "_first": true,
               "name": "done",
+              "parameter_name": "done",
               "type": "boolean",
+              "parameter_type": "boolean",
               "_last": true
             }
           ],
@@ -63,7 +78,9 @@
         {
           "_first": false,
           "name": "delete",
+          "service_name": "delete",
           "type": "void",
+          "service_type": "void",
           "parameter": [],
           "_last": true
         }
@@ -73,19 +90,24 @@
     {
       "_first": false,
       "name": "crm",
+      "domain_name": "crm",
       "entity": [
         {
           "_first": true,
           "name": "customer",
+          "entity_name": "customer",
           "event": [
             {
               "_first": true,
               "name": "onNegotiate",
+              "event_name": "onNegotiate",
               "parameter": [
                 {
                   "_first": true,
                   "name": "price",
+                  "parameter_name": "price",
                   "type": "double",
+                  "parameter_type": "double",
                   "_last": true
                 }
               ],
@@ -96,19 +118,25 @@
             {
               "_first": true,
               "name": "id",
+              "property_name": "id",
               "type": "string",
+              "property_type": "string",
               "_last": false
             },
             {
               "_first": false,
               "name": "name",
+              "property_name": "name",
               "type": "string",
+              "property_type": "string",
               "_last": false
             },
             {
               "_first": false,
               "name": "surname",
+              "property_name": "surname",
               "type": "string",
+              "property_type": "string",
               "_last": true
             }
           ],
@@ -119,12 +147,16 @@
         {
           "_first": true,
           "name": "negotiate",
+          "service_name": "negotiate",
           "type": "boolean",
+          "service_type": "boolean",
           "parameter": [
             {
               "_first": true,
               "name": "price",
+              "parameter_name": "price",
               "type": "double",
+              "parameter_type": "double",
               "_last": true
             }
           ],

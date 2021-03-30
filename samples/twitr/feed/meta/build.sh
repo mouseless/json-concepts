@@ -1,3 +1,3 @@
-cd schema
+cd meta
 node build.js
 cd ..
