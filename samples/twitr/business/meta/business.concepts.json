@@ -1,0 +1,46 @@
+{
+    "Assembly": {
+        "path": "/",
+        "schema": {
+            "$Assembly+": {}
+        }
+    },
+    "Type": {
+        "path": "/**/$Assembly",
+        "schema": {
+            "$Type+": {}
+        }
+    },
+    "Method": {
+        "path": "/**/$Type",
+        "schema": {
+            "Methods?": {
+                "$Method+": {
+                    "ReturnType": "$Type"
+                }
+            }
+        }
+    },
+    "Parameter": {
+        "path": [
+            "/**/$Method"
+        ],
+        "schema": {
+            "Parameters?": {
+                "$Parameter+": {
+                    "ParameterType": "$Type"
+                }
+            }
+        }
+    },
+    "Property": {
+        "path": "/**/$Property",
+        "schema": {
+            "Properties?": {
+                "$Property+": {
+                    "PropertyType": "$Type"
+                }
+            }
+        }
+    }
+}
