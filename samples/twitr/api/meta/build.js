@@ -1,4 +1,4 @@
-const build = require('../../../../gazel-build');
+const build = require('../../../../buildr');
 
 const concepts = {
     business: build.concepts({ ref: 'business' }),

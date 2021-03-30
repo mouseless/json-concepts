@@ -1,13 +1,7 @@
 // --- in progress ---
-// folder refactoring
-// - doesn't seem clean or readable...
-// - each layer may expose its own build logic
-//  - `build('todo', ["businesslogic", "server", "client"]);`
-// - remove all magic, to make it readable
-// - directory structure config should be explicit
+// in transformation files replace $path with $select
 
 // --- todo ---
-// in transformation files replace $path with $select
 // migrate from mustache to handlebars
 // template language to support in target file type
 // - js: loops comments /* #each domain */ */, variables underscore _name_
@@ -16,5 +10,14 @@
 // parent support in transformation views for further transformation possibilities
 // support /# in meta schema -> json merger
 // array support in transformation
-// todo.reflection.json from gazel sample code
+// build.js
+// - directory structure config should be explicit
+// - builder pattern may be applied
 // ui sample project
+// - business (dotnet)
+// - http:business (dotnet)
+// - rest:http (go)
+// - graphql:http (node)
+// - feed:rest (react)
+// - feed:graphql (vue)
+// - board:graphql (angular)
