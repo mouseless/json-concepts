@@ -4,7 +4,7 @@
 // ---------------------------
 
 import './App.css';
-import { todo, crm } from './client/services';
+import { todo, crm } from './Services';
 
 function App() {
   return (
