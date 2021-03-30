@@ -18,6 +18,8 @@ const jp = require('jsonpath');
 const jf = require('json-format');
 const ms = require('mustache');
 const cc = require('camel-case').camelCase;
+const capitalize = require('capitalize');
+
 const jfFormat = { type: 'space', size: 2 };
 
 // end imports 
@@ -40,8 +42,16 @@ String.prototype.toCamelCase = function () {
     return cc(this);
 }
 
+String.prototype.append = function (suffix) {
+    return this + suffix;
+}
+
 String.prototype.prepend = function (prefix) {
     return prefix + this;
+}
+
+String.prototype.capitalize = function () {
+    return capitalize(this);
 }
 
 function readJson(filePath) { if (filePath == null) { return {}; } return JSON.parse(fs.readFileSync(filePath)); }
@@ -62,7 +72,9 @@ function renderString({ template, templatePath, view }) {
         template = readString(templatePath);
     }
 
-    return ms.render(template, view);
+    const result = ms.render(template, view);
+
+    return result;
 }
 
 /**
@@ -111,6 +123,7 @@ function schema({ name, from, concept }) {
         transformationsPath: `./transformations/from.${from.concept.name}.json`,
         source: from.schemaView
     });
+
     result.schema = renderJson({
         template: concept.template,
         view: result.schemaView
@@ -285,62 +298,74 @@ function transform({
         const targetArray = [];
 
         if (transformations.hasOwnProperty(concept)) {
-            const transformation = transformations[concept];
+            let transformationArray = transformations[concept];
 
-            const sourceArray = jp.query(source, `${transformation.$path}`);
+            if (!Array.isArray(transformationArray)) {
+                transformationArray = [transformationArray];
+            }
 
-            for (let sourceItem in sourceArray) {
-                sourceItem = sourceArray[sourceItem];
+            for (let transformation in transformationArray) {
+                transformation = transformationArray[transformation];
 
-                let targetItem = null;
+                const sourceArray = jp.query(source, `${transformation.$select}`);
 
-                if (transformation.hasOwnProperty(".")) {
-                    const value = transformation["."];
+                for (let sourceItem in sourceArray) {
+                    sourceItem = sourceArray[sourceItem];
 
-                    if (value === '.') {
-                        targetItem = sourceItem;
-                    } else {
-                        targetItem = eval(`sourceItem.${value}`);
-                    }
+                    let targetItem = null;
 
-                } else {
-                    targetItem = {};
-                    targetItem._first = sourceItem === sourceArray[0];
+                    if (transformation.hasOwnProperty(".")) {
+                        const value = transformation["."];
 
-                    for (const key in transformation) {
-                        if (key.startsWith("$")) {
-                            continue;
+                        if (value === '.') {
+                            targetItem = sourceItem;
+                        } else {
+                            targetItem = eval(`sourceItem.${value}`);
                         }
 
-                        const value = transformation[key];
+                    } else {
+                        targetItem = {};
 
-                        targetItem[key] = eval(`sourceItem.${value}`);
-                        targetItem[`${concept}_${key}`] = targetItem[key];
-                    }
-
-                    if (typeof schema === 'object') {
-                        for (const childPattern in schema) {
-                            const options = {
-                                target: targetItem,
-                                source: sourceItem,
-                                schema: schema[childPattern],
-                                transformations: transformations
-                            };
-
-                            const childIsConcept = childPattern.startsWith('$');
-                            if (childIsConcept) {
-                                options.concept = childPattern.replace(/[$*?+]/g, '');
+                        for (const key in transformation) {
+                            if (key.startsWith("$")) {
+                                continue;
                             }
 
-                            transform(options);
+                            const value = transformation[key];
+
+                            targetItem[key] = eval(`sourceItem.${value}`);
+                            targetItem[`${concept}_${key}`] = targetItem[key];
+                        }
+
+                        if (typeof schema === 'object') {
+                            for (const childPattern in schema) {
+                                const options = {
+                                    target: targetItem,
+                                    source: sourceItem,
+                                    schema: schema[childPattern],
+                                    transformations: transformations
+                                };
+
+                                const childIsConcept = childPattern.startsWith('$');
+                                if (childIsConcept) {
+                                    options.concept = childPattern.replace(/[$*?+]/g, '');
+                                }
+
+                                transform(options);
+                            }
                         }
                     }
 
-                    targetItem._last = sourceItem === sourceArray[sourceArray.length - 1];
+                    targetArray.push(targetItem);
                 }
-
-                targetArray.push(targetItem);
             }
+        }
+
+        for (let targetItem in targetArray) {
+            targetItem = targetArray[targetItem];
+
+            targetItem._first = targetItem == targetArray[0];
+            targetItem._last = targetItem == targetArray[targetArray.length - 1];
         }
 
         target[concept] = targetArray;

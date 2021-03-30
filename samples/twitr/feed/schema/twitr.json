@@ -8,6 +8,12 @@
         "parameters": {
           "done": {
             "type": "boolean"
+          },
+          "by": {
+            "type": "string"
+          },
+          "doneAdded": {
+            "type": "boolean"
           }
         }
       },
@@ -26,6 +32,12 @@
         "parameters": {
           "done": {
             "type": "boolean"
+          },
+          "by": {
+            "type": "string"
+          },
+          "doneAdded": {
+            "type": "boolean"
           }
         }
       }
@@ -40,6 +52,9 @@
         "parameters": {
           "price": {
             "type": "double"
+          },
+          "priceAdded": {
+            "type": "double"
           }
         }
       }
@@ -49,6 +64,9 @@
         "service": "negotiate",
         "parameters": {
           "price": {
+            "type": "double"
+          },
+          "priceAdded": {
             "type": "double"
           }
         }

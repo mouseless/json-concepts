@@ -1,21 +1,28 @@
 {
     "domain": {
-        "$path": "$..domain[*]",
+        "$select": "$..domain[*]",
         "name": "name"
     },
     "service": {
-        "$path": "$..service[*]",
+        "$select": "$..service[*]",
         "name": "name",
         "type": "type"
     },
     "event": {
-        "$path": "$..event[*]",
+        "$select": "$..event[*]",
         "name": "name",
         "service": "name.after('on').toLowerCase()"
     },
-    "parameter": {
-        "$path": "$..parameter[*]",
-        "name": "name",
-        "type": "type"
-    }
+    "parameter": [
+        {
+            "$select": "$..parameter[*]",
+            "name": "name",
+            "type": "type"
+        },
+        {
+            "$select": "$..parameter[0]",
+            "name": "name.append(\"Added\")",
+            "type": "type"
+        }
+    ]
 }

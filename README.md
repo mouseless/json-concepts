@@ -6,15 +6,16 @@ of any concepts within a project.
 
 ## Tasks
 
-- [ ] in transformation files replace $path with $select
+- [x] in transformation files replace $path with $select
+- [x] array support in transformation
+- [ ] parent support in transformation views for further transformation possibilities
+- [ ] make string functions extensible for further transformation possibilities
 - [ ] migrate from mustache to handlebars
 - [ ] template language to support in target file type
   - [ ] js: loops using comments `/* #each domain */`, variables underscore `_name_`
   - [ ] json: loops dollar sign `each$domain`, etc
 - [ ] remove views, transform directly to schema (todoServer, todoClient)
-- [ ] parent support in transformation views for further transformation possibilities
 - [ ] support /# in meta schema -> json merger
-- [ ] array support in transformation
 - [ ] build.js
   - [ ] directory structure config should be explicit
   - [ ] builder pattern may be applied

@@ -11,10 +11,10 @@ function App() {
     <div className="App">
       <header className="App-header">
         <h1>todo</h1>
-        <p>{ todo.services.update("test-update") }</p>
-        <p>{ todo.services.delete("test-delete") }</p>
+        <p>{ todo.services.update("test-done", "test-by", "test-doneAdded") }</p>
+        <p>{ todo.services.delete() }</p>
         <h1>crm</h1>
-        <p>{ crm.services.negotiate("test-negotiate") }</p>
+        <p>{ crm.services.negotiate("test-price", "test-priceAdded") }</p>
       </header>
     </div>
   );

@@ -11,8 +11,8 @@ module.exports = { todo, crm };
 // begin services
 // begin todo
 todo.services = {
-    "update": function (done) {
-        return "update called" + " (done: " + done + ")";
+    "update": function (done, by, doneAdded) {
+        return "update called" + " (done: " + done + ")" + " (by: " + by + ")" + " (doneAdded: " + doneAdded + ")";
     }, 
     "delete": function () {
         return "delete called";
@@ -21,8 +21,8 @@ todo.services = {
 // end todo
 // begin crm
 crm.services = {
-    "negotiate": function (price) {
-        return "negotiate called" + " (price: " + price + ")";
+    "negotiate": function (price, priceAdded) {
+        return "negotiate called" + " (price: " + price + ")" + " (priceAdded: " + priceAdded + ")";
     }
 };
 // end crm
@@ -36,11 +36,11 @@ todo.events = {
     },
     "update": {
         callbacks: [],
-        raise: function (done) {
+        raise: function (done, by, doneAdded) {
             for(let callback in this.callbacks){
                 callback = this.callbacks[callback];
 
-                callback(done);
+                callback(done, by, doneAdded);
             }
         }
     }
@@ -48,10 +48,10 @@ todo.events = {
 
 todo._services = {};
 todo._services.update = todo.services.update;
-todo.services.update = function(done) {
-    const result = todo._services.update(done);
+todo.services.update = function(done, by, doneAdded) {
+    const result = todo._services.update(done, by, doneAdded);
     
-    todo.events.update.raise(done);
+    todo.events.update.raise(done, by, doneAdded);
 
     return result;
 }
@@ -63,11 +63,11 @@ crm.events = {
     },
     "negotiate": {
         callbacks: [],
-        raise: function (price) {
+        raise: function (price, priceAdded) {
             for(let callback in this.callbacks){
                 callback = this.callbacks[callback];
 
-                callback(price);
+                callback(price, priceAdded);
             }
         }
     }
@@ -75,10 +75,10 @@ crm.events = {
 
 crm._services = {};
 crm._services.negotiate = crm.services.negotiate;
-crm.services.negotiate = function(price) {
-    const result = crm._services.negotiate(price);
+crm.services.negotiate = function(price, priceAdded) {
+    const result = crm._services.negotiate(price, priceAdded);
     
-    crm.events.negotiate.raise(price);
+    crm.events.negotiate.raise(price, priceAdded);
 
     return result;
 }

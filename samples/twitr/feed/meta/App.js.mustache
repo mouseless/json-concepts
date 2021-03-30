@@ -15,7 +15,7 @@ function App() {
         {{#domain}}
         <h1>{{name}}</h1>
         {{#service}}
-        <p>{ {{domain_name}}.services.{{name}}("test-{{name}}") }</p>
+        <p>{ {{domain_name}}.services.{{name}}({{#parameter}}"test-{{name}}"{{^_last}}, {{/_last}}{{/parameter}}) }</p>
         {{/service}}
         {{/domain}}
       </header>

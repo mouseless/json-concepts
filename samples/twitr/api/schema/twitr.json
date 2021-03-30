@@ -6,6 +6,9 @@
           "parameters": {
             "done": {
               "type": "boolean"
+            },
+            "by": {
+              "type": "string"
             }
           }
         }
@@ -30,6 +33,9 @@
         "parameters": {
           "done": {
             "type": "boolean"
+          },
+          "by": {
+            "type": "string"
           }
         }
       },
