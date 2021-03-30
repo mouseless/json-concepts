@@ -1,0 +1,21 @@
+{
+    "domain": {
+        "$path": "$..domain[*]",
+        "name": "name"
+    },
+    "service": {
+        "$path": "$..service[*]",
+        "name": "name",
+        "type": "type"
+    },
+    "event": {
+        "$path": "$..event[*]",
+        "name": "name",
+        "service": "name.after('on').toLowerCase()"
+    },
+    "parameter": {
+        "$path": "$..parameter[*]",
+        "name": "name",
+        "type": "type"
+    }
+}

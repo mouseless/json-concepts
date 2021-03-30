@@ -1,0 +1,58 @@
+{
+  "todo": {
+    "services": {
+      "update": {
+        "return": {
+          "type": "void"
+        },
+        "parameters": {
+          "done": {
+            "type": "boolean"
+          }
+        }
+      },
+      "delete": {
+        "return": {
+          "type": "void"
+        },
+        "parameters": {
+          
+        }
+      }
+    },
+    "events": {
+      "onUpdate": {
+        "service": "update",
+        "parameters": {
+          "done": {
+            "type": "boolean"
+          }
+        }
+      }
+    }
+  },
+  "crm": {
+    "services": {
+      "negotiate": {
+        "return": {
+          "type": "boolean"
+        },
+        "parameters": {
+          "price": {
+            "type": "double"
+          }
+        }
+      }
+    },
+    "events": {
+      "onNegotiate": {
+        "service": "negotiate",
+        "parameters": {
+          "price": {
+            "type": "double"
+          }
+        }
+      }
+    }
+  }
+}

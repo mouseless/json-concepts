@@ -1,0 +1,57 @@
+{
+    "domain": {
+        "path": "/",
+        "schema": {
+            "$domain+": {}
+        }
+    },
+    "entity": {
+        "path": "/**/$domain",
+        "schema": {
+            "$entity+": {}
+        }
+    },
+    "service": {
+        "path": "/**/$domain",
+        "schema": {
+            "services?": {
+                "$service+": {
+                    "return?": {
+                        "type": "$type"
+                    }
+                }
+            }
+        }
+    },
+    "event": {
+        "path": "/**/$entity",
+        "schema": {
+            "events?": {
+                "$event+": {}
+            }
+        }
+    },
+    "parameter": {
+        "path": [
+            "/**/$service",
+            "/**/$event"
+        ],
+        "schema": {
+            "parameters?": {
+                "$parameter+": {
+                    "type": "$type"
+                }
+            }
+        }
+    },
+    "property": {
+        "path": "/**/$entity",
+        "schema": {
+            "properties?": {
+                "$property+": {
+                    "type": "$type"
+                }
+            }
+        }
+    }
+}

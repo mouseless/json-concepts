@@ -1,0 +1,29 @@
+{
+    "domain": {
+        "$path": "$..Assemblies[?( @.Name.startsWith('Inventiv') )]",
+        "name": "Name.afterLast('.').toCamelCase()"
+    },
+    "entity": {
+        "$path": "$..Types[?( @.IsPublic )]",
+        "name": "Name.toCamelCase()"
+    },
+    "service": {
+        "$path": "$..Methods[*]",
+        "name": "Name.toCamelCase()",
+        "type": "ReturnType.afterLast('.').toCamelCase()"
+    },
+    "event": {
+        "$path": "$..Methods[?( @.CustomAttributes.includes('Broadcast') )]",
+        "name": "Name.prepend('on')"
+    },
+    "parameter": {
+        "$path": "$..Parameters[*]",
+        "name": "Name.toCamelCase()",
+        "type": "Type.afterLast('.').toCamelCase()"
+    },
+    "property": {
+        "$path": "$..Properties[?( @.IsPublic && @.CanRead )]",
+        "name": "Name.toCamelCase()",
+        "type": "Type.afterLast('.').toCamelCase()"
+    }
+}

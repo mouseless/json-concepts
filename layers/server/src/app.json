@@ -1,0 +1,82 @@
+{
+  "todo": {
+    "task": {
+      "events": {
+        "onUpdate": {
+          "parameters": {
+            "done": {
+              "type": "boolean"
+            }
+          }
+        }
+      },
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "done": {
+          "type": "boolean"
+        }
+      }
+    },
+    "services": {
+      "update": {
+        "return": {
+          "type": "void"
+        },
+        "parameters": {
+          "done": {
+            "type": "boolean"
+          }
+        }
+      },
+      "delete": {
+        "return": {
+          "type": "void"
+        },
+        "parameters": {
+          
+        }
+      }
+    }
+  },
+  "crm": {
+    "customer": {
+      "events": {
+        "onNegotiate": {
+          "parameters": {
+            "price": {
+              "type": "double"
+            }
+          }
+        }
+      },
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "surname": {
+          "type": "string"
+        }
+      }
+    },
+    "services": {
+      "negotiate": {
+        "return": {
+          "type": "boolean"
+        },
+        "parameters": {
+          "price": {
+            "type": "double"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,45 @@
+{
+    "domain": {
+        "path": "/",
+        "schema": {
+            "$domain+": {}
+        }
+    },
+    "service": {
+        "path": "/**/$domain",
+        "schema": {
+            "services?": {
+                "$service+": {
+                    "return?": {
+                        "type": "$type"
+                    }
+                }
+            }
+        }
+    },
+    "event": [
+        {
+            "path": "/**/$domain",
+            "schema": {
+                "events?": {
+                    "$event+": {
+                        "service": "$service"
+                    }
+                }
+            }
+        }
+    ],
+    "parameter": {
+        "path": [
+            "/**/$service",
+            "/**/$event"
+        ],
+        "schema": {
+            "parameters?": {
+                "$parameter+": {
+                    "type": "$type"
+                }
+            }
+        }
+    }
+}

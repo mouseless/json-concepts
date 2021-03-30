@@ -1,0 +1,61 @@
+{{#domain}}
+const {{name}} = {};
+{{/domain}}
+
+module.exports = { {{#domain}}{{name}}{{^_last}}, {{/_last}}{{/domain}} };
+
+let domain = null;
+
+// begin services
+{{#domain}}
+// begin {{name}}
+domain = {{name}};
+domain.services = {
+    "$": {{name}},
+    {{#service}}
+    "{{name}}": function ({{#parameter}}{{name}}{{^_last}}, {{/_last}}{{/parameter}}) {
+        console.log("{{name}} called"{{#parameter}}+ " ({{name}}: " + {{name}} + ")"{{/parameter}});
+    }{{^_last}}, {{/_last}}
+    {{/service}}
+};
+// end {{name}}
+{{/domain}}
+// end services
+
+// begin events
+{{#domain}}
+// begin {{name}}
+domain = {{name}};
+domain.events = {
+    "$": {{name}},
+    {{#event}}
+    "{{name}}": function (callback) {
+        this.$.events.{{service}}.callbacks.push(callback);
+    },
+    "{{service}}": {
+        callbacks: [],
+        raise: function ({{#parameter}}{{name}}{{^_last}}, {{/_last}}{{/parameter}}) {
+            for(let callback in this.callbacks){
+                callback = this.callbacks[callback];
+
+                callback({{#parameter}}{{name}}{{^_last}}, {{/_last}}{{/parameter}});
+            }
+        }
+    }{{^_last}}, {{/_last}}
+    {{/event}}
+};
+
+domain._services = {
+    "$": {{name}}
+};
+{{#event}}
+domain._services.{{service}} = domain.services.{{service}};
+domain.services.{{service}} = function({{#parameter}}{{name}}{{^_last}}, {{/_last}}{{/parameter}}) {
+    this.$._services.{{service}}({{#parameter}}{{name}}{{^_last}}, {{/_last}}{{/parameter}});
+    
+    this.$.events.{{service}}.raise({{#parameter}}{{name}}{{^_last}}, {{/_last}}{{/parameter}});
+}
+{{/event}}
+// end {{name}}
+{{/domain}}
+// end events

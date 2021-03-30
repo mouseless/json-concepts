@@ -1,0 +1,10 @@
+{
+    "requires": {
+        "aspects": [
+            "authentication"
+        ],
+        "features": [
+            "manage-task"
+        ]
+    }
+}

@@ -1,0 +1,21 @@
+{
+  "name": "open-schema",
+  "version": "0.0.1",
+  "description": "open schema is an extensible json schema specification.",
+  "main": "index.js",
+  "keywords": [
+    "json",
+    "schema"
+  ],
+  "author": "Cihan Deniz",
+  "license": "MIT",
+  "bin": {
+    "index": "./bin/index.js"
+  },
+  "dependencies": {
+    "camel-case": "^4.1.2",
+    "json-format": "^1.0.1",
+    "jsonpath": "^1.1.0",
+    "mustache": "^4.1.0"
+  }
+}
