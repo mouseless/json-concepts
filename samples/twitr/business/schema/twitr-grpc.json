@@ -1,0 +1,31 @@
+{
+  "business": {
+    "package": "business",
+    "Services": {
+      "Feed": {
+        "Name": "Feed",
+        "Rpcs": {
+          "GetPosts": {
+            "Name": "GetPosts",
+            "Request": {
+              "stream": "",
+              "Message": "GetPostsRequest"
+            },
+            "Reply": {
+              "stream": "true",
+              "Message": "Post"
+            }
+          }
+        }
+      }
+    },
+    "Messages": {
+      "GetPostsRequest": {
+        "Name": "GetPostsRequest"
+      },
+      "Post": {
+        "Name": "Post"
+      }
+    }
+  }
+}

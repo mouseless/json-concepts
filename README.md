@@ -24,6 +24,11 @@ of any concepts within a project.
 - [ ] ui sample project
   - [x] business (dotnet)
     - [ ] gRpc(dotnet):
+      - [x] generate proto
+      - [ ] generate response fields
+      - [ ] generate service class
+      - [ ] generate startup configure services body
+      - [ ] refactor and extend buildr
     - [ ] :database(mongo)
   - [ ] rest (go)
     - [ ] :gRpc(*)

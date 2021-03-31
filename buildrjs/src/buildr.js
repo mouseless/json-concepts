@@ -76,9 +76,7 @@ function renderString({ template, templatePath, view }) {
         template = readString(templatePath);
     }
 
-    const result = ms.render(template, view);
-
-    return result;
+    return ms.render(template, view);
 }
 
 /**
@@ -110,7 +108,7 @@ function concepts({ ref, name = ref }) {
  * @param {Object}  options.from
  * @param {Object}  options.concept
  */
-function schema({ name, from, concept }) {
+function schema({ name, concept, from }) {
     const result = {};
 
     result.name = name;
@@ -118,6 +116,12 @@ function schema({ name, from, concept }) {
 
     if (concept.isRef) {
         result.schemaView = readJson(`../../${concept.name}/schema/${name}.view.json`);
+
+        return result;
+    }
+
+    if(from == null) {
+        result.schemaView = readJson(`../schema/${name}.view.json`);
 
         return result;
     }

@@ -47,6 +47,60 @@
               "CustomAttributes": []
             }
           ],
+          "CustomAttributes": [
+            "ServiceAttribute"
+          ]
+        },
+        {
+          "Name": "ServiceAttribute",
+          "Namespace": "Twitr.Business",
+          "FullName": "Twitr.Business.ServiceAttribute",
+          "IsGeneric": false,
+          "Constructors": [
+            {
+              "Parameters": [],
+              "CustomAttributes": []
+            }
+          ],
+          "Properties": [
+            {
+              "Name": "TypeId",
+              "PropertyType": {
+                "IsGeneric": false,
+                "Name": "System.Object"
+              },
+              "CustomAttributes": []
+            }
+          ],
+          "Methods": [
+            {
+              "Name": "Match",
+              "ReturnType": {
+                "IsGeneric": false,
+                "Name": "System.Boolean"
+              },
+              "Parameters": [
+                {
+                  "Name": "obj",
+                  "ParameterType": {
+                    "IsGeneric": false,
+                    "Name": "System.Object"
+                  },
+                  "CustomAttributes": []
+                }
+              ],
+              "CustomAttributes": []
+            },
+            {
+              "Name": "IsDefaultAttribute",
+              "ReturnType": {
+                "IsGeneric": false,
+                "Name": "System.Boolean"
+              },
+              "Parameters": [],
+              "CustomAttributes": []
+            }
+          ],
           "CustomAttributes": []
         },
         {

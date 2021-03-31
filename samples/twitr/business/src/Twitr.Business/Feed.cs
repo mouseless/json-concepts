@@ -1,8 +1,10 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Twitr.Business
 {
+    [Service]
     public class Feed
     {
         private readonly IRepository<Post> repository;
@@ -13,5 +15,9 @@ namespace Twitr.Business
         }
 
         public List<Post> GetPosts() => repository.All();
+    }
+
+    public class ServiceAttribute : Attribute
+    {
     }
 }

@@ -6,4 +6,7 @@ const concepts = {
 }
 
 const twitr = {};
-// twitr.business = build.schema({ name: 'twitr', concept: concepts.business });
+twitr.business = build.schema({ name: 'twitr', concept: concepts.business });
+twitr.grpc = build.schema({ name: 'twitr-grpc', concept: concepts.grpc, from: twitr.business });
+
+build.code({ file: './../src/Twitr.Grpc/Protos/twitr.proto', template: 'proto', schema: twitr.grpc });

@@ -2,18 +2,22 @@ syntax = "proto3";
 
 option csharp_namespace = "{{csharp_namespace}}";
 
+{{#package.0}}
 package {{package}};
 
-service {{Service}}Grpc {
+{{#Service}}
+service {{Name}}Grpc {
 {{#Rpc}}
-  rpc {{Name}} ({{#Request.stream}}stream {{/Request.stream}}{{Request.Message}}) returns ({{#Reply.stream}}stream {{/Reply.stream}}{{Reply.Message}});
+  rpc {{Name}} ({{#RequestStream}}stream {{/RequestStream}}{{RequestMessage}}) returns ({{#ReplyStream}}stream {{/ReplyStream}}{{ReplyMessage}});
 {{/Rpc}}
 }
-
+{{/Service}}
 {{#Message}}
+
 message {{Name}} {
 {{#Field}}
     {{type}} {{name}} = {{index}};
 {{/Field}}
 }
 {{/Message}}
+{{/package.0}}

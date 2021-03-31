@@ -3,19 +3,29 @@
         "path": "/",
         "schema": {
             "$package*": {
-                "package": "$package",
-                "Service?": "$Service"
+                "package": "$package"
             }
         }
     },
-    "Rpc": {
+    "Service": {
         "path": "/**/$package",
         "schema": {
-            "$Rpc": {
-                "Name": "$Name",
-                "Request": {
-                    "$stream?": true,
-                    "Message": "$Message"
+            "Services?": {
+                "$Service+": {
+                    "Name": "$Name",
+                    "Rpcs?": {
+                        "$Rpc+": {
+                            "Name": "$Name",
+                            "Request": {
+                                "stream": "$RequestStream",
+                                "Message": "$RequestMessage"
+                            },
+                            "Reply": {
+                                "stream": "$ReplyStream",
+                                "Message": "$ReplyMessage"
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -23,11 +33,13 @@
     "Message": {
         "path": "/**/$package",
         "schema": {
-            "$Message": {
-                "Name": "$Name",
-                "$field*": {
-                    "type": "$type",
-                    "index": "$index"
+            "Messages?":{
+                "$Message*": {
+                    "Name": "$Name",
+                    "$field*": {
+                        "type": "$type",
+                        "index": "$index"
+                    }
                 }
             }
         }

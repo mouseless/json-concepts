@@ -1,0 +1,58 @@
+{
+  "package": [
+    {
+      "name": "business",
+      "package_name": "business",
+      "package": "business",
+      "package_package": "business",
+      "Service": [
+        {
+          "name": "Feed",
+          "Service_name": "Feed",
+          "Name": "Feed",
+          "Service_Name": "Feed",
+          "Rpc": [
+            {
+              "name": "GetPosts",
+              "Rpc_name": "GetPosts",
+              "Name": "GetPosts",
+              "Rpc_Name": "GetPosts",
+              "RequestMessage": "GetPostsRequest",
+              "Rpc_RequestMessage": "GetPostsRequest",
+              "ReplyMessage": "Post",
+              "Rpc_ReplyMessage": "Post",
+              "ReplyStream": true,
+              "Rpc_ReplyStream": true,
+              "_first": true,
+              "_last": true
+            }
+          ],
+          "_first": true,
+          "_last": true
+        }
+      ],
+      "Message": [
+        {
+          "name": "GetPostsRequest",
+          "Message_name": "GetPostsRequest",
+          "Name": "GetPostsRequest",
+          "Message_Name": "GetPostsRequest",
+          "field": [],
+          "_first": true,
+          "_last": false
+        },
+        {
+          "name": "Post",
+          "Message_name": "Post",
+          "Name": "Post",
+          "Message_Name": "Post",
+          "field": [],
+          "_first": false,
+          "_last": true
+        }
+      ],
+      "_first": true,
+      "_last": true
+    }
+  ]
+}

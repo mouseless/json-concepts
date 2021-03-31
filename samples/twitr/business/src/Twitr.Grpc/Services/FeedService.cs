@@ -16,9 +16,7 @@ namespace Twitr.Grpc
             this.feed = feed;
         }
 
-        public override async Task GetPosts(PostQuery request, IServerStreamWriter<Post> responseStream, ServerCallContext context)
-        {
+        public override async Task GetPosts(GetPostsRequest request, IServerStreamWriter<Post> responseStream, ServerCallContext context) =>
             await responseStream.WriteAsync(new Post { });
-        }
     }
 }

@@ -1,29 +1,32 @@
 {
-    "domain": {
+    "package": {
         "$select": "$..Assemblies[?( @.Name.startsWith('Twitr') )]",
-        "name": "Name.afterLast('.').toCamelCase()"
+        "name": "Name.afterLast('.').toCamelCase()",
+        "package": "Name.afterLast('.').toCamelCase()"
     },
-    "entity": {
-        "$select": "$..Types[?( @.IsGeneric === false )]",
-        "name": "Name.toCamelCase()"
+    "Service": {
+        "$select": "$..Types[?( @.CustomAttributes.includes('ServiceAttribute') )]",
+        "name": "Name",
+        "Name": "Name"
     },
-    "service": {
+    "Rpc": {
         "$select": "$..Methods[*]",
-        "name": "Name.toCamelCase()",
-        "type": "ReturnType.Name.afterLast('.').toCamelCase()"
+        "name": "Name",
+        "Name": "Name",
+        "RequestMessage": "Name.append('Request')",
+        "ReplyMessage": "ReturnType.GenericArguments[0].Name.afterLast('.')",
+        "ReplyStream": "ReturnType.IsGeneric"
     },
-    "event": {
-        "$select": "$..Methods[?( @.CustomAttributes.includes('Broadcast') )]",
-        "name": "Name.prepend('on')"
-    },
-    "parameter": {
-        "$select": "$..Parameters[*]",
-        "name": "Name.toCamelCase()",
-        "type": "ParameterType.Name.afterLast('.').toCamelCase()"
-    },
-    "property": {
-        "$select": "$..Properties[*]",
-        "name": "Name.toCamelCase()",
-        "type": "PropertyType.Name.afterLast('.').toCamelCase()"
-    }
+    "Message": [
+        {
+            "$select": "$..Types[?( @.CustomAttributes.includes('ServiceAttribute') )].Methods[*]",
+            "name": "Name.append('Request')",
+            "Name": "Name.append('Request')"
+        },
+        {
+            "$select": "$..Types[?( @.CustomAttributes.includes('ServiceAttribute') )].Methods[*]",
+            "name": "ReturnType.GenericArguments[0].Name.afterLast('.')",
+            "Name": "ReturnType.GenericArguments[0].Name.afterLast('.')"
+        }
+    ]
 }
