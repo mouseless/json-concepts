@@ -1,7 +1,8 @@
 const build = require('../../../../buildrjs/src/buildr');
 
 const concepts = {
-    business: build.concepts({ name: 'business' })
+    business: build.concepts({ name: 'business' }),
+    grpc: build.concepts({ name: 'grpc' })
 }
 
 const twitr = {};

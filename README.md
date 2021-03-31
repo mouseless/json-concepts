@@ -8,9 +8,10 @@ of any concepts within a project.
 
 - [x] in transformation files replace $path with $select
 - [x] array support in transformation
-- [ ] fix bug in buildr.js/after
-- [ ] parent support in transformation views for further transformation possibilities
-- [ ] make string functions extensible for further transformation possibilities
+- [x] fix bug in buildr.js/after
+- [ ] parent support in transformation views
+- [ ] index support in transformation views
+- [ ] make transformation string functions extensible
 - [ ] migrate from mustache to handlebars
 - [ ] template language to support in target file type
   - [ ] js: loops using comments `/* #each domain */`, variables underscore `_name_`
@@ -22,13 +23,17 @@ of any concepts within a project.
   - [ ] builder pattern may be applied
 - [ ] ui sample project
   - [x] business (dotnet)
-    - [ ] http:business (dotnet)
-  - [ ] database (mongo)
-    - [ ] business:database (dotnet)
-  - [ ] rest:http (go)
-  - [ ] graphql:http (node)
-  - [ ] feed:rest (react)
-  - [ ] feed:graphql (vue)
-  - [ ] board:graphql (angular)
+    - [ ] gRpc(dotnet):
+    - [ ] :database(mongo)
+  - [ ] rest (go)
+    - [ ] :gRpc(*)
+  - [ ] graphQL (node)
+    - [ ] :gRpc(*)
+  - [ ] feed (react)
+    - [ ] :rest(*)
+  - [ ] feed (vue)
+    - [ ] :graphQL(*)
+  - [ ] board (angular)
+    - [ ] :graphQL(*)
 
 _PS: Any previous task was lost before converting this file to an .md file._

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Twitr.Business
 {
@@ -11,8 +12,6 @@ namespace Twitr.Business
             this.repository = repository;
         }
 
-        public List<Post> Get() => repository.All();
-
-        public List<Post> GetByName(string name) => repository.All();
+        public List<Post> GetPosts() => repository.All();
     }
 }

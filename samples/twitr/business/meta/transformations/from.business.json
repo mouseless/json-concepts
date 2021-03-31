@@ -1,0 +1,29 @@
+{
+    "domain": {
+        "$select": "$..Assemblies[?( @.Name.startsWith('Twitr') )]",
+        "name": "Name.afterLast('.').toCamelCase()"
+    },
+    "entity": {
+        "$select": "$..Types[?( @.IsGeneric === false )]",
+        "name": "Name.toCamelCase()"
+    },
+    "service": {
+        "$select": "$..Methods[*]",
+        "name": "Name.toCamelCase()",
+        "type": "ReturnType.Name.afterLast('.').toCamelCase()"
+    },
+    "event": {
+        "$select": "$..Methods[?( @.CustomAttributes.includes('Broadcast') )]",
+        "name": "Name.prepend('on')"
+    },
+    "parameter": {
+        "$select": "$..Parameters[*]",
+        "name": "Name.toCamelCase()",
+        "type": "ParameterType.Name.afterLast('.').toCamelCase()"
+    },
+    "property": {
+        "$select": "$..Properties[*]",
+        "name": "Name.toCamelCase()",
+        "type": "PropertyType.Name.afterLast('.').toCamelCase()"
+    }
+}

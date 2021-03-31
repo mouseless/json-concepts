@@ -32,7 +32,7 @@
           "Properties": [],
           "Methods": [
             {
-              "Name": "Get",
+              "Name": "GetPosts",
               "ReturnType": {
                 "IsGeneric": true,
                 "Name": "System.Collections.Generic.List",
@@ -45,30 +45,6 @@
               },
               "Parameters": [],
               "CustomAttributes": []
-            },
-            {
-              "Name": "GetByName",
-              "ReturnType": {
-                "IsGeneric": true,
-                "Name": "System.Collections.Generic.List",
-                "GenericArguments": [
-                  {
-                    "IsGeneric": false,
-                    "Name": "Twitr.Business.Post"
-                  }
-                ]
-              },
-              "Parameters": [
-                {
-                  "Name": "name",
-                  "ParameterType": {
-                    "IsGeneric": false,
-                    "Name": "System.String"
-                  },
-                  "CustomAttributes": []
-                }
-              ],
-              "CustomAttributes": []
             }
           ],
           "CustomAttributes": []
@@ -79,6 +55,37 @@
           "FullName": "Twitr.Business.IRepository",
           "IsGeneric": true,
           "Constructors": [],
+          "Properties": [],
+          "Methods": [
+            {
+              "Name": "All",
+              "ReturnType": {
+                "IsGeneric": true,
+                "Name": "System.Collections.Generic.List",
+                "GenericArguments": [
+                  {
+                    "IsGeneric": false,
+                    "Name": null
+                  }
+                ]
+              },
+              "Parameters": [],
+              "CustomAttributes": []
+            }
+          ],
+          "CustomAttributes": []
+        },
+        {
+          "Name": "NullRepository",
+          "Namespace": "Twitr.Business",
+          "FullName": "Twitr.Business.NullRepository",
+          "IsGeneric": true,
+          "Constructors": [
+            {
+              "Parameters": [],
+              "CustomAttributes": []
+            }
+          ],
           "Properties": [],
           "Methods": [
             {

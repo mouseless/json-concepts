@@ -6,4 +6,9 @@ namespace Twitr.Business
     {
         List<T> All();
     }
+
+    public class NullRepository<T> : IRepository<T>
+    {
+        public List<T> All() => new List<T>();
+    }
 }

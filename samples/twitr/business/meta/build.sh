@@ -9,3 +9,9 @@ cd ../../meta
 
 node build.js
 cd ..
+
+cd src/Twitr.Grpc
+
+dotnet build -v q
+
+cd ..
