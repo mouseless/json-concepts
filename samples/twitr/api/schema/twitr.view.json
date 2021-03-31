@@ -1,184 +1,82 @@
 {
   "domain": [
     {
-      "name": "todo",
-      "domain_name": "todo",
+      "name": "business",
+      "domain_name": "business",
       "entity": [
         {
-          "name": "task",
-          "entity_name": "task",
-          "event": [
+          "name": "feed",
+          "entity_name": "feed",
+          "service": [
             {
-              "name": "onUpdate",
-              "event_name": "onUpdate",
+              "name": "get",
+              "service_name": "get",
+              "type": "list",
+              "service_type": "list",
+              "parameter": [],
+              "_first": true,
+              "_last": false
+            },
+            {
+              "name": "getByName",
+              "service_name": "getByName",
+              "type": "list",
+              "service_type": "list",
               "parameter": [
                 {
-                  "name": "done",
-                  "parameter_name": "done",
-                  "type": "boolean",
-                  "parameter_type": "boolean",
-                  "_first": true,
-                  "_last": false
-                },
-                {
-                  "name": "by",
-                  "parameter_name": "by",
+                  "name": "name",
+                  "parameter_name": "name",
                   "type": "string",
                   "parameter_type": "string",
-                  "_first": false,
+                  "_first": true,
                   "_last": true
                 }
               ],
-              "_first": true,
-              "_last": true
-            }
-          ],
-          "property": [
-            {
-              "name": "id",
-              "property_name": "id",
-              "type": "string",
-              "property_type": "string",
-              "_first": true,
-              "_last": false
-            },
-            {
-              "name": "description",
-              "property_name": "description",
-              "type": "string",
-              "property_type": "string",
-              "_first": false,
-              "_last": false
-            },
-            {
-              "name": "done",
-              "property_name": "done",
-              "type": "boolean",
-              "property_type": "boolean",
               "_first": false,
               "_last": true
             }
           ],
-          "_first": true,
-          "_last": true
-        }
-      ],
-      "service": [
-        {
-          "name": "update",
-          "service_name": "update",
-          "type": "void",
-          "service_type": "void",
-          "parameter": [
-            {
-              "name": "done",
-              "parameter_name": "done",
-              "type": "boolean",
-              "parameter_type": "boolean",
-              "_first": true,
-              "_last": false
-            },
-            {
-              "name": "by",
-              "parameter_name": "by",
-              "type": "string",
-              "parameter_type": "string",
-              "_first": false,
-              "_last": true
-            }
-          ],
+          "event": [],
+          "property": [],
           "_first": true,
           "_last": false
         },
         {
-          "name": "delete",
-          "service_name": "delete",
-          "type": "void",
-          "service_type": "void",
-          "parameter": [],
+          "name": "post",
+          "entity_name": "post",
+          "service": [],
+          "event": [],
+          "property": [
+            {
+              "name": "uid",
+              "property_name": "uid",
+              "type": "guid",
+              "property_type": "guid",
+              "_first": true,
+              "_last": false
+            },
+            {
+              "name": "user",
+              "property_name": "user",
+              "type": "string",
+              "property_type": "string",
+              "_first": false,
+              "_last": false
+            },
+            {
+              "name": "content",
+              "property_name": "content",
+              "type": "string",
+              "property_type": "string",
+              "_first": false,
+              "_last": true
+            }
+          ],
           "_first": false,
           "_last": true
         }
       ],
       "_first": true,
-      "_last": false
-    },
-    {
-      "name": "crm",
-      "domain_name": "crm",
-      "entity": [
-        {
-          "name": "customer",
-          "entity_name": "customer",
-          "event": [
-            {
-              "name": "onNegotiate",
-              "event_name": "onNegotiate",
-              "parameter": [
-                {
-                  "name": "price",
-                  "parameter_name": "price",
-                  "type": "double",
-                  "parameter_type": "double",
-                  "_first": true,
-                  "_last": true
-                }
-              ],
-              "_first": true,
-              "_last": true
-            }
-          ],
-          "property": [
-            {
-              "name": "id",
-              "property_name": "id",
-              "type": "string",
-              "property_type": "string",
-              "_first": true,
-              "_last": false
-            },
-            {
-              "name": "name",
-              "property_name": "name",
-              "type": "string",
-              "property_type": "string",
-              "_first": false,
-              "_last": false
-            },
-            {
-              "name": "surname",
-              "property_name": "surname",
-              "type": "string",
-              "property_type": "string",
-              "_first": false,
-              "_last": true
-            }
-          ],
-          "_first": true,
-          "_last": true
-        }
-      ],
-      "service": [
-        {
-          "name": "negotiate",
-          "service_name": "negotiate",
-          "type": "boolean",
-          "service_type": "boolean",
-          "parameter": [
-            {
-              "name": "price",
-              "parameter_name": "price",
-              "type": "double",
-              "parameter_type": "double",
-              "_first": true,
-              "_last": true
-            }
-          ],
-          "_first": true,
-          "_last": true
-        }
-      ],
-      "_first": false,
       "_last": true
     }
   ]

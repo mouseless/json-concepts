@@ -8,6 +8,7 @@ of any concepts within a project.
 
 - [x] in transformation files replace $path with $select
 - [x] array support in transformation
+- [ ] fix bug in buildr.js/after
 - [ ] parent support in transformation views for further transformation possibilities
 - [ ] make string functions extensible for further transformation possibilities
 - [ ] migrate from mustache to handlebars
@@ -20,7 +21,7 @@ of any concepts within a project.
   - [ ] directory structure config should be explicit
   - [ ] builder pattern may be applied
 - [ ] ui sample project
-  - [ ] business (dotnet)
+  - [x] business (dotnet)
     - [ ] http:business (dotnet)
   - [ ] database (mongo)
     - [ ] business:database (dotnet)

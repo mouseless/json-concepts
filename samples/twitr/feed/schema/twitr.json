@@ -1,76 +1,30 @@
 {
-  "todo": {
+  "business": {
     "services": {
-      "update": {
+      "get": {
         "return": {
-          "type": "void"
-        },
-        "parameters": {
-          "done": {
-            "type": "boolean"
-          },
-          "by": {
-            "type": "string"
-          },
-          "doneAdded": {
-            "type": "boolean"
-          }
-        }
-      },
-      "delete": {
-        "return": {
-          "type": "void"
+          "type": "list"
         },
         "parameters": {
           
         }
-      }
-    },
-    "events": {
-      "onUpdate": {
-        "service": "update",
-        "parameters": {
-          "done": {
-            "type": "boolean"
-          },
-          "by": {
-            "type": "string"
-          },
-          "doneAdded": {
-            "type": "boolean"
-          }
-        }
-      }
-    }
-  },
-  "crm": {
-    "services": {
-      "negotiate": {
+      },
+      "getByName": {
         "return": {
-          "type": "boolean"
+          "type": "list"
         },
         "parameters": {
-          "price": {
-            "type": "double"
+          "name": {
+            "type": "string"
           },
-          "priceAdded": {
-            "type": "double"
+          "nameAdded": {
+            "type": "string"
           }
         }
       }
     },
     "events": {
-      "onNegotiate": {
-        "service": "negotiate",
-        "parameters": {
-          "price": {
-            "type": "double"
-          },
-          "priceAdded": {
-            "type": "double"
-          }
-        }
-      }
+      
     }
   }
 }

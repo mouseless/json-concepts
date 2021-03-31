@@ -12,7 +12,7 @@
         }
     },
     "service": {
-        "path": "/**/$domain",
+        "path": "/**/$entity",
         "schema": {
             "services?": {
                 "$service+": {

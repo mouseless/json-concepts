@@ -12,5 +12,7 @@ namespace Twitr.Business
         }
 
         public List<Post> Get() => repository.All();
+
+        public List<Post> GetByName(string name) => repository.All();
     }
 }

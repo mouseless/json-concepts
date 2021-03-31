@@ -29,6 +29,7 @@ const jfFormat = { type: 'space', size: 2 };
 String.prototype.after = function (separator) {
     const parts = this.split(separator);
 
+    //TODO BUG should join rest of the parts
     return parts.length > 1 ? parts[1] : '';
 }
 

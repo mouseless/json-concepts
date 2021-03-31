@@ -1,111 +1,145 @@
 {
-    "Assemblies": [
+  "Assemblies": [
+    {
+      "Name": "Twitr.Business",
+      "Types": [
         {
-            "Name": "Inventiv.Sample.Todo",
-            "Types": [
+          "Name": "Feed",
+          "Namespace": "Twitr.Business",
+          "FullName": "Twitr.Business.Feed",
+          "IsGeneric": false,
+          "Constructors": [
+            {
+              "Parameters": [
                 {
-                    "FullName": "Inventiv.Sample.Todo.Task",
-                    "Name": "Task",
-                    "Namespace": "Inventiv.Sample.Todo",
-                    "IsPublic": true,
-                    "Methods": [
-                        {
-                            "Name": "Update",
-                            "Parameters": [
-                                {
-                                    "Name": "done",
-                                    "Type": "System.Boolean"
-                                },
-                                {
-                                    "Name": "by",
-                                    "Type": "System.String"
-                                }
-                            ],
-                            "ReturnType": "System.Void",
-                            "CustomAttributes": [
-                                "Broadcast"
-                            ]
-                        },
-                        {
-                            "Name": "Delete",
-                            "ReturnType": "System.Void",
-                            "CustomAttributes": []
-                        }
-                    ],
-                    "Properties": [
-                        {
-                            "Name": "Id",
-                            "CanRead": true,
-                            "CanWrite": false,
-                            "Type": "System.String",
-                            "IsPublic": true
-                        },
-                        {
-                            "Name": "Description",
-                            "CanRead": true,
-                            "CanWrite": false,
-                            "Type": "System.String",
-                            "IsPublic": true
-                        },
-                        {
-                            "Name": "Done",
-                            "CanRead": true,
-                            "CanWrite": false,
-                            "Type": "System.Boolean",
-                            "IsPublic": true
-                        }
+                  "Name": "repository",
+                  "ParameterType": {
+                    "IsGeneric": true,
+                    "Name": "Twitr.Business.IRepository",
+                    "GenericArguments": [
+                      {
+                        "IsGeneric": false,
+                        "Name": "Twitr.Business.Post"
+                      }
                     ]
+                  },
+                  "CustomAttributes": []
                 }
-            ]
+              ],
+              "CustomAttributes": []
+            }
+          ],
+          "Properties": [],
+          "Methods": [
+            {
+              "Name": "Get",
+              "ReturnType": {
+                "IsGeneric": true,
+                "Name": "System.Collections.Generic.List",
+                "GenericArguments": [
+                  {
+                    "IsGeneric": false,
+                    "Name": "Twitr.Business.Post"
+                  }
+                ]
+              },
+              "Parameters": [],
+              "CustomAttributes": []
+            },
+            {
+              "Name": "GetByName",
+              "ReturnType": {
+                "IsGeneric": true,
+                "Name": "System.Collections.Generic.List",
+                "GenericArguments": [
+                  {
+                    "IsGeneric": false,
+                    "Name": "Twitr.Business.Post"
+                  }
+                ]
+              },
+              "Parameters": [
+                {
+                  "Name": "name",
+                  "ParameterType": {
+                    "IsGeneric": false,
+                    "Name": "System.String"
+                  },
+                  "CustomAttributes": []
+                }
+              ],
+              "CustomAttributes": []
+            }
+          ],
+          "CustomAttributes": []
         },
         {
-            "Name": "Inventiv.Sample.Crm",
-            "Types": [
-                {
-                    "FullName": "Inventiv.Sample.Crm.Customer",
-                    "Name": "Customer",
-                    "Namespace": "Inventiv.Sample.Crm",
-                    "IsPublic": true,
-                    "Methods": [
-                        {
-                            "Name": "Negotiate",
-                            "Parameters": [
-                                {
-                                    "Name": "price",
-                                    "Type": "System.Double"
-                                }
-                            ],
-                            "ReturnType": "System.Boolean",
-                            "CustomAttributes": [
-                                "Broadcast"
-                            ]
-                        }
-                    ],
-                    "Properties": [
-                        {
-                            "Name": "Id",
-                            "CanRead": true,
-                            "CanWrite": false,
-                            "Type": "System.String",
-                            "IsPublic": true
-                        },
-                        {
-                            "Name": "Name",
-                            "CanRead": true,
-                            "CanWrite": false,
-                            "Type": "System.String",
-                            "IsPublic": true
-                        },
-                        {
-                            "Name": "Surname",
-                            "CanRead": true,
-                            "CanWrite": false,
-                            "Type": "System.String",
-                            "IsPublic": true
-                        }
-                    ]
-                }
-            ]
+          "Name": "IRepository",
+          "Namespace": "Twitr.Business",
+          "FullName": "Twitr.Business.IRepository",
+          "IsGeneric": true,
+          "Constructors": [],
+          "Properties": [],
+          "Methods": [
+            {
+              "Name": "All",
+              "ReturnType": {
+                "IsGeneric": true,
+                "Name": "System.Collections.Generic.List",
+                "GenericArguments": [
+                  {
+                    "IsGeneric": false,
+                    "Name": null
+                  }
+                ]
+              },
+              "Parameters": [],
+              "CustomAttributes": []
+            }
+          ],
+          "CustomAttributes": []
+        },
+        {
+          "Name": "Post",
+          "Namespace": "Twitr.Business",
+          "FullName": "Twitr.Business.Post",
+          "IsGeneric": false,
+          "Constructors": [
+            {
+              "Parameters": [],
+              "CustomAttributes": []
+            }
+          ],
+          "Properties": [
+            {
+              "Name": "Uid",
+              "PropertyType": {
+                "IsGeneric": false,
+                "Name": "System.Guid"
+              },
+              "CustomAttributes": []
+            },
+            {
+              "Name": "User",
+              "PropertyType": {
+                "IsGeneric": false,
+                "Name": "System.String"
+              },
+              "CustomAttributes": []
+            },
+            {
+              "Name": "Content",
+              "PropertyType": {
+                "IsGeneric": false,
+                "Name": "System.String"
+              },
+              "CustomAttributes": []
+            }
+          ],
+          "Methods": [],
+          "CustomAttributes": []
         }
-    ]
+      ]
+    }
+  ]
 }

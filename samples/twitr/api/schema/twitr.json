@@ -1,86 +1,49 @@
 {
-  "todo": {
-    "task": {
-      "events": {
-        "onUpdate": {
+  "business": {
+    "feed": {
+      "services": {
+        "get": {
+          "return": {
+            "type": "list"
+          },
           "parameters": {
-            "done": {
-              "type": "boolean"
-            },
-            "by": {
+            
+          }
+        },
+        "getByName": {
+          "return": {
+            "type": "list"
+          },
+          "parameters": {
+            "name": {
               "type": "string"
             }
           }
         }
       },
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "description": {
-          "type": "string"
-        },
-        "done": {
-          "type": "boolean"
-        }
-      }
-    },
-    "services": {
-      "update": {
-        "return": {
-          "type": "void"
-        },
-        "parameters": {
-          "done": {
-            "type": "boolean"
-          },
-          "by": {
-            "type": "string"
-          }
-        }
-      },
-      "delete": {
-        "return": {
-          "type": "void"
-        },
-        "parameters": {
-          
-        }
-      }
-    }
-  },
-  "crm": {
-    "customer": {
       "events": {
-        "onNegotiate": {
-          "parameters": {
-            "price": {
-              "type": "double"
-            }
-          }
-        }
+        
       },
       "properties": {
-        "id": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "surname": {
-          "type": "string"
-        }
+        
       }
     },
-    "services": {
-      "negotiate": {
-        "return": {
-          "type": "boolean"
+    "post": {
+      "services": {
+        
+      },
+      "events": {
+        
+      },
+      "properties": {
+        "uid": {
+          "type": "guid"
         },
-        "parameters": {
-          "price": {
-            "type": "double"
-          }
+        "user": {
+          "type": "string"
+        },
+        "content": {
+          "type": "string"
         }
       }
     }

@@ -1,4 +1,4 @@
-const build = require('../../../../buildr');
+const build = require('../../../../buildrjs/src/buildr');
 
 const concepts = {
     api: build.concepts({ ref: "api" }),

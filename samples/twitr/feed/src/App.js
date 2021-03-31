@@ -4,17 +4,15 @@
 // ---------------------------
 
 import './App.css';
-import { todo, crm } from './Services';
+import { business } from './Services';
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <h1>todo</h1>
-        <p>{ todo.services.update("test-done", "test-by", "test-doneAdded") }</p>
-        <p>{ todo.services.delete() }</p>
-        <h1>crm</h1>
-        <p>{ crm.services.negotiate("test-price", "test-priceAdded") }</p>
+        <h1>business</h1>
+        <p>{ business.services.get() }</p>
+        <p>{ business.services.getByName("test-name", "test-nameAdded") }</p>
       </header>
     </div>
   );

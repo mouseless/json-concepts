@@ -1,4 +1,4 @@
-const build = require('../../../../buildr');
+const build = require('../../../../buildrjs/src/buildr');
 
 const concepts = {
     business: build.concepts({ ref: 'business' }),

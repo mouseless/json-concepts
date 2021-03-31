@@ -16,6 +16,7 @@
         "Gazel",
         "Inventiv",
         "buildr",
+        "buildrjs",
         "businesslogic",
         "camelcase",
         "jsonpath",
@@ -26,6 +27,7 @@
         "restclient",
         "selecttransform",
         "stjs",
-        "twitr"
+        "twitr",
+        "typeof"
     ]
 }

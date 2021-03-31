@@ -1,16 +1,16 @@
 {
     "domain": {
-        "$select": "$..Assemblies[?( @.Name.startsWith('Inventiv') )]",
+        "$select": "$..Assemblies[?( @.Name.startsWith('Twitr') )]",
         "name": "Name.afterLast('.').toCamelCase()"
     },
     "entity": {
-        "$select": "$..Types[?( @.IsPublic )]",
+        "$select": "$..Types[?( @.IsGeneric === false )]",
         "name": "Name.toCamelCase()"
     },
     "service": {
         "$select": "$..Methods[*]",
         "name": "Name.toCamelCase()",
-        "type": "ReturnType.afterLast('.').toCamelCase()"
+        "type": "ReturnType.Name.afterLast('.').toCamelCase()"
     },
     "event": {
         "$select": "$..Methods[?( @.CustomAttributes.includes('Broadcast') )]",
@@ -19,11 +19,11 @@
     "parameter": {
         "$select": "$..Parameters[*]",
         "name": "Name.toCamelCase()",
-        "type": "Type.afterLast('.').toCamelCase()"
+        "type": "ParameterType.Name.afterLast('.').toCamelCase()"
     },
     "property": {
-        "$select": "$..Properties[?( @.IsPublic && @.CanRead )]",
+        "$select": "$..Properties[*]",
         "name": "Name.toCamelCase()",
-        "type": "Type.afterLast('.').toCamelCase()"
+        "type": "PropertyType.Name.afterLast('.').toCamelCase()"
     }
 }
