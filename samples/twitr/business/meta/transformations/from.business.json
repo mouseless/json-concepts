@@ -28,5 +28,6 @@
             "name": "ReturnType.GenericArguments[0].Name.afterLast('.')",
             "Name": "ReturnType.GenericArguments[0].Name.afterLast('.')"
         }
-    ]
+    ],
+    "field": []
 }

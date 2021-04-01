@@ -25,7 +25,7 @@ namespace Twitr.Grpc
             app.UseRouting();
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGrpcService<FeedService>();
+                //endpoints.MapGrpcService<FeedService>();
 
                 endpoints.MapGet("/", async context =>
                 {

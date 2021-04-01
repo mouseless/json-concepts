@@ -1,17 +1,21 @@
-{
-    "Assembly": {
+[
+    {
         "path": "/",
         "schema": {
             "$Assembly+": {}
         }
     },
-    "Type": {
+    {
         "path": "/**/$Assembly",
         "schema": {
-            "$Type+": {}
+            "$Type+": {
+                "Namespace": "$Namespace",
+                "FullName": "$FullName",
+                "IsGeneric": "$IsGeneric"
+            }
         }
     },
-    "Method": {
+    {
         "path": "/**/$Type",
         "schema": {
             "Methods?": {
@@ -21,26 +25,38 @@
             }
         }
     },
-    "Parameter": {
+    {
+        "path": "/**/$Type",
+        "schema": {
+            "Properties?": {
+                "$Property+": {
+                    "$PropertyType": {
+                        "Name": "$PropertyType.Name"
+                    }
+                }
+            }
+        }
+    },
+    {
+        "path": "/**/$Constructor",
+        "schema": {
+            "$Constructors*": {}
+        }
+    },
+    {
         "path": [
+            "/**/$Constructor",
             "/**/$Method"
         ],
         "schema": {
             "Parameters?": {
                 "$Parameter+": {
-                    "ParameterType": "$Type"
-                }
-            }
-        }
-    },
-    "Property": {
-        "path": "/**/$Property",
-        "schema": {
-            "Properties?": {
-                "$Property+": {
-                    "PropertyType": "$Type"
+                    "$ParameterType": {
+                        "IsGeneric": "$IsGeneric",
+                        "Name": "$Name"
+                    }
                 }
             }
         }
     }
-}
+]

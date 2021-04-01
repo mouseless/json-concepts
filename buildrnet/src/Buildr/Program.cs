@@ -3,10 +3,11 @@ using System.IO;
 using System.Reflection;
 using System.Linq;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace Buildr
 {
-    public class Program
+    public static class Program
     {
         static void Main(string[] args)
         {
@@ -34,46 +35,7 @@ namespace Buildr
 
             var json = new
             {
-                Assemblies = args.Skip(1).Select(path => Assembly.LoadFile(path)).Select(assembly => new
-                {
-                    Name = assembly.GetName().Name,
-                    Types = assembly.GetExportedTypes().Select(type => new
-                    {
-                        Name = FixTypeName(type.Name),
-                        Namespace = type.Namespace,
-                        FullName = FixTypeName(type.FullName),
-                        IsGeneric = type.IsGenericType,
-                        Constructors = type.GetConstructors().Select(constructor => new
-                        {
-                            Parameters = constructor.GetParameters().Select(parameter => new
-                            {
-                                Name = parameter.Name,
-                                ParameterType = Ref(parameter.ParameterType),
-                                CustomAttributes = parameter.CustomAttributes.Select(attr => attr.AttributeType.Name)
-                            }),
-                            CustomAttributes = constructor.CustomAttributes.Select(attr => attr.AttributeType.Name)
-                        }),
-                        Properties = type.GetProperties().Select(property => new
-                        {
-                            Name = property.Name,
-                            PropertyType = Ref(property.PropertyType),
-                            CustomAttributes = property.CustomAttributes.Select(attr => attr.AttributeType.Name)
-                        }),
-                        Methods = type.GetMethods().Where(method => !method.IsSpecialName && !FromObject(method)).Select(method => new
-                        {
-                            Name = method.Name,
-                            ReturnType = Ref(method.ReturnType),
-                            Parameters = method.GetParameters().Select(parameter => new
-                            {
-                                Name = parameter.Name,
-                                ParameterType = Ref(parameter.ParameterType),
-                                CustomAttributes = parameter.CustomAttributes.Select(attr => attr.AttributeType.Name)
-                            }),
-                            CustomAttributes = method.CustomAttributes.Select(attr => attr.AttributeType.Name)
-                        }),
-                        CustomAttributes = type.CustomAttributes.Select(attr => attr.AttributeType.Name)
-                    })
-                })
+                Assembly = args.Skip(1).Select(path => Assembly.LoadFile(path)).ToDynamic()
             };
 
             var jsonString = JsonConvert.SerializeObject(json, Formatting.Indented);
@@ -86,6 +48,93 @@ namespace Buildr
             File.WriteAllText(args[0], jsonString);
 
             Console.WriteLine($"Json written to {args[0]}");
+        }
+
+        private static dynamic ToDynamic(this IEnumerable<Assembly> source)
+        {
+            var list = source.ToList();
+
+            return list.Select((assembly, index) => new
+            {
+                _first = index == 0,
+                _last = index == list.Count - 1,
+                _key = assembly.GetName().Name,
+                Type = assembly.GetExportedTypes().ToDynamic()
+            });
+        }
+
+        private static dynamic ToDynamic(this IEnumerable<Type> source)
+        {
+            var list = source.ToList();
+            return list.Select((type, index) => new
+            {
+                _first = index == 0,
+                _last = index == list.Count - 1,
+                _key = FixTypeName(type.Name),
+                Namespace = type.Namespace,
+                FullName = FixTypeName(type.FullName),
+                IsGeneric = type.IsGenericType,
+                Constructor = type.GetConstructors().ToDynamic(),
+                Property = type.GetProperties().ToDynamic(),
+                Method = type.GetMethods().Where(method => !method.IsSpecialName && !FromObject(method)).ToDynamic(),
+                CustomAttribute = type.CustomAttributes.Select(attr => attr.AttributeType.Name)
+            });
+        }
+
+        private static dynamic ToDynamic(this IEnumerable<ConstructorInfo> source)
+        {
+            var list = source.ToList();
+
+            return list.Select((constructor, index) => new
+            {
+                _first = index == 0,
+                _last = index == list.Count - 1,
+                Parameter = constructor.GetParameters().ToDynamic(),
+                CustomAttribute = constructor.CustomAttributes.Select(attr => attr.AttributeType.Name)
+            });
+        }
+
+        private static dynamic ToDynamic(this IEnumerable<PropertyInfo> source)
+        {
+            var list = source.ToList();
+
+            return list.Select((property, index) => new
+            {
+                _first = index == 0,
+                _last = index == list.Count - 1,
+                _key = property.Name,
+                PropertyType = Ref(property.PropertyType),
+                CustomAttribute = property.CustomAttributes.Select(attr => attr.AttributeType.Name)
+            });
+        }
+
+        private static dynamic ToDynamic(this IEnumerable<MethodInfo> source)
+        {
+            var list = source.ToList();
+
+            return list.Select((method, index) => new
+            {
+                _first = index == 0,
+                _last = index == list.Count - 1,
+                _key = method.Name,
+                ReturnType = Ref(method.ReturnType),
+                Parameter = method.GetParameters().ToDynamic(),
+                CustomAttribute = method.CustomAttributes.Select(attr => attr.AttributeType.Name)
+            });
+        }
+
+        private static dynamic ToDynamic(this IEnumerable<ParameterInfo> source)
+        {
+            var list = source.ToList();
+
+            return list.Select((parameter, index) => new
+            {
+                _first = index == 0,
+                _last = index == list.Count - 1,
+                _key = parameter.Name,
+                ParameterType = Ref(parameter.ParameterType),
+                CustomAttribute = parameter.CustomAttributes.Select(attr => attr.AttributeType.Name)
+            });
         }
 
         static dynamic Ref(Type type)
@@ -103,7 +152,7 @@ namespace Buildr
             {
                 IsGeneric = true,
                 Name = FixTypeName(type.GetGenericTypeDefinition().FullName),
-                GenericArguments = type.GetGenericArguments().Select(Ref)
+                GenericArgument = type.GetGenericArguments().Select(Ref)
             };
         }
 

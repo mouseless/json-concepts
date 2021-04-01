@@ -120,17 +120,15 @@ function schema({ name, concept, from }) {
         return result;
     }
 
-    if(from == null) {
+    if (from == null) {
         result.schemaView = readJson(`../schema/${name}.view.json`);
-
-        return result;
+    } else {
+        result.schemaView = transform({
+            schema: concept.schema,
+            transformationsPath: `./transformations/from.${from.concept.name}.json`,
+            source: from.schemaView
+        });
     }
-
-    result.schemaView = transform({
-        schema: concept.schema,
-        transformationsPath: `./transformations/from.${from.concept.name}.json`,
-        source: from.schemaView
-    });
 
     result.schema = renderJson({
         template: concept.template,

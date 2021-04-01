@@ -2,14 +2,3 @@ syntax = "proto3";
 
 option csharp_namespace = "";
 
-package business;
-
-service FeedGrpc {
-  rpc GetPosts (GetPostsRequest) returns (stream Post);
-}
-
-message GetPostsRequest {
-}
-
-message Post {
-}

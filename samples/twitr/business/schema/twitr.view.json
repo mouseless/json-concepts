@@ -1,204 +1,246 @@
 {
-  "Assemblies": [
+  "Assembly": [
     {
-      "Name": "Twitr.Business",
-      "Types": [
+      "_first": true,
+      "_last": true,
+      "_key": "Twitr.Business",
+      "Type": [
         {
-          "Name": "Feed",
+          "_first": true,
+          "_last": false,
+          "_key": "Feed",
           "Namespace": "Twitr.Business",
           "FullName": "Twitr.Business.Feed",
           "IsGeneric": false,
-          "Constructors": [
+          "Constructor": [
             {
-              "Parameters": [
+              "_first": true,
+              "_last": true,
+              "Parameter": [
                 {
-                  "Name": "repository",
+                  "_first": true,
+                  "_last": true,
+                  "_key": "repository",
                   "ParameterType": {
                     "IsGeneric": true,
                     "Name": "Twitr.Business.IRepository",
-                    "GenericArguments": [
+                    "GenericArgument": [
                       {
                         "IsGeneric": false,
                         "Name": "Twitr.Business.Post"
                       }
                     ]
                   },
-                  "CustomAttributes": []
+                  "CustomAttribute": []
                 }
               ],
-              "CustomAttributes": []
+              "CustomAttribute": []
             }
           ],
-          "Properties": [],
-          "Methods": [
+          "Property": [],
+          "Method": [
             {
-              "Name": "GetPosts",
+              "_first": true,
+              "_last": true,
+              "_key": "GetPosts",
               "ReturnType": {
                 "IsGeneric": true,
                 "Name": "System.Collections.Generic.List",
-                "GenericArguments": [
+                "GenericArgument": [
                   {
                     "IsGeneric": false,
                     "Name": "Twitr.Business.Post"
                   }
                 ]
               },
-              "Parameters": [],
-              "CustomAttributes": []
+              "Parameter": [],
+              "CustomAttribute": []
             }
           ],
-          "CustomAttributes": [
+          "CustomAttribute": [
             "ServiceAttribute"
           ]
         },
         {
-          "Name": "ServiceAttribute",
+          "_first": false,
+          "_last": false,
+          "_key": "ServiceAttribute",
           "Namespace": "Twitr.Business",
           "FullName": "Twitr.Business.ServiceAttribute",
           "IsGeneric": false,
-          "Constructors": [
+          "Constructor": [
             {
-              "Parameters": [],
-              "CustomAttributes": []
+              "_first": true,
+              "_last": true,
+              "Parameter": [],
+              "CustomAttribute": []
             }
           ],
-          "Properties": [
+          "Property": [
             {
-              "Name": "TypeId",
+              "_first": true,
+              "_last": true,
+              "_key": "TypeId",
               "PropertyType": {
                 "IsGeneric": false,
                 "Name": "System.Object"
               },
-              "CustomAttributes": []
+              "CustomAttribute": []
             }
           ],
-          "Methods": [
+          "Method": [
             {
-              "Name": "Match",
+              "_first": true,
+              "_last": false,
+              "_key": "Match",
               "ReturnType": {
                 "IsGeneric": false,
                 "Name": "System.Boolean"
               },
-              "Parameters": [
+              "Parameter": [
                 {
-                  "Name": "obj",
+                  "_first": true,
+                  "_last": true,
+                  "_key": "obj",
                   "ParameterType": {
                     "IsGeneric": false,
                     "Name": "System.Object"
                   },
-                  "CustomAttributes": []
+                  "CustomAttribute": []
                 }
               ],
-              "CustomAttributes": []
+              "CustomAttribute": []
             },
             {
-              "Name": "IsDefaultAttribute",
+              "_first": false,
+              "_last": true,
+              "_key": "IsDefaultAttribute",
               "ReturnType": {
                 "IsGeneric": false,
                 "Name": "System.Boolean"
               },
-              "Parameters": [],
-              "CustomAttributes": []
+              "Parameter": [],
+              "CustomAttribute": []
             }
           ],
-          "CustomAttributes": []
+          "CustomAttribute": []
         },
         {
-          "Name": "IRepository",
+          "_first": false,
+          "_last": false,
+          "_key": "IRepository",
           "Namespace": "Twitr.Business",
           "FullName": "Twitr.Business.IRepository",
           "IsGeneric": true,
-          "Constructors": [],
-          "Properties": [],
-          "Methods": [
+          "Constructor": [],
+          "Property": [],
+          "Method": [
             {
-              "Name": "All",
+              "_first": true,
+              "_last": true,
+              "_key": "All",
               "ReturnType": {
                 "IsGeneric": true,
                 "Name": "System.Collections.Generic.List",
-                "GenericArguments": [
+                "GenericArgument": [
                   {
                     "IsGeneric": false,
                     "Name": null
                   }
                 ]
               },
-              "Parameters": [],
-              "CustomAttributes": []
+              "Parameter": [],
+              "CustomAttribute": []
             }
           ],
-          "CustomAttributes": []
+          "CustomAttribute": []
         },
         {
-          "Name": "NullRepository",
+          "_first": false,
+          "_last": false,
+          "_key": "NullRepository",
           "Namespace": "Twitr.Business",
           "FullName": "Twitr.Business.NullRepository",
           "IsGeneric": true,
-          "Constructors": [
+          "Constructor": [
             {
-              "Parameters": [],
-              "CustomAttributes": []
+              "_first": true,
+              "_last": true,
+              "Parameter": [],
+              "CustomAttribute": []
             }
           ],
-          "Properties": [],
-          "Methods": [
+          "Property": [],
+          "Method": [
             {
-              "Name": "All",
+              "_first": true,
+              "_last": true,
+              "_key": "All",
               "ReturnType": {
                 "IsGeneric": true,
                 "Name": "System.Collections.Generic.List",
-                "GenericArguments": [
+                "GenericArgument": [
                   {
                     "IsGeneric": false,
                     "Name": null
                   }
                 ]
               },
-              "Parameters": [],
-              "CustomAttributes": []
+              "Parameter": [],
+              "CustomAttribute": []
             }
           ],
-          "CustomAttributes": []
+          "CustomAttribute": []
         },
         {
-          "Name": "Post",
+          "_first": false,
+          "_last": true,
+          "_key": "Post",
           "Namespace": "Twitr.Business",
           "FullName": "Twitr.Business.Post",
           "IsGeneric": false,
-          "Constructors": [
+          "Constructor": [
             {
-              "Parameters": [],
-              "CustomAttributes": []
+              "_first": true,
+              "_last": true,
+              "Parameter": [],
+              "CustomAttribute": []
             }
           ],
-          "Properties": [
+          "Property": [
             {
-              "Name": "Uid",
+              "_first": true,
+              "_last": false,
+              "_key": "Uid",
               "PropertyType": {
                 "IsGeneric": false,
                 "Name": "System.Guid"
               },
-              "CustomAttributes": []
+              "CustomAttribute": []
             },
             {
-              "Name": "User",
+              "_first": false,
+              "_last": false,
+              "_key": "User",
               "PropertyType": {
                 "IsGeneric": false,
                 "Name": "System.String"
               },
-              "CustomAttributes": []
+              "CustomAttribute": []
             },
             {
-              "Name": "Content",
+              "_first": false,
+              "_last": true,
+              "_key": "Content",
               "PropertyType": {
                 "IsGeneric": false,
                 "Name": "System.String"
               },
-              "CustomAttributes": []
+              "CustomAttribute": []
             }
           ],
-          "Methods": [],
-          "CustomAttributes": []
+          "Method": [],
+          "CustomAttribute": []
         }
       ]
     }

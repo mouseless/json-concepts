@@ -10,13 +10,9 @@
         "**/obj": true
     },
     "cSpell.words": [
-        "Cihan",
-        "D'oh",
-        "Deniz",
-        "Gazel",
         "Grpc",
-        "Inventiv",
         "Protos",
+        "Rpcs",
         "buildr",
         "buildrjs",
         "businesslogic",
@@ -26,6 +22,7 @@
         "noreferrer",
         "prego",
         "prestart",
+        "proto",
         "restclient",
         "selecttransform",
         "stjs",
