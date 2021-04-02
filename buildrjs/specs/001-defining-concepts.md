@@ -1,8 +1,9 @@
 # Defining Concepts
 
-Concepts are schemas that create schemas. Meta-schema could be another word for concepts, but we like concepts more.
+Concepts are schemas that create schemas. To define concepts create a file with
+`.concepts.json` extension.
 
-To define concepts create a file with `.concepts.json` extension. For instance;
+For instance;
 
 `service.concepts.json`
 
