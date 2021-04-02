@@ -5,10 +5,10 @@
 ```json
 {
     "$service+": {
-        "async": "/#/boolean"
+        "async": "/#/async"
     },
     "#": {
-        "boolean": [ true, false ]
+        "async": "$async:boolean"
     }
 }
 ```

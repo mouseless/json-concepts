@@ -1,7 +1,7 @@
 # Zero or One
 
-When put at the end of a concept, `?` indicates that that concept might or
-might not exist in output schemas.
+When put at the end of a concept, `?` indicates that the concept might or might
+not exist in output schemas.
 
 So for the following, `$parameter?` indicates that parameter concept is
 optional for service concept;

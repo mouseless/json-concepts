@@ -31,3 +31,13 @@
     ]
 }
 ```
+
+`greeting.services.json`
+
+```json
+{
+    "sayHello": {
+        "name": "string"
+    }
+}
+```

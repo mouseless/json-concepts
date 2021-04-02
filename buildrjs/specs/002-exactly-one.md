@@ -37,4 +37,5 @@ or this data;
 }
 ```
 
-will **NOT** create a schema, but will give a proper validation error.
+will **NOT** create a schema, because it is missing a parameter data. So it
+will give a proper validation error.

@@ -2,7 +2,7 @@
 
 Concepts are schemas that create schemas. Meta-schema could be another word for concepts, but we like concepts more.
 
-To define concepts create a file with `.concepts.json` extension.
+To define concepts create a file with `.concepts.json` extension. For instance;
 
 `service.concepts.json`
 
@@ -14,7 +14,7 @@ To define concepts create a file with `.concepts.json` extension.
 }
 ```
 
-For the following data;
+with following data;
 
 `greeting.json`
 
@@ -29,7 +29,7 @@ For the following data;
 }
 ```
 
-It creates following file;
+creates following schema;
 
 `greeting.service.json`
 

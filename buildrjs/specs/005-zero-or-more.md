@@ -1,7 +1,7 @@
 # Zero or More
 
-Just like `+`, `*` constraint also requires an array of concept instances in
-data file, except now it can be an empty array.
+Just like `+`, `*` constraint also requires an array of instances in data file,
+except now it can be an empty array.
 
 Changing parameter concept to `$parameter*` will allow zero or more parameters
 under service concept;
