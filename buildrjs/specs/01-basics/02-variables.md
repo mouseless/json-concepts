@@ -1,5 +1,7 @@
 # Variables
 
+> TODO don't mention concepts yet, because concepts come after variables now...!!11!
+
 `$` is used to indicate a variable. A variable is a key variable when it is on
 the key part, and a value variable when it is on the value part. Since concepts
 are basically key variables, we will use variable only for value variables.

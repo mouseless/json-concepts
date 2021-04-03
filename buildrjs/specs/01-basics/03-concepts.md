@@ -1,5 +1,7 @@
 # Concepts
 
+> TODO revise after 01 and 02 are revised..!!
+
 Concepts are schemas that create schemas. To define concepts create a file with
 `.concepts.json` extension.
 

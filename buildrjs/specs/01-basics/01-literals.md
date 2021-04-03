@@ -1,5 +1,7 @@
 # Literals
 
+> TODO simplify samples, because literals comes first now...!!!
+
 Literals are values that are translated directly to output schema.
 
 In below file `string` expression is a literal on value side, `response` is a
