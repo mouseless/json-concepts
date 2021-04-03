@@ -1,8 +1,8 @@
-# Generate text from not matching schema and template
+# Render text using a template with any json
 
 Case: There is a json and a template, but they don't match
 
-Steps to solve the case;
+Steps to follow;
 
 - Create concepts for json
 - Create concepts for template
