@@ -1,4 +1,4 @@
-# Constraints on Key Literals
+# Key Literals
 
 > TBD
 

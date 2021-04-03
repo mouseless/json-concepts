@@ -24,6 +24,8 @@ For following concepts file, `statusCode` is restricted to be either `200`,
 
 Short-hand for enum validator is as follows;
 
+`service.concepts.json`
+
 ```json
 {
     "$service+": {

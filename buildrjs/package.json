@@ -1,11 +1,15 @@
 {
-  "name": "open-schema",
+  "name": "json-concepts",
   "version": "0.0.1",
-  "description": "open schema is an extensible json schema specification.",
+  "description": "json concepts is a meta-schema specification in json format.",
   "main": "index.js",
   "keywords": [
     "json",
-    "schema"
+    "schema",
+    "meta-schema",
+    "concepts",
+    "code",
+    "generation"
   ],
   "author": "Cihan Deniz",
   "license": "MIT",

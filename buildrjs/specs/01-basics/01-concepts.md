@@ -1,9 +1,9 @@
-# Defining Concepts
+# Concepts
 
 Concepts are schemas that create schemas. To define concepts create a file with
 `.concepts.json` extension.
 
-For instance;
+For instance, following concepts file;
 
 `service.concepts.json`
 
@@ -30,7 +30,7 @@ with following data;
 }
 ```
 
-creates following schema;
+generates following schema;
 
 `greeting.service.json`
 
