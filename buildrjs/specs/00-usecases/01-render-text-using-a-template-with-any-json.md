@@ -42,10 +42,10 @@ class Template {
     + render(schema: Schema, transformation: Transformation): String
 }
 
-Transformation *-- Concepts : have >
-Schema *-- Concepts : have > 
-Transformation - Schema : transforms >
-Schema - Template : renders <
+Transformation *-- Concepts : has 2 >
+Schema *-- Concepts : has > 
+Transformation .. Schema : transforms >
+Schema .. Template : renders <
 ```
 
 ## Pseudo Code of Facade Methods
