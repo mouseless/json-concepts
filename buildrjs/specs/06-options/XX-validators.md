@@ -1,4 +1,4 @@
-# Custom Validators
+# Validators
 
 > TBD - will only be available in js
 

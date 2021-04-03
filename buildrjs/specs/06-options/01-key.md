@@ -1,7 +1,7 @@
-# Overriding `_key` Property
+# Key
 
-In data json, `_key` property is expected every concept. This property name can
-be overridden.
+In data json, `_key` property is expected for every concept. This property name
+can be overridden.
 
 `service.concepts.json`
 

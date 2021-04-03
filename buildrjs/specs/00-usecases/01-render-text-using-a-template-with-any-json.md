@@ -20,7 +20,7 @@ Below diagram allows;
 
 ```plantuml
 class Concepts {
-    + createSchema(data: json, schema: json): Schema
+    + createSchema(dataOrSchema: json): Schema
     + verifySchema(schema: json): boolean
     + verifyData(data: json): boolean
 }
@@ -48,7 +48,7 @@ Transformation - Schema : transforms >
 Schema - Template : renders <
 ```
 
-## Pseudo Codes for Facade Methods
+## Pseudo Code of Facade Methods
 
 ```javascript
 Concepts.createSchema = function(dataOrSchema) {
