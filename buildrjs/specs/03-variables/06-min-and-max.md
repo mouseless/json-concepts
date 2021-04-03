@@ -57,7 +57,6 @@ it will create this schema;
 
 But for following data;
 
-
 `greeting.json`
 
 ```json
