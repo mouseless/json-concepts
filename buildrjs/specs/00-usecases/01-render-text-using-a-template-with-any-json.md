@@ -1,8 +1,10 @@
 # Render text using a template with any json
 
-Case: There is a json and a template, but they don't match
+## Case
 
-Steps to follow;
+There is a json and a template, but they don't match.
+
+## Solution
 
 - Create concepts for json
 - Create concepts for template
@@ -20,21 +22,20 @@ Below diagram allows;
 
 ```plantuml
 class Concepts {
-    + createSchema(dataOrSchema: json): Schema
-    + verifySchema(schema: json): boolean
-    + verifyData(data: json): boolean
+    + createSchema(schema: JSON): Schema
+    + verifySchema(schema: JSON): boolean
 }
 
 class Schema {
     - concepts: Concepts
-    + getData(): JSON
+    + getJSON() : JSON
 }
 
 class Transformation {
     - source: Concepts
     - target: Concepts
-    + transform(source: Schema): Schema
-    + transform(source: JSON): JSON
+    + transform(schema: Schema): Schema
+    + transform(schema: JSON): JSON
 }
 
 class Template {
@@ -51,24 +52,17 @@ Schema .. Template : renders <
 ## Pseudo Code of Facade Methods
 
 ```javascript
-Concepts.createSchema = function(dataOrSchema) {
-    if(verifySchema(dataOrSchema))
-        return this + dataOrSchema; // => implementation
-
-    if(verifyData(dataOrSchema))
-        return this + dataOrSchema; // => implementation
+Concepts.createSchema = function(schema) {
+    if(!verifySchema(schema))
+        throw error;    
     
-    throw error;
-}
-
-Schema.getData = function() {
-    return this + this.concepts; // => implementation
+    return this + schema; // => implementation
 }
 
 Transformation.transform = function(source: Schema) {
     return this.target.createSchema(
         this.transform(
-            source.getData()
+            source.getJSON()
         )
     );
 }
