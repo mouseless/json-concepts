@@ -1,10 +1,10 @@
 # Variables
 
-> TODO don't mention concepts yet, because concepts come after variables now...!!11!
+> TODO don't mention concepts yet, variables are right hand expressions, because concepts come after variables now...!!11!
 
 `$` is used to indicate a variable. A variable is a key variable when it is on
 the key part, and a value variable when it is on the value part. Since concepts
-are basically key variables, we will use variable only for value variables.
+are basically key variables, we will use variable to refer to value variables.
 
 Below `$service` and `$parameter` are concepts, but `$type` is a variable.
 
@@ -55,7 +55,7 @@ Output schema is;
 }
 ```
 
-## For Key Literals
+## Case: Key Literals Under Concepts
 
 When a variable exists next to a key literal, its value should be under the
 first concept it is defined.
@@ -105,3 +105,7 @@ Output schema is;
     }
 }
 ```
+
+## Case: Conflicts in Key Literals and Concept Keys
+
+> TBD response literal under service conflicts with response parameter

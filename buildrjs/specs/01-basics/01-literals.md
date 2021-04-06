@@ -1,54 +1,37 @@
 # Literals
 
-> TODO simplify samples, because literals comes first now...!!!
-
 Literals are values that are translated directly to output schema.
 
-In below file `string` expression is a literal on value side, `response` is a
-literal on key side.
+In below file `sayHello` and `name` are literals on key side, `string`
+expression is a literal on value side.
 
 `service.concepts.json`
 
 ```json
 {
-    "$service+": {
-        "$parameter*": "string",
-        "response": "string"
+    "sayHello": {
+        "name": "string"
     }
 }
 ```
 
-For following data;
+For any data;
 
 `greeting.json`
 
 ```json
 {
-    "service": [
-        {
-            "_key": "sayHello",
-            "parameter": [
-                {
-                    "_key": "name"
-                }
-            ]
-        }
-    ]
 }
 ```
 
-Output becomes;
+Output is always;
 
 `greeting.service.json`
 
 ```json
 {
     "sayHello": {
-        "name": "string",
-        "response": "string"
+        "name": "string"
     }
 }
 ```
-
-> For this concepts file when a parameter with name `response` is given, there
-> will be a validation error because it conflicts with `response` key literal.
