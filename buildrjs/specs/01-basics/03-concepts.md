@@ -1,40 +1,21 @@
 # Concepts
 
-> TODO revise after 01 and 02 are revised..!!
+When a key starts with a `$` sign, it indicates that it is a concept. In below
+concepts file, there are two concepts `$service` and `$parameter`.
 
-Concepts are schemas that create schemas. To define concepts create a file with
-`.concepts.json` extension.
-
-For instance, following concepts file;
-
-`service.concepts.json`
+`CONCEPTS: service.concepts.json`
 
 ```json
 {
     "$service": {
-        "$parameter": "string"
+        "$parameter": "$type"
     }
 }
 ```
 
-with following data;
+Below schema is a valid schema against above concepts file;
 
-`greeting.json`
-
-```json
-{
-    "service": {
-        "_key": "sayHello",
-        "parameter": {
-            "_key": "name"
-        }
-    }
-}
-```
-
-generates following schema;
-
-`greeting.service.json`
+`SCHEMA: greeting.service.json`
 
 ```json
 {
@@ -44,56 +25,25 @@ generates following schema;
 }
 ```
 
-> File name construction goes as follows;
->
-> - `greeting` comes from the name of data file: `greeting.json`
-> - `service` comes from the name of concepts file: `service.concepts.json`
-> - `json` is the extension of json files
->
-> So it is: `greeting.service.json`
+## Key Literals Under Concepts
 
+You can define a key literal under a concept. For the following concepts file
+`response` is a key literal under `$service` concept;
 
-## Case: Key Literals Under Concepts
-
-When a variable exists next to a key literal, its value should be under the
-first concept it is defined.
-
-For below concepts file, `$responseType` value is expected to be under
-`service` data.
-
-`service.concepts.json`
+`CONCEPTS: service.concepts.json`
 
 ```json
 {
-    "$service+": {
-        "$parameter*": "$type",
+    "$service": {
+        "$parameter": "$type",
         "response": "$responseType"
     }
 }
 ```
 
-`greeting.json`
+Below is a valid schema for above concepts file;
 
-```json
-{
-    "service": [
-        {
-            "_key": "sayHello",
-            "parameter": [
-                {
-                    "_key": "name",
-                    "type": "string"
-                }
-            ],
-            "responseType": "string"
-        }
-    ]
-}
-```
-
-Output schema is;
-
-`greeting.service.json`
+`SCHEMA: greeting.service.json`
 
 ```json
 {
@@ -104,6 +54,31 @@ Output schema is;
 }
 ```
 
-## Case: Conflicts in Key Literals and Concept Keys
+## Conflicts in Key Literals and Concepts
 
-> TBD response literal under service conflicts with response parameter
+For below concepts file, `$parameter` concept cannot be `response`, because
+there is already a key literal with that name;
+
+`CONCEPTS: service.concepts.json`
+
+```json
+{
+    "$service": {
+        "$parameter": "$type",
+        "response": "$responseType"
+    }
+}
+```
+
+For this reason below schema is **NOT** valid;
+
+`SCHEMA: greeting.service.json`
+
+```json
+{
+    "sayHello": {
+        "response": "string",
+        "response": "string"
+    }
+}
+```

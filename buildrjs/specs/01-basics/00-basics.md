@@ -37,7 +37,6 @@ validate a schema like the following;
 
 ## About Specifications
 
-Every specification introduces a feature of JSON Concepts. In every schema
-there will be one or more cases to clearly define the feature. Just like above
-examples, there will be a sample concepts file and a sample schema to
-demonstrate that case.
+Every specification introduces a feature of JSON Concepts and there will be one
+or more cases to clearly define the feature. Just like above examples, there
+will be a sample concepts file and a sample schema to demonstrate that case.
