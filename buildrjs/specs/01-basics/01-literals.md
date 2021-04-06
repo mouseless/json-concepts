@@ -1,11 +1,26 @@
 # Literals
 
-Literals are values that are translated directly to output schema.
+Literals are definitions that are expected in schema files exactly the same as
+they exist in concepts files.
 
-In below file `sayHello` and `name` are literals on key side, `string`
-expression is a literal on value side.
+In below file `sayHello`, `name` and `string` are literals.
 
-`service.concepts.json`
+`CONCEPTS: service.concepts.json`
+
+```json
+{
+    "sayHello": {
+        "name": "string"
+    }
+}
+```
+
+Literals on the left-hand side are called **key literals**. Those that are on the
+right-hand side are called **value literals**.
+
+Above concepts file only accepts below schema;
+
+`SCHEMA: greeting.service.json`
 
 ```json
 {
@@ -15,23 +30,5 @@ expression is a literal on value side.
 }
 ```
 
-For any data;
-
-`greeting.json`
-
-```json
-{
-}
-```
-
-Output is always;
-
-`greeting.service.json`
-
-```json
-{
-    "sayHello": {
-        "name": "string"
-    }
-}
-```
+This is because there were no variables in above concepts file, but only
+literals. To define variables see [variables](variables.md) specification.

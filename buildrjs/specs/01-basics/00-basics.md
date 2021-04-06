@@ -2,7 +2,7 @@
 
 "JSON Concepts" is a schema specification in JSON format which allows you to
 create a conceptual design for any type of data structure, especially those
-that represent meta-data.
+that represent a meta-data.
 
 A conceptual design is a file in JSON format with a `.concepts.json` extension.
 These files are referred as concepts files throughout the document. Below is an
@@ -21,7 +21,7 @@ example of a concepts file;
 
 Although it is more or less of a self explanatory example, what this document
 represents will become more and more clear as you go throughout this document.
-For now, we only need you to realise that this document defines concepts to
+For now, we only need you to realise that this file defines concepts to
 validate a schema like the following;
 
 `SCHEMA: greeting.service.json`
