@@ -21,14 +21,17 @@ Below diagram allows;
 - Generate code from templates and schemas
 
 ```plantuml
+
 class Concepts {
-    + createSchema(schema: JSON): Schema
-    + verifySchema(schema: JSON): boolean
+    + loadSchema(schema: JSON, path: String): Schema
+    + validateSchema(schema: JSON, path: String): boolean
+    + {static} load(concepts: JSON, path: String): Concepts
 }
 
 class Schema {
     - concepts: Concepts
     + getJSON() : JSON
+    + {static} load(schema: JSON, path: String): Schema
 }
 
 class Transformation {
@@ -53,7 +56,7 @@ Schema .. Template : renders <
 
 ```javascript
 Concepts.createSchema = function(schema) {
-    if(!verifySchema(schema))
+    if(!validateSchema(schema))
         throw error;    
     
     return this + schema; // => implementation

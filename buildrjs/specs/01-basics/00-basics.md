@@ -2,7 +2,7 @@
 
 "JSON Concepts" is a schema specification in JSON format which allows you to
 create a conceptual design for any type of data structure, especially those
-that represent a meta-data.
+that represent a schema.
 
 A conceptual design is a file in JSON format with a `.concepts.json` extension.
 These files are referred as concepts files throughout the document. Below is an

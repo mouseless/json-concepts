@@ -6,47 +6,47 @@
 /* ! auto generation warning  */
 
 /* #domain */
-const $domain = { };
+const $domain$ = { };
 /* / */
 
-module.exports = { /* # */$domain };
+module.exports = { /* # */$domain$ };
 
 /* #domain */
-$domain.services = {
+$domain$.services = {
     /* #service */
-    $service: function (/* # */$parameter) {
-        return "$service called"/* #parameter */ + " ($parameter: " + $parameter + ")"/* / */;
+    $service$: function (/* # */$parameter$) {
+        return "$service$ called"/* #parameter */ + " ($parameter$: " + $parameter$ + ")"/* / */;
     }
     /* / */
 };
 /* / */
 
 /* #domain */
-$domain.events = {
+$domain$.events = {
     /* #event */
-    $event: function (callback) {
-        $domain.events.$service.callbacks.push(callback);
+    $event$: function (callback) {
+        $domain$.events.$service$.callbacks.push(callback);
     },
-    $service: {
+    $service$: {
         callbacks: [],
-        raise: function (/* # */$parameter) {
+        raise: function (/* # */$parameter$) {
             for(let callback in this.callbacks){
                 callback = this.callbacks[callback];
 
-                callback(/* # */$parameter);
+                callback(/* # */$parameter$);
             }
         }
     }/* , */
     /* / */
 };
 
-/* #each event */
-$domain._services = {};
-$domain._services.$service = $domain.services.$service;
-$domain.services.$service = function(/* # */$parameter) {
-    const result = $domain._services.$service(/* # */$parameter);
+$domain$._services = {};
+/* #event */
+$domain$._services.$service$ = $domain$.services.$service$;
+$domain$.services.$service$ = function(/* # */$parameter$) {
+    const result = $domain$._services.$service$(/* # */$parameter$);
     
-    $domain.events.$service.raise(/* # */$parameter);
+    $domain$.events.$service$.raise(/* # */$parameter$);
 
     return result;
 }

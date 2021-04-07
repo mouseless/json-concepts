@@ -1,6 +1,6 @@
 # Concepts
 
-When a key starts with a `$` sign, it indicates that it is a concept. In below
+When a **key** starts with a `$` sign, it indicates that it is a concept. In below
 concepts file, there are two concepts `$service` and `$parameter`.
 
 `CONCEPTS: service.concepts.json`

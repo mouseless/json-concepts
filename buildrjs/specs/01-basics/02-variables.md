@@ -1,6 +1,6 @@
 # Variables
 
-When an value starts with `$` sign, it indicates that it is a variable. Below
+When an **value** starts with `$` sign, it indicates that it is a variable. Below
 `$type` is a variable.
 
 `CONCEPTS: service.concepts.json`
