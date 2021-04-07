@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+option csharp_namespace = "$csharp_namespace$";
+
+package $package$;
+
+/* #Service */
+service $Service$Grpc {
+  /* #Rpc */
+  rpc $Rpc (/* ?RequestStream */stream /* / */$RequestMessage$) returns (/* ?ReplyStream */stream /* / */$ReplyMessage$);
+  /* / */
+}
+/* / */
+
+/* #Message */
+message $Message$ {
+  /* #Field */
+    $type$ $name$ = $index$;
+  /* / */
+}
+/* / */
