@@ -19,7 +19,7 @@ function $function$(/* # */$parameter$) {
 ```json
 {
     "$function*": {
-        "$parameter*": "$type"
+        "$parameter*": { }
     }
 }
 ```
