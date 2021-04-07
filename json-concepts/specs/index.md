@@ -1,4 +1,4 @@
-# Basics
+# Introduction
 
 "JSON Concepts" is a schema specification in JSON format which allows you to
 create a conceptual design for any type of data structure, especially those

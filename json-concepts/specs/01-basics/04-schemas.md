@@ -55,8 +55,8 @@ the top. Below is a schema that refers to `service.concepts.json` file locally;
 }
 ```
 
-To validate above schema you don't need to specify a concepts file since it is
-self-validating. So the validation example in `javascript` becomes simpler;
+To validate above schema you don't need to specify a concepts file explicitly.
+So the validation example in `javascript` becomes simpler;
 
 ```javascript
 const schema = Schema.load({ path: "greeting.service.json" });
