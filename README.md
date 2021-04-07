@@ -9,13 +9,13 @@ of any concepts within a project.
 - [x] in transformation files replace $path with $select
 - [x] array support in transformation
 - [x] fix bug in buildr.js/after
-- [ ] parent support in transformation views
-- [ ] index support in transformation views
-- [ ] make transformation string functions extensible
+- [x] parent support in transformation views -> JSONata has it
+- [x] index support in transformation views -> JSONata has it
+- [x] make transformation string functions extensible -> JSONata has it
+- [x] template language to support in target file type -> Codestache will have it
+  - [x] js: loops using comments `/* #each domain */`, variables underscore `_name_`
+- [ ] try app for json concepts, see try.jsonata.org
 - [ ] migrate from mustache to handlebars
-- [ ] template language to support in target file type
-  - [ ] js: loops using comments `/* #each domain */`, variables underscore `_name_`
-  - [ ] json: loops dollar sign `each$domain`, etc
 - [ ] remove views, transform directly to schema (todoServer, todoClient)
 - [ ] support /# in meta schema -> json merger
 - [ ] build.js

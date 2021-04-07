@@ -6,7 +6,7 @@
 /* ! auto generation warning  */
 
 /* #domain */
-const $domain$ = { };
+const $domain$ = {};
 /* / */
 
 module.exports = { /* # */$domain$ };
@@ -30,7 +30,7 @@ $domain$.events = {
     $service$: {
         callbacks: [],
         raise: function (/* # */$parameter$) {
-            for(let callback in this.callbacks){
+            for (let callback in this.callbacks) {
                 callback = this.callbacks[callback];
 
                 callback(/* # */$parameter$);
@@ -43,9 +43,9 @@ $domain$.events = {
 $domain$._services = {};
 /* #event */
 $domain$._services.$service$ = $domain$.services.$service$;
-$domain$.services.$service$ = function(/* # */$parameter$) {
+$domain$.services.$service$ = function (/* # */$parameter$) {
     const result = $domain$._services.$service$(/* # */$parameter$);
-    
+
     $domain$.events.$service$.raise(/* # */$parameter$);
 
     return result;

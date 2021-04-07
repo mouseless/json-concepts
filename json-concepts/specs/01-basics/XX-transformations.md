@@ -1,5 +1,7 @@
 # Transformations
 
+> TBD
+
 ```json
 {
     "$service": {
@@ -20,13 +22,35 @@
 
 ```json
 {
-    "function": {
-        "$select": "$..service[*]",
-        "returnType": "responseType.capitalize()"
-    },
+    "function": [
+        {
+            "_": "service",
+            "filter": { 
+                "say*": {
+                }
+            },
+            "map": {
+                "_": "_.after('say').camelCase()",
+                "returnType": "responseType.capitalize()"
+            }
+        },
+        {
+            "_": "service",
+            "filter": { 
+                "get*": {
+                }
+            },
+            "map": {
+                "_": "_.camelCase()",
+                "returnType": "responseType.capitalize()"
+            }
+        }
+    ],
     "argument": {
-        "$select": "$..parameter[*]",
-        "type": "type.capitalize()"
+        "$select": "parameter",
+        "map": {
+            "type": "type.capitalize()"
+        }
     }
 }
 ```
@@ -36,13 +60,21 @@
     "sayHello": {
         "name": "string",
         "response": "string"
+    },
+    "getName": {
+        "name": "string",
+        "response": "string"
+    },
+    "sayGoodbye": {
+        "name": "string",
+        "response": "string"
     }
 }
 ```
 
 ```json
 {
-    "sayHello": {
+    "hello": {
         "name": "String",
         "return": "String"
     }

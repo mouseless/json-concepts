@@ -19,7 +19,7 @@ namespace Twitr.Grpc
         /* #Method */
         public override async Task _Method_(_Request_ request, IServerStreamWriter<_Response_> responseStream, ServerCallContext context)
         {
-            var result = target._Method_(/* #Parameter */request._Parameter_/* ,/ */);
+            var result = target._Method_(/* #Parameter */_request_._Parameter_/* ,/ */);
 
             await responseStream.WriteAsync(result);
         }
