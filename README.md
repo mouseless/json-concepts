@@ -1,44 +1,50 @@
-# OPEN-SCHEMA
+# JSON Concepts
 
-This is an experimental project to see if it is possible to create
-an application with multiple tech stack, and still no duplication
-of any concepts within a project.
+"JSON Concepts" is a schema specification in JSON format which allows you to
+create a conceptual design for any type of data structure, especially those
+that represent a schema.
 
-## Tasks
+This project mainly focuses on a specification rather than an implementation.
+However there is going to be a node.js implementation for PoC purposes.
 
-- [x] in transformation files replace $path with $select
-- [x] array support in transformation
-- [x] fix bug in buildr.js/after
-- [x] parent support in transformation views -> JSONata has it
-- [x] index support in transformation views -> JSONata has it
-- [x] make transformation string functions extensible -> JSONata has it
-- [x] template language to support in target file type -> Codestache will have it
-  - [x] js: loops using comments `/* #each domain */`, variables underscore `_name_`
-- [ ] try app for json concepts, see try.jsonata.org
-- [ ] migrate from mustache to handlebars
-- [ ] remove views, transform directly to schema (todoServer, todoClient)
-- [ ] support /# in meta schema -> json merger
-- [ ] build.js
-  - [ ] directory structure config should be explicit
-  - [ ] builder pattern may be applied
-- [ ] ui sample project
-  - [x] business (dotnet)
-    - [ ] gRpc(dotnet):
-      - [x] generate proto
-      - [ ] generate response fields
-      - [ ] generate service class
-      - [ ] generate startup configure services body
-      - [ ] refactor and extend buildr
-    - [ ] :database(mongo)
-  - [ ] rest (go)
-    - [ ] :gRpc(*)
-  - [ ] graphQL (node)
-    - [ ] :gRpc(*)
-  - [ ] feed (react)
-    - [ ] :rest(*)
-  - [ ] feed (vue)
-    - [ ] :graphQL(*)
-  - [ ] board (angular)
-    - [ ] :graphQL(*)
+Below is a sample concepts file;
 
-_PS: Any previous task was lost before converting this file to an .md file._
+`CONCEPTS: endpoint.concepts.json`
+
+```json
+{
+    "$endpoint+": {
+        "$method+": {
+            "$parameter*": "$model",
+            "response?": "$responseModel",
+            "status*": "$status:httpStatus"
+        }
+    },
+    ":": {
+        "httpStatus": [ 200, 400, 404 ]
+    }
+}
+```
+
+Below is a sample schema;
+
+`SCHEMA: users.endpoint.json`
+
+```json
+{
+    "$concepts": "endpoint.concepts.json",
+    
+    "users": {
+        "get": {
+            "name": "string",
+            "response": "user",
+            "status": [ 200, 404 ]
+        },
+        "post": {
+            "name": "string",
+            "surname": "string",
+            "status": [ 200, 400 ]
+        }
+    }
+}
+```
