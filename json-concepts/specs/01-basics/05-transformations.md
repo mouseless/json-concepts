@@ -108,7 +108,7 @@ function $function$($function.argument$) {
 ```
 
 Every template requires its own concepts just like a view requiring its own
-model in MVC. Now what we have is two different definitions of concepts;
+model in MVC, but what we have is two different definitions of concepts;
 
 Client concepts are;
 
