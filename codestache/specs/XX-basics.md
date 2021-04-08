@@ -1,4 +1,4 @@
-# Language Recognition
+# Basics
 
 `TEMPLATE: template.js`
 

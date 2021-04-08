@@ -1,7 +1,45 @@
 # Each, If, Unless
 
-`/* #key */ hey! /* / */` renders `hey!` for every key in given schema
+## Each
 
-`/* ?key */ hey! /* / */` renders `hey!` if key is `true`
+```javascript
+/* #key */
+const $key$ = "hey!";
+/* / */
+```
 
-`/* !key */ hey! /* / */` renders `hey!` unless key is `true`
+renders `hey!` for every key in given schema
+
+```javascript
+const $key$ = "hey!" // #key
+```
+
+single line version of it
+
+## If
+
+```javascript
+/* ?key */
+const $key$ = "hey!";
+/* / */
+```
+
+renders `hey!` if key is `true`
+
+```javascript
+const $key$ = "hey!" // ?key
+```
+
+## Unless
+
+```javascript
+/* !key */
+const $key$ = "hey!";
+/* / */
+```
+
+renders `hey!` unless key is `true`
+
+```javascript
+const $key$ = "hey!" // !key
+```
