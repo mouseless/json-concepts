@@ -15,8 +15,8 @@ In below file `sayHello`, `name` and `string` are literals.
 }
 ```
 
-Literals on the left-hand side are called **key literals**. Those that are on the
-right-hand side are called **value literals**.
+Literals on the left-hand side are called **key literals**. Those that are on
+the right-hand side are called **value literals**.
 
 Above concepts file only accepts below schema;
 
