@@ -28,7 +28,6 @@ This schema can be validated against following concepts file;
 }
 ```
 
-To validate above schema you will need to specify concepts file explicitly.
 Below is a validation example in `javascript`;
 
 ```javascript
@@ -40,14 +39,14 @@ const schema = Concepts
 
 ## Self-Validating Schema
 
-A schema file is **self-validating**  when there exists a `$concepts` key at
+A schema file is **self-validating**  when there exists a `@concepts` key at
 the top. Below is a schema that refers to `service.concepts.json` file locally;
 
 `SCHEMA: greeting.service.json`
 
 ```json
 {
-    "$concepts": "service.concepts.json",
+    "@concepts": "service.concepts.json",
     "sayHello": {
         "name": "string",
         "response": "string"
@@ -71,7 +70,7 @@ example;
 
 ```json
 {
-    "$concepts": "https://jsonconcepts.github.io/samples/service.concepts.json",
+    "@concepts": "https://jsonconcepts.github.io/samples/service.concepts.json",
     "sayHello": {
         "name": "string",
         "response": "string"
