@@ -7,18 +7,20 @@
     "$service+": {
         "name": "$name:name"
     },
-    ":": {
-        "name": {
-            "type": "string",
-            "custom": {
-                "option1": true, 
-                "option2": false
+    "@": {
+        "types": {
+            "name": {
+                "type": "string",
+                "custom": {
+                    "option1": true, 
+                    "option2": false
+                }
             }
-        }
-    },
-    "?": {
-        "validators": {
-            "custom": "custom.validator.js"
+        },
+        "options": {
+            "validators": {
+                "custom": "custom.validator.js"
+            }
         }
     }
 }

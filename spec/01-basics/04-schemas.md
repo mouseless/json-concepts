@@ -39,8 +39,9 @@ const schema = Concepts
 
 ## Self-Validating Schema
 
-A schema file is **self-validating**  when there exists a `@concepts` key at
-the top. Below is a schema that refers to `service.concepts.json` file locally;
+A schema file is **self-validating**  when there exists a `@concepts`
+meta-data. Below is a schema that refers to `service.concepts.json` file
+locally;
 
 `SCHEMA: greeting.service.json`
 
@@ -70,7 +71,7 @@ example;
 
 ```json
 {
-    "@concepts": "https://jsonconcepts.github.io/samples/service.concepts.json",
+    "@concepts": "https://json-concepts.github.io/samples/service.concepts.json",
     "sayHello": {
         "name": "string",
         "response": "string"

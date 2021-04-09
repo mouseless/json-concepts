@@ -10,7 +10,7 @@ change this behavior by setting `caseSensitive` option to `false`.
     "$service+": {
         "$parameter*": "$type"
     },
-    "?": {
+    "@options": {
         "key": "name",
         "caseSensitive": false
     }

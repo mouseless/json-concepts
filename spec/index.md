@@ -40,3 +40,33 @@ validate a schema like the following;
 Every specification introduces a feature of JSON Concepts and there will be one
 or more cases to clearly define the feature. Just like above examples, there
 will be a sample concepts file and a sample schema to demonstrate that case.
+
+## About Syntax
+
+To keep its syntax short, JSON Concepts makes a heavy use of special
+characters. This is a design decision to make the syntax expressive, just like
+regular expressions.
+
+For readability there are two basic rules about usage of special characters;
+
+1. They should mean only one thing
+2. The meaning should be familiar for an acceptable reason
+   1. It may have the same meaning in another language or standard
+   2. Name or shape of the symbol makes sense
+
+Any special character usage that doesn't suit above rules should be taken into
+reconsideration.
+
+| Character | Meaning | Familiarity |
+| - | - | - |
+| $ | variable | variables in php, bash, powershell |
+| # | preprocessor | c macros |
+| : | type | uml, swift, scala |
+| @ | meta-data | java annotations |
+| ? | zero or one | regex, if-else |
+| + | one or more | regex |
+| * | zero or more, any | regex, wildcard |
+| / | path | urls |
+| .. | parent | file paths |
+| ** | any child | file path wildcard |
+| _ | self or current | ?? |

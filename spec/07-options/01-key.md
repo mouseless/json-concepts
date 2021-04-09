@@ -10,7 +10,7 @@ can be overridden.
     "$service+": {
         "$parameter*": "$type"
     },
-    "?": {
+    "@options": {
         "key": "name"
     }
 }

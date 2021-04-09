@@ -31,4 +31,4 @@ Above concepts file only accepts below schema;
 ```
 
 This is because there are no variables in above concepts file, but only
-literals. To define variables see [variables](variables.md) specification.
+literals.

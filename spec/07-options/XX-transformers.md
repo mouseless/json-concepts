@@ -5,10 +5,10 @@
 ```json
 {
     "$service+": {
-        "name": "$name:name"
+        "name": "$name:identifier"
     },
-    ":": {
-        "name": {
+    "@types": {
+        "identifier": {
             "type": "string",
             "custom": {
                 "option1": true, 
@@ -16,7 +16,7 @@
             }
         }
     },
-    "?": {
+    "@options": {
         "transformers": {
             "append": "append.js"
         }
