@@ -4,7 +4,7 @@
 
 ```json
 {
-    "$concepts": {
+    "@concepts": {
         "$function+": {
             "$parameter*": "$type"
         }
