@@ -19,8 +19,8 @@ Below schema is a valid schema against above concepts file;
 
 ```json
 {
-    "sayHello": {
-        "name": "string"
+    "sayGoodbye": {
+        "cry": "boolean"
     }
 }
 ```
@@ -47,8 +47,8 @@ Below is a valid schema for above concepts file;
 
 ```json
 {
-    "sayHello": {
-        "name": "string",
+    "sayGoodbye": {
+        "cry": "boolean",
         "response": "string"
     }
 }
@@ -76,7 +76,7 @@ For this reason below schema is **NOT** valid;
 
 ```json
 {
-    "sayHello": {
+    "sayGoodbye": {
         "response": "string",
         "response": "string"
     }
