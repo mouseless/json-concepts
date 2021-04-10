@@ -17,12 +17,9 @@
     "index": "./bin/index.js"
   },
   "scripts": {
-    "test": "mocha test/**"
+    "test": "mocha test/** -w --reporter min"
   },
-
-  
   "dependencies": {
-    "assert": "^2.0.0",
     "camel-case": "^4.1.2",
     "capitalize": "^2.0.3",
     "chai": "^4.3.4",
