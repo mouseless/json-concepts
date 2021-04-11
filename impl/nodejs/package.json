@@ -20,11 +20,13 @@
     "test": "mocha test/**/* -w --reporter min"
   },
   "dependencies": {
+    "axios": "^0.21.1",
     "camel-case": "^4.1.2",
     "capitalize": "^2.0.3",
     "chai": "^4.3.4",
     "json-format": "^1.0.1",
     "mocha": "^8.3.2",
-    "mock-fs": "^4.13.0"
+    "mock-fs": "^4.13.0",
+    "nock": "^13.0.11"
   }
 }

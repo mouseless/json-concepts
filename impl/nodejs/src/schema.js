@@ -1,17 +1,22 @@
 class Schema {
-    static load(schemaPath, conceptsPath) {
-        const schemaObject = JSON.parse(fs.readFileSync(schemaPath));
+    /**
+     * @param {String|Object} schemaPathOrObject 
+     * @param {String|Object} conceptsPathOrObject 
+     * @returns {Schema}
+     */
+    static load(schemaPathOrObject, conceptsPathOrObject) {
+        const schemaObject = JSON.load(schemaPathOrObject);
 
         if (schemaObject.hasOwnProperty('@concepts')) {
-            conceptsPath = schemaObject['@concepts'];
-        } else if(conceptsPath === null) {
+            conceptsPathOrObject = schemaObject['@concepts'];
+            delete schemaObject['@concepts'];
+        } else if (conceptsPathOrObject === null) {
             throw "error";
         }
 
-        const conceptsObject = JSON.parse(fs.readFileSync(conceptsPath));
-        delete schemaObject['@concepts'];
-
-        return Concepts.load(conceptsObject).load(schemaObject);
+        return Concepts
+            .load(conceptsPathOrObject)
+            .load(schemaObject);
     }
 
     #schemaObject;
@@ -24,4 +29,3 @@ class Schema {
 module.exports = { Schema };
 
 const Concepts = require('./concepts').Concepts;
-const fs = require('fs');
