@@ -1,11 +1,10 @@
-var Concepts = require("../../src/concepts").Concepts;
-var should = require('chai').should();
-
+const Concepts = require('../../../index').Concepts;
+const should = require('chai').should();
 
 describe('basics', function () {
     describe('literals', function () {
         describe('default case', function () {
-            var testing = Concepts.load({
+            const testing = Concepts.load({
                 "sayHello": {
                     "name": "string"
                 }

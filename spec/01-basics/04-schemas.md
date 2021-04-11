@@ -31,10 +31,7 @@ This schema can be validated against following concepts file;
 Below is a validation example in `javascript`;
 
 ```javascript
-const schema = Concepts
-    .load({ path: "service.concepts.json" })
-    .loadSchema({ path: "greeting.service.json" })
-;
+const schema = Schema.load("greeting.service.json", "service.concepts.json");
 ```
 
 ## Self-Validating Schema
@@ -59,7 +56,7 @@ To validate above schema you don't need to specify a concepts file explicitly.
 So the validation example in `javascript` becomes simpler;
 
 ```javascript
-const schema = Schema.load({ path: "greeting.service.json" });
+const schema = Schema.load("greeting.service.json");
 ```
 
 ## Referring to a Remote Concepts File
