@@ -5,12 +5,7 @@ class Concepts {
      * @returns {Concepts} 
      */
     static load(conceptsPathOrObject) {
-        let conceptsObject = conceptsPathOrObject;
-        if(typeof conceptsObject === 'string') {
-            conceptsObject = JSON.parse(fs.readFileSync(conceptsObject));
-        }
-
-        return new Concepts(conceptsObject);
+        return new Concepts(JSON.load(conceptsPathOrObject));
     }
 
     #conceptsObject;
@@ -39,10 +34,7 @@ class Concepts {
      * @returns {Schema}
      */
     load(schemaPathOrObject) {
-        let schemaObject = schemaPathOrObject;
-        if(typeof schemaObject === 'string') {
-            schemaObject = JSON.parse(fs.readFileSync(schemaPathOrObject));
-        }
+        const schemaObject = JSON.load(schemaPathOrObject);
 
         if (this.validate(schemaObject)) {
             return new Schema(schemaObject);
@@ -92,6 +84,6 @@ class Concepts {
 
 module.exports = { Concepts };
 
-const fs = require('fs');
 const symbols = require('./symbols');
 const Schema = require('./schema').Schema;
+require('./json-load');
