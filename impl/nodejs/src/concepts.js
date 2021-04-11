@@ -1,14 +1,15 @@
-const symbols = require('./symbols');
-
 class Concepts {
     /**
-     * @param {Object} options
-     * @param {Object} options.object
-     * @param {String} options.path
+     * @param {String|Object} conceptsPathOrObject
      * 
      * @returns {Concepts} 
      */
-    static load(conceptsObject) {
+    static load(conceptsPathOrObject) {
+        let conceptsObject = conceptsPathOrObject;
+        if(typeof conceptsObject === 'string') {
+            conceptsObject = JSON.parse(fs.readFileSync(conceptsObject));
+        }
+
         return new Concepts(conceptsObject);
     }
 
@@ -24,9 +25,30 @@ class Concepts {
 
     /**
      * @param {Object} schemaObject
+     * 
+     * @returns {boolean}
      */
     validate(schemaObject) {
         return Concepts.#validateRecursively(this.#conceptsObject, schemaObject);
+    }
+
+    /**
+     * 
+     * @param {String|Object} schemaPathOrObject 
+     * 
+     * @returns {Schema}
+     */
+    load(schemaPathOrObject) {
+        let schemaObject = schemaPathOrObject;
+        if(typeof schemaObject === 'string') {
+            schemaObject = JSON.parse(fs.readFileSync(schemaPathOrObject));
+        }
+
+        if (this.validate(schemaObject)) {
+            return new Schema(schemaObject);
+        } else {
+            throw "error";
+        }
     }
 
     static #validateRecursively = function (conceptsObject, schemaObject) {
@@ -36,12 +58,13 @@ class Concepts {
 
         for (const key in conceptsObject) {
             let schemaKey = key;
+
             if (Concepts.#isVariable(key)) {
                 schemaKey = Object.keys(schemaObject)[0];
             } else if (!schemaObject.hasOwnProperty(key)) {
                 return false;
             }
-            
+
             if (!Concepts.#validateRecursively(conceptsObject[key], schemaObject[schemaKey])) {
                 return false;
             }
@@ -58,9 +81,17 @@ class Concepts {
         return conceptsObject === schemaObject;
     }
 
-    static #isVariable = function (conceptsObject) {
-        return conceptsObject.startsWith(symbols.VARIABLE);
+    static #isVariable = function (expression) {
+        return expression.startsWith(symbols.VARIABLE);
+    }
+
+    static #isMetaData = function (expression) {
+        return expression.startsWith(symbols.META_DATA);
     }
 }
 
 module.exports = { Concepts };
+
+const fs = require('fs');
+const symbols = require('./symbols');
+const Schema = require('./schema').Schema;

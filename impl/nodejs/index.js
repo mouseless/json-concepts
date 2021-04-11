@@ -1,11 +1,7 @@
 const Concepts = require("./src/concepts").Concepts;
+const Schema = require("./src/schema").Schema;
 
-const concepts = Concepts.load({
-    object: {
-        "$service": {
-            "$parameter*": "$type"
-        }
-    }
-})
-
-console.log(concepts.object);
+module.exports = {
+    Concepts,
+    Schema
+};
