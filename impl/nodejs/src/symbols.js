@@ -10,6 +10,22 @@ const PARENT = "..";
 const ANY_CHILD = "**";
 const SELF = "_";
 
+function isVariable(expression) {
+    return expression.startsWith(VARIABLE);
+}
+
+function isMetaData(expression) {
+    return expression.startsWith(META_DATA);
+}
+
+function variable(name) {
+    return `${VARIABLE}${name}`;
+}
+
+function metaData(name) {
+    return `${META_DATA}${name}`;
+}
+
 module.exports = {
     VARIABLE,
     PREPROCESSOR,
@@ -21,5 +37,10 @@ module.exports = {
     PATH,
     PARENT,
     ANY_CHILD,
-    SELF
+    SELF,
+
+    isVariable,
+    variable,
+    isMetaData,
+    metaData
 };
