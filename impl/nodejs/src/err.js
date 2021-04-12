@@ -25,7 +25,7 @@ module.exports = {
     Concepts_required_to_load_SCHEMA(SCHEMA) {
         return err(
             `Concepts required to load ${SCHEMA}.` +
-            `Either specify @concepts meta-data within ${SCHEMA}, or pass concepts as a parameter.`
+            ` Either specify @concepts meta-data within ${SCHEMA}, or pass concepts as a parameter.`
         );
     },
     PARAMETER_is_required(PARAMETER) {

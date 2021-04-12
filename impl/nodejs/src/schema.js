@@ -10,10 +10,9 @@ class Schema {
     ) {
         const schemaObject = await JSON.load(schemaPathOrObject);
 
-        if (schemaObject.hasOwnProperty('@concepts')) {
-            conceptsPathOrObject = schemaObject['@concepts'];
-            delete schemaObject['@concepts'];
-        } else if (conceptsPathOrObject === null) {
+        conceptsPathOrObject = conceptsPathOrObject || metaData.read(schemaObject, 'concepts', true);
+
+        if (conceptsPathOrObject === null) {
             throw ERR.Concepts_required_to_load_SCHEMA(schemaPathOrObject);
         }
 
@@ -40,4 +39,5 @@ class Schema {
 module.exports = { Schema };
 
 const { Concepts } = require('./concepts');
+const metaData = require('./meta-data');
 const ERR = require('./err');

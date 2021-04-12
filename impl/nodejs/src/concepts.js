@@ -62,7 +62,7 @@ class Concepts {
         for (const key in conceptsObject) {
             let schemaKey = key;
 
-            if (Concepts.#isVariable(key)) {
+            if (symbols.isVariable(key)) {
                 schemaKey = Object.keys(schemaObject)[0];
             } else if (!schemaObject.hasOwnProperty(key)) {
                 return false;
@@ -77,19 +77,11 @@ class Concepts {
     }
 
     static #validateValue = function (conceptsObject, schemaObject) {
-        if (Concepts.#isVariable(conceptsObject)) {
+        if (symbols.isVariable(conceptsObject)) {
             return true;
         }
 
         return conceptsObject === schemaObject;
-    }
-
-    static #isVariable = function (expression) {
-        return expression.startsWith(symbols.VARIABLE);
-    }
-
-    static #isMetaData = function (expression) {
-        return expression.startsWith(symbols.META_DATA);
     }
 }
 
