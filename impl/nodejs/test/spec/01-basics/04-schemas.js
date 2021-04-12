@@ -9,7 +9,7 @@ describe('basics', function () {
         });
 
         describe('default case', function () {
-            it('should validate', function () {
+            it('should validate', async function () {
                 fs({
                     'service.concepts.json': JSON.stringify({
                         "$service": {
@@ -25,14 +25,14 @@ describe('basics', function () {
                     })
                 });
 
-                const actual = Schema.load("greeting.service.json", "service.concepts.json");
+                const actual = await Schema.load("greeting.service.json", "service.concepts.json");
 
                 actual.should.be.an.instanceof(Schema);
             });
             it('should not validate if it does not conform to its concepts');
         });
         describe('self-validating schema', function () {
-            it('should validate', function () {
+            it('should validate', async function () {
                 fs({
                     'service.concepts.json': JSON.stringify({
                         "$service": {
@@ -49,7 +49,7 @@ describe('basics', function () {
                     })
                 });
 
-                const actual = Schema.load('greeting.service.json');
+                const actual = await Schema.load('greeting.service.json');
 
                 actual.should.be.an.instanceof(Schema);
             });

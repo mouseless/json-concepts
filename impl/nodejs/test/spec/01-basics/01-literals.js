@@ -3,8 +3,8 @@ const should = require('chai').should();
 
 describe('basics', function () {
     describe('literals', function () {
-        describe('default case', function () {
-            const testing = Concepts.load({
+        describe('default case', async function () {
+            const testing = await Concepts.load({
                 "sayHello": {
                     "name": "string"
                 }
