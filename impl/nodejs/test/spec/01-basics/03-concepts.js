@@ -3,8 +3,8 @@ const should = require('chai').should();
 
 describe('basics', function () {
     describe('concepts', function () {
-        describe('default case', function () {
-            const testing = Concepts.load({
+        describe('default case', async function () {
+            const testing = await Concepts.load({
                 "$service": {
                     "$parameter": "$type"
                 }
@@ -18,8 +18,8 @@ describe('basics', function () {
                 }).should.equal(true);
             });
         });
-        describe('key literals under concepts', function () {
-            const testing = Concepts.load({
+        describe('key literals under concepts', async function () {
+            const testing = await Concepts.load({
                 "$service": {
                     "$parameter": "$type",
                     "response": "$responseType"
@@ -43,8 +43,8 @@ describe('basics', function () {
                 }).should.equal(false);
             });
         });
-        describe('conflicts in key literals and concepts', function () {
-            const testing = Concepts.load({
+        describe('conflicts in key literals and concepts', async function () {
+            const testing = await Concepts.load({
                 "$service": {
                     "$parameter": "$type",
                     "response": "$responseType"

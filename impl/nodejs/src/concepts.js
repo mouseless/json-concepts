@@ -1,11 +1,12 @@
 class Concepts {
     /**
+     * @async
      * @param {String|Object} conceptsPathOrObject
      * 
-     * @returns {Concepts} 
+     * @returns {Promise<Concepts>} 
      */
-    static load(conceptsPathOrObject) {
-        return new Concepts(JSON.load(conceptsPathOrObject));
+    static async load(conceptsPathOrObject) {
+        return new Concepts(await JSON.load(conceptsPathOrObject));
     }
 
     #conceptsObject;
@@ -28,13 +29,13 @@ class Concepts {
     }
 
     /**
-     * 
+     * @async
      * @param {String|Object} schemaPathOrObject 
      * 
-     * @returns {Schema}
+     * @returns {Promise<Schema>}
      */
-    load(schemaPathOrObject) {
-        const schemaObject = JSON.load(schemaPathOrObject);
+    async load(schemaPathOrObject) {
+        const schemaObject = await JSON.load(schemaPathOrObject);
 
         if (this.validate(schemaObject)) {
             return new Schema(schemaObject);

@@ -4,8 +4,8 @@ class Schema {
      * @param {String|Object} conceptsPathOrObject 
      * @returns {Schema}
      */
-    static load(schemaPathOrObject, conceptsPathOrObject) {
-        const schemaObject = JSON.load(schemaPathOrObject);
+    static async load(schemaPathOrObject, conceptsPathOrObject) {
+        const schemaObject = await JSON.load(schemaPathOrObject);
 
         if (schemaObject.hasOwnProperty('@concepts')) {
             conceptsPathOrObject = schemaObject['@concepts'];
@@ -14,9 +14,9 @@ class Schema {
             throw "error";
         }
 
-        return Concepts
-            .load(conceptsPathOrObject)
-            .load(schemaObject);
+        const concepts = await Concepts.load(conceptsPathOrObject);
+        
+        return await concepts.load(schemaObject);
     }
 
     #schemaObject;
