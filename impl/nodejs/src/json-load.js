@@ -1,10 +1,10 @@
 /**
  * @async
- * @param {Object} pathOrObject
+ * @param {String|Object} pathOrObject
  * 
  * @returns {Promise<Object>}
  */
-JSON.load = async function (pathOrObject) {
+JSON.load = async function (pathOrObject = required('pathOrObject')) {
     if (typeof pathOrObject === 'object') {
         return pathOrObject;
     }
@@ -65,6 +65,7 @@ function is2xx(statusCode) {
 }
 
 const ERR = require('./err');
+const { required } = require('./required');
 const fs = require('fs');
 const http = require('http');
 const https = require('https');
