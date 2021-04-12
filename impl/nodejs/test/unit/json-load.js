@@ -1,3 +1,13 @@
+const { use, should } = require('chai');
+const chaiAsPromised = require('chai-as-promised');
+const fs = require('mock-fs');
+const nock = require('nock');
+const ERR = require('../../src/err');
+require('../../src/json-load');
+
+use(chaiAsPromised);
+should();
+
 describe('json-loader', async function () {
     after(async function () {
         fs.restore();
@@ -18,6 +28,10 @@ describe('json-loader', async function () {
 
         actual.should.be.an('object');
         actual.test.should.equal("expected");
+    });
+    it('should give error if pathOrObject is not given', async function () {
+        await JSON.load()
+            .should.be.rejectedWith(ERR.PARAMETER_is_required('pathOrObject').message);
     });
     it('should give error if file is not json', async function () {
         fs({
@@ -62,13 +76,3 @@ describe('json-loader', async function () {
         actual.test.should.equal('expected');
     });
 });
-
-const { use, should } = require('chai');
-const chaiAsPromised = require('chai-as-promised');
-const fs = require('mock-fs');
-const nock = require('nock');
-const ERR = require('../../src/err');
-require('../../src/json-load');
-
-use(chaiAsPromised);
-should();

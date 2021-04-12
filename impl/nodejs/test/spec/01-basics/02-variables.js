@@ -1,3 +1,8 @@
+const { Concepts } = require('../../../index');
+const { should } = require('chai');
+
+should();
+
 describe('basics', function () {
     describe('variables', function () {
         describe('default case', async function () {
@@ -25,8 +30,3 @@ describe('basics', function () {
         });
     });
 });
-
-const { Concepts } = require('../../../index');
-const { should } = require('chai');
-
-should();

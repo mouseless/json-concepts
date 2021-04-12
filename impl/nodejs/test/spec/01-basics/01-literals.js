@@ -1,3 +1,8 @@
+const { Concepts } = require('../../../index');
+const { should } = require('chai');
+
+should();
+
 describe('basics', function () {
     describe('literals', function () {
         describe('default case', async function () {
@@ -13,6 +18,11 @@ describe('basics', function () {
                         "name": "string"
                     }
                 }).should.equal(true);
+            });
+
+            it('should not validate if parameter is null or undefined', function () {
+                testing.validate().should.equal(false);
+                testing.validate(null).should.equal(false);
             });
 
             it('should not validate if root keys does not exist', function () {
@@ -46,8 +56,3 @@ describe('basics', function () {
         });
     });
 });
-
-const { Concepts } = require('../../../index');
-const { should } = require('chai');
-
-should();

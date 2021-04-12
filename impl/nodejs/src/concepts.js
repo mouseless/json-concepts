@@ -5,13 +5,17 @@ class Concepts {
      * 
      * @returns {Promise<Concepts>} 
      */
-    static async load(conceptsPathOrObject) {
+    static async load(
+        conceptsPathOrObject = required('conceptsPathOrObject')
+    ) {
         return new Concepts(await JSON.load(conceptsPathOrObject));
     }
 
     #conceptsObject;
 
-    constructor(conceptsObject) {
+    constructor(
+        conceptsObject = required('conceptsObject')
+    ) {
         this.#conceptsObject = conceptsObject;
     }
 
@@ -20,28 +24,34 @@ class Concepts {
     }
 
     /**
-     * @param {Object} schemaObject
-     * 
-     * @returns {boolean}
-     */
-    validate(schemaObject) {
-        return Concepts.#validateRecursively(this.#conceptsObject, schemaObject);
-    }
-
-    /**
      * @async
      * @param {String|Object} schemaPathOrObject 
      * 
      * @returns {Promise<Schema>}
      */
-    async load(schemaPathOrObject) {
+    async load(
+        schemaPathOrObject = required('schemaPathOrObject')
+    ) {
         const schemaObject = await JSON.load(schemaPathOrObject);
 
         if (this.validate(schemaObject)) {
             return new Schema(schemaObject);
         } else {
-            throw "error";
+            throw ERR.SCHEMA_is_not_valid(schemaPathOrObject);
         }
+    }
+
+    /**
+     * @param {Object} schemaObject
+     * 
+     * @returns {boolean}
+     */
+    validate(schemaObject = null) {
+        if (schemaObject === null) {
+            return false;
+        }
+
+        return Concepts.#validateRecursively(this.#conceptsObject, schemaObject);
     }
 
     static #validateRecursively = function (conceptsObject, schemaObject) {
@@ -86,5 +96,7 @@ class Concepts {
 module.exports = { Concepts };
 
 const symbols = require('./symbols');
-const Schema = require('./schema').Schema;
+const { Schema } = require('./schema');
+const { required } = require('./required');
+const ERR = require('./err');
 require('./json-load');
