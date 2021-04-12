@@ -63,7 +63,7 @@ describe('json-loader', async function () {
     });
 });
 
-const { should, use } = require('chai');
+const { use, should } = require('chai');
 const chaiAsPromised = require('chai-as-promised');
 const fs = require('mock-fs');
 const nock = require('nock');
