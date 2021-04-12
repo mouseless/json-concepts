@@ -1,7 +1,3 @@
-const Schema = require('../../../index').Schema;
-const fs = require('mock-fs');
-const should = require('chai').should();
-
 describe('basics', function () {
     describe('schemas', function () {
         after(function () {
@@ -60,3 +56,9 @@ describe('basics', function () {
         });
     });
 });
+
+const { Schema } = require('../../../index');
+const fs = require('mock-fs');
+const { should } = require('chai');
+
+should();
