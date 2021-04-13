@@ -10,20 +10,20 @@ const PARENT = "..";
 const ANY_CHILD = "**";
 const SELF = "_";
 
-function isVariable(expression) {
-    return expression.startsWith(VARIABLE);
+function is(symbol, expression) {
+    return expression.startsWith(symbol);
 }
 
-function isMetaData(expression) {
-    return expression.startsWith(META_DATA);
+function to(symbol, name) {
+    return `${symbol}${name}`;
 }
 
-function variable(name) {
-    return `${VARIABLE}${name}`;
-}
+function from(symbol, variableName) {
+    if(!is(symbol, variableName)) {
+        return variableName;
+    }
 
-function metaData(name) {
-    return `${META_DATA}${name}`;
+    return variableName.substring(VARIABLE.length);
 }
 
 module.exports = {
@@ -39,8 +39,7 @@ module.exports = {
     ANY_CHILD,
     SELF,
 
-    isVariable,
-    variable,
-    isMetaData,
-    metaData
+    is,
+    to,
+    from
 };

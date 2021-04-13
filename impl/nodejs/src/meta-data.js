@@ -1,5 +1,5 @@
 function exists(obj, name) {
-    return obj.hasOwnProperty(symbols.metaData(name));
+    return obj.hasOwnProperty(SYM.to(SYM.META_DATA, name));
 }
 
 function read(obj, name, burnAfterReading = false) {
@@ -7,7 +7,7 @@ function read(obj, name, burnAfterReading = false) {
         return null;
     }
 
-    const metaDataKey = symbols.metaData(name);
+    const metaDataKey = SYM.to(SYM.META_DATA, name);
     const result = obj[metaDataKey];
 
     if(burnAfterReading) {
@@ -22,4 +22,4 @@ module.exports = {
     read
 };
 
-const symbols = require('./symbols');
+const SYM = require('./symbols');

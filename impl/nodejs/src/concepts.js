@@ -35,7 +35,7 @@ class Concepts {
         const schemaObject = await JSON.load(schemaPathOrObject);
 
         if (this.validate(schemaObject)) {
-            return new Schema(schemaObject);
+            return new Schema(schemaObject, this);
         } else {
             throw ERR.SCHEMA_is_not_valid(schemaPathOrObject);
         }
@@ -51,10 +51,51 @@ class Concepts {
             return false;
         }
 
-        return Concepts.#validateRecursively(this.#conceptsObject, schemaObject);
+        return Concepts.#validate(this.#conceptsObject, schemaObject);
     }
 
-    static #validateRecursively = function (conceptsObject, schemaObject) {
+    castShadow() {
+        const shadow = {
+            concepts: []
+        };
+
+        Concepts.#castShadow(shadow, this.#conceptsObject);
+
+        return shadow;
+    }
+
+    static #castShadowOfConcept = function (key, concepts) {
+        const shadow = {
+            _: SYM.from(SYM.VARIABLE, key),
+            variables: [],
+            concepts: []
+        };
+
+        Concepts.#castShadow(shadow, concepts);
+
+        return shadow;
+    }
+
+    static #castShadow = function (shadow, concepts) {
+        if (typeof concepts === 'object') { // traverse
+            for (const key in concepts) {
+                if (SYM.is(SYM.VARIABLE, key)) {
+                    shadow.concepts.push(Concepts.#castShadowOfConcept(key, concepts[key]));
+                } else {
+                    Concepts.#castShadow(shadow, concepts[key]);
+                }
+            }
+        } else if (typeof concepts === 'string' && SYM.is(SYM.VARIABLE, concepts)) { // variable
+            if (!shadow.hasOwnProperty('variables')) {
+                shadow.variables = [];
+            }
+            shadow.variables.push({
+                _: SYM.from(SYM.VARIABLE, concepts)
+            });
+        }
+    }
+
+    static #validate = function (conceptsObject, schemaObject) {
         if (typeof conceptsObject === 'string') {
             return Concepts.#validateValue(conceptsObject, schemaObject);
         }
@@ -62,13 +103,13 @@ class Concepts {
         for (const key in conceptsObject) {
             let schemaKey = key;
 
-            if (symbols.isVariable(key)) {
+            if (SYM.is(SYM.VARIABLE, key)) {
                 schemaKey = Object.keys(schemaObject)[0];
             } else if (!schemaObject.hasOwnProperty(key)) {
                 return false;
             }
 
-            if (!Concepts.#validateRecursively(conceptsObject[key], schemaObject[schemaKey])) {
+            if (!Concepts.#validate(conceptsObject[key], schemaObject[schemaKey])) {
                 return false;
             }
         }
@@ -77,7 +118,7 @@ class Concepts {
     }
 
     static #validateValue = function (conceptsObject, schemaObject) {
-        if (symbols.isVariable(conceptsObject)) {
+        if (SYM.is(SYM.VARIABLE, conceptsObject)) {
             return true;
         }
 
@@ -87,7 +128,7 @@ class Concepts {
 
 module.exports = { Concepts };
 
-const symbols = require('./symbols');
+const SYM = require('./symbols');
 const { Schema } = require('./schema');
 const { required } = require('./required');
 const ERR = require('./err');
