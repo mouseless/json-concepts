@@ -17,7 +17,7 @@
     "index": "./bin/index.js"
   },
   "scripts": {
-    "test": "mocha test/**/* -w --reporter min"
+    "test": "mocha test/**/*"
   },
   "dependencies": {
     "chai": "^4.3.4",

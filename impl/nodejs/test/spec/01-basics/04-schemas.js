@@ -14,46 +14,46 @@ describe('basics', function () {
             fs.restore();
         });
 
-        describe('default case', function () {
-            it('should validate', async function () {
-                fs({
-                    'service.concepts.json': JSON.stringify({
-                        "$service": {
-                            "$parameter": "$type",
-                            "response": "$responseType"
-                        }
-                    }),
-                    'greeting.service.json': JSON.stringify({
-                        "sayHello": {
-                            "name": "string",
-                            "response": "string"
-                        }
-                    })
-                });
-
-                const actual = await Schema.load('greeting.service.json', 'service.concepts.json');
-
-                actual.should.be.an.instanceof(Schema);
+        it('should validate', async function () {
+            fs({
+                'service.concepts.json': JSON.stringify({
+                    "$service": {
+                        "$parameter": "$type",
+                        "response": "$responseType"
+                    }
+                }),
+                'greeting.service.json': JSON.stringify({
+                    "sayHello": {
+                        "name": "string",
+                        "response": "string"
+                    }
+                })
             });
-            it('should not validate if it does not conform to its concepts', async function () {
-                fs({
-                    'service.concepts.json': JSON.stringify({
-                        "$service": {
-                            "$parameter": "$type",
-                            "response": "$responseType"
-                        }
-                    }),
-                    'greeting.service.json': JSON.stringify({
-                        "sayHello": {
-                            "name": "string",
-                        }
-                    })
-                });
 
-                await Schema.load('greeting.service.json', 'service.concepts.json')
-                    .should.be.rejectedWith(ERR.SCHEMA_is_not_valid('greeting.service.json').message)
-            });
+            const actual = await Schema.load('greeting.service.json', 'service.concepts.json');
+
+            actual.should.be.an.instanceof(Schema);
         });
+
+        it('should not validate if it does not conform to its concepts', async function () {
+            fs({
+                'service.concepts.json': JSON.stringify({
+                    "$service": {
+                        "$parameter": "$type",
+                        "response": "$responseType"
+                    }
+                }),
+                'greeting.service.json': JSON.stringify({
+                    "sayHello": {
+                        "name": "string",
+                    }
+                })
+            });
+
+            await Schema.load('greeting.service.json', 'service.concepts.json')
+                .should.be.rejectedWith(ERR.SCHEMA_is_not_valid('greeting.service.json').message)
+        });
+        
         describe('self-validating schema', function () {
             it('should validate', async function () {
                 fs({
@@ -76,6 +76,7 @@ describe('basics', function () {
 
                 actual.should.be.an.instanceof(Schema);
             });
+
             it('should not load if schema is not self-validating', async function () {
                 fs({
                     'greeting.service.json': JSON.stringify({
@@ -90,6 +91,7 @@ describe('basics', function () {
                     .should.be.rejectedWith(ERR.Concepts_required_to_load_SCHEMA('greeting.service.json').message);
             });
         });
+        
         describe('referring-to-a-remote-concepts-file', function () {
             it('should validate', async function () {
                 nock("http://test.com")
