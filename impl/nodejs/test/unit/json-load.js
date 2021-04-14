@@ -8,7 +8,7 @@ require('../../src/json-load');
 use(chaiAsPromised);
 should();
 
-describe('json-loader', async function () {
+describe('JSON#load', async function () {
     after(async function () {
         fs.restore();
     });

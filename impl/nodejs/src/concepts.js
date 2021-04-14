@@ -68,28 +68,21 @@ class Concepts {
 
 function castShadow(shadow, concepts) {
     if (typeof concepts === 'string' && SYM.is(SYM.VARIABLE, concepts)) {
-        shadow.variable = { [SYM.SELF]: SYM.from(SYM.VARIABLE, concepts) };
+        arrayify.pushOrSet(shadow, 'variable', { [SYM.SELF]: SYM.from(SYM.VARIABLE, concepts) });
     } else if (typeof concepts === 'object') {
         for (const key in concepts) {
             if (SYM.is(SYM.VARIABLE, key)) {
                 const concept = { [SYM.SELF]: SYM.from(SYM.VARIABLE, key) };
                 castShadow(concept, concepts[key]);
-                push(shadow, 'concepts', concept);
+                arrayify.pushOrSet(shadow, 'concept', concept);
 
             } else {
                 const literal = { [SYM.SELF]: key };
                 castShadow(literal, concepts[key]);
-                push(shadow, 'literals', literal);
+                arrayify.pushOrSet(shadow, 'literal', literal);
             }
         }
     }
-}
-
-function push(source, key, value) {
-    if (!source.hasOwnProperty(key)) {
-        source[key] = [];
-    }
-    source[key].push(value);
 }
 
 function validate(conceptsObject, schemaObject) {
@@ -125,8 +118,9 @@ function validateValue(conceptsObject, schemaObject) {
 
 module.exports = { Concepts };
 
-const SYM = require('./symbols');
 const { Schema } = require('./schema');
-const { required } = require('./required');
+const arrayify = require('./arrayify');
+const SYM = require('./symbols');
 const ERR = require('./err');
+const { required } = require('./required');
 require('./json-load');

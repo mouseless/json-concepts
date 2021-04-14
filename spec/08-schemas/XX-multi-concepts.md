@@ -1,4 +1,4 @@
-# Multi Concepts At The Same Level
+# Multi Concepts
 
 > TBD - should it be allowed to have multiple concepts, if so then how?
 

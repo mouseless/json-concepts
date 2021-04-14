@@ -25,27 +25,21 @@ Corresponding shadow is as follows;
 
 ```json
 {
-    "concepts": [
-        {
-            "_": "service",
-            "literals": [
-                {
-                    "_": "response",
-                    "variable": {
-                        "_": "responseType"
-                    }
-                }
-            ],
-            "concepts": [
-                { 
-                    "_": "parameter",
-                    "variable": {
-                        "_": "type"
-                    }
-                }
-            ]
+    "concept": {
+        "_": "service",
+        "literal": {
+            "_": "response",
+            "variable": {
+                "_": "responseType"
+            }
+        },
+        "concept": { 
+            "_": "parameter",
+            "variable": {
+                "_": "type"
+            }
         }
-    ]
+    }
 }
 ```
 

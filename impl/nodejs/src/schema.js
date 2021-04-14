@@ -42,9 +42,9 @@ class Schema {
 
     #shadow;
     get shadow() {
-        if(this.#shadow == null) {
+        if (this.#shadow == null) {
             this.#shadow = {};
-    
+
             castShadow(this.#shadow, this.#schemaObject, this.#concepts.shadow);
         }
 
@@ -53,20 +53,22 @@ class Schema {
 }
 
 function castShadow(shadow, schema, conceptsShadow) {
-    if (conceptsShadow.hasOwnProperty('variable')) {
-        const variable = conceptsShadow.variable;
+    const variables = arrayify.get(conceptsShadow, 'variable');
+    if (variables.length > 0) {
+        for (let i = 0; i < variables.length; i++) {
+            const variable = conceptsShadow.variable;
 
-        shadow[variable[SYM.SELF]] = schema;
+            shadow[variable[SYM.SELF]] = schema;
+        }
         return;
     }
 
     const literalMap = {};
-    if (conceptsShadow.hasOwnProperty('literals')) {
-        for (let i = 0; i < conceptsShadow.literals.length; i++) {
-            const literal = conceptsShadow.literals[i];
+    const literals = arrayify.get(conceptsShadow, 'literal');
+    for (let i = 0; i < literals.length; i++) {
+        const literal = literals[i];
 
-            literalMap[literal[SYM.SELF]] = literal;
-        }
+        literalMap[literal[SYM.SELF]] = literal;
     }
 
     for (const key in schema) {
@@ -75,29 +77,16 @@ function castShadow(shadow, schema, conceptsShadow) {
 
             castShadow(shadow, schema[key], literal);
         } else {
-            if (conceptsShadow.hasOwnProperty('concepts')) {
-                for (let i = 0; i < conceptsShadow.concepts.length; i++) {
-                    const concept = conceptsShadow.concepts[i];
+            const concepts = arrayify.get(conceptsShadow, 'concept');
+            for (let i = 0; i < concepts.length; i++) {
+                const concept = concepts[i];
 
-                    const child = { [SYM.SELF]: key };
-                    castShadow(child, schema[key], concept);
+                const child = { [SYM.SELF]: key };
+                castShadow(child, schema[key], concept);
 
-                    setOrPush(shadow, concept[SYM.SELF], child);
-                }
+                arrayify.pushOrSet(shadow, concept[SYM.SELF], child);
             }
         }
-    }
-}
-
-function setOrPush(source, key, value) {
-    if (!source.hasOwnProperty(key)) {
-        source[key] = value;
-    } else {
-        if (!Array.isArray(source[key])) {
-            source[key] = [source[key]];
-        }
-
-        source[key].push(value);
     }
 }
 
@@ -105,7 +94,7 @@ module.exports = { Schema };
 
 const { Concepts } = require('./concepts');
 const metaData = require('./meta-data');
+const arrayify = require('./arrayify');
 const ERR = require('./err');
 const SYM = require('./symbols');
 const { required } = require('./required');
-const jf = require('json-format');
