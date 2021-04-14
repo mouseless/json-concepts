@@ -1,4 +1,4 @@
-const { Schema } = require('../../../index');
+const { Schema, Concepts } = require('../../../index');
 const { should } = require('chai');
 
 should();
@@ -6,29 +6,64 @@ should();
 describe('basics', function () {
     describe('shadows', function () {
         it('should cast shadow', async function () {
-            const schema = await Schema.load({
-                "@concepts": {
-                    "$service": {
-                        "$parameter": "$type",
-                        "response": "$responseType"
-                    }
-                },
-                "sayHello": {
-                    "name": "string",
-                    "response": "string"
+            const concepts = await Concepts.load({
+                "$service": {
+                    "$parameter": "$type",
+                    "response": "$responseType"
                 }
             });
-            
-            const shadow = schema.castShadow();
 
-            shadow.service._.should.equal('sayHello');
-            shadow.service.responseType.should.equal('string');
-            shadow.service.parameter._.should.equal('name');
-            shadow.service.parameter.type.should.equal('string');
+            concepts.shadow.should.deep.equal({
+                concepts: [
+                    {
+                        _: "service",
+                        literals: [
+                            {
+                                _: "response",
+                                variable: {
+                                    _: "responseType"
+                                }
+                            }
+                        ],
+                        concepts: [
+                            { 
+                                _: "parameter",
+                                variable: {
+                                    "_": "type"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            })
         });
 
-        describe('shadow concepts', function () {
-            it('should cast shadow');
+        describe('shadow schema', function () {
+            it('should cast shadow', async function () {
+                const schema = await Schema.load({
+                    "@concepts": {
+                        "$service": {
+                            "$parameter": "$type",
+                            "response": "$responseType"
+                        }
+                    },
+                    "sayHello": {
+                        "name": "string",
+                        "response": "string"
+                    }
+                });
+
+                schema.shadow.should.deep.equal({
+                    service: {
+                        _: "sayHello",
+                        parameter: {
+                            _: "name",
+                            type: "string"
+                        },
+                        responseType: "string"
+                    }
+                });
+            });
         });
     });
 });

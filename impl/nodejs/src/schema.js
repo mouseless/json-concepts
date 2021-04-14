@@ -29,8 +29,8 @@ class Schema {
         }
     }
 
-    #concepts;
     #schemaObject;
+    #concepts;
 
     constructor(
         schemaObject = required('schemaObject'),
@@ -40,39 +40,64 @@ class Schema {
         this.#concepts = concepts;
     }
 
-    castShadow() {
-        const shadow = {};
+    #shadow;
+    get shadow() {
+        if(this.#shadow == null) {
+            this.#shadow = {};
+    
+            castShadow(this.#shadow, this.#schemaObject, this.#concepts.shadow);
+        }
 
-        Schema.#castShadow(shadow, this.#schemaObject, this.#concepts.castShadow().concepts);
+        return this.#shadow;
+    }
+}
 
-        console.log();
-        console.log(shadow);
+function castShadow(shadow, schema, conceptsShadow) {
+    if (conceptsShadow.hasOwnProperty('variable')) {
+        const variable = conceptsShadow.variable;
 
-        return shadow;
+        shadow[variable[SYM.SELF]] = schema;
+        return;
     }
 
-    static #castShadow = function (shadow, schema, concepts) {
-        for (let i = 0; i < concepts.length; i++) {
-            const concept = concepts[i];
+    const literalMap = {};
+    if (conceptsShadow.hasOwnProperty('literals')) {
+        for (let i = 0; i < conceptsShadow.literals.length; i++) {
+            const literal = conceptsShadow.literals[i];
 
-            for (const key in schema) {
-                const child = {
-                    _: key
-                };
+            literalMap[literal[SYM.SELF]] = literal;
+        }
+    }
 
-                //Schema.#castShadow(shadow, schema[key], concept.concepts);
+    for (const key in schema) {
+        if (literalMap.hasOwnProperty(key)) {
+            const literal = literalMap[key];
 
-                if (!shadow.hasOwnProperty(concept._)) {
-                    shadow[concept._] = child;
-                } else {
-                    if (!Array.isArray(shadow[concept._])) {
-                        shadow[concept._] = [shadow[concept._]];
-                    }
+            castShadow(shadow, schema[key], literal);
+        } else {
+            if (conceptsShadow.hasOwnProperty('concepts')) {
+                for (let i = 0; i < conceptsShadow.concepts.length; i++) {
+                    const concept = conceptsShadow.concepts[i];
 
-                    shadow[concept._].push(child);
+                    const child = { [SYM.SELF]: key };
+                    castShadow(child, schema[key], concept);
+
+                    setOrPush(shadow, concept[SYM.SELF], child);
                 }
             }
         }
+    }
+}
+
+function setOrPush(source, key, value) {
+    if (!source.hasOwnProperty(key)) {
+        source[key] = value;
+    } else {
+        if (!Array.isArray(source[key])) {
+            source[key] = [source[key]];
+        }
+
+        source[key].push(value);
     }
 }
 
@@ -81,4 +106,6 @@ module.exports = { Schema };
 const { Concepts } = require('./concepts');
 const metaData = require('./meta-data');
 const ERR = require('./err');
+const SYM = require('./symbols');
 const { required } = require('./required');
+const jf = require('json-format');

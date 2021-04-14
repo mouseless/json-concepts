@@ -23,6 +23,17 @@ class Concepts {
         return this.#conceptsObject;
     }
 
+    #shadow;
+    get shadow() {
+        if (this.#shadow == null) {
+            this.#shadow = {};
+
+            castShadow(this.#shadow, this.#conceptsObject);
+        }
+
+        return this.#shadow;
+    }
+
     /**
      * @async
      * @param {String|Object} schemaPathOrObject 
@@ -51,80 +62,66 @@ class Concepts {
             return false;
         }
 
-        return Concepts.#validate(this.#conceptsObject, schemaObject);
-    }
-
-    castShadow() {
-        const shadow = {
-            concepts: []
-        };
-
-        Concepts.#castShadow(shadow, this.#conceptsObject);
-
-        return shadow;
-    }
-
-    static #castShadowOfConcept = function (key, concepts) {
-        const shadow = {
-            _: SYM.from(SYM.VARIABLE, key),
-            variables: [],
-            concepts: []
-        };
-
-        Concepts.#castShadow(shadow, concepts);
-
-        return shadow;
-    }
-
-    static #castShadow = function (shadow, concepts) {
-        if (typeof concepts === 'object') { // traverse
-            for (const key in concepts) {
-                if (SYM.is(SYM.VARIABLE, key)) {
-                    shadow.concepts.push(Concepts.#castShadowOfConcept(key, concepts[key]));
-                } else {
-                    Concepts.#castShadow(shadow, concepts[key]);
-                }
-            }
-        } else if (typeof concepts === 'string' && SYM.is(SYM.VARIABLE, concepts)) { // variable
-            if (!shadow.hasOwnProperty('variables')) {
-                shadow.variables = [];
-            }
-            shadow.variables.push({
-                _: SYM.from(SYM.VARIABLE, concepts)
-            });
-        }
-    }
-
-    static #validate = function (conceptsObject, schemaObject) {
-        if (typeof conceptsObject === 'string') {
-            return Concepts.#validateValue(conceptsObject, schemaObject);
-        }
-
-        for (const key in conceptsObject) {
-            let schemaKey = key;
-
-            if (SYM.is(SYM.VARIABLE, key)) {
-                schemaKey = Object.keys(schemaObject)[0];
-            } else if (!schemaObject.hasOwnProperty(key)) {
-                return false;
-            }
-
-            if (!Concepts.#validate(conceptsObject[key], schemaObject[schemaKey])) {
-                return false;
-            }
-        }
-
-        return Object.keys(conceptsObject).length == Object.keys(schemaObject).length;
-    }
-
-    static #validateValue = function (conceptsObject, schemaObject) {
-        if (SYM.is(SYM.VARIABLE, conceptsObject)) {
-            return true;
-        }
-
-        return conceptsObject === schemaObject;
+        return validate(this.#conceptsObject, schemaObject);
     }
 }
+
+function castShadow(shadow, concepts) {
+    if (typeof concepts === 'string' && SYM.is(SYM.VARIABLE, concepts)) {
+        shadow.variable = { [SYM.SELF]: SYM.from(SYM.VARIABLE, concepts) };
+    } else if (typeof concepts === 'object') {
+        for (const key in concepts) {
+            if (SYM.is(SYM.VARIABLE, key)) {
+                const concept = { [SYM.SELF]: SYM.from(SYM.VARIABLE, key) };
+                castShadow(concept, concepts[key]);
+                push(shadow, 'concepts', concept);
+
+            } else {
+                const literal = { [SYM.SELF]: key };
+                castShadow(literal, concepts[key]);
+                push(shadow, 'literals', literal);
+            }
+        }
+    }
+}
+
+function push(source, key, value) {
+    if (!source.hasOwnProperty(key)) {
+        source[key] = [];
+    }
+    source[key].push(value);
+}
+
+function validate(conceptsObject, schemaObject) {
+    if (typeof conceptsObject === 'string') {
+        return validateValue(conceptsObject, schemaObject);
+    }
+
+    for (const key in conceptsObject) {
+        let schemaKey = key;
+
+        if (SYM.is(SYM.VARIABLE, key)) {
+            schemaKey = Object.keys(schemaObject)[0];
+        } else if (!schemaObject.hasOwnProperty(key)) {
+            return false;
+        }
+
+        if (!validate(conceptsObject[key], schemaObject[schemaKey])) {
+            return false;
+        }
+    }
+
+    return Object.keys(conceptsObject).length == Object.keys(schemaObject).length;
+}
+
+function validateValue(conceptsObject, schemaObject) {
+    if (SYM.is(SYM.VARIABLE, conceptsObject)) {
+        return true;
+    }
+
+    return conceptsObject === schemaObject;
+}
+
 
 module.exports = { Concepts };
 
