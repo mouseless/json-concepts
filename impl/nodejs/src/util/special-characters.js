@@ -10,16 +10,16 @@ const PARENT = "..";
 const ANY_CHILD = "**";
 const SELF = "_";
 
-function is(symbol, expression) {
-    return expression.startsWith(symbol);
+function is(specialCharacter, expression) {
+    return expression.startsWith(specialCharacter);
 }
 
-function to(symbol, name) {
-    return `${symbol}${name}`;
+function to(specialCharacter, name) {
+    return `${specialCharacter}${name}`;
 }
 
-function from(symbol, variableName) {
-    if(!is(symbol, variableName)) {
+function from(specialCharacter, variableName) {
+    if (!is(specialCharacter, variableName)) {
         return variableName;
     }
 

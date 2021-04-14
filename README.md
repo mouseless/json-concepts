@@ -4,8 +4,8 @@
 create a conceptual design for any type of data structure, especially those
 that represent a schema.
 
-This project mainly focuses on a specification rather than an implementation.
-However there is going to be a node.js implementation for PoC purposes.
+This repository mainly focuses on the specification of JSON Concepts, but there
+is going to be a node.js implementation for PoC purposes.
 
 Below is a sample concepts file;
 
@@ -32,7 +32,7 @@ Below is a sample schema;
 
 ```json
 {
-    "$concepts": "endpoint.concepts.json",
+    "@concepts": "endpoint.concepts.json",
     
     "users": {
         "get": {

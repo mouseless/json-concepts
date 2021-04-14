@@ -1,5 +1,5 @@
 const { Schema } = require('../../../index');
-const ERR = require('../../../src/err');
+const { error } = require('../../../src/util');
 const fs = require('mock-fs');
 const nock = require('nock');
 const { use, should } = require('chai');
@@ -50,7 +50,7 @@ describe('spec/basics/schemas', function () {
         });
 
         await Schema.load('greeting.service.json', 'service.concepts.json')
-            .should.be.rejectedWith(ERR.SCHEMA_is_not_valid('greeting.service.json').message)
+            .should.be.rejectedWith(error.SCHEMA_is_not_valid('greeting.service.json').message)
     });
 
     describe('self-validating schema', function () {
@@ -87,7 +87,7 @@ describe('spec/basics/schemas', function () {
             });
 
             await Schema.load('greeting.service.json')
-                .should.be.rejectedWith(ERR.Concepts_required_to_load_SCHEMA('greeting.service.json').message);
+                .should.be.rejectedWith(error.Concepts_required_to_load_SCHEMA('greeting.service.json').message);
         });
     });
 

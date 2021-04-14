@@ -22,4 +22,7 @@ function pushOrSet(source, key, value) {
     }
 }
 
-module.exports = { get, pushOrSet };
+module.exports = {
+    get,
+    pushOrSet
+};

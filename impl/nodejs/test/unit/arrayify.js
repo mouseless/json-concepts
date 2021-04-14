@@ -1,4 +1,4 @@
-const arrayify = require('../../src/arrayify');
+const { arrayify } = require('../../src/util');
 const { should } = require('chai');
 
 should();

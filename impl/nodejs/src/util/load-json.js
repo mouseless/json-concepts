@@ -4,7 +4,7 @@
  * 
  * @returns {Promise<Object>}
  */
-JSON.load = async function (pathOrObject = required('pathOrObject')) {
+async function loadJSON(pathOrObject = required('pathOrObject')) {
     if (typeof pathOrObject === 'object') {
         return pathOrObject;
     }
@@ -17,20 +17,20 @@ JSON.load = async function (pathOrObject = required('pathOrObject')) {
         try {
             json = await get(path);
         } catch {
-            throw ERR.Cannot_load_URL(path);
+            throw error.Cannot_load_URL(path);
         }
     } else {
         try {
             json = await fs.readFileSync(path);
         } catch {
-            throw ERR.Cannot_load_FILE(path);
+            throw error.Cannot_load_FILE(path);
         }
     }
 
     try {
         return JSON.parse(json);
     } catch {
-        throw ERR.FILE_is_not_a_valid_json(path);
+        throw error.FILE_is_not_a_valid_json(path);
     }
 };
 
@@ -54,8 +54,8 @@ async function get(url) {
             res.on('data', data => {
                 resolve(data);
             });
-        }).on('error', error => {
-            reject(error);
+        }).on('error', e => {
+            reject(e);
         }).end();
     });
 }
@@ -64,8 +64,12 @@ function is2xx(statusCode) {
     return statusCode / 100 === 2;
 }
 
-const ERR = require('./err');
-const { required } = require('./required');
+module.exports = {
+    loadJSON
+};
+
 const fs = require('fs');
 const http = require('http');
 const https = require('https');
+const { required } = require('./required');
+const error = require('./error');

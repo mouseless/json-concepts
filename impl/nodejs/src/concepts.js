@@ -8,7 +8,7 @@ class Concepts {
     static async load(
         conceptsPathOrObject = required('conceptsPathOrObject')
     ) {
-        return new Concepts(await JSON.load(conceptsPathOrObject));
+        return new Concepts(await loadJSON(conceptsPathOrObject));
     }
 
     #conceptsObject;
@@ -43,12 +43,12 @@ class Concepts {
     async load(
         schemaPathOrObject = required('schemaPathOrObject')
     ) {
-        const schemaObject = await JSON.load(schemaPathOrObject);
+        const schemaObject = await loadJSON(schemaPathOrObject);
 
         if (this.validate(schemaObject)) {
             return new Schema(schemaObject, this);
         } else {
-            throw ERR.SCHEMA_is_not_valid(schemaPathOrObject);
+            throw error.SCHEMA_is_not_valid(schemaPathOrObject);
         }
     }
 
@@ -67,17 +67,17 @@ class Concepts {
 }
 
 function castShadow(shadow, concepts) {
-    if (typeof concepts === 'string' && SYM.is(SYM.VARIABLE, concepts)) {
-        arrayify.pushOrSet(shadow, 'variable', { [SYM.SELF]: SYM.from(SYM.VARIABLE, concepts) });
+    if (typeof concepts === 'string' && sc.is(sc.VARIABLE, concepts)) {
+        arrayify.pushOrSet(shadow, 'variable', { [sc.SELF]: sc.from(sc.VARIABLE, concepts) });
     } else if (typeof concepts === 'object') {
         for (const key in concepts) {
-            if (SYM.is(SYM.VARIABLE, key)) {
-                const concept = { [SYM.SELF]: SYM.from(SYM.VARIABLE, key) };
+            if (sc.is(sc.VARIABLE, key)) {
+                const concept = { [sc.SELF]: sc.from(sc.VARIABLE, key) };
                 castShadow(concept, concepts[key]);
                 arrayify.pushOrSet(shadow, 'concept', concept);
 
             } else {
-                const literal = { [SYM.SELF]: key };
+                const literal = { [sc.SELF]: key };
                 castShadow(literal, concepts[key]);
                 arrayify.pushOrSet(shadow, 'literal', literal);
             }
@@ -93,7 +93,7 @@ function validate(conceptsObject, schemaObject) {
     for (const key in conceptsObject) {
         let schemaKey = key;
 
-        if (SYM.is(SYM.VARIABLE, key)) {
+        if (sc.is(sc.VARIABLE, key)) {
             schemaKey = Object.keys(schemaObject)[0];
         } else if (!schemaObject.hasOwnProperty(key)) {
             return false;
@@ -108,19 +108,14 @@ function validate(conceptsObject, schemaObject) {
 }
 
 function validateValue(conceptsObject, schemaObject) {
-    if (SYM.is(SYM.VARIABLE, conceptsObject)) {
+    if (sc.is(sc.VARIABLE, conceptsObject)) {
         return true;
     }
 
     return conceptsObject === schemaObject;
 }
 
-
 module.exports = { Concepts };
 
 const { Schema } = require('./schema');
-const arrayify = require('./arrayify');
-const SYM = require('./symbols');
-const ERR = require('./err');
-const { required } = require('./required');
-require('./json-load');
+const { arrayify, error, sc, required, loadJSON } = require('./util');
