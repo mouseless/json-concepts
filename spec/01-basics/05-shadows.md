@@ -47,7 +47,7 @@ Corresponding shadow is as follows;
 
 ## Shadow Schema
 
-Assume there is below schema that conforms to `service.concepts.json`;
+Assume there is below schema that conforms to above concepts;
 
 `SCHEMA: greeting.service.json`
 
@@ -81,7 +81,7 @@ In this case `greeting.service.json` schema is expected to cast below shadow;
 This way, schema becomes traversable. Following is an example in `javascript`;
 
 ```javascript
-const schema = Schema.load(`greeting.service.json`);
+const schema = Schema.load('greeting.service.json');
 const shadow = schema.shadow;
 
 const service = shadow.service;

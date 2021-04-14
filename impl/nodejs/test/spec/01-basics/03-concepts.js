@@ -3,12 +3,43 @@ const { should } = require('chai');
 
 should();
 
-describe('basics', function () {
-    describe('concepts', function () {
+describe('spec/basics/concepts', function () {
+    it('should validate', async function () {
+        const concepts = await Concepts.load({
+            "$service": {
+                "$parameter": "$type"
+            }
+        });
+
+        concepts.validate({
+            "sayGoodbye": {
+                "cry": "boolean"
+            }
+        }).should.equal(true);
+    });
+
+    describe('key literals under concepts', function () {
         it('should validate', async function () {
             const concepts = await Concepts.load({
                 "$service": {
-                    "$parameter": "$type"
+                    "$parameter": "$type",
+                    "response": "$responseType"
+                }
+            });
+
+            concepts.validate({
+                "sayGoodbye": {
+                    "cry": "boolean",
+                    "response": "string"
+                }
+            }).should.equal(true);
+        });
+
+        it('should not validate', async function () {
+            const concepts = await Concepts.load({
+                "$service": {
+                    "$parameter": "$type",
+                    "response": "$responseType"
                 }
             });
 
@@ -16,58 +47,25 @@ describe('basics', function () {
                 "sayGoodbye": {
                     "cry": "boolean"
                 }
-            }).should.equal(true);
+            }).should.equal(false);
         });
+    });
 
-        describe('key literals under concepts', function () {
-            it('should validate', async function () {
-                const concepts = await Concepts.load({
-                    "$service": {
-                        "$parameter": "$type",
-                        "response": "$responseType"
-                    }
-                });
-
-                concepts.validate({
-                    "sayGoodbye": {
-                        "cry": "boolean",
-                        "response": "string"
-                    }
-                }).should.equal(true);
+    describe('conflicts in key literals and concepts', function () {
+        it('should not validate', async function () {
+            const concepts = await Concepts.load({
+                "$service": {
+                    "$parameter": "$type",
+                    "response": "$responseType"
+                }
             });
 
-            it('should not validate', async function () {
-                const concepts = await Concepts.load({
-                    "$service": {
-                        "$parameter": "$type",
-                        "response": "$responseType"
-                    }
-                });
-
-                concepts.validate({
-                    "sayGoodbye": {
-                        "cry": "boolean"
-                    }
-                }).should.equal(false);
-            });
-        });
-
-        describe('conflicts in key literals and concepts', function () {
-            it('should not validate', async function () {
-                const concepts = await Concepts.load({
-                    "$service": {
-                        "$parameter": "$type",
-                        "response": "$responseType"
-                    }
-                });
-
-                concepts.validate({
-                    "sayGoodbye": {
-                        "response": "string",
-                        "response": "string"
-                    }
-                }).should.equal(false);
-            });
+            concepts.validate({
+                "sayGoodbye": {
+                    "response": "string",
+                    "response": "string"
+                }
+            }).should.equal(false);
         });
     });
 });
