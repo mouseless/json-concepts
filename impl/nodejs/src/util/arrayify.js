@@ -1,4 +1,7 @@
-function get(source, key) {
+function get(
+    source = required('source'),
+    key = required('key')
+) {
     if (!source.hasOwnProperty(key)) {
         return [];
     }
@@ -16,7 +19,11 @@ function get(source, key) {
  * @param {String} key 
  * @param {Object} value 
  */
-function pushOrSet(source, key, value) {
+function pushOrSet(
+    source = required('source'),
+    key = required('key'),
+    value = required('value')
+) {
     if (!source.hasOwnProperty(key)) {
         source[key] = value;
     } else {
@@ -32,3 +39,5 @@ module.exports = {
     get,
     pushOrSet
 };
+
+const { required } = require("./required");

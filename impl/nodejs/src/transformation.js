@@ -12,11 +12,17 @@
     /* const */ #object;
     /* const */ #source;
     /* const */ #target;
+    /* const */ #queriesMap;
 
     constructor(object, source, target) {
+        //todo validate conformance
+
         this.#object = object;
         this.#source = source;
         this.#target = target;
+
+        this.#queriesMap = {};
+        this._build();
     }
 
     get object() { return this.#object; }
@@ -29,52 +35,61 @@
      */
     transform(schema) {
         return this.#target.create(
-            _transform(schema._shadow, this.#target._shadow, this.#object)
+            this._transform(schema._shadow, this.#target._shadow)
         );
     }
-}
 
-function _transform(schema, target, transformation, context = {}) {
-    if (target.hasAnyVariables()) {
-        const result = [];
+    _build() {
+        for (const concept in this.#object) {
+            this.#queriesMap[concept] = [];
 
-        for (const variable of target.variables) {
-            result.push(context[variable.name]);
-        }
-
-        return result.length == 1 ? result[0] : result;
-    }
-
-    const result = {};
-    for (const literal of target.literals) {
-        result[literal.name] = _transform(schema, literal, transformation, context);
-    }
-
-    for (const concept of target.concepts) {
-        const query = transformation[concept.name];
-
-        if (schema.hasSchema(query.from)) {
-            for (const source of schema.getSchema(query.from)) {
-                result[source.name] = {};
-
-                const subContext = {};
-                for (const targetKey in query.select) {
-                    const sourceKey = query.select[targetKey];
-
-                    subContext[targetKey] = source.getVariable(sourceKey).data;
-                }
-
-                result[source.name] = _transform(source, concept, transformation, subContext);
+            const queries = arrayify.get(this.#object, concept);
+            for (const query of queries) {
+                this.#queriesMap[concept].push(new Query(query));
             }
         }
     }
 
-    return result;
+    _transform(schema, target, context = {}) {
+        if (target.hasAnyVariables()) {
+            const result = [];
+
+            for (const variable of target.variables) {
+                if (context.hasOwnProperty(variable.name)) {
+                    result.push(context[variable.name]);
+                }
+            }
+
+            return result.length > 1
+                ? result
+                : result.length > 0
+                    ? result[0]
+                    : null;
+        }
+
+        const result = {};
+        for (const literal of target.literals) {
+            result[literal.name] = this._transform(schema, literal, context);
+        }
+
+        for (const concept of target.concepts) {
+            for (const query of this.#queriesMap[concept.name]) {
+                for (const childSchema of query.from(schema)) {
+                    const childContext = query.select(childSchema);
+
+                    result[childSchema.name] = this._transform(childSchema, concept, childContext);
+                }
+            }
+        }
+
+        return result;
+    }
 }
 
 module.exports = {
     Transformation
 };
 
-const { sc, arrayify, required, loadJSON } = require('./util');
+const { arrayify, required, loadJSON } = require('./util');
 const { Schema } = require('./schema');
+const { Query } = require('./query');

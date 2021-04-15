@@ -1,4 +1,4 @@
-const { arrayify } = require('../../src/util');
+const { arrayify, error } = require('../../src/util');
 const { should } = require('chai');
 
 should();
@@ -27,6 +27,14 @@ describe('arrayify', function () {
 
             actual.should.be.an('array');
             actual.length.should.equal(0);
+        });
+
+        it('should throw error when a parameter is not given', function () {
+            (() => arrayify.get())
+                .should.throw(error.PARAMETER_is_required('source').message);
+
+            (() => arrayify.get({}))
+                .should.throw(error.PARAMETER_is_required('key').message);
         });
     });
 
@@ -57,6 +65,17 @@ describe('arrayify', function () {
 
             source.string.should.be.a('string');
             source.string.should.equal("test");
+        });
+
+        it('should throw error when a parameter is not given', function () {
+            (() => arrayify.pushOrSet())
+                .should.throw(error.PARAMETER_is_required('source').message);
+
+            (() => arrayify.pushOrSet({}))
+                .should.throw(error.PARAMETER_is_required('key').message);
+
+            (() => arrayify.pushOrSet({}, 'test'))
+                .should.throw(error.PARAMETER_is_required('value').message);
         });
     })
 });
