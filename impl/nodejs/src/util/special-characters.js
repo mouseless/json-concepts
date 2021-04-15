@@ -7,6 +7,7 @@ const ONE_OR_MORE = "+";
 const ZERO_OR_MORE = "*";
 const PATH = "/";
 const PARENT = "..";
+const ANY = "*";
 const ANY_CHILD = "**";
 const SELF = "_";
 
@@ -36,6 +37,7 @@ module.exports = {
     ZERO_OR_MORE,
     PATH,
     PARENT,
+    ANY,
     ANY_CHILD,
     SELF,
 

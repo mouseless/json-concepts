@@ -1,37 +1,32 @@
 class Concepts {
     /**
      * @async
-     * @param {String|Object} conceptsPathOrObject
+     * @param {String|Object} pathOrObject
      * 
      * @returns {Promise<Concepts>} 
      */
-    static async load(
-        conceptsPathOrObject = required('conceptsPathOrObject')
-    ) {
-        return new Concepts(await loadJSON(conceptsPathOrObject));
+    static async load(pathOrObject = required('pathOrObject')) {
+        return new Concepts(await loadJSON(pathOrObject));
     }
 
-    #conceptsObject;
+    #object;
+    #root;
 
-    constructor(
-        conceptsObject = required('conceptsObject')
-    ) {
-        this.#conceptsObject = conceptsObject;
+    constructor(object = required('object')) {
+        this.#object = object;
+        this.#root = Concept.build(undefined, object);
     }
 
     get object() {
-        return this.#conceptsObject;
+        return this.#object;
     }
 
-    #shadow;
     get shadow() {
-        if (this.#shadow == null) {
-            this.#shadow = {};
+        return this.#root.shadow;
+    }
 
-            castShadow(this.#shadow, this.#conceptsObject);
-        }
-
-        return this.#shadow;
+    get _root() {
+        return this.#root;
     }
 
     /**
@@ -40,9 +35,7 @@ class Concepts {
      * 
      * @returns {Promise<Schema>}
      */
-    async load(
-        schemaPathOrObject = required('schemaPathOrObject')
-    ) {
+    async load(schemaPathOrObject = required('schemaPathOrObject')) {
         const schemaObject = await loadJSON(schemaPathOrObject);
 
         if (this.validate(schemaObject)) {
@@ -62,26 +55,7 @@ class Concepts {
             return false;
         }
 
-        return validate(this.#conceptsObject, schemaObject);
-    }
-}
-
-function castShadow(shadow, concepts) {
-    if (typeof concepts === 'string' && sc.is(sc.VARIABLE, concepts)) {
-        arrayify.pushOrSet(shadow, 'variable', { [sc.SELF]: sc.from(sc.VARIABLE, concepts) });
-    } else if (typeof concepts === 'object') {
-        for (const key in concepts) {
-            if (sc.is(sc.VARIABLE, key)) {
-                const concept = { [sc.SELF]: sc.from(sc.VARIABLE, key) };
-                castShadow(concept, concepts[key]);
-                arrayify.pushOrSet(shadow, 'concept', concept);
-
-            } else {
-                const literal = { [sc.SELF]: key };
-                castShadow(literal, concepts[key]);
-                arrayify.pushOrSet(shadow, 'literal', literal);
-            }
-        }
+        return validate(this.#object, schemaObject);
     }
 }
 
@@ -118,4 +92,5 @@ function validateValue(conceptsObject, schemaObject) {
 module.exports = { Concepts };
 
 const { Schema } = require('./schema');
-const { arrayify, error, sc, required, loadJSON } = require('./util');
+const { Concept } = require('./concept');
+const { error, sc, required, loadJSON } = require('./util');

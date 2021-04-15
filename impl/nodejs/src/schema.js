@@ -1,103 +1,89 @@
 class Schema {
     /**
-     * @param {String|Object} schemaPathOrObject 
-     * @param {String|Object} conceptsPathOrObject
+     * @param {String|Object} pathOrObject 
+     * @param {String|Object|Concepts} concepts
      * 
      * @returns {Schema}
      */
     static async load(
-        schemaPathOrObject = required('schemaPathOrObject'),
-        conceptsPathOrObject = null
+        pathOrObject = required('pathOrObject'),
+        concepts = null
     ) {
-        const schemaObject = await loadJSON(schemaPathOrObject);
+        const object = await loadJSON(pathOrObject);
 
-        conceptsPathOrObject = conceptsPathOrObject || metaData.read(schemaObject, 'concepts', true);
+        concepts = concepts || metaData.read(object, 'concepts', true);
 
-        if (conceptsPathOrObject === null) {
-            throw error.Concepts_required_to_load_SCHEMA(schemaPathOrObject);
+        if (concepts === null) {
+            throw error.Concepts_required_to_load_SCHEMA(pathOrObject);
         }
 
-        const concepts = await Concepts.load(conceptsPathOrObject);
+        if (!(concepts instanceof Concepts)) {
+            concepts = await Concepts.load(concepts);
+        }
 
         try {
-            return await concepts.load(schemaObject);
+            return await concepts.load(object);
         } catch (e) {
-            if (e.name === error.NAMES.SCHEMA_ERROR) {
-                throw error.SCHEMA_is_not_valid(schemaPathOrObject);
+            if (e.name === error.Names.SCHEMA_ERROR) {
+                throw error.SCHEMA_is_not_valid(pathOrObject);
             }
 
             throw e;
         }
     }
 
-    #schemaObject;
+    #object;
     #concepts;
+    #shadow;
 
     constructor(
-        schemaObject = required('schemaObject'),
+        object = required('object'),
         concepts = required('concepts')
     ) {
-        this.#schemaObject = schemaObject;
+        this.#object = object;
         this.#concepts = concepts;
     }
 
-    #shadow;
+    get object() {
+        return this.#object;
+    }
+
     get shadow() {
         if (this.#shadow == null) {
             this.#shadow = {};
 
-            castShadow(this.#shadow, this.#schemaObject, this.#concepts.shadow);
+            castShadow(this.#shadow, this.#object, this.#concepts.shadow);
         }
 
         return this.#shadow;
     }
 }
 
-function castShadow(shadow, schema, conceptsShadow) {
-    const variables = arrayify.get(conceptsShadow, SHADOW_KEYS.VARIABLE);
-    if (variables.length > 0) {
-        for (let i = 0; i < variables.length; i++) {
-            const variable = conceptsShadow.variable;
-
+function castShadow(shadow, schema, concept) {
+    concept = Concept.from(concept);
+    if (concept.hasVariable()) {
+        for (const variable of concept.variables) {
             shadow[variable[sc.SELF]] = schema;
         }
         return;
     }
 
-    const literalMap = {};
-    const literals = arrayify.get(conceptsShadow, SHADOW_KEYS.LITERAL);
-    for (let i = 0; i < literals.length; i++) {
-        const literal = literals[i];
-
-        literalMap[literal[sc.SELF]] = literal;
-    }
-
     for (const key in schema) {
-        if (literalMap.hasOwnProperty(key)) {
-            const literal = literalMap[key];
-
-            castShadow(shadow, schema[key], literal);
+        if (concept.hasLiteral(key)) {
+            castShadow(shadow, schema[key], concept.getLiteral(key));
         } else {
-            const concepts = arrayify.get(conceptsShadow, SHADOW_KEYS.CONCEPT);
-            for (let i = 0; i < concepts.length; i++) {
-                const concept = concepts[i];
+            for (const childConcept of concept.concepts) {
+                const childShadow = { [sc.SELF]: key };
+                castShadow(childShadow, schema[key], childConcept);
 
-                const child = { [sc.SELF]: key };
-                castShadow(child, schema[key], concept);
-
-                arrayify.pushOrSet(shadow, concept[sc.SELF], child);
+                arrayify.pushOrSet(shadow, childConcept[sc.SELF], childShadow);
             }
         }
     }
 }
 
-const SHADOW_KEYS = {
-    VARIABLE: 'variable',
-    CONCEPT: 'concept',
-    LITERAL: 'literal'
-}
-
 module.exports = { Schema };
 
 const { Concepts } = require('./concepts');
+const { Concept } = require('./concept');
 const { sc, error, metaData, arrayify, required, loadJSON } = require('./util');

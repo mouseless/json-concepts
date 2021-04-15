@@ -1,9 +1,9 @@
-const NAMES = {
+const Names = {
     SCHEMA_ERROR: 'SchemaError',
     ERROR: 'Error'
 }
 
-function error(message, name = NAMES.ERROR) {
+function error(message, name = Names.ERROR) {
     const result = new Error(message);
 
     result.name = name;
@@ -12,7 +12,7 @@ function error(message, name = NAMES.ERROR) {
 }
 
 module.exports = {
-    NAMES,
+    Names,
     FILE_is_not_a_valid_json(FILE) {
         return error(`'${FILE}' is not a valid json`);
     },
@@ -36,6 +36,6 @@ module.exports = {
             SCHEMA = 'Schema';
         }
 
-        return error(`${SCHEMA} is not valid`, NAMES.SCHEMA_ERROR);
+        return error(`${SCHEMA} is not valid`, Names.SCHEMA_ERROR);
     }
 };

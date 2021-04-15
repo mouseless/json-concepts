@@ -55,12 +55,6 @@ Above transformation takes following schema;
 
 ```json
 {
-    "@concepts": {
-        "$service": {
-            "$parameter": "$type",
-            "response": "$responseType"
-        }
-    },
     "sayHello": {
         "name": "string",
         "response": "string"
