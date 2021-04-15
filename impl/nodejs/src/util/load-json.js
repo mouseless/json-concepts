@@ -15,7 +15,7 @@ async function loadJSON(pathOrObject = required('pathOrObject')) {
     if (path.startsWith('http://') ||
         path.startsWith('https://')) {
         try {
-            json = await get(path);
+            json = await _get(path);
         } catch {
             throw error.Cannot_load_URL(path);
         }
@@ -41,12 +41,12 @@ async function loadJSON(pathOrObject = required('pathOrObject')) {
  * @param {string} url A url that starts with 'http://' or 'https://'
  * @returns {Promise<string>} Data that is returned from given url
  */
-async function get(url) {
+async function _get(url) {
     return new Promise((resolve, reject) => {
         const make = url.startsWith("https") ? https : http;
 
         make.request(url, res => {
-            if (!is2xx(res.statusCode)) {
+            if (!_is2xx(res.statusCode)) {
                 reject(new Error());
                 return;
             }
@@ -60,7 +60,7 @@ async function get(url) {
     });
 }
 
-function is2xx(statusCode) {
+function _is2xx(statusCode) {
     return statusCode / 100 === 2;
 }
 

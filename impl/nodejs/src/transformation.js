@@ -1,4 +1,4 @@
-/* export */ class Transformation {
+/* exported */ class Transformation {
     static async load(
         pathOrObject = required('pathOrObject'),
         source = null,
@@ -30,11 +30,11 @@
      * @returns {Schema}
      */
     transform(schema) {
-        return transform(schema.shadow, this.#target._shadow, this.#object);
+        return _transform(schema.shadow, this.#target._shadow, this.#object);
     }
 }
 
-function transform(schema, target, transformation, context = {}) {
+function _transform(schema, target, transformation, context = {}) {
     if (target.hasVariable()) {
         const result = [];
 
@@ -48,7 +48,7 @@ function transform(schema, target, transformation, context = {}) {
     const result = {};
 
     for (const literal of target.literals) {
-        result[literal.name] = transform(schema, literal, transformation, context);
+        result[literal.name] = _transform(schema, literal, transformation, context);
     }
 
     for (const concept of target.concepts) {
@@ -65,7 +65,7 @@ function transform(schema, target, transformation, context = {}) {
                 subContext[targetKey] = source[sourceKey];
             }
 
-            result[source[sc.SELF]] = transform(source, concept, transformation, subContext);
+            result[source[sc.SELF]] = _transform(source, concept, transformation, subContext);
         }
     }
 

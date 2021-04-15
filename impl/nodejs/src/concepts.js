@@ -1,4 +1,4 @@
-/* export */ class Concepts {
+/* exported */ class Concepts {
     /**
      * @async
      * @param {String|Object} pathOrObject
@@ -19,17 +19,10 @@
         this.#shadow.build(object);
     }
 
-    get object() {
-        return this.#object;
-    }
+    get object() { return this.#object; }
+    get shadow() { return this.#shadow.data; }
 
-    get shadow() {
-        return this.#shadow.data;
-    }
-
-    get _shadow() {
-        return this.#shadow;
-    }
+    get _shadow() { return this.#shadow; }
 
     /**
      * @async
@@ -57,13 +50,13 @@
             return false;
         }
 
-        return validate(this.#object, schemaObject);
+        return _validate(this.#object, schemaObject);
     }
 }
 
-function validate(conceptsObject, schemaObject) {
+function _validate(conceptsObject, schemaObject) {
     if (typeof conceptsObject === 'string') {
-        return validateValue(conceptsObject, schemaObject);
+        return _validateValue(conceptsObject, schemaObject);
     }
 
     for (const key in conceptsObject) {
@@ -75,7 +68,7 @@ function validate(conceptsObject, schemaObject) {
             return false;
         }
 
-        if (!validate(conceptsObject[key], schemaObject[schemaKey])) {
+        if (!_validate(conceptsObject[key], schemaObject[schemaKey])) {
             return false;
         }
     }
@@ -83,7 +76,7 @@ function validate(conceptsObject, schemaObject) {
     return Object.keys(conceptsObject).length == Object.keys(schemaObject).length;
 }
 
-function validateValue(conceptsObject, schemaObject) {
+function _validateValue(conceptsObject, schemaObject) {
     if (sc.is(sc.VARIABLE, conceptsObject)) {
         return true;
     }

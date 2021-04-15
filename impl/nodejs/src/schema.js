@@ -1,4 +1,4 @@
-/* export */ class Schema {
+/* exported */ class Schema {
     /**
      * @param {String|Object} pathOrObject 
      * @param {String|Object|Concepts} concepts
@@ -34,8 +34,7 @@
 
     /* const */ #object;
     /* const */ #concepts;
-    
-    /* let */ #shadow;
+    /* const */ #shadow;
 
     constructor(
         object = required('object'),
@@ -43,46 +42,18 @@
     ) {
         this.#object = object;
         this.#concepts = concepts;
+
+        this.#shadow = new ShadowSchema(ShadowSchema.build(undefined, this.#object, this.#concepts._shadow));
     }
 
-    get object() {
-        return this.#object;
-    }
-
-    get shadow() {
-        if (this.#shadow == null) {
-            this.#shadow = {};
-
-            build(this.#shadow, this.#object, this.#concepts._shadow);
-        }
-
-        return this.#shadow;
-    }
-}
-
-function build(shadow, schema, concept) {
-    if (concept.hasVariable()) {
-        for (const variable of concept.variables) {
-            arrayify.pushOrSet(shadow, variable.name, schema);
-        }
-        return;
-    }
-
-    for (const key in schema) {
-        if (concept.hasLiteral(key)) {
-            build(shadow, schema[key], concept.getLiteral(key));
-        } else {
-            for (const childConcept of concept.concepts) {
-                const childShadow = { [sc.SELF]: key };
-                build(childShadow, schema[key], childConcept);
-
-                arrayify.pushOrSet(shadow, childConcept.name, childShadow);
-            }
-        }
-    }
+    get object() { return this.#object; }
+    get shadow() { return this.#shadow.data; }
+    
+    get _shadow() { return this.#shadow; }
 }
 
 module.exports = { Schema };
 
 const { Concepts } = require('./concepts');
-const { sc, error, metaData, arrayify, required, loadJSON } = require('./util');
+const { ShadowSchema } = require('./shadow-schema');
+const { error, metaData, required, loadJSON } = require('./util');

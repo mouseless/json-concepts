@@ -24,7 +24,7 @@ function from(specialCharacter, variableName) {
         return variableName;
     }
 
-    return variableName.substring(VARIABLE.length);
+    return variableName.substring(specialCharacter.length);
 }
 
 module.exports = {
@@ -40,7 +40,6 @@ module.exports = {
     ANY,
     ANY_CHILD,
     SELF,
-
     is,
     to,
     from
