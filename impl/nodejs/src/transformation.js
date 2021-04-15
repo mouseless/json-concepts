@@ -28,7 +28,9 @@
      * @returns {Schema}
      */
     transform(schema) {
-        return _transform(schema.shadow, this.#target._shadow, this.#object);
+        return this.#target.create(
+            _transform(schema._shadow, this.#target._shadow, this.#object)
+        );
     }
 }
 
@@ -44,7 +46,6 @@ function _transform(schema, target, transformation, context = {}) {
     }
 
     const result = {};
-
     for (const literal of target.literals) {
         result[literal.name] = _transform(schema, literal, transformation, context);
     }
@@ -52,18 +53,19 @@ function _transform(schema, target, transformation, context = {}) {
     for (const concept of target.concepts) {
         const query = transformation[concept.name];
 
-        const sources = arrayify.get(schema, query.from);
-        for (const source of sources) {
-            result[source[sc.SELF]] = {};
+        if (schema.hasSchema(query.from)) {
+            for (const source of schema.getSchema(query.from)) {
+                result[source.name] = {};
 
-            const subContext = {};
-            for (const targetKey in query.select) {
-                const sourceKey = query.select[targetKey];
+                const subContext = {};
+                for (const targetKey in query.select) {
+                    const sourceKey = query.select[targetKey];
 
-                subContext[targetKey] = source[sourceKey];
+                    subContext[targetKey] = source.getVariable(sourceKey).data;
+                }
+
+                result[source.name] = _transform(source, concept, transformation, subContext);
             }
-
-            result[source[sc.SELF]] = _transform(source, concept, transformation, subContext);
         }
     }
 

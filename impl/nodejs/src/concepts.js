@@ -33,11 +33,11 @@
     async load(schemaPathOrObject = required('schemaPathOrObject')) {
         const schemaObject = await loadJSON(schemaPathOrObject);
 
-        if (this.validate(schemaObject)) {
-            return new Schema(schemaObject, this);
-        } else {
-            throw error.SCHEMA_is_not_valid(schemaPathOrObject);
-        }
+        return this.create(schemaObject);
+    }
+
+    create(schemaObject = required('schemaObject')) {
+        return new Schema(schemaObject, this);
     }
 
     /**

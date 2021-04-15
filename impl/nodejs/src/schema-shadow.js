@@ -1,8 +1,10 @@
 class SchemaShadow {
     /* const */ #conceptsShadow;
     /* const */ #name;
-    /* const */ #schemas;
     /* const */ #variables;
+    /* const */ #variableMap;
+    /* const */ #schemas;
+    /* const */ #schemaMap;
     /* const */ #data;
 
     constructor(conceptsShadow, name) {
@@ -10,12 +12,19 @@ class SchemaShadow {
         this.#name = name;
 
         this.#variables = [];
+        this.#variableMap = {};
         this.#schemas = [];
+        this.#schemaMap = {};
         this.#data = {};
     }
 
     get name() { return this.#name; }
     get data() { return this.#data; }
+
+    hasVariable(name) { return this.#variableMap.hasOwnProperty(name); }
+    getVariable(name) { return this.#variableMap[name]; }
+    hasSchema(name) { return this.#schemaMap.hasOwnProperty(name); }
+    getSchema(name) { return arrayify.get(this.#schemaMap, name); }
 
     build(schema) {
         this._build(schema, this.#conceptsShadow);
@@ -24,13 +33,13 @@ class SchemaShadow {
             this.#data[sc.SELF] = this.#name;
         }
 
-        if(this.#conceptsShadow.hasNothingButName()) {
+        if (this.#conceptsShadow.hasNothingButName()) {
             this.#data = schema;
         } else {
             for (const shadow of this.#variables) {
                 this.#data[shadow.#conceptsShadow.name] = shadow.#data;
             }
-    
+
             for (const shadow of this.#schemas) {
                 arrayify.pushOrSet(this.#data, shadow.#conceptsShadow.name, shadow.#data);
             }
@@ -42,10 +51,11 @@ class SchemaShadow {
             for (const variable of conceptsShadow.variables) {
                 const shadow = new SchemaShadow(variable)
                 shadow.build(schema);
-                
+
                 this.#variables.push(shadow);
+                this.#variableMap[shadow.#conceptsShadow.name] = shadow;
             }
-        } else if(conceptsShadow.hasAnyConcepts() || conceptsShadow.hasAnyLiterals()){
+        } else if (conceptsShadow.hasAnyConcepts() || conceptsShadow.hasAnyLiterals()) {
             for (const key in schema) {
                 if (conceptsShadow.hasLiteral(key)) {
                     this._build(schema[key], conceptsShadow.getLiteral(key));
@@ -55,6 +65,7 @@ class SchemaShadow {
                         shadow.build(schema[key]);
 
                         this.#schemas.push(shadow);
+                        arrayify.pushOrSet(this.#schemaMap, shadow.#conceptsShadow.name, shadow);
                     }
                 }
             }

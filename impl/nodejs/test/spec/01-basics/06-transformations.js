@@ -1,22 +1,22 @@
-const { Transformation, Concepts } = require('../../../index');
+const { Transformation, Schema, Concepts } = require('../../../index');
 
 describe('spec/basics/transformations', function () {
-    it('should transform', async function () {
-        const source = await Concepts.load({
+    it('should transform', function () {
+        const source = new Concepts({
             "$service": {
                 "$parameter": "$type",
                 "response": "$responseType"
             }
         });
 
-        const target = await Concepts.load({
+        const target = new Concepts({
             "$function": {
                 "$argument": "$type",
                 "return": "$returnType"
             }
         });
 
-        const transformation = await Transformation.load({
+        const transformation = new Transformation({
             "function": {
                 "from": "service",
                 "select": {
@@ -31,7 +31,7 @@ describe('spec/basics/transformations', function () {
             }
         }, source, target);
 
-        const input = await source.load({
+        const input = source.create({
             "sayHello": {
                 "name": "string",
                 "response": "string"
@@ -40,7 +40,7 @@ describe('spec/basics/transformations', function () {
 
         const output = transformation.transform(input);
 
-        output.should.deep.equal({
+        output.object.should.deep.equal({
             "sayHello": {
                 "name": "string",
                 "return": "string"

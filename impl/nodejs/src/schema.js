@@ -40,6 +40,10 @@
         object = required('object'),
         concepts = required('concepts')
     ) {
+        if (!concepts.validate(object)) {
+            throw error.SCHEMA_is_not_valid(object);
+        }
+
         this.#object = object;
         this.#concepts = concepts;
 

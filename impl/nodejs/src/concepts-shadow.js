@@ -2,8 +2,8 @@ class ConceptsShadow {
     /* const */ #name;
     /* const */ #variables;
     /* const */ #literals;
-    /* const */ #concepts;
     /* const */ #literalMap;
+    /* const */ #concepts;
     /* const */ #data;
 
     constructor(name) {
@@ -11,8 +11,8 @@ class ConceptsShadow {
 
         this.#variables = [];
         this.#literals = [];
-        this.#concepts = [];
         this.#literalMap = {};
+        this.#concepts = [];
         this.#data = {};
     }
 
