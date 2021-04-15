@@ -9,9 +9,9 @@
         return new Transformation(object, source, target);
     }
 
-    #object;
-    #source;
-    #target;
+    /* const */ #object;
+    /* const */ #source;
+    /* const */ #target;
 
     constructor(object, source, target) {
         this.#object = object;
@@ -19,9 +19,7 @@
         this.#target = target;
     }
 
-    get object() {
-        return this.#object;
-    }
+    get object() { return this.#object; }
 
     /**
      * 
@@ -35,7 +33,7 @@
 }
 
 function _transform(schema, target, transformation, context = {}) {
-    if (target.hasVariable()) {
+    if (target.hasAnyVariables()) {
         const result = [];
 
         for (const variable of target.variables) {

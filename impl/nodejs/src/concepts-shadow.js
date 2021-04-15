@@ -1,4 +1,4 @@
-class ShadowConcepts {
+class ConceptsShadow {
     /* const */ #name;
     /* const */ #variables;
     /* const */ #literals;
@@ -22,9 +22,18 @@ class ShadowConcepts {
     get concepts() { return this.#concepts; }
     get data() { return this.#data; }
 
-    hasVariable() { return this.#variables.length > 0; }
+    hasAnyVariables() { return this.#variables.length > 0; }
+    hasAnyLiterals() { return this.#literals.length > 0; }
     hasLiteral(name) { return this.#literalMap.hasOwnProperty(name); }
     getLiteral(name) { return this.#literalMap[name]; }
+    hasAnyConcepts() { return this.#concepts.length > 0; }
+
+    hasNothingButName() {
+        return this.#name != null &&
+            !this.hasAnyVariables() &&
+            !this.hasAnyLiterals() &&
+            !this.hasAnyConcepts();
+    }
 
     build(concepts) {
         if (concepts != null) {
@@ -59,14 +68,14 @@ class ShadowConcepts {
     }
 
     _pushVariable(key) {
-        const variable = new ShadowConcepts(sc.from(sc.VARIABLE, key));
+        const variable = new ConceptsShadow(sc.from(sc.VARIABLE, key));
         variable.build();
 
         this.#variables.push(variable);
     }
 
     _pushLiteral(key, concepts) {
-        const literal = new ShadowConcepts(key);
+        const literal = new ConceptsShadow(key);
         literal.build(concepts[key]);
 
         this.#literals.push(literal);
@@ -74,7 +83,7 @@ class ShadowConcepts {
     }
 
     _pushConcept(key, concepts) {
-        const concept = new ShadowConcepts(sc.from(sc.VARIABLE, key));
+        const concept = new ConceptsShadow(sc.from(sc.VARIABLE, key));
         concept.build(concepts[key]);
 
         this.#concepts.push(concept);
@@ -82,7 +91,7 @@ class ShadowConcepts {
 }
 
 module.exports = {
-    ShadowConcepts
+    ConceptsShadow
 };
 
 const { sc, arrayify } = require('./util');

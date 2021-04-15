@@ -43,8 +43,7 @@
         this.#object = object;
         this.#concepts = concepts;
 
-        this.#shadow = new ShadowSchema(this.#concepts._shadow);
-
+        this.#shadow = new SchemaShadow(this.#concepts._shadow);
         this.#shadow.build(this.#object);
     }
 
@@ -57,5 +56,5 @@
 module.exports = { Schema };
 
 const { Concepts } = require('./concepts');
-const { ShadowSchema } = require('./shadow-schema');
+const { SchemaShadow } = require('./schema-shadow');
 const { error, metaData, required, loadJSON } = require('./util');

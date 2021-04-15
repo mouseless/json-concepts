@@ -21,7 +21,7 @@ Let's begin with a concept;
 
 Corresponding shadow is as follows;
 
-`SHADOW CONCEPTS`
+`CONCEPTS SHADOW`
 
 ```json
 {
@@ -45,7 +45,7 @@ Corresponding shadow is as follows;
 
 > By default `_` key is added to represent name of an element.
 
-## Shadow Schema
+## Schema Shadow
 
 Assume there is below schema that conforms to above concepts;
 
@@ -63,7 +63,7 @@ Assume there is below schema that conforms to above concepts;
 
 In this case `greeting.service.json` schema is expected to cast below shadow;
 
-`SHADOW SCHEMA`
+`SCHEMA SHADOW`
 
 ```json
 {

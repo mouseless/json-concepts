@@ -14,8 +14,8 @@
 
     constructor(object = required('object')) {
         this.#object = object;
-        this.#shadow = new ShadowConcepts();
 
+        this.#shadow = new ConceptsShadow();
         this.#shadow.build(object);
     }
 
@@ -87,5 +87,5 @@ function _validateValue(conceptsObject, schemaObject) {
 module.exports = { Concepts };
 
 const { Schema } = require('./schema');
-const { ShadowConcepts } = require('./shadow-concepts');
+const { ConceptsShadow } = require('./concepts-shadow');
 const { error, sc, required, loadJSON } = require('./util');

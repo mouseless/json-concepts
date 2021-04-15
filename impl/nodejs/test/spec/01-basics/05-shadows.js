@@ -31,7 +31,7 @@ describe('spec/basics/shadows', function () {
         })
     });
 
-    describe('shadow schema', function () {
+    describe('schema shadow', function () {
         it('should cast shadow', async function () {
             const schema = await Schema.load({
                 "@concepts": {

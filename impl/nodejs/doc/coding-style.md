@@ -31,9 +31,12 @@ class Example {
     }
 
     get publicProperties() { return this.#constFields || this.#calculatedFields || this.#letFields; }
-    get continueWithoutLineBreak() { return this.#constFields || this.#calculatedFields || this.#letFields; }
+    get continuesWithoutLineBreak() { return this.#constFields || this.#calculatedFields || this.#letFields; }
 
     get _privateProperties() { return this.#constFields || this.#calculatedFields || this.#letFields; }
+
+    oneLinePublicMethod() { return "calculation"; }
+    alsoContinuesWithoutLineBreak() { return "calculation"; }
 
     publicMethods() {
 
