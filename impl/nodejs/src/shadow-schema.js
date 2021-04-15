@@ -1,37 +1,59 @@
 class ShadowSchema {
-    static build(shadow, schema, concept) {
-        shadow = shadow || {};
+    /* const */ #shadowConcepts;
+    /* const */ #name;
+    /* const */ #schemas;
+    /* const */ #variables;
+    /* const */ #data;
 
-        if (concept.hasVariable()) {
-            for (const variable of concept.variables) {
-                arrayify.pushOrSet(shadow, variable.name, schema);
-            }
-            return;
+    constructor(shadowConcepts, name) {
+        this.#shadowConcepts = shadowConcepts;
+        this.#name = name;
+
+        this.#variables = [];
+        this.#schemas = [];
+        this.#data = {};
+    }
+
+    get name() { return this.#name; }
+    get data() { return this.#data; }
+
+    build(schema, shadowConcepts = null) {
+        this._build(schema, shadowConcepts || this.#shadowConcepts)
+
+        if (this.#name != null) {
+            this.#data[sc.SELF] = this.#name;
         }
 
-        for (const key in schema) {
-            if (concept.hasLiteral(key)) {
-                ShadowSchema.build(shadow, schema[key], concept.getLiteral(key));
-            } else {
-                for (const childConcept of concept.concepts) {
-                    const childShadow = { [sc.SELF]: key };
-                    ShadowSchema.build(childShadow, schema[key], childConcept);
+        for (const variable of this.#variables) {
+            this.#data[variable.#shadowConcepts.name] = variable.name;
+        }
 
-                    arrayify.pushOrSet(shadow, childConcept.name, childShadow);
+        for (const childSchema of this.#schemas) {
+            arrayify.pushOrSet(this.#data, childSchema.#shadowConcepts.name, childSchema.#data);
+        }
+    }
+
+    _build(schema, shadowConcepts) {
+        if (shadowConcepts.hasVariable()) {
+            for (const variable of shadowConcepts.variables) {
+                this.#variables.push(new ShadowSchema(variable, schema));
+            }
+        } else {
+            for (const key in schema) {
+                if (shadowConcepts.hasLiteral(key)) {
+                    this._build(schema[key], shadowConcepts.getLiteral(key));
+                } else {
+                    for (const concept of shadowConcepts.concepts) {
+                        const childSchema = new ShadowSchema(concept, key);
+
+                        childSchema.build(schema[key]);
+
+                        this.#schemas.push(childSchema);
+                    }
                 }
             }
         }
-
-        return shadow;
     }
-
-    /* const */ #data;
-
-    constructor(data) {
-        this.#data = data;
-    }
-
-    get data() { return this.#data; }
 }
 
 module.exports = {

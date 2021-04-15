@@ -43,12 +43,14 @@
         this.#object = object;
         this.#concepts = concepts;
 
-        this.#shadow = new ShadowSchema(ShadowSchema.build(undefined, this.#object, this.#concepts._shadow));
+        this.#shadow = new ShadowSchema(this.#concepts._shadow);
+
+        this.#shadow.build(this.#object);
     }
 
     get object() { return this.#object; }
     get shadow() { return this.#shadow.data; }
-    
+
     get _shadow() { return this.#shadow; }
 }
 

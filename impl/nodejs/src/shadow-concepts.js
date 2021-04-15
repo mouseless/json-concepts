@@ -46,15 +46,15 @@ class ShadowConcepts {
         }
 
         for (const variable of this.#variables) {
-            arrayify.pushOrSet(this.#data, 'variable', variable.data);
+            arrayify.pushOrSet(this.#data, 'variable', variable.#data);
         }
 
         for (const literal of this.#literals) {
-            arrayify.pushOrSet(this.#data, 'literal', literal.data);
+            arrayify.pushOrSet(this.#data, 'literal', literal.#data);
         }
 
         for (const concept of this.#concepts) {
-            arrayify.pushOrSet(this.#data, 'concept', concept.data);
+            arrayify.pushOrSet(this.#data, 'concept', concept.#data);
         }
     }
 

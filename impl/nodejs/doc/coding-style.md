@@ -30,8 +30,8 @@ class Example {
         this.#calculatedFields = "calculation";
     }
 
-    get properties() { return this.#constFields || this.#calculatedFields || this.#letFields; }
-    set properties(value) { this.#letFields = value; }
+    get publicProperties() { return this.#constFields || this.#calculatedFields || this.#letFields; }
+    get continueWithoutLineBreak() { return this.#constFields || this.#calculatedFields || this.#letFields; }
 
     get _privateProperties() { return this.#constFields || this.#calculatedFields || this.#letFields; }
 
