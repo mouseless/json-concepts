@@ -1,27 +1,28 @@
-class Concepts {
+/* exported */ class Concepts {
     /**
      * @async
-     * @param {String|Object} conceptsPathOrObject
+     * @param {String|Object} pathOrObject
      * 
      * @returns {Promise<Concepts>} 
      */
-    static async load(
-        conceptsPathOrObject = required('conceptsPathOrObject')
-    ) {
-        return new Concepts(await JSON.load(conceptsPathOrObject));
+    static async load(pathOrObject = required('pathOrObject')) {
+        return new Concepts(await loadJSON(pathOrObject));
     }
 
-    #conceptsObject;
+    /* const */ #object;
+    /* const */ #shadow;
 
-    constructor(
-        conceptsObject = required('conceptsObject')
-    ) {
-        this.#conceptsObject = conceptsObject;
+    constructor(object = required('object')) {
+        this.#object = object;
+
+        this.#shadow = new ConceptsShadow();
+        this.#shadow.build(object);
     }
 
-    get object() {
-        return this.#conceptsObject;
-    }
+    get object() { return this.#object; }
+    get shadow() { return this.#shadow.data; }
+
+    get _shadow() { return this.#shadow; }
 
     /**
      * @async
@@ -29,16 +30,14 @@ class Concepts {
      * 
      * @returns {Promise<Schema>}
      */
-    async load(
-        schemaPathOrObject = required('schemaPathOrObject')
-    ) {
-        const schemaObject = await JSON.load(schemaPathOrObject);
+    async load(schemaPathOrObject = required('schemaPathOrObject')) {
+        const schemaObject = await loadJSON(schemaPathOrObject);
 
-        if (this.validate(schemaObject)) {
-            return new Schema(schemaObject);
-        } else {
-            throw ERR.SCHEMA_is_not_valid(schemaPathOrObject);
-        }
+        return this.create(schemaObject);
+    }
+
+    create(schemaObject = required('schemaObject')) {
+        return new Schema(schemaObject, this);
     }
 
     /**
@@ -51,44 +50,42 @@ class Concepts {
             return false;
         }
 
-        return Concepts.#validateRecursively(this.#conceptsObject, schemaObject);
+        return _validate(this.#object, schemaObject);
+    }
+}
+
+function _validate(conceptsObject, schemaObject) {
+    if (typeof conceptsObject === 'string') {
+        return _validateValue(conceptsObject, schemaObject);
     }
 
-    static #validateRecursively = function (conceptsObject, schemaObject) {
-        if (typeof conceptsObject === 'string') {
-            return Concepts.#validateValue(conceptsObject, schemaObject);
+    for (const key in conceptsObject) {
+        let schemaKey = key;
+
+        if (sc.is(sc.VARIABLE, key)) {
+            schemaKey = Object.keys(schemaObject)[0];
+        } else if (!schemaObject.hasOwnProperty(key)) {
+            return false;
         }
 
-        for (const key in conceptsObject) {
-            let schemaKey = key;
-
-            if (symbols.isVariable(key)) {
-                schemaKey = Object.keys(schemaObject)[0];
-            } else if (!schemaObject.hasOwnProperty(key)) {
-                return false;
-            }
-
-            if (!Concepts.#validateRecursively(conceptsObject[key], schemaObject[schemaKey])) {
-                return false;
-            }
+        if (!_validate(conceptsObject[key], schemaObject[schemaKey])) {
+            return false;
         }
-
-        return Object.keys(conceptsObject).length == Object.keys(schemaObject).length;
     }
 
-    static #validateValue = function (conceptsObject, schemaObject) {
-        if (symbols.isVariable(conceptsObject)) {
-            return true;
-        }
+    return Object.keys(conceptsObject).length == Object.keys(schemaObject).length;
+}
 
-        return conceptsObject === schemaObject;
+function _validateValue(conceptsObject, schemaObject) {
+    if (sc.is(sc.VARIABLE, conceptsObject)) {
+        return true;
     }
+
+    return conceptsObject === schemaObject;
 }
 
 module.exports = { Concepts };
 
-const symbols = require('./symbols');
 const { Schema } = require('./schema');
-const { required } = require('./required');
-const ERR = require('./err');
-require('./json-load');
+const { ConceptsShadow } = require('./concepts-shadow');
+const { error, sc, required, loadJSON } = require('./util');

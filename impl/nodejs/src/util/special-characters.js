@@ -7,23 +7,24 @@ const ONE_OR_MORE = "+";
 const ZERO_OR_MORE = "*";
 const PATH = "/";
 const PARENT = "..";
+const ANY = "*";
 const ANY_CHILD = "**";
 const SELF = "_";
 
-function isVariable(expression) {
-    return expression.startsWith(VARIABLE);
+function is(specialCharacter, expression) {
+    return expression.startsWith(specialCharacter);
 }
 
-function isMetaData(expression) {
-    return expression.startsWith(META_DATA);
+function to(specialCharacter, name) {
+    return `${specialCharacter}${name}`;
 }
 
-function variable(name) {
-    return `${VARIABLE}${name}`;
-}
+function from(specialCharacter, variableName) {
+    if (!is(specialCharacter, variableName)) {
+        return variableName;
+    }
 
-function metaData(name) {
-    return `${META_DATA}${name}`;
+    return variableName.substring(specialCharacter.length);
 }
 
 module.exports = {
@@ -36,11 +37,10 @@ module.exports = {
     ZERO_OR_MORE,
     PATH,
     PARENT,
+    ANY,
     ANY_CHILD,
     SELF,
-
-    isVariable,
-    variable,
-    isMetaData,
-    metaData
+    is,
+    to,
+    from
 };

@@ -1,7 +1,9 @@
-const Concepts = require("./src/concepts").Concepts;
-const Schema = require("./src/schema").Schema;
+const { Concepts } = require("./src/concepts");
+const { Schema } = require("./src/schema");
+const { Transformation } = require("./src/transformation");
 
 module.exports = {
     Concepts,
-    Schema
+    Schema,
+    Transformation
 };

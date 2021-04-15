@@ -1,43 +1,64 @@
-class Schema {
+/* exported */ class Schema {
     /**
-     * @param {String|Object} schemaPathOrObject 
-     * @param {String|Object} conceptsPathOrObject 
+     * @param {String|Object} pathOrObject 
+     * @param {String|Object|Concepts} concepts
+     * 
      * @returns {Schema}
      */
     static async load(
-        schemaPathOrObject = required('schemaPathOrObject'),
-        conceptsPathOrObject = null
+        pathOrObject = required('pathOrObject'),
+        concepts = null
     ) {
-        const schemaObject = await JSON.load(schemaPathOrObject);
+        const object = await loadJSON(pathOrObject);
 
-        conceptsPathOrObject = conceptsPathOrObject || metaData.read(schemaObject, 'concepts', true);
+        concepts = concepts || metaData.read(object, 'concepts', true);
 
-        if (conceptsPathOrObject === null) {
-            throw ERR.Concepts_required_to_load_SCHEMA(schemaPathOrObject);
+        if (concepts === null) {
+            throw error.Concepts_required_to_load_SCHEMA(pathOrObject);
         }
 
-        const concepts = await Concepts.load(conceptsPathOrObject);
+        if (!(concepts instanceof Concepts)) {
+            concepts = await Concepts.load(concepts);
+        }
 
         try {
-            return await concepts.load(schemaObject);
-        } catch(e) {
-            if(e.name === ERR.NAMES.SCHEMA_ERROR) {
-                throw ERR.SCHEMA_is_not_valid(schemaPathOrObject);
+            return await concepts.load(object);
+        } catch (e) {
+            if (e.name === error.Names.SCHEMA_ERROR) {
+                throw error.SCHEMA_is_not_valid(pathOrObject);
             }
 
             throw e;
         }
     }
 
-    #schemaObject;
+    /* const */ #object;
+    /* const */ #concepts;
+    /* const */ #shadow;
 
-    constructor(schemaObject) {
-        this.#schemaObject = schemaObject;
+    constructor(
+        object = required('object'),
+        concepts = required('concepts')
+    ) {
+        if (!concepts.validate(object)) {
+            throw error.SCHEMA_is_not_valid(object);
+        }
+
+        this.#object = object;
+        this.#concepts = concepts;
+
+        this.#shadow = new SchemaShadow(this.#concepts._shadow);
+        this.#shadow.build(this.#object);
     }
+
+    get object() { return this.#object; }
+    get shadow() { return this.#shadow.data; }
+
+    get _shadow() { return this.#shadow; }
 }
 
 module.exports = { Schema };
 
 const { Concepts } = require('./concepts');
-const metaData = require('./meta-data');
-const ERR = require('./err');
+const { SchemaShadow } = require('./schema-shadow');
+const { error, metaData, required, loadJSON } = require('./util');

@@ -4,7 +4,7 @@
  * 
  * @returns {Promise<Object>}
  */
-JSON.load = async function (pathOrObject = required('pathOrObject')) {
+async function loadJSON(pathOrObject = required('pathOrObject')) {
     if (typeof pathOrObject === 'object') {
         return pathOrObject;
     }
@@ -15,22 +15,22 @@ JSON.load = async function (pathOrObject = required('pathOrObject')) {
     if (path.startsWith('http://') ||
         path.startsWith('https://')) {
         try {
-            json = await get(path);
+            json = await _get(path);
         } catch {
-            throw ERR.Cannot_load_URL(path);
+            throw error.Cannot_load_URL(path);
         }
     } else {
         try {
             json = await fs.readFileSync(path);
         } catch {
-            throw ERR.Cannot_load_FILE(path);
+            throw error.Cannot_load_FILE(path);
         }
     }
 
     try {
         return JSON.parse(json);
     } catch {
-        throw ERR.FILE_is_not_a_valid_json(path);
+        throw error.FILE_is_not_a_valid_json(path);
     }
 };
 
@@ -41,12 +41,12 @@ JSON.load = async function (pathOrObject = required('pathOrObject')) {
  * @param {string} url A url that starts with 'http://' or 'https://'
  * @returns {Promise<string>} Data that is returned from given url
  */
-async function get(url) {
+async function _get(url) {
     return new Promise((resolve, reject) => {
         const make = url.startsWith("https") ? https : http;
 
         make.request(url, res => {
-            if (!is2xx(res.statusCode)) {
+            if (!_is2xx(res.statusCode)) {
                 reject(new Error());
                 return;
             }
@@ -54,18 +54,22 @@ async function get(url) {
             res.on('data', data => {
                 resolve(data);
             });
-        }).on('error', error => {
-            reject(error);
+        }).on('error', e => {
+            reject(e);
         }).end();
     });
 }
 
-function is2xx(statusCode) {
+function _is2xx(statusCode) {
     return statusCode / 100 === 2;
 }
 
-const ERR = require('./err');
-const { required } = require('./required');
+module.exports = {
+    loadJSON
+};
+
 const fs = require('fs');
 const http = require('http');
 const https = require('https');
+const { required } = require('./required');
+const error = require('./error');

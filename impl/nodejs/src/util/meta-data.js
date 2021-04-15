@@ -1,19 +1,19 @@
 function exists(obj, name) {
-    return obj.hasOwnProperty(symbols.metaData(name));
+    return obj.hasOwnProperty(sc.to(sc.META_DATA, name));
 }
 
 function read(obj, name, burnAfterReading = false) {
-    if(!exists(obj, name)) {
+    if (!exists(obj, name)) {
         return null;
     }
 
-    const metaDataKey = symbols.metaData(name);
+    const metaDataKey = sc.to(sc.META_DATA, name);
     const result = obj[metaDataKey];
 
-    if(burnAfterReading) {
+    if (burnAfterReading) {
         delete obj[metaDataKey];
     }
-    
+
     return result;
 };
 
@@ -22,4 +22,4 @@ module.exports = {
     read
 };
 
-const symbols = require('./symbols');
+const sc = require('./special-characters');
