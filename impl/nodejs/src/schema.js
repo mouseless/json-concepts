@@ -1,4 +1,4 @@
-class Schema {
+/* export */ class Schema {
     /**
      * @param {String|Object} pathOrObject 
      * @param {String|Object|Concepts} concepts
@@ -32,9 +32,10 @@ class Schema {
         }
     }
 
-    #object;
-    #concepts;
-    #shadow;
+    /* const */ #object;
+    /* const */ #concepts;
+    
+    /* let */ #shadow;
 
     constructor(
         object = required('object'),

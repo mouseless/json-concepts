@@ -1,4 +1,4 @@
-class Transformation {
+/* export */ class Transformation {
     static async load(
         pathOrObject = required('pathOrObject'),
         source = null,

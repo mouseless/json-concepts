@@ -1,4 +1,4 @@
-class Concepts {
+/* export */ class Concepts {
     /**
      * @async
      * @param {String|Object} pathOrObject
@@ -9,12 +9,14 @@ class Concepts {
         return new Concepts(await loadJSON(pathOrObject));
     }
 
-    #object;
-    #root;
+    /* const */ #object;
+    /* const */ #root;
 
     constructor(object = required('object')) {
         this.#object = object;
-        this.#root = Concept.build(undefined, object);
+        this.#root = new Concept();
+
+        this.#root.build(object);
     }
 
     get object() {

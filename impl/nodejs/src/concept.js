@@ -1,57 +1,43 @@
 class Concept {
-    static build(name, concepts) {
-        const concept = new Concept(name);
+    /* const */ #name;
+    /* const */ #variables;
+    /* const */ #literals;
+    /* const */ #concepts;
+    /* const */ #literalMap;
 
-        if (typeof concepts === 'string' && sc.is(sc.VARIABLE, concepts)) {
-            concept.pushVariable(concepts);
-        } else if (typeof concepts === 'object') {
-            for (const key in concepts) {
-                if (sc.is(sc.VARIABLE, key)) {
-                    concept.pushConcept(key, concepts);
-                } else {
-                    concept.pushLiteral(key, concepts);
-                }
-            }
-        }
-
-        return concept;
-    }
-
-    #name;
-    #variables;
-    #literals;
-    #concepts;
-    #literalMap;
-    #shadow;
+    /* let */ #shadow;
 
     constructor(name) {
         this.#name = name;
+
         this.#variables = [];
         this.#literals = [];
         this.#concepts = [];
+        this.#literalMap = {};
     }
 
-    get name() {
-        return this.#name;
-    }
+    get name() { return this.#name; }
+    get variables() { return this.#variables; }
+    get literals() { return this.#literals; }
+    get concepts() { return this.#concepts; }
 
     get shadow() {
-        if(this.#shadow == null) {
+        if (this.#shadow == null) {
             this.#shadow = {};
 
-            if(this.#name != null) {
+            if (this.#name != null) {
                 this.#shadow[sc.SELF] = this.#name;
             }
 
-            for(const variable of this.#variables) {
+            for (const variable of this.#variables) {
                 arrayify.pushOrSet(this.#shadow, 'variable', variable.shadow);
             }
 
-            for(const literal of this.#literals) {
+            for (const literal of this.#literals) {
                 arrayify.pushOrSet(this.#shadow, 'literal', literal.shadow);
             }
 
-            for(const concept of this.#concepts) {
+            for (const concept of this.#concepts) {
                 arrayify.pushOrSet(this.#shadow, 'concept', concept.shadow);
             }
         }
@@ -59,58 +45,45 @@ class Concept {
         return this.#shadow;
     }
 
-    get variables() {
-        return this.#variables;
-    }
-
-    get literals() {
-        return this.#literals;
-    }
-
-    get concepts() {
-        return this.#concepts;
+    build(concepts = required('concepts')) {
+        if (typeof concepts === 'string' && sc.is(sc.VARIABLE, concepts)) {
+            this.pushVariable(concepts);
+        } else if (typeof concepts === 'object') {
+            for (const key in concepts) {
+                if (sc.is(sc.VARIABLE, key)) {
+                    this.pushConcept(key, concepts);
+                } else {
+                    this.pushLiteral(key, concepts);
+                }
+            }
+        }
     }
 
     pushVariable(key) {
-        this.#variables.push(
-            Concept.build(sc.from(sc.VARIABLE, key))
-        );
+        const variable = new Concept(sc.from(sc.VARIABLE, key));
+        this.#variables.push(variable);
     }
 
     pushLiteral(key, concepts) {
-        this.#literals.push(
-            Concept.build(key, concepts[key])
-        );
+        const literal = new Concept(key);
+        literal.build(concepts[key]);
+        this.#literals.push(literal);
+        this.#literalMap[literal.name] = literal;
     }
 
     pushConcept(key, concepts) {
-        this.#concepts.push(
-            Concept.build(sc.from(sc.VARIABLE, key), concepts[key])
-        );
+        const concept = new Concept(sc.from(sc.VARIABLE, key));
+        concept.build(concepts[key]);
+        this.#concepts.push(concept);
     }
 
-    hasVariable() {
-        return this.#variables.length > 0;
-    }
-
-    hasLiteral(name) {
-        return this.getLiteral(name) != null;
-    }
-
-    getLiteral(name) {
-        if (this.#literalMap == null) {
-            this.#literalMap = {};
-            for (const literal of this.#literals) {
-                this.#literalMap[literal.name] = literal;
-            }
-        }
-
-        return this.#literalMap[name];
-    }
+    hasVariable() { return this.#variables.length > 0; }
+    hasLiteral(name) { return this.#literalMap.hasOwnProperty(name); }
+    getLiteral(name) { return this.#literalMap[name]; }
 }
 
 module.exports = {
     Concept
 };
 
-const { sc, arrayify } = require('./util');
+const { sc, arrayify, required } = require('./util');
