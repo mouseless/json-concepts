@@ -52,31 +52,30 @@ class Schema {
         if (this.#shadow == null) {
             this.#shadow = {};
 
-            castShadow(this.#shadow, this.#object, this.#concepts.shadow);
+            build(this.#shadow, this.#object, this.#concepts._root);
         }
 
         return this.#shadow;
     }
 }
 
-function castShadow(shadow, schema, concept) {
-    concept = Concept.from(concept);
+function build(shadow, schema, concept) {
     if (concept.hasVariable()) {
         for (const variable of concept.variables) {
-            shadow[variable[sc.SELF]] = schema;
+            arrayify.pushOrSet(shadow, variable.name, schema);
         }
         return;
     }
 
     for (const key in schema) {
         if (concept.hasLiteral(key)) {
-            castShadow(shadow, schema[key], concept.getLiteral(key));
+            build(shadow, schema[key], concept.getLiteral(key));
         } else {
             for (const childConcept of concept.concepts) {
                 const childShadow = { [sc.SELF]: key };
-                castShadow(childShadow, schema[key], childConcept);
+                build(childShadow, schema[key], childConcept);
 
-                arrayify.pushOrSet(shadow, childConcept[sc.SELF], childShadow);
+                arrayify.pushOrSet(shadow, childConcept.name, childShadow);
             }
         }
     }
@@ -85,5 +84,4 @@ function castShadow(shadow, schema, concept) {
 module.exports = { Schema };
 
 const { Concepts } = require('./concepts');
-const { Concept } = require('./concept');
 const { sc, error, metaData, arrayify, required, loadJSON } = require('./util');

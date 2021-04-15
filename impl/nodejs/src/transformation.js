@@ -30,17 +30,16 @@ class Transformation {
      * @returns {Schema}
      */
     transform(schema) {
-        return transform(schema.shadow, this.#target.shadow, this.#object);
+        return transform(schema.shadow, this.#target._root, this.#object);
     }
 }
 
 function transform(schema, target, transformation, context = {}) {
-    target = Concept.from(target);
     if (target.hasVariable()) {
         const result = [];
 
         for (const variable of target.variables) {
-            result.push(context[variable[sc.SELF]]);
+            result.push(context[variable.name]);
         }
 
         return result.length == 1 ? result[0] : result;
@@ -49,11 +48,11 @@ function transform(schema, target, transformation, context = {}) {
     const result = {};
 
     for (const literal of target.literals) {
-        result[literal[sc.SELF]] = transform(schema, literal, transformation, context);
+        result[literal.name] = transform(schema, literal, transformation, context);
     }
 
     for (const concept of target.concepts) {
-        const query = transformation[concept[sc.SELF]];
+        const query = transformation[concept.name];
 
         const sources = arrayify.get(schema, query.from);
         for (const source of sources) {
