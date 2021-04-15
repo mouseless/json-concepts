@@ -4,8 +4,8 @@ const { should } = require('chai');
 should();
 
 describe('spec/basics/concepts', function () {
-    it('should validate', async function () {
-        const concepts = await Concepts.load({
+    it('should validate', function () {
+        const concepts = new Concepts({
             "$service": {
                 "$parameter": "$type"
             }
@@ -19,8 +19,8 @@ describe('spec/basics/concepts', function () {
     });
 
     describe('key literals under concepts', function () {
-        it('should validate', async function () {
-            const concepts = await Concepts.load({
+        it('should validate', function () {
+            const concepts = new Concepts({
                 "$service": {
                     "$parameter": "$type",
                     "response": "$responseType"
@@ -35,8 +35,8 @@ describe('spec/basics/concepts', function () {
             }).should.equal(true);
         });
 
-        it('should not validate', async function () {
-            const concepts = await Concepts.load({
+        it('should not validate', function () {
+            const concepts = new Concepts({
                 "$service": {
                     "$parameter": "$type",
                     "response": "$responseType"
@@ -52,8 +52,8 @@ describe('spec/basics/concepts', function () {
     });
 
     describe('conflicts in key literals and concepts', function () {
-        it('should not validate', async function () {
-            const concepts = await Concepts.load({
+        it('should not validate', function () {
+            const concepts = new Concepts({
                 "$service": {
                     "$parameter": "$type",
                     "response": "$responseType"

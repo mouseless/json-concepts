@@ -4,8 +4,8 @@ const { should } = require('chai');
 should();
 
 describe('spec/basics/shadows', function () {
-    it('should cast shadow', async function () {
-        const concepts = await Concepts.load({
+    it('should cast shadow', function () {
+        const concepts = new Concepts({
             "$service": {
                 "$parameter": "$type",
                 "response": "$responseType"
@@ -32,14 +32,15 @@ describe('spec/basics/shadows', function () {
     });
 
     describe('schema shadow', function () {
-        it('should cast shadow', async function () {
-            const schema = await Schema.load({
-                "@concepts": {
-                    "$service": {
-                        "$parameter": "$type",
-                        "response": "$responseType"
-                    }
-                },
+        it('should cast shadow', function () {
+            const concepts = new Concepts({
+                "$service": {
+                    "$parameter": "$type",
+                    "response": "$responseType"
+                }
+            });
+
+            const schema = concepts.create({
                 "sayHello": {
                     "name": "string",
                     "response": "string"

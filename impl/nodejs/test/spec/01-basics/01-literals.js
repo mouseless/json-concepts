@@ -4,8 +4,8 @@ const { should } = require('chai');
 should();
 
 describe('spec/basics/literals', function () {
-    it('should validate', async function () {
-        const concepts = await Concepts.load({
+    it('should validate', function () {
+        const concepts = new Concepts({
             "sayHello": {
                 "name": "string"
             }
@@ -18,8 +18,8 @@ describe('spec/basics/literals', function () {
         }).should.equal(true);
     });
 
-    it('should not validate if parameter is null or undefined', async function () {
-        const concepts = await Concepts.load({
+    it('should not validate if parameter is null or undefined', function () {
+        const concepts = new Concepts({
             "sayHello": {
                 "name": "string"
             }
@@ -29,8 +29,8 @@ describe('spec/basics/literals', function () {
         concepts.validate(null).should.equal(false);
     });
 
-    it('should not validate if root keys does not exist', async function () {
-        const concepts = await Concepts.load({
+    it('should not validate if root keys does not exist', function () {
+        const concepts = new Concepts({
             "sayHello": {
                 "name": "string"
             }
@@ -39,8 +39,8 @@ describe('spec/basics/literals', function () {
         concepts.validate({}).should.equal(false);
     });
 
-    it('should not validate if all schema is not the same recursively', async function () {
-        const concepts = await Concepts.load({
+    it('should not validate if all schema is not the same recursively', function () {
+        const concepts = new Concepts({
             "sayHello": {
                 "name": "string"
             }
@@ -52,8 +52,8 @@ describe('spec/basics/literals', function () {
         }).should.equal(false);
     });
 
-    it('should not validate if schema has more things than concepts', async function () {
-        const concepts = await Concepts.load({
+    it('should not validate if schema has more things than concepts', function () {
+        const concepts = new Concepts({
             "sayHello": {
                 "name": "string"
             }
@@ -67,8 +67,8 @@ describe('spec/basics/literals', function () {
         }).should.equal(false);
     });
 
-    it('should not validate if value side does not fit concepts literal', async function () {
-        const concepts = await Concepts.load({
+    it('should not validate if value side does not fit concepts literal', function () {
+        const concepts = new Concepts({
             "sayHello": {
                 "name": "string"
             }
