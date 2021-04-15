@@ -10,13 +10,13 @@
     }
 
     /* const */ #object;
-    /* const */ #root;
+    /* const */ #shadow;
 
     constructor(object = required('object')) {
         this.#object = object;
-        this.#root = new Concept();
+        this.#shadow = new ShadowConcepts();
 
-        this.#root.build(object);
+        this.#shadow.build(object);
     }
 
     get object() {
@@ -24,11 +24,11 @@
     }
 
     get shadow() {
-        return this.#root.shadow;
+        return this.#shadow.data;
     }
 
-    get _root() {
-        return this.#root;
+    get _shadow() {
+        return this.#shadow;
     }
 
     /**
@@ -94,5 +94,5 @@ function validateValue(conceptsObject, schemaObject) {
 module.exports = { Concepts };
 
 const { Schema } = require('./schema');
-const { Concept } = require('./concept');
+const { ShadowConcepts } = require('./shadow-concepts');
 const { error, sc, required, loadJSON } = require('./util');

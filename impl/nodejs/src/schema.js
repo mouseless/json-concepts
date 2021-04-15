@@ -53,7 +53,7 @@
         if (this.#shadow == null) {
             this.#shadow = {};
 
-            build(this.#shadow, this.#object, this.#concepts._root);
+            build(this.#shadow, this.#object, this.#concepts._shadow);
         }
 
         return this.#shadow;

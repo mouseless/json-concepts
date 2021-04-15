@@ -30,7 +30,7 @@
      * @returns {Schema}
      */
     transform(schema) {
-        return transform(schema.shadow, this.#target._root, this.#object);
+        return transform(schema.shadow, this.#target._shadow, this.#object);
     }
 }
 
@@ -78,4 +78,3 @@ module.exports = {
 
 const { sc, arrayify, required, loadJSON } = require('./util');
 const { Schema } = require('./schema');
-const { Concept } = require('./concept');
