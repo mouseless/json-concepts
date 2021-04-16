@@ -105,11 +105,10 @@
 
         for (const concept of target.concepts) {
             for (const query of this.#queriesMap[concept.name]) {
-                for (const childSchema of query.from(schema)) {
-                    const childContext = query.select(childSchema);
-
-                    result[childSchema.name] = this._transform(childSchema, concept, childContext);
-                }
+                const $this = this;
+                query.execute(schema, function(childSchema, childContext) {
+                    result[childSchema.name] = $this._transform(childSchema, concept, childContext);
+                });
             }
         }
 
