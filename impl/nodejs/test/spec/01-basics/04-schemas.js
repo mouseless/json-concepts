@@ -34,6 +34,9 @@ describe('spec/basics/schemas', function () {
         actual.should.be.an.instanceof(Schema);
     });
 
+    it('should give error when path or object is not supplied');
+    it('should give error when concepts is not supplied');
+
     it('should not validate if it does not conform to its concepts', async function () {
         fs({
             'service.concepts.json': JSON.stringify({

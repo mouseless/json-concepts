@@ -7,7 +7,21 @@ class SchemaShadow {
     /* const */ #schemaMap;
     /* const */ #data;
 
-    constructor(conceptsShadow, name) {
+    /**
+     * SchemaShadow is a traversable tree version of a schema. It also
+     * represents any node in that tree.
+     * 
+     * This constructor only initializes this node. It should be built after
+     * its construction.
+     * 
+     * @param {ConceptsShadow} conceptsShadow (Required) Corresponding concepts
+     * shadow of this node.
+     * @param {String} name Name of this node
+     */
+    constructor(
+        conceptsShadow = required('conceptsShadow'),
+        name
+    ) {
         this.#conceptsShadow = conceptsShadow;
         this.#name = name;
 
@@ -18,19 +32,66 @@ class SchemaShadow {
         this.#data = {};
     }
 
+    /**
+     * Name of this node.
+     * 
+     * @returns {String}
+     */
     get name() { return this.#name; }
+    /**
+     * Data representation of this node and all of is nodes under it as an
+     * object.
+     * 
+     * @returns {Object}
+     */
     get data() { return this.#data; }
 
-    hasVariable(name) { return this.#variableMap.hasOwnProperty(name); }
-    getVariable(name) { return this.#variableMap[name]; }
-    hasSchema(name) { return this.#schemaMap.hasOwnProperty(name); }
-    getSchema(name) { return arrayify.get(this.#schemaMap, name); }
+    /**
+     * Helper method to check if this node has a variable child node with given
+     * name.
+     * 
+     * @param {String} name (Required) Variable name to check 
+     * 
+     * @returns {boolean} `true` if it has, `false` otherwise
+     */
+    hasVariable(name = required('name')) { return this.#variableMap.hasOwnProperty(name); }
+    /**
+     * Helper method to get the variable node with given name.
+     * 
+     * @param {String} name (Required) Variable name to get
+     * 
+     * @returns {SchemaShadow} Variable node with given name under this node
+     */
+    getVariable(name = required('name')) { return this.#variableMap[name]; }
+    /**
+     * Helper method to check if this node has any schema child node with given
+     * name.
+     * 
+     * @param {String} name (Required) Schema name to check 
+     * 
+     * @returns {boolean} `true` if it has, `false` otherwise
+     */
+    hasSchemas(name = required('name')) { return this.#schemaMap.hasOwnProperty(name); }
+    /**
+     * Helper method to get schema nodes with given name.
+     * 
+     * @param {String} name (Required) Schema name to get
+     * 
+     * @returns {Array.<SchemaShadow>} Schema nodes with given name under this
+     * node.
+     */
+    getSchemas(name = required('name')) { return arrayify.get(this.#schemaMap, name); }
 
-    build(schema) {
+    /**
+     * Recursively builds this node using given schema object.
+     * 
+     * @param {Object} schema (Required) Schema object
+     */
+    build(schema = required('schema')) {
         this._build(schema, this.#conceptsShadow);
 
         if (this.#name != null) {
-            this.#data[sc.SELF] = this.#name;
+            this.#data[SC.SELF.value] = this.#name;
         }
 
         if (this.#conceptsShadow.hasNothingButName()) {
@@ -41,7 +102,7 @@ class SchemaShadow {
             }
 
             for (const shadow of this.#schemas) {
-                arrayify.pushOrSet(this.#data, shadow.#conceptsShadow.name, shadow.#data);
+                arrayify.push(this.#data, shadow.#conceptsShadow.name, shadow.#data);
             }
         }
     }
@@ -65,7 +126,7 @@ class SchemaShadow {
                         shadow.build(schema[key]);
 
                         this.#schemas.push(shadow);
-                        arrayify.pushOrSet(this.#schemaMap, shadow.#conceptsShadow.name, shadow);
+                        arrayify.push(this.#schemaMap, shadow.#conceptsShadow.name, shadow);
                     }
                 }
             }
@@ -77,4 +138,4 @@ module.exports = {
     SchemaShadow
 };
 
-const { sc, arrayify } = require('./util');
+const { SpecialCharacters: SC, arrayify, required } = require('./util');

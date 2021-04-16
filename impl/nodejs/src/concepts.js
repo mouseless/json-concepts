@@ -1,17 +1,29 @@
 /* exported */ class Concepts {
     /**
-     * @async
-     * @param {String|Object} pathOrObject
+     * Loads concepts from given path.
      * 
-     * @returns {Promise<Concepts>} 
+     * @async
+     * @param {String} path (Required) File path or URL to load concepts from
+     * 
+     * @returns {Promise<Concepts>} Concepts at given path
      */
-    static async load(pathOrObject = required('pathOrObject')) {
-        return new Concepts(await loadJSON(pathOrObject));
+    static async load(path = required('path')) {
+        const object = await loadJSON(path);
+
+        return new Concepts(object);
     }
 
     /* const */ #object;
     /* const */ #shadow;
 
+    /**
+     * Concepts represents a schema for a schema. It contains a set of concept
+     * definitions that is used to validate schemas against.
+     * 
+     * This constructor builds concepts from given object.
+     * 
+     * @param {Object} object (Required) Concepts object
+     */
     constructor(object = required('object')) {
         this.#object = object;
 
@@ -19,65 +31,88 @@
         this.#shadow.build(object);
     }
 
+    /**
+     * Data of this concepts as an object.
+     * 
+     * @returns {Object}
+     */
     get object() { return this.#object; }
+    /**
+     * Shadow data of this concepts as an object.
+     * 
+     * @returns {Object}
+     */
     get shadow() { return this.#shadow.data; }
 
     get _shadow() { return this.#shadow; }
 
     /**
-     * @async
-     * @param {String|Object} schemaPathOrObject 
+     * Loads schema at path and create a schema using this concepts.
      * 
-     * @returns {Promise<Schema>}
+     * @async
+     * @param {String} schemaPath (Required) File path or URL to load schema
+     * from.
+     * 
+     * @returns {Promise<Schema>} Schema at path
      */
-    async load(schemaPathOrObject = required('schemaPathOrObject')) {
-        const schemaObject = await loadJSON(schemaPathOrObject);
+    async load(schemaPath = required('schemaPath')) {
+        const object = await loadJSON(schemaPath);
 
-        return this.create(schemaObject);
-    }
-
-    create(schemaObject = required('schemaObject')) {
-        return new Schema(schemaObject, this);
+        return this.create(object);
     }
 
     /**
-     * @param {Object} schemaObject
+     * Creates schema using with this as its concepts and given schema object.
      * 
-     * @returns {boolean}
+     * @param {Object} schema (Required) Schema object
+     * 
+     * @returns {Schema} Created schema
      */
-    validate(schemaObject = null) {
-        if (schemaObject === null) {
+    create(schema = required('schema')) {
+        return new Schema(schema, this);
+    }
+
+    /**
+     * Validates schema against this concepts definition.
+     * 
+     * @param {Schema|Object} schema Schema to validate. Accepts both an object
+     * and an instance of Schema.
+     * 
+     * @returns {boolean} `true` if schema is valid, `false` otherwise
+     */
+    validate(schema = null) {
+        if (schema === null) {
             return false;
         }
 
-        return _validate(this.#object, schemaObject);
+        return _validate(this.#object, schema);
     }
 }
 
-function _validate(conceptsObject, schemaObject) {
-    if (typeof conceptsObject === 'string') {
-        return _validateValue(conceptsObject, schemaObject);
+function _validate(concepts, schema) {
+    if (typeof concepts === 'string') {
+        return _validateValue(concepts, schema);
     }
 
-    for (const key in conceptsObject) {
+    for (const key in concepts) {
         let schemaKey = key;
 
-        if (sc.is(sc.VARIABLE, key)) {
-            schemaKey = Object.keys(schemaObject)[0];
-        } else if (!schemaObject.hasOwnProperty(key)) {
+        if (SC.VARIABLE.matches(key)) {
+            schemaKey = Object.keys(schema)[0];
+        } else if (!schema.hasOwnProperty(key)) {
             return false;
         }
 
-        if (!_validate(conceptsObject[key], schemaObject[schemaKey])) {
+        if (!_validate(concepts[key], schema[schemaKey])) {
             return false;
         }
     }
 
-    return Object.keys(conceptsObject).length == Object.keys(schemaObject).length;
+    return Object.keys(concepts).length == Object.keys(schema).length;
 }
 
 function _validateValue(conceptsObject, schemaObject) {
-    if (sc.is(sc.VARIABLE, conceptsObject)) {
+    if (SC.VARIABLE.matches(conceptsObject)) {
         return true;
     }
 
@@ -88,4 +123,4 @@ module.exports = { Concepts };
 
 const { Schema } = require('./schema');
 const { ConceptsShadow } = require('./concepts-shadow');
-const { error, sc, required, loadJSON } = require('./util');
+const { SpecialCharacters: SC, required, loadJSON } = require('./util');

@@ -10,11 +10,13 @@
         "**/obj": true
     },
     "cSpell.words": [
+        "AVLCN",
         "Codestache",
         "Grpc",
         "Nata",
         "Protos",
         "Rpcs",
+        "Undecorates",
         "arrayify",
         "buildr",
         "buildrjs",
@@ -34,6 +36,7 @@
         "selecttransform",
         "stjs",
         "twitr",
-        "typeof"
+        "typeof",
+        "undecorate"
     ]
 }

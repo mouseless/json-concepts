@@ -1,5 +1,12 @@
+/**
+ * Names of errors to be thrown from this module.
+ * 
+ * @enum {String}
+ */
 const Names = {
+    /** Schema validation errors */
     SCHEMA_ERROR: 'SchemaError',
+    /** Other errors */
     ERROR: 'Error'
 }
 
@@ -37,5 +44,8 @@ module.exports = {
         }
 
         return _error(`${SCHEMA} is not valid`, Names.SCHEMA_ERROR);
+    },
+    Expected_type_was_EXPECTED_got_ACTUAL(EXPECTED, ACTUAL) {
+        return _error(`Expected type was '${EXPECTED}', got '${ACTUAL}'`);
     }
 };

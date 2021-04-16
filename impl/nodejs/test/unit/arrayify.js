@@ -38,11 +38,11 @@ describe('arrayify', function () {
         });
     });
 
-    describe('#pushOrSet', function () {
+    describe('#push', function () {
         it('should push value to array if source[key] is array', function () {
             const source = { 'array': [1, 2] };
 
-            arrayify.pushOrSet(source, 'array', 3);
+            arrayify.push(source, 'array', 3);
 
             source.array.length.should.equal(3);
             source.array[2].should.equal(3);
@@ -51,7 +51,7 @@ describe('arrayify', function () {
         it('should make source[key] an array and push value to source if source[key] is object', function () {
             const source = { 'array': 1 };
 
-            arrayify.pushOrSet(source, 'array', 2);
+            arrayify.push(source, 'array', 2);
 
             source.array.should.be.an('array');
             source.array.length.should.equal(2);
@@ -61,20 +61,20 @@ describe('arrayify', function () {
         it('should set value to source if source[key] is undefined', function () {
             const source = {};
 
-            arrayify.pushOrSet(source, 'string', "test");
+            arrayify.push(source, 'string', "test");
 
             source.string.should.be.a('string');
             source.string.should.equal("test");
         });
 
         it('should throw error when a parameter is not given', function () {
-            (() => arrayify.pushOrSet())
+            (() => arrayify.push())
                 .should.throw(error.PARAMETER_is_required('source').message);
 
-            (() => arrayify.pushOrSet({}))
+            (() => arrayify.push({}))
                 .should.throw(error.PARAMETER_is_required('key').message);
 
-            (() => arrayify.pushOrSet({}, 'test'))
+            (() => arrayify.push({}, 'test'))
                 .should.throw(error.PARAMETER_is_required('value').message);
         });
     })

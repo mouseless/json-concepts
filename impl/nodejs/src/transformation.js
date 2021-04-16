@@ -1,10 +1,21 @@
 /* exported */ class Transformation {
+    /**
+     * Loads transformation from given path.
+     * 
+     * @async
+     * @param {String} path (Required) File path or URL referring to a json
+     * content.
+     * @param {Concepts} source Source concepts to transform from
+     * @param {Concepts} target Target concepts to transform to
+     * 
+     * @returns {Promise<Transformation>} Transformation at given path
+     */
     static async load(
-        pathOrObject = required('pathOrObject'),
+        path = required('path'),
         source = null,
         target = null
     ) {
-        const object = await loadJSON(pathOrObject);
+        const object = await loadJSON(path);
 
         return new Transformation(object, source, target);
     }
@@ -14,9 +25,19 @@
     /* const */ #target;
     /* const */ #queriesMap;
 
+    /**
+     * Transformation represents a set of transformation rules from one
+     * concepts (source) to another (target). Once created, you can use it to
+     * transform any schema of source concepts to target concepts.
+     * 
+     * This constructor validates object against given source and target
+     * concepts, and builds queries from given object.
+     * 
+     * @param {Object} object Transformation object
+     * @param {Concepts} source Source concepts
+     * @param {Concepts} target Target concepts
+     */
     constructor(object, source, target) {
-        //todo validate conformance
-
         this.#object = object;
         this.#source = source;
         this.#target = target;
@@ -25,13 +46,23 @@
         this._build();
     }
 
+    /**
+     * Object that represents the transformation. This object has query
+     * definitions for at least one concept in target concepts.
+     * 
+     * @returns {Object}
+     */
     get object() { return this.#object; }
 
     /**
+     * Transforms given schema in source concepts to target concepts. Schema is
+     * validated against source concepts before transformation.
      * 
-     * @param {Schema} schema 
+     * @param {Schema|Object} schema The schema to be transformed. You can pass
+     * a schema object directly, it will be converted to a Schema from source
+     * concepts.
      * 
-     * @returns {Schema}
+     * @returns {Schema} Target version of given schema
      */
     transform(schema) {
         return this.#target.create(
@@ -91,5 +122,6 @@ module.exports = {
 };
 
 const { arrayify, required, loadJSON } = require('./util');
+const { Concepts } = require('./concepts');
 const { Schema } = require('./schema');
 const { Query } = require('./query');

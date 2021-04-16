@@ -47,4 +47,12 @@ describe('spec/basics/transformations', function () {
             }
         });
     });
+
+    it('should give error when path is not supplied');
+    it('should give error when schema is not supplied');
+    it('should verify that given source and target are compatible with transformation');
+    it('should validate given schema against source concepts');
+    it('should create schema from source concepts when schema is an object');
+
+    // TODO: check any inconsistency in api
 });

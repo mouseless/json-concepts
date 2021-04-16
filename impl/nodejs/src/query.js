@@ -1,29 +1,40 @@
 class Query {
     /* const */ #object;
 
+    /**
+     * Query represents a single transformation definition from one concept to
+     * another.
+     * 
+     * This constructor initializes a Query instance with given object from a
+     * transformation definition.
+     * 
+     * @param {Object} object Object from a transformation definition
+     */
     constructor(object) {
         this.#object = object;
     }
 
     /**
+     * Finds and returns list of schemas to select from.
      * 
-     * @param {SchemaShadow} schema
+     * @param {SchemaShadow} schema Root schema node to search child schemas
      * 
-     * @returns {Array.<SchemaShadow>}
+     * @returns {Array.<SchemaShadow>} Found array of schema nodes
      */
     from(schema) {
-        if (!schema.hasSchema(this.#object.from)) {
+        if (!schema.hasSchemas(this.#object.from)) {
             return [];
         }
 
-        return schema.getSchema(this.#object.from);
+        return schema.getSchemas(this.#object.from);
     }
 
     /**
+     * Projects a given schema into a variable context for the target schema.
      * 
-     * @param {Schema} schema 
+     * @param {Schema} schema Schema to project
      * 
-     * @returns {Object}
+     * @returns {Object} Projected variable context
      */
     select(schema) {
         const result = {};
