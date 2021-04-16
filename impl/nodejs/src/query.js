@@ -27,7 +27,8 @@ class Query {
      * child schema and projected variable context.
      * 
      * @param {Object} schema Schema on which this query will be executed
-     * @param {executeCallback} callback  Function to callback for each child schema
+     * @param {executeCallback} callback  Function to callback for each child
+     * schema.
      */
     execute(
         schema = required('schema'),
@@ -67,5 +68,5 @@ module.exports = {
     Query
 };
 
-const { SchemaShadow } = require('./schema-shadow');
+const { Concepts } = require('./concepts');
 const { required } = require('./util');

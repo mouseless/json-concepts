@@ -58,13 +58,21 @@
      * Transforms given schema in source concepts to target concepts. Schema is
      * validated against source concepts before transformation.
      * 
-     * @param {Schema|Object} schema The schema to be transformed. You can pass
-     * a schema object directly, it will be converted to a Schema from source
-     * concepts.
+     * @param {Schema|Object} schema (Required) The schema to be transformed. 
+     * You can pass a schema object directly, it will be converted to a Schema
+     * from source concepts.
      * 
      * @returns {Schema} Target version of given schema
      */
-    transform(schema) {
+    transform(schema = required('schema')) {
+        if (!(schema instanceof Schema)) {
+            schema = this.#source.create(schema);
+        } else {
+            if (!this.#source.validate(schema.object)) {
+                throw error.SCHEMA_is_not_valid(schema.object);
+            }
+        }
+
         return this.#target.create(
             this._transform(schema._shadow, this.#target._shadow)
         );
@@ -75,8 +83,10 @@
             this.#queriesMap[concept] = [];
 
             const queries = arrayify.get(this.#object, concept);
-            for (const query of queries) {
-                this.#queriesMap[concept].push(new Query(query));
+            for (const object of queries) {
+                const query = new Query(object);
+
+                this.#queriesMap[concept].push(query);
             }
         }
     }
@@ -106,7 +116,7 @@
         for (const concept of target.concepts) {
             for (const query of this.#queriesMap[concept.name]) {
                 const $this = this;
-                query.execute(schema, function(childSchema, childContext) {
+                query.execute(schema, function (childSchema, childContext) {
                     result[childSchema.name] = $this._transform(childSchema, concept, childContext);
                 });
             }
@@ -120,7 +130,7 @@ module.exports = {
     Transformation
 };
 
-const { arrayify, required, loadJSON } = require('./util');
+const { error, arrayify, required, loadJSON } = require('./util');
 const { Concepts } = require('./concepts');
 const { Schema } = require('./schema');
 const { Query } = require('./query');

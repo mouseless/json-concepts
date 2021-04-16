@@ -18,6 +18,11 @@ describe('spec/basics/concepts', function () {
         }).should.equal(true);
     });
 
+    it('should be able to list all concepts');
+    it('should be able to get a concept');
+    it('should be able to list all variables of each concept');
+    it('should be able to get a variable of a concept');
+
     describe('key literals under concepts', function () {
         it('should validate', function () {
             const concepts = new Concepts({

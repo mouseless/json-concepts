@@ -50,13 +50,13 @@
      * Loads schema at path and create a schema using this concepts.
      * 
      * @async
-     * @param {String} schemaPath (Required) File path or URL to load schema
+     * @param {String} path (Required) File path or URL to load schema
      * from.
      * 
      * @returns {Promise<Schema>} Schema at path
      */
-    async load(schemaPath = required('schemaPath')) {
-        const object = await loadJSON(schemaPath);
+    async load(path = required('path')) {
+        const object = await loadJSON(path);
 
         return this.create(object);
     }

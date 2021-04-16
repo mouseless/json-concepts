@@ -47,5 +47,12 @@ module.exports = {
     },
     Expected_type_was_EXPECTED_got_ACTUAL(EXPECTED, ACTUAL) {
         return _error(`Expected type was '${EXPECTED}', got '${ACTUAL}'`);
+    }, 
+    TRANSFORMATION_is_not_compatible_with_its_CONCEPTS(TRANSFORMATION, CONCEPTS) {
+        if(typeof TRANSFORMATION === 'object') {
+            TRANSFORMATION = 'Transformation';
+        }
+
+        return _error(`${TRANSFORMATION} is not compatible with its ${CONCEPTS}`, Names.SCHEMA_ERROR);
     }
 };
