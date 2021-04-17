@@ -133,7 +133,7 @@ Shadow concepts is as follows;
 
 When there are variables next to optional literals, shadow schema should set
 variable value to `null`. When an optional concept is not defined in a schema
-shadow schema should have an empty array for that concept;
+shadow schema should have `null` for that concept;
 
 `SCHEMA: greeting.service.json`
 
@@ -149,7 +149,7 @@ shadow schema should have an empty array for that concept;
 {
     "service": {
         "_": "sayHello",
-        "parameter": [ ],
+        "parameter": null,
         "responseType": null
     }
 }
@@ -175,7 +175,7 @@ It casts the same shadow above;
 {
     "service": {
         "_": "sayHello",
-        "parameter": [ ],
+        "parameter": null,
         "responseType": null
     }
 }

@@ -43,7 +43,7 @@ However following schema is **NOT** valid;
 Because it is missing a `parameter`. Validation should give an error containing
 the missing concept name;
 
-`ERROR: 'greeting.service.json' is not valid, 'parameter' concept is missing.`
+`ERROR: 'greeting.service.json' is not valid, 'parameter' is missing.`
 
 ## Missing More Than One Concept
 
@@ -58,7 +58,7 @@ Below schema is missing both `service` and a `parameter` data;
 
 Validation should throw an error with message containing `service`;
 
-`ERROR: 'greeting.service.json' is not valid, 'service' concept is missing.`
+`ERROR: 'greeting.service.json' is not valid, 'service' is missing.`
 
 ## Key Literals
 
@@ -86,7 +86,7 @@ Following schema will **NOT** be validated;
 
 Error message should contain the missing literal;
 
-`ERROR: 'greeting.service.json' is not valid, 'response' literal is missing.`
+`ERROR: 'greeting.service.json' is not valid, 'response' is missing.`
 
 ## Null Variables
 
