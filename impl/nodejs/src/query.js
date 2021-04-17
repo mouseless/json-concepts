@@ -15,6 +15,40 @@ class Query {
     }
 
     /**
+     * Validates this query against given target concept and source concepts.
+     * An error will be thrown if validation fails.
+     * 
+     * @param {Concept} targetConcept Target concept data. Pass the concept
+     * data to which result of this query will be set.
+     * @param {Concepts} source Source concepts from which this query will
+     * fetch its result.
+     */
+    validate(targetConcept, source) {
+        if (!source.has(this.#definition.from)) {
+            throw error.Definition_is_not_compatible_with_its_CONCEPTS__because__REASON(
+                'source', reason => reason.CONCEPT_not_found(this.#definition.from)
+            );
+        }
+
+        const sourceConcept = source.get(this.#definition.from);
+        for (const targetVariable in this.#definition.select) {
+            const sourceVariable = this.#definition.select[targetVariable];
+
+            if (!targetConcept.variables.hasOwnProperty(targetVariable)) {
+                throw error.Definition_is_not_compatible_with_its_CONCEPTS__because__REASON(
+                    'target', reason => reason.VARIABLE_not_found(targetVariable)
+                );
+            }
+
+            if (!sourceConcept.variables.hasOwnProperty(sourceVariable)) {
+                throw error.Definition_is_not_compatible_with_its_CONCEPTS__because__REASON(
+                    'source', reason => reason.VARIABLE_not_found(sourceVariable)
+                );
+            }
+        }
+    }
+
+    /**
      * Executed for each source found in given schema.
      * 
      * @callback executeCallback
@@ -68,4 +102,5 @@ module.exports = {
     Query
 };
 
-const { required } = require('./util');
+const { Concepts } = require('./concepts');
+const { error, required } = require('./util');

@@ -10,6 +10,11 @@ const Names = {
     ERROR: 'Error'
 }
 
+const Reasons = {
+    CONCEPT_not_found: CONCEPT => CONCEPTS => `Concept named '${CONCEPT}' is not found in ${CONCEPTS} concepts`,
+    VARIABLE_not_found: VARIABLE => CONCEPTS => `Variable named '${VARIABLE}' is not found in ${CONCEPTS} concepts`,
+}
+
 function _error(message, name = Names.ERROR) {
     const result = new Error(message);
 
@@ -20,6 +25,7 @@ function _error(message, name = Names.ERROR) {
 
 module.exports = {
     Names,
+    Reasons,
     FILE_is_not_a_valid_json(FILE) {
         return _error(`'${FILE}' is not a valid json`);
     },
@@ -39,7 +45,7 @@ module.exports = {
         return _error(`${PARAMETER} is required`);
     },
     SCHEMA_is_not_valid(SCHEMA) {
-        if(typeof SCHEMA === 'object') {
+        if (typeof SCHEMA === 'object') {
             SCHEMA = 'Schema';
         }
 
@@ -47,12 +53,15 @@ module.exports = {
     },
     Expected_type_was_EXPECTED_got_ACTUAL(EXPECTED, ACTUAL) {
         return _error(`Expected type was '${EXPECTED}', got '${ACTUAL}'`);
-    }, 
-    TRANSFORMATION_is_not_compatible_with_its_CONCEPTS(TRANSFORMATION, CONCEPTS) {
-        if(typeof TRANSFORMATION === 'object') {
-            TRANSFORMATION = 'Transformation';
-        }
-
-        return _error(`${TRANSFORMATION} is not compatible with its ${CONCEPTS}`, Names.SCHEMA_ERROR);
+    },
+    Definition_is_not_compatible_with_its_CONCEPTS__because__REASON(CONCEPTS, because) {
+        return _error(
+            `Definition is not compatible with its ${CONCEPTS}, ` +
+            `because: ${because(Reasons)(CONCEPTS)}`,
+            Names.SCHEMA_ERROR
+        );
+    },
+    TRANSFORMATION_is_not_valid__Error_is_ERROR(TRANSFORMATION, ERROR) {
+        return _error(`Transformation '${TRANSFORMATION}' is not valid. Error is: ${ERROR}`);
     }
 };

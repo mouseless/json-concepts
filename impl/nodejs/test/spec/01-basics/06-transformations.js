@@ -1,5 +1,6 @@
 const { Transformation, Schema, Concepts } = require('../../../index');
 const { error } = require('../../../src/util');
+const fs = require('mock-fs');
 const { use, should } = require('chai');
 const chaiAsPromised = require('chai-as-promised');
 
@@ -7,6 +8,10 @@ use(chaiAsPromised);
 should();
 
 describe('spec/basics/transformations', function () {
+    after(function () {
+        fs.restore();
+    });
+
     it('should transform', function () {
         const source = new Concepts({
             "$service": {
@@ -143,5 +148,105 @@ describe('spec/basics/transformations', function () {
 
     });
 
-    it('should verify that given source and target are compatible with transformation');
+    it('should verify that given source and target are compatible with transformation', function () {
+        const source = new Concepts({
+            "$service": {
+                "response": "$responseType"
+            }
+        });
+
+        const target = new Concepts({
+            "$function": {
+                "return": "$returnType"
+            }
+        });
+
+        (() => new Transformation({
+            "function": {
+                "from": "service_",
+                "select": {
+                    "returnType": "responseType"
+                }
+            }
+        }, source, target)).should.throw(error
+            .Definition_is_not_compatible_with_its_CONCEPTS__because__REASON(
+                'source', because => because.CONCEPT_not_found('service_')
+            ).message
+        );
+
+        (() => new Transformation({
+            "function": {
+                "from": "service",
+                "select": {
+                    "returnType": "responseType_"
+                }
+            }
+        }, source, target)).should.throw(error
+            .Definition_is_not_compatible_with_its_CONCEPTS__because__REASON(
+                'source', because => because.VARIABLE_not_found('responseType_')
+            ).message
+        );
+
+        (() => new Transformation({
+            "function_": {
+                "from": "service",
+                "select": {
+                    "returnType": "responseType"
+                }
+            }
+        }, source, target)).should.throw(error
+            .Definition_is_not_compatible_with_its_CONCEPTS__because__REASON(
+                'target', because => because.CONCEPT_not_found('function_')
+            ).message
+        );
+
+        (() => new Transformation({
+            "function": {
+                "from": "service",
+                "select": {
+                    "returnType_": "responseType"
+                }
+            }
+        }, source, target)).should.throw(error
+            .Definition_is_not_compatible_with_its_CONCEPTS__because__REASON(
+                'target', because => because.VARIABLE_not_found('returnType_')
+            ).message
+        );
+    });
+
+    it('should include path in error message when it is loaded', async function () {
+        fs({
+            'service.concepts.json': JSON.stringify({
+                "$service": {
+                    "response": "$responseType"
+                }
+            }),
+            'client.concepts.json': JSON.stringify({
+                "$function": {
+                    "return": "$returnType"
+                }
+            }),
+            'client.from.service.json': JSON.stringify({
+                "function": {
+                    "from": "service",
+                    "select": {
+                        "returnType_": "responseType"
+                    }
+                }
+            })
+        });
+
+        const source = await Concepts.load('service.concepts.json');
+        const target = await Concepts.load('client.concepts.json');
+
+        await Transformation.load('client.from.service.json', source, target)
+            .should.be.rejectedWith(
+                error.TRANSFORMATION_is_not_valid__Error_is_ERROR(
+                    'client.from.service.json',
+                    error.Definition_is_not_compatible_with_its_CONCEPTS__because__REASON(
+                        'target', because => because.VARIABLE_not_found('returnType_')
+                    ).message
+                ).message
+            );
+    });
 });

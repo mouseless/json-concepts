@@ -17,7 +17,15 @@
     ) {
         const definition = await loadJSON(path);
 
-        return new Transformation(definition, source, target);
+        try {
+            return new Transformation(definition, source, target);
+        } catch (e) {
+            if (e.name === error.Names.SCHEMA_ERROR) {
+                throw error.TRANSFORMATION_is_not_valid__Error_is_ERROR(path, e.message);
+            }
+
+            throw e;
+        }
     }
 
     /* const */ #definition;
@@ -84,11 +92,18 @@
 
     _build() {
         for (const concept in this.#definition) {
+            if (!this.#target.has(concept)) {
+                throw error.Definition_is_not_compatible_with_its_CONCEPTS__because__REASON(
+                    'target', reason => reason.CONCEPT_not_found(concept)
+                );
+            }
+
             this.#queriesMap[concept] = [];
 
             const queries = arrayify.get(this.#definition, concept);
             for (const definition of queries) {
                 const query = new Query(definition);
+                query.validate(this.#target.get(concept), this.#source);
 
                 this.#queriesMap[concept].push(query);
             }
@@ -105,11 +120,7 @@
                 }
             }
 
-            return result.length > 1
-                ? result
-                : result.length > 0
-                    ? result[0]
-                    : null;
+            return result.length > 1 ? result : result.length > 0 ? result[0] : null;
         }
 
         const result = {};
