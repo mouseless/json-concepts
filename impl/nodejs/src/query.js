@@ -1,17 +1,17 @@
 class Query {
-    /* const */ #object;
+    /* const */ #definition;
 
     /**
      * Query represents a single transformation definition from one concept to
      * another.
      * 
-     * This constructor initializes a Query instance with given object from a
-     * transformation definition.
+     * This constructor initializes a Query instance with given definition from
+     * a transformation.
      * 
-     * @param {Object} object Object from a transformation definition
+     * @param {Object} definition Query definition from a transformation
      */
-    constructor(object) {
-        this.#object = object;
+    constructor(definition) {
+        this.#definition = definition;
     }
 
     /**
@@ -42,18 +42,18 @@ class Query {
     };
 
     _from(schema) {
-        if (!schema.hasSchemas(this.#object.from)) {
+        if (!schema.hasSchemas(this.#definition.from)) {
             return [];
         }
 
-        return schema.getSchemas(this.#object.from);
+        return schema.getSchemas(this.#definition.from);
     }
 
     _select(schema) {
         const projection = {};
 
-        for (const targetKey in this.#object.select) {
-            const sourceKey = this.#object.select[targetKey];
+        for (const targetKey in this.#definition.select) {
+            const sourceKey = this.#definition.select[targetKey];
 
             if (schema.hasVariable(sourceKey)) {
                 projection[targetKey] = schema.getVariable(sourceKey).data;
@@ -68,5 +68,4 @@ module.exports = {
     Query
 };
 
-const { Concepts } = require('./concepts');
 const { required } = require('./util');

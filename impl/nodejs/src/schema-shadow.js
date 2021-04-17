@@ -2,9 +2,8 @@ class SchemaShadow {
     /* const */ #conceptsShadow;
     /* const */ #name;
     /* const */ #variables;
-    /* const */ #variableMap;
     /* const */ #schemas;
-    /* const */ #schemaMap;
+    /* const */ #schemaArray;
     /* const */ #data;
 
     /**
@@ -25,10 +24,9 @@ class SchemaShadow {
         this.#conceptsShadow = conceptsShadow;
         this.#name = name;
 
-        this.#variables = [];
-        this.#variableMap = {};
-        this.#schemas = [];
-        this.#schemaMap = {};
+        this.#variables = {};
+        this.#schemas = {};
+        this.#schemaArray = [];
         this.#data = {};
     }
 
@@ -38,6 +36,18 @@ class SchemaShadow {
      * @returns {String}
      */
     get name() { return this.#name; }
+    /**
+     * Array of variable nodes under this node.
+     * 
+     * @returns {Array.<SchemaShadow>}
+     */
+    get variables() { return Object.values(this.#variables); }
+    /**
+     * Array of schema nodes under this node.
+     * 
+     * @returns {Array.<SchemaShadow>}
+     */
+    get schemas() { return this.#schemaArray; }
     /**
      * Data representation of this node and all of is nodes under it as an
      * object.
@@ -54,7 +64,7 @@ class SchemaShadow {
      * 
      * @returns {boolean} `true` if it has, `false` otherwise
      */
-    hasVariable(name = required('name')) { return this.#variableMap.hasOwnProperty(name); }
+    hasVariable(name = required('name')) { return this.#variables.hasOwnProperty(name); }
     /**
      * Helper method to get the variable node with given name.
      * 
@@ -62,7 +72,7 @@ class SchemaShadow {
      * 
      * @returns {SchemaShadow} Variable node with given name under this node
      */
-    getVariable(name = required('name')) { return this.#variableMap[name]; }
+    getVariable(name = required('name')) { return this.#variables[name]; }
     /**
      * Helper method to check if this node has any schema child node with given
      * name.
@@ -71,7 +81,7 @@ class SchemaShadow {
      * 
      * @returns {boolean} `true` if it has, `false` otherwise
      */
-    hasSchemas(name = required('name')) { return this.#schemaMap.hasOwnProperty(name); }
+    hasSchemas(name = required('name')) { return this.#schemas.hasOwnProperty(name); }
     /**
      * Helper method to get schema nodes with given name.
      * 
@@ -80,57 +90,64 @@ class SchemaShadow {
      * @returns {Array.<SchemaShadow>} Schema nodes with given name under this
      * node.
      */
-    getSchemas(name = required('name')) { return arrayify.get(this.#schemaMap, name); }
+    getSchemas(name = required('name')) { return arrayify.get(this.#schemas, name); }
 
     /**
-     * Recursively builds this node using given schema object.
+     * Recursively builds this node using given schema definition.
      * 
-     * @param {Object} schema (Required) Schema object
+     * @param {Object} definition (Required) Schema definition
      */
-    build(schema = required('schema')) {
-        this._build(schema, this.#conceptsShadow);
+    build(definition = required('definition')) {
+        this._build(definition, this.#conceptsShadow);
 
         if (this.#name != null) {
             this.#data[SC.SELF.value] = this.#name;
         }
 
         if (this.#conceptsShadow.hasNothingButName()) {
-            this.#data = schema;
+            this.#data = definition;
         } else {
-            for (const shadow of this.#variables) {
+            for (const shadow of this.variables) {
                 this.#data[shadow.#conceptsShadow.name] = shadow.#data;
             }
 
-            for (const shadow of this.#schemas) {
+            for (const shadow of this.#schemaArray) {
                 arrayify.push(this.#data, shadow.#conceptsShadow.name, shadow.#data);
             }
         }
     }
 
-    _build(schema, conceptsShadow) {
+    _build(definition, conceptsShadow) {
         if (conceptsShadow.hasAnyVariables()) {
             for (const variable of conceptsShadow.variables) {
-                const shadow = new SchemaShadow(variable)
-                shadow.build(schema);
-
-                this.#variables.push(shadow);
-                this.#variableMap[shadow.#conceptsShadow.name] = shadow;
+                this._pushVariable(definition, variable);
             }
         } else if (conceptsShadow.hasAnyConcepts() || conceptsShadow.hasAnyLiterals()) {
-            for (const key in schema) {
+            for (const key in definition) {
                 if (conceptsShadow.hasLiteral(key)) {
-                    this._build(schema[key], conceptsShadow.getLiteral(key));
+                    this._build(definition[key], conceptsShadow.getLiteral(key));
                 } else {
                     for (const concept of conceptsShadow.concepts) {
-                        const shadow = new SchemaShadow(concept, key);
-                        shadow.build(schema[key]);
-
-                        this.#schemas.push(shadow);
-                        arrayify.push(this.#schemaMap, shadow.#conceptsShadow.name, shadow);
+                        this._pushSchema(definition[key], concept, key);
                     }
                 }
             }
         }
+    }
+
+    _pushVariable(definition, variable) {
+        const shadow = new SchemaShadow(variable)
+        shadow.build(definition);
+
+        this.#variables[shadow.#conceptsShadow.name] = shadow;
+    }
+
+    _pushSchema(definition, concept, key) {
+        const shadow = new SchemaShadow(concept, key);
+        shadow.build(definition);
+
+        arrayify.push(this.#schemas, shadow.#conceptsShadow.name, shadow);
+        this.#schemaArray.push(shadow);
     }
 }
 

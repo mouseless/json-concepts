@@ -1,4 +1,5 @@
 const { Concepts } = require('../../../index');
+const { error } = require('../../../src/util');
 const { should } = require('chai');
 
 should();
@@ -16,6 +17,11 @@ describe('spec/basics/literals', function () {
                 "name": "string"
             }
         }).should.equal(true);
+    });
+
+    it('should give error when definition is not supplied to constructor', function() {
+        (() => new Concepts())
+            .should.throw(error.PARAMETER_is_required('definition').message);
     });
 
     it('should not validate if parameter is null or undefined', function () {

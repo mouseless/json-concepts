@@ -197,9 +197,17 @@ function _private() {
 }
 
 class Class { // no JSDoc for classes
+    /**
+     * Any anonymous object is documented at the top of its class.
+     * 
+     * @typedef {Object} Type
+     * @property {String} name Document properties like parameters
+     */
 
     /**
-     * Describe your class in constructor JSDoc
+     * Describe your class in constructor JSDoc.
+     * 
+     * Then describe constructor if necessary.
      */
     constructor() {
 

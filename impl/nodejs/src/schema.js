@@ -14,10 +14,10 @@
         path = required('path'),
         concepts = null
     ) {
-        const object = await loadJSON(path);
+        const definition = await loadJSON(path);
 
         concepts = concepts ||
-            metaData.read(object, 'concepts', /* burnAfterReading */ true);
+            metaData.read(definition, 'concepts', /* burnAfterReading */ true);
 
         if (concepts === null) {
             throw error.Concepts_required_to_load_SCHEMA(path);
@@ -32,7 +32,7 @@
         }
 
         try {
-            return new Schema(object, concepts);
+            return new Schema(definition, concepts);
         } catch (e) {
             if (e.name === error.Names.SCHEMA_ERROR) {
                 throw error.SCHEMA_is_not_valid(path);
@@ -42,45 +42,46 @@
         }
     }
 
-    /* const */ #object;
+    /* const */ #definition;
     /* const */ #concepts;
     /* const */ #shadow;
 
     /**
      * Schema represents a meta-data about anything. For now schemas will not
-     * a data validation capability. This is because its focus is more on
-     * schema transformation and code generation than pure data.
+     * have a data validation capability. This is because its focus is more on
+     * schema transformation and code generation than data validation.
      * 
-     * This constructor validates given object against given concepts, and
-     * builds schema from given object.
+     * This constructor validates given definition against given concepts, and
+     * builds schema from given definition.
      * 
-     * @param {Object} object (Required) Schema object
+     * @param {Object} definition (Required) Schema definition
      * @param {Concepts} concepts (Required) Concepts of this schema
      */
     constructor(
-        object = required('object'),
+        definition = required('definition'),
         concepts = required('concepts')
     ) {
-        if (!concepts.validate(object)) {
-            throw error.SCHEMA_is_not_valid(object);
+        if (!concepts.validate(definition)) {
+            throw error.SCHEMA_is_not_valid(definition);
         }
 
-        this.#object = object;
+        this.#definition = definition;
         this.#concepts = concepts;
 
         this.#shadow = new SchemaShadow(this.#concepts._shadow);
-        this.#shadow.build(this.#object);
+        this.#shadow.build(this.#definition);
     }
 
     /**
-     * Data of this schema as an object. Any meta-data that was in a schema
-     * file is removed during load operation. This will only have schema data.
+     * Definition of this schema as an object. Any meta-data that was in a
+     * schema file is removed during load operation. This will only have
+     * schema definition itself.
      * 
      * @returns {Object}
      */
-    get object() { return this.#object; }
+    get definition() { return this.#definition; }
     /**
-     * Shadow data of this schema as an object.
+     * Shadow definition of this schema as an object.
      * 
      * @returns {Object}
      */

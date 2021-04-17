@@ -37,7 +37,10 @@ describe('spec/basics/schemas', function () {
         schema2.should.be.an.instanceof(Schema);
     });
 
-    it('should give error when path is not supplied', async function () {
+    it('should give error when path is not supplied to load methods', async function () {
+        await Concepts.load()
+            .should.be.rejectedWith(error.PARAMETER_is_required('path').message);
+
         const concepts = await Concepts.load('service.concepts.json');
 
         await concepts.load()
@@ -47,7 +50,9 @@ describe('spec/basics/schemas', function () {
             .should.be.rejectedWith(error.PARAMETER_is_required('path').message);
     });
 
-    it('should give error when concepts is not supplied', function () {
+    it('should give error when definition or concepts is not supplied to constructor', function () {
+        (() => new Schema())
+            .should.throw(error.PARAMETER_is_required('definition').message);
         (() => new Schema({}))
             .should.throw(error.PARAMETER_is_required('concepts').message);
     });

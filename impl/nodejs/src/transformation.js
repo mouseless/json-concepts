@@ -15,12 +15,12 @@
         source = null,
         target = null
     ) {
-        const object = await loadJSON(path);
+        const definition = await loadJSON(path);
 
-        return new Transformation(object, source, target);
+        return new Transformation(definition, source, target);
     }
 
-    /* const */ #object;
+    /* const */ #definition;
     /* const */ #source;
     /* const */ #target;
     /* const */ #queriesMap;
@@ -30,15 +30,19 @@
      * concepts (source) to another (target). Once created, you can use it to
      * transform any schema of source concepts to target concepts.
      * 
-     * This constructor validates object against given source and target
-     * concepts, and builds queries from given object.
+     * This constructor validates definition against given source and target
+     * concepts, and builds queries from given definition.
      * 
-     * @param {Object} object Transformation object
+     * @param {Object} definition Transformation definition
      * @param {Concepts} source Source concepts
      * @param {Concepts} target Target concepts
      */
-    constructor(object, source, target) {
-        this.#object = object;
+    constructor(
+        definition = required('definition'),
+        source = required('source'),
+        target = required('target')
+    ) {
+        this.#definition = definition;
         this.#source = source;
         this.#target = target;
 
@@ -47,12 +51,12 @@
     }
 
     /**
-     * Object that represents the transformation. This object has query
+     * Definition that represents the transformation. This definition has query
      * definitions for at least one concept in target concepts.
      * 
      * @returns {Object}
      */
-    get object() { return this.#object; }
+    get definition() { return this.#definition; }
 
     /**
      * Transforms given schema in source concepts to target concepts. Schema is
@@ -68,8 +72,8 @@
         if (!(schema instanceof Schema)) {
             schema = this.#source.create(schema);
         } else {
-            if (!this.#source.validate(schema.object)) {
-                throw error.SCHEMA_is_not_valid(schema.object);
+            if (!this.#source.validate(schema.definition)) {
+                throw error.SCHEMA_is_not_valid(schema.definition);
             }
         }
 
@@ -79,12 +83,12 @@
     }
 
     _build() {
-        for (const concept in this.#object) {
+        for (const concept in this.#definition) {
             this.#queriesMap[concept] = [];
 
-            const queries = arrayify.get(this.#object, concept);
-            for (const object of queries) {
-                const query = new Query(object);
+            const queries = arrayify.get(this.#definition, concept);
+            for (const definition of queries) {
+                const query = new Query(definition);
 
                 this.#queriesMap[concept].push(query);
             }

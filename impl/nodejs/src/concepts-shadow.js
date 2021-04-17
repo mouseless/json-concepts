@@ -2,7 +2,6 @@ class ConceptsShadow {
     /* const */ #name;
     /* const */ #variables;
     /* const */ #literals;
-    /* const */ #literalMap;
     /* const */ #concepts;
     /* const */ #data;
 
@@ -19,10 +18,9 @@ class ConceptsShadow {
     constructor(name) {
         this.#name = name;
 
-        this.#variables = [];
-        this.#literals = [];
-        this.#literalMap = {};
-        this.#concepts = [];
+        this.#variables = {};
+        this.#literals = {};
+        this.#concepts = {};
         this.#data = {};
     }
 
@@ -37,19 +35,19 @@ class ConceptsShadow {
      * 
      * @returns {Array.<ConceptsShadow>}
      */
-    get variables() { return this.#variables; }
+    get variables() { return Object.values(this.#variables); }
     /**
      * Array of literal nodes under this node.
      * 
      * @returns {Array.<ConceptsShadow>}
      */
-    get literals() { return this.#literals; }
+    get literals() { return Object.values(this.#literals); }
     /**
      * Array of concept nodes under this node.
      * 
      * @returns {Array.<ConceptsShadow>}
      */
-    get concepts() { return this.#concepts; }
+    get concepts() { return Object.values(this.#concepts); }
     /**
      * Data representation of this node and all of is nodes under it as an
      * object.
@@ -63,13 +61,13 @@ class ConceptsShadow {
      * 
      * @returns {boolean} `true` if it has, `false` otherwise
      */
-    hasAnyVariables() { return this.#variables.length > 0; }
+    hasAnyVariables() { return this.variables.length > 0; }
     /**
      * Helper method to check if this node has any literal nodes.
      * 
      * @returns {boolean} `true` if it has, `false` otherwise
      */
-    hasAnyLiterals() { return this.#literals.length > 0; }
+    hasAnyLiterals() { return this.literals.length > 0; }
     /**
      * Helper method to check if this node has a literal node with given name.
      * 
@@ -77,7 +75,7 @@ class ConceptsShadow {
      * 
      * @returns {boolean} `true` if it has, `false` otherwise
      */
-    hasLiteral(name = required('name')) { return this.#literalMap.hasOwnProperty(name); }
+    hasLiteral(name = required('name')) { return this.#literals.hasOwnProperty(name); }
     /**
      * Helper method to get literal node with given name.
      * 
@@ -85,13 +83,13 @@ class ConceptsShadow {
      * 
      * @returns {ConceptsShadow} Literal node with given name under this node
      */
-    getLiteral(name = required('name')) { return this.#literalMap[name]; }
+    getLiteral(name = required('name')) { return this.#literals[name]; }
     /**
      * Helper method to check if this node has any concept nodes.
      * 
      * @returns {boolean} `true` if it has, `false` otherwise
      */
-    hasAnyConcepts() { return this.#concepts.length > 0; }
+    hasAnyConcepts() { return this.concepts.length > 0; }
 
     /**
      * Helper method to check if this node is a leaf node.
@@ -106,40 +104,44 @@ class ConceptsShadow {
     }
 
     /**
-     * Recursively builds this node using given concepts object. When no
-     * object is given, it means this node is a leaf node.
+     * Recursively builds this node using given concepts definition. When no
+     * definition is given, it means this node is a leaf node.
      * 
-     * @param {Object} concepts Concepts object
+     * @param {Object} definition Concepts definition
      */
-    build(concepts) {
-        if (concepts != null) {
-            if (typeof concepts === 'string' && SC.VARIABLE.matches(concepts)) {
-                this._pushVariable(concepts);
-            } else if (typeof concepts === 'object') {
-                for (const key in concepts) {
-                    if (SC.VARIABLE.matches(key)) {
-                        this._pushConcept(key, concepts);
-                    } else {
-                        this._pushLiteral(key, concepts);
-                    }
-                }
-            }
+    build(definition) {
+        if (definition != null) {
+            this._build(definition);
         }
 
         if (this.#name != null) {
             this.#data[SC.SELF.value] = this.#name;
         }
 
-        for (const variable of this.#variables) {
+        for (const variable of this.variables) {
             arrayify.push(this.#data, 'variable', variable.#data);
         }
 
-        for (const literal of this.#literals) {
+        for (const literal of this.literals) {
             arrayify.push(this.#data, 'literal', literal.#data);
         }
 
-        for (const concept of this.#concepts) {
+        for (const concept of this.concepts) {
             arrayify.push(this.#data, 'concept', concept.#data);
+        }
+    }
+
+    _build(definition) {
+        if (typeof definition === 'string' && SC.VARIABLE.matches(definition)) {
+            this._pushVariable(definition);
+        } else if (typeof definition === 'object') {
+            for (const key in definition) {
+                if (SC.VARIABLE.matches(key)) {
+                    this._pushConcept(key, definition);
+                } else {
+                    this._pushLiteral(key, definition);
+                }
+            }
         }
     }
 
@@ -147,22 +149,21 @@ class ConceptsShadow {
         const variable = new ConceptsShadow(SC.VARIABLE.undecorate(key));
         variable.build();
 
-        this.#variables.push(variable);
+        this.#variables[variable.name] = variable;
     }
 
-    _pushLiteral(key, concepts) {
+    _pushLiteral(key, definition) {
         const literal = new ConceptsShadow(key);
-        literal.build(concepts[key]);
+        literal.build(definition[key]);
 
-        this.#literals.push(literal);
-        this.#literalMap[literal.name] = literal;
+        this.#literals[literal.name] = literal;
     }
 
-    _pushConcept(key, concepts) {
+    _pushConcept(key, definition) {
         const concept = new ConceptsShadow(SC.VARIABLE.undecorate(key));
-        concept.build(concepts[key]);
+        concept.build(definition[key]);
 
-        this.#concepts.push(concept);
+        this.#concepts[concept.name] = concept;
     }
 }
 

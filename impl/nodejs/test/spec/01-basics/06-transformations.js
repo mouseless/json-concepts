@@ -46,7 +46,7 @@ describe('spec/basics/transformations', function () {
 
         const output = transformation.transform(input);
 
-        output.object.should.deep.equal({
+        output.definition.should.deep.equal({
             "sayHello": {
                 "name": "string",
                 "return": "string"
@@ -57,6 +57,15 @@ describe('spec/basics/transformations', function () {
     it('should give error when path is not supplied', async function () {
         await Transformation.load()
             .should.be.rejectedWith(error.PARAMETER_is_required('path').message);
+    });
+
+    it('should give error when definition, source or target is not supplied to constructor', function () {
+        (() => new Transformation())
+            .should.throw(error.PARAMETER_is_required('definition').message);
+        (() => new Transformation({}))
+            .should.throw(error.PARAMETER_is_required('source').message);
+        (() => new Transformation({}, new Concepts({})))
+            .should.throw(error.PARAMETER_is_required('target').message);
     });
 
     it('should give error when schema is not supplied', function () {
@@ -94,7 +103,7 @@ describe('spec/basics/transformations', function () {
             }
         });
 
-        output.object.should.deep.equal({
+        output.definition.should.deep.equal({
             "sayHello": {
                 "return": "string"
             }
@@ -134,53 +143,5 @@ describe('spec/basics/transformations', function () {
 
     });
 
-    it('should verify that given source and target are compatible with transformation', function() {
-        const source = new Concepts({
-            "$service": {
-                "response": "$responseType"
-            }
-        });
-
-        const target = new Concepts({
-            "$function": {
-                "return": "$returnType"
-            }
-        });
-
-        (() => new Transformation({
-            "function": {
-                "from": "service_",
-                "select": {
-                    "returnType": "responseType"
-                }
-            }
-        }, source, target)).should.throw(error.TRANSFORMATION_is_not_compatible_with_its_CONCEPTS('Transformation', 'source').message);
-
-        (() => new Transformation({
-            "function": {
-                "from": "service",
-                "select": {
-                    "returnType": "responseType_"
-                }
-            }
-        }, source, target)).should.throw(error.TRANSFORMATION_is_not_compatible_with_its_CONCEPTS('Transformation', 'source').message);
-
-        (() => new Transformation({
-            "function_": {
-                "from": "service",
-                "select": {
-                    "returnType": "responseType"
-                }
-            }
-        }, source, target)).should.throw(error.TRANSFORMATION_is_not_compatible_with_its_CONCEPTS('Transformation', 'target').message);
-
-        (() => new Transformation({
-            "function": {
-                "from": "service",
-                "select": {
-                    "returnType_": "responseType"
-                }
-            }
-        }, source, target)).should.throw(error.TRANSFORMATION_is_not_compatible_with_its_CONCEPTS('Transformation', 'target').message);
-    });
+    it('should verify that given source and target are compatible with transformation');
 });

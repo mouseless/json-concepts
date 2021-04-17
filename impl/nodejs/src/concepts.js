@@ -1,5 +1,26 @@
 /* exported */ class Concepts {
     /**
+     * Data that represents a concept
+     * 
+     * @typedef {Object} Concept
+     * @property {String} name Name of concept
+     * @property {Variables} variables Variables of concept
+     */
+    /**
+     * Variables are stored in an object instead of an array to provide quick
+     * access via variable name.
+     * 
+     * @typedef {Object} Variables
+     * @see Variable
+     */
+    /**
+     * Data that represent a variable
+     * 
+     * @typedef {Object} Variable
+     * @property {String} name Name of variable
+     */
+
+    /**
      * Loads concepts from given path.
      * 
      * @async
@@ -8,43 +29,70 @@
      * @returns {Promise<Concepts>} Concepts at given path
      */
     static async load(path = required('path')) {
-        const object = await loadJSON(path);
+        const definition = await loadJSON(path);
 
-        return new Concepts(object);
+        return new Concepts(definition);
     }
 
-    /* const */ #object;
+    /* const */ #definition;
     /* const */ #shadow;
+    /* const */ #concepts;
 
     /**
      * Concepts represents a schema for a schema. It contains a set of concept
      * definitions that is used to validate schemas against.
      * 
-     * This constructor builds concepts from given object.
+     * This constructor builds concepts from given definition.
      * 
-     * @param {Object} object (Required) Concepts object
+     * @param {Object} definition (Required) Concepts definition
      */
-    constructor(object = required('object')) {
-        this.#object = object;
+    constructor(definition = required('definition')) {
+        this.#definition = definition;
 
         this.#shadow = new ConceptsShadow();
-        this.#shadow.build(object);
+        this.#shadow.build(definition);
+        this.#concepts = {};
+
+        this._build(this.#shadow);
     }
 
     /**
-     * Data of this concepts as an object.
+     * Definition of this concepts as an object.
      * 
      * @returns {Object}
      */
-    get object() { return this.#object; }
+    get definition() { return this.#definition; }
     /**
-     * Shadow data of this concepts as an object.
+     * Shadow definition of this concepts as an object.
      * 
      * @returns {Object}
      */
     get shadow() { return this.#shadow.data; }
+    /**
+     * Lists concepts in an array.
+     * 
+     * @returns {Array.<Concept>}
+     */
+    get list() { return Object.values(this.#concepts); }
 
     get _shadow() { return this.#shadow; }
+
+    /**
+     * Checks if a concept with given name exists.
+     * 
+     * @param {String} name (Required) Name to check
+     * @returns {boolean} `true` if it exists, `false` otherwise
+     */
+    has(name = required('name')) { return this.#concepts.hasOwnProperty(name); }
+    /**
+     * Gets concept with a given name. Returns `undefined` when a concept with
+     * given name does not exist.
+     * 
+     * @param {String} name (Required) Name of concept to get
+     * 
+     * @returns {Concept} Concept with given name
+     */
+    get(name = required('name')) { return this.#concepts[name]; }
 
     /**
      * Loads schema at path and create a schema using this concepts.
@@ -56,20 +104,20 @@
      * @returns {Promise<Schema>} Schema at path
      */
     async load(path = required('path')) {
-        const object = await loadJSON(path);
+        const definition = await loadJSON(path);
 
-        return this.create(object);
+        return this.create(definition);
     }
 
     /**
-     * Creates schema using with this as its concepts and given schema object.
+     * Creates schema using with this and given schema definition.
      * 
-     * @param {Object} schema (Required) Schema object
+     * @param {Object} definition (Required) Schema definition
      * 
      * @returns {Schema} Created schema
      */
-    create(schema = required('schema')) {
-        return new Schema(schema, this);
+    create(definition = required('definition')) {
+        return new Schema(definition, this);
     }
 
     /**
@@ -85,16 +133,38 @@
             return false;
         }
 
-        return _validate(this.#object, schema);
+        return _validate(this.#definition, schema);
+    }
+
+    _build(shadow) {
+        for (const concept of shadow.concepts) {
+            this.#concepts[concept.name] = {
+                name: concept.name,
+                variables: this._variables(concept)
+            };
+            this._build(concept);
+        }
+    }
+
+    _variables(shadow, result = {}) {
+        for (const variable of shadow.variables) {
+            result[variable.name] = { name: variable.name };
+        }
+
+        for(const literal of shadow.literals) {
+            this._variables(literal, result);
+        }
+
+        return result;
     }
 }
 
-function _validate(concepts, schema) {
-    if (typeof concepts === 'string') {
-        return _validateValue(concepts, schema);
+function _validate(definition, schema) {
+    if (typeof definition === 'string') {
+        return _validateValue(definition, schema);
     }
 
-    for (const key in concepts) {
+    for (const key in definition) {
         let schemaKey = key;
 
         if (SC.VARIABLE.matches(key)) {
@@ -103,20 +173,20 @@ function _validate(concepts, schema) {
             return false;
         }
 
-        if (!_validate(concepts[key], schema[schemaKey])) {
+        if (!_validate(definition[key], schema[schemaKey])) {
             return false;
         }
     }
 
-    return Object.keys(concepts).length == Object.keys(schema).length;
+    return Object.keys(definition).length == Object.keys(schema).length;
 }
 
-function _validateValue(conceptsObject, schemaObject) {
-    if (SC.VARIABLE.matches(conceptsObject)) {
+function _validateValue(definition, schema) {
+    if (SC.VARIABLE.matches(definition)) {
         return true;
     }
 
-    return conceptsObject === schemaObject;
+    return definition === schema;
 }
 
 module.exports = { Concepts };
