@@ -106,7 +106,7 @@ variables to `null`. So below schema is **VALID**;
 
 And its shadow is as follows;
 
-`SHADOW SCHEMA`
+`SCHEMA SHADOW`
 
 ```json
 {

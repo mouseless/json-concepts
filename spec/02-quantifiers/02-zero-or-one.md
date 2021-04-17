@@ -82,9 +82,9 @@ Below schema becomes valid;
 }
 ```
 
-## Shadow Concepts
+## Concepts Shadow
 
-Shadow concepts include quantifier information. For below concepts definition;
+Concepts shadow include quantifier information. For below concepts definition;
 
 `CONCEPTS: service.concepts.json`
 
@@ -97,9 +97,9 @@ Shadow concepts include quantifier information. For below concepts definition;
 }
 ```
 
-Shadow concepts is as follows;
+Concepts shadow is as follows;
 
-`SHADOW CONCEPTS`
+`CONCEPTS SHADOW`
 
 ```json
 {
@@ -129,11 +129,11 @@ Shadow concepts is as follows;
 }
 ```
 
-## Shadow Schema
+## Schema Shadow
 
-When there are variables next to optional literals, shadow schema should set
-variable value to `null`. When an optional concept is not defined in a schema
-shadow schema should have `null` for that concept;
+When there are variables next to optional literals, schema shadow should set
+variable value to `null`. When an optional concept is not defined in a schema,
+schema shadow have `null` for that concept;
 
 `SCHEMA: greeting.service.json`
 
@@ -143,7 +143,7 @@ shadow schema should have `null` for that concept;
 }
 ```
 
-`SHADOW SCHEMA`
+`SCHEMA SHADOW`
 
 ```json
 {
@@ -169,7 +169,7 @@ Below schema is also valid;
 
 It casts the same shadow above;
 
-`SHADOW SCHEMA`
+`SCHEMA SHADOW`
 
 ```json
 {

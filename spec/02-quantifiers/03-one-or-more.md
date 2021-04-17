@@ -66,8 +66,8 @@ schema;
 }
 ```
 
-Notice that this key literal would only accept an array now. So `tags` cannot
-have `null` or a `string`, it should be an array;
+> Notice that this key literal would only accept an array now. So `tags` cannot
+> have `null` or a `string`, it should be an array;
 
 ## Requires At Least One
 
@@ -96,7 +96,7 @@ is **NOT** valid as well;
 }
 ```
 
-## Shadow Concepts
+## Concepts Shadow
 
 For following concepts definition, quantifier does not have a max;
 
@@ -111,7 +111,7 @@ For following concepts definition, quantifier does not have a max;
 }
 ```
 
-`SHADOW CONCEPTS`
+`CONCEPTS SHADOW`
 
 ```json
 {
@@ -143,9 +143,9 @@ For following concepts definition, quantifier does not have a max;
 }
 ```
 
-## Shadow Schema
+## Schema Shadow
 
-When there exists more than one concept in a schema, shadow schema stores them
+When there exists more than one concept in a schema, schema shadow stores them
 in an array. Key literals are also stored in an array. Below is an example;
 
 `SCHEMA: greeting.service.json`
@@ -162,7 +162,7 @@ in an array. Key literals are also stored in an array. Below is an example;
 }
 ```
 
-`SHADOW SCHEMA`
+`SCHEMA SHADOW`
 
 ```json
 {
@@ -184,5 +184,5 @@ in an array. Key literals are also stored in an array. Below is an example;
 }
 ```
 
-Notice that this time `parameter` concept was set to an empty array instead of
-`null`, because its quantifier allows more than one instance;
+> Notice that this time `parameter` concept was set to an empty array instead of
+> `null`, because its quantifier allows more than one instance;
