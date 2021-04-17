@@ -30,7 +30,7 @@ describe('#loadJSON', async function () {
     });
     it('should give error if pathOrObject is not given', async function () {
         await loadJSON()
-            .should.be.rejectedWith(error.PARAMETER_is_required('pathOrObject').message);
+            .should.be.rejectedWith(error.PARAMETER_is_required('path').message);
     });
     it('should give error if file is not json', async function () {
         fs({
@@ -68,10 +68,8 @@ describe('#loadJSON', async function () {
         await loadJSON('test.json')
             .should.be.rejectedWith(error.Cannot_load_FILE('test.json').message);
     });
-    it('should return given object if it is already an object', async function () {
-        const actual = await loadJSON({ test: 'expected' });
-
-        actual.should.be.an('object');
-        actual.test.should.equal('expected');
+    it('should give error when given path is not a string', async function () {
+        await loadJSON({ test: 'expected' })
+            .should.be.rejectedWith(error.Expected_type_was_EXPECTED_got_ACTUAL('string', 'object').message);
     });
 });

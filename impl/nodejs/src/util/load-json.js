@@ -1,15 +1,14 @@
 /**
- * @async
- * @param {String|Object} pathOrObject
+ * Loads json file in given path
  * 
- * @returns {Promise<Object>}
+ * @async
+ * @param {String} path Path or URL to load json from
+ * 
+ * @returns {Promise<Object>} Loaded object
  */
-async function loadJSON(pathOrObject = required('pathOrObject')) {
-    if (typeof pathOrObject === 'object') {
-        return pathOrObject;
-    }
+async function loadJSON(path = required('path')) {
+    checkType(path, 'string');
 
-    const path = pathOrObject;
     let json = '';
 
     if (path.startsWith('http://') ||
@@ -34,13 +33,6 @@ async function loadJSON(pathOrObject = required('pathOrObject')) {
     }
 };
 
-/**
- * Loads data from given url.
- * 
- * @async
- * @param {string} url A url that starts with 'http://' or 'https://'
- * @returns {Promise<string>} Data that is returned from given url
- */
 async function _get(url) {
     return new Promise((resolve, reject) => {
         const make = url.startsWith("https") ? https : http;
@@ -71,5 +63,5 @@ module.exports = {
 const fs = require('fs');
 const http = require('http');
 const https = require('https');
-const { required } = require('./required');
+const { required, checkType } = require('./validation');
 const error = require('./error');

@@ -4,6 +4,7 @@ const fs = require('mock-fs');
 const nock = require('nock');
 const { use, should } = require('chai');
 const chaiAsPromised = require('chai-as-promised');
+const { Concepts } = require('../../../src/concepts');
 
 use(chaiAsPromised);
 should();
@@ -29,9 +30,31 @@ describe('spec/basics/schemas', function () {
             })
         });
 
-        const actual = await Schema.load('greeting.service.json', 'service.concepts.json');
+        const schema1 = await (await Concepts.load('service.concepts.json')).load('greeting.service.json');
+        schema1.should.be.an.instanceof(Schema);
 
-        actual.should.be.an.instanceof(Schema);
+        const schema2 = await Schema.load('greeting.service.json', 'service.concepts.json');
+        schema2.should.be.an.instanceof(Schema);
+    });
+
+    it('should give error when path is not supplied to load methods', async function () {
+        await Concepts.load()
+            .should.be.rejectedWith(error.PARAMETER_is_required('path').message);
+
+        const concepts = await Concepts.load('service.concepts.json');
+
+        await concepts.load()
+            .should.be.rejectedWith(error.PARAMETER_is_required('path').message);
+            
+        await Schema.load()
+            .should.be.rejectedWith(error.PARAMETER_is_required('path').message);
+    });
+
+    it('should give error when definition or concepts is not supplied to constructor', function () {
+        (() => new Schema())
+            .should.throw(error.PARAMETER_is_required('definition').message);
+        (() => new Schema({}))
+            .should.throw(error.PARAMETER_is_required('concepts').message);
     });
 
     it('should not validate if it does not conform to its concepts', async function () {

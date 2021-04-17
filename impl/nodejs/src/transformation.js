@@ -1,23 +1,56 @@
 /* exported */ class Transformation {
+    /**
+     * Loads transformation from given path.
+     * 
+     * @async
+     * @param {String} path (Required) File path or URL referring to a json
+     * content.
+     * @param {Concepts} source Source concepts to transform from
+     * @param {Concepts} target Target concepts to transform to
+     * 
+     * @returns {Promise<Transformation>} Transformation at given path
+     */
     static async load(
-        pathOrObject = required('pathOrObject'),
+        path = required('path'),
         source = null,
         target = null
     ) {
-        const object = await loadJSON(pathOrObject);
+        const definition = await loadJSON(path);
 
-        return new Transformation(object, source, target);
+        try {
+            return new Transformation(definition, source, target);
+        } catch (e) {
+            if (e.name === error.Names.SCHEMA_ERROR) {
+                throw error.TRANSFORMATION_is_not_valid__Error_is_ERROR(path, e.message);
+            }
+
+            throw e;
+        }
     }
 
-    /* const */ #object;
+    /* const */ #definition;
     /* const */ #source;
     /* const */ #target;
     /* const */ #queriesMap;
 
-    constructor(object, source, target) {
-        //todo validate conformance
-
-        this.#object = object;
+    /**
+     * Transformation represents a set of transformation rules from one
+     * concepts (source) to another (target). Once created, you can use it to
+     * transform any schema of source concepts to target concepts.
+     * 
+     * This constructor validates definition against given source and target
+     * concepts, and builds queries from given definition.
+     * 
+     * @param {Object} definition Transformation definition
+     * @param {Concepts} source Source concepts
+     * @param {Concepts} target Target concepts
+     */
+    constructor(
+        definition = required('definition'),
+        source = required('source'),
+        target = required('target')
+    ) {
+        this.#definition = definition;
         this.#source = source;
         this.#target = target;
 
@@ -25,27 +58,54 @@
         this._build();
     }
 
-    get object() { return this.#object; }
+    /**
+     * Definition that represents the transformation. This definition has query
+     * definitions for at least one concept in target concepts.
+     * 
+     * @returns {Object}
+     */
+    get definition() { return this.#definition; }
 
     /**
+     * Transforms given schema in source concepts to target concepts. Schema is
+     * validated against source concepts before transformation.
      * 
-     * @param {Schema} schema 
+     * @param {Schema|Object} schema (Required) The schema to be transformed. 
+     * You can pass a schema object directly, it will be converted to a Schema
+     * from source concepts.
      * 
-     * @returns {Schema}
+     * @returns {Schema} Target version of given schema
      */
-    transform(schema) {
+    transform(schema = required('schema')) {
+        if (!(schema instanceof Schema)) {
+            schema = this.#source.create(schema);
+        } else {
+            if (!this.#source.validate(schema.definition)) {
+                throw error.SCHEMA_is_not_valid(schema.definition);
+            }
+        }
+
         return this.#target.create(
             this._transform(schema._shadow, this.#target._shadow)
         );
     }
 
     _build() {
-        for (const concept in this.#object) {
+        for (const concept in this.#definition) {
+            if (!this.#target.has(concept)) {
+                throw error.Definition_is_not_compatible_with_its_CONCEPTS__because__REASON(
+                    'target', reason => reason.CONCEPT_not_found(concept)
+                );
+            }
+
             this.#queriesMap[concept] = [];
 
-            const queries = arrayify.get(this.#object, concept);
-            for (const query of queries) {
-                this.#queriesMap[concept].push(new Query(query));
+            const queries = arrayify.get(this.#definition, concept);
+            for (const definition of queries) {
+                const query = new Query(definition);
+                query.validate(this.#target.get(concept), this.#source);
+
+                this.#queriesMap[concept].push(query);
             }
         }
     }
@@ -60,11 +120,7 @@
                 }
             }
 
-            return result.length > 1
-                ? result
-                : result.length > 0
-                    ? result[0]
-                    : null;
+            return result.length > 1 ? result : result.length > 0 ? result[0] : null;
         }
 
         const result = {};
@@ -74,11 +130,10 @@
 
         for (const concept of target.concepts) {
             for (const query of this.#queriesMap[concept.name]) {
-                for (const childSchema of query.from(schema)) {
-                    const childContext = query.select(childSchema);
-
-                    result[childSchema.name] = this._transform(childSchema, concept, childContext);
-                }
+                const $this = this;
+                query.execute(schema, function (childSchema, childContext) {
+                    result[childSchema.name] = $this._transform(childSchema, concept, childContext);
+                });
             }
         }
 
@@ -90,6 +145,7 @@ module.exports = {
     Transformation
 };
 
-const { arrayify, required, loadJSON } = require('./util');
+const { error, arrayify, required, loadJSON } = require('./util');
+const { Concepts } = require('./concepts');
 const { Schema } = require('./schema');
 const { Query } = require('./query');

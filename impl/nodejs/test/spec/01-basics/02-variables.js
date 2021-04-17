@@ -4,8 +4,8 @@ const { should } = require('chai');
 should();
 
 describe('spec/basics/variables', function () {
-    it('should validate schema 1', async function () {
-        const concepts = await Concepts.load({
+    it('should validate schema 1', function () {
+        const concepts = new Concepts({
             "sayHello": {
                 "name": "$type"
             }
@@ -18,8 +18,8 @@ describe('spec/basics/variables', function () {
         }).should.equal(true);
     });
 
-    it('should validate schema 2', async function () {
-        const concepts = await Concepts.load({
+    it('should validate schema 2',  function () {
+        const concepts = new Concepts({
             "sayHello": {
                 "name": "$type"
             }
