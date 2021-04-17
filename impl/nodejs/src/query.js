@@ -1,4 +1,13 @@
 class Query {
+    /**
+     * Data that represents a concept
+     * 
+     * @typedef {Object} Concept
+     * @property {Object} variables
+     * 
+     * @see Concepts
+     */
+
     /* const */ #definition;
 
     /**
