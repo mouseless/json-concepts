@@ -66,6 +66,7 @@ reconsideration.
 | ? | zero or one | regex, if-else, null propagation |
 | + | one or more | regex |
 | * | zero or more, any | regex, wildcard |
+| {,} | quantifier | regex |
 | / | path | urls |
 | .. | parent | file paths |
 | ** | any child | file path wildcard |
