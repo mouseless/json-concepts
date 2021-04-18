@@ -63,7 +63,7 @@ reconsideration.
 | # | preprocessor | c macros |
 | : | type | uml, swift, scala |
 | @ | meta-data | java annotations |
-| ? | zero or one | regex, if-else |
+| ? | zero or one | regex, if-else, null propagation |
 | + | one or more | regex |
 | * | zero or more, any | regex, wildcard |
 | / | path | urls |

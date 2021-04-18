@@ -98,7 +98,8 @@ is **NOT** valid as well;
 
 ## Concepts Shadow
 
-For following concepts definition, quantifier does not have a max;
+For following concepts definition, quantifiers of `service` and `tags` don't
+have a max;
 
 `CONCEPTS: service.concepts.json`
 
@@ -143,6 +144,11 @@ For following concepts definition, quantifier does not have a max;
 }
 ```
 
+> It looks like `variable` should have `quantifier` key instead of `literal`
+> because literal is not affected by it. However this would be interpreting the
+> definition, not shadowing. Remember that shadows are only easy-to-code and
+> **traversable** versions of concepts definitions, not **interpretation**s.
+
 ## Schema Shadow
 
 When there exists more than one concept in a schema, schema shadow stores them
@@ -177,12 +183,9 @@ in an array. Key literals are also stored in an array. Below is an example;
         },
         {
             "_": "sayHello",
-            "parameter": [ ],
+            "parameter": null,
             "tags": [ "readonly" ]
         }
     ]
 }
 ```
-
-> Notice that this time `parameter` concept was set to an empty array instead of
-> `null`, because its quantifier allows more than one instance;
