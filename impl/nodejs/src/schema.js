@@ -90,8 +90,8 @@
     get _shadow() { return this.#shadow; }
 }
 
-module.exports = { Schema };
+module.exports = Schema;
 
-const { Concepts } = require('./concepts');
-const { SchemaShadow } = require('./schema-shadow');
+const Concepts = require('./concepts');
+const SchemaShadow = require('./schema-shadow');
 const { error, metaData, required, loadJSON } = require('./util');

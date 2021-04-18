@@ -1,7 +1,7 @@
 /**
- * Gets data at given key from source as an array. This function return an
- * array no matter what. If key does not exist in source, then an empty array is
- * returned.
+ * Gets data at given key from source as an array. This function returns is
+ * guaranteed to return an array. If key does not exist in source, then an
+ * empty array is returned.
  * 
  * @param {Object} source (Required) The object to retrieve data from
  * @param {String} key (Required) Key of data to retrieve

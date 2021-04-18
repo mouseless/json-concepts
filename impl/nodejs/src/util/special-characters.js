@@ -88,8 +88,6 @@ const SpecialCharacters = {
     SELF: new SpecialCharacter("_")
 }
 
-module.exports = {
-    SpecialCharacters
-};
+module.exports = SpecialCharacters;
 
 const { required } = require("./validation");
