@@ -1,62 +1,191 @@
 # One or More
 
-`+` constraint causes concepts to expect an array of instances in given data.
+`+` indicates that one or more of that concept can occur in a schema.
 
 So for the following concepts definition, `$service+` indicates that there
 will exist at least one `service` in every schema of this concepts file;
 
-`service.concepts.json`
+`CONCEPTS: service.concepts.json`
 
 ```json
 {
     "$service+": {
-        "$parameter?": "string"
+        "$parameter?": "$type"
     }
 }
 ```
 
-Now service data should be an array;
+Below schema is now valid;
 
-`greeting.json`
+`SCHEMA: greeting.service.json`
+
+```json
+{
+    "sayHello": { 
+        "name": "string"
+    },
+    "sayGoodbye": { }
+}
+```
+
+## Key Literals
+
+Unlike a concept, when a key literal has `+` quantifier it does not mean that
+a key literal can occur more than once, because that means having the same key
+in an object more than once, which is not allowed in JSON. So, to have a `+`
+quantifier in a key literal means that right-hand side value should be an
+array.
+
+Below is an example concepts definition;
+
+`CONCEPTS: service.concepts.json`
+
+```json
+{
+    "$service+": {
+        "$parameter?": "$type",
+        "tags+": "$tags"
+    }
+}
+```
+
+This definition allows us to define an array in a schema. Below is a valid
+schema;
+
+`SCHEMA: greeting.service.json`
+
+```json
+{
+    "sayHello": {
+        "name": "string",
+        "tags": [ "readonly", "friendly" ]
+    },
+    "sayGoodbye": {
+        "tags": [ "readonly" ]
+    }
+}
+```
+
+> Notice that this key literal would only accept an array now. So `tags` cannot
+> have `null` or a `string`, it should be an array;
+
+## Requires At Least One
+
+When no concept is given, schema becomes **INVALID**;
+
+`SCHEMA: greeting.service.json`
+
+```json
+{
+}
+```
+
+`ERROR: 'greeting.service.json' is not valid, at least one 'service' was`
+`expected.`
+
+A key literal is also expected to have at least one item in it. So below schema
+is **NOT** valid as well;
+
+`SCHEMA: greeting.service.json`
+
+```json
+{
+    "sayGoodbye": {
+        "tags": [ ]
+    }
+}
+```
+
+## Concepts Shadow
+
+For following concepts definition, quantifiers of `service` and `tags` don't
+have a max;
+
+`CONCEPTS: service.concepts.json`
+
+```json
+{
+    "$service+": {
+        "$parameter?": "$type",
+        "tags+": "$tags"
+    }
+}
+```
+
+`CONCEPTS SHADOW`
+
+```json
+{
+    "concept": {
+        "_": "service", 
+        "quantifier": {
+            "min": 1
+        },
+        "literal": {
+            "_": "tags",
+            "quantifier": {
+                "min": 1
+            },
+            "variable": {
+                "_": "tags"
+            }
+        },
+        "concept": {
+            "_": "parameter",
+            "quantifier": {
+                "min": 0,
+                "max": 1
+            },
+            "variable": {
+                "_": "type"
+            }
+        }
+    }
+}
+```
+
+> It looks like `variable` should have `quantifier` key instead of `literal`
+> because literal is not affected by it. However this would be interpreting the
+> definition, not shadowing. Remember that shadows are only easy-to-code and
+> **traversable** versions of concepts definitions, not **interpretation**s.
+
+## Schema Shadow
+
+When there exists more than one concept in a schema, schema shadow stores them
+in an array. Key literals are also stored in an array. Below is an example;
+
+`SCHEMA: greeting.service.json`
+
+```json
+{
+    "sayHello": {
+        "name": "string",
+        "tags": [ "readonly", "friendly" ]
+    },
+    "sayGoodbye": {
+        "tags": [ "readonly" ]
+    }
+}
+```
+
+`SCHEMA SHADOW`
 
 ```json
 {
     "service": [
         {
-            "_key": "sayHello"
+            "_": "sayHello",
+            "parameter": {
+                "_": "name",
+                "type": "string"
+            },
+            "tags": [ "readonly", "friendly" ]
         },
         {
-            "_key": "sayGoodbye",
-            "parameter": {
-                "_key": "name"
-            }
+            "_": "sayHello",
+            "parameter": null,
+            "tags": [ "readonly" ]
         }
     ]
 }
 ```
-
-Output schema becomes;
-
-`greeting.service.json`
-
-```json
-{
-    "sayHello": { },
-    "sayGoodbye": { 
-        "name": "string"
-    }
-}
-```
-
-And the following data;
-
-`greeting.json`
-
-```json
-{
-    "service": [ ]
-}
-```
-
-will **NOT** create a schema, because it expects at least one `service`. So it
-gives a proper error message.

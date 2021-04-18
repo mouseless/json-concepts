@@ -47,5 +47,5 @@ module.exports = {
     read
 };
 
-const { SpecialCharacters } = require('./special-characters');
+const SpecialCharacters = require('./special-characters');
 const { required } = require('./validation');

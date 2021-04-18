@@ -141,11 +141,9 @@
     }
 }
 
-module.exports = {
-    Transformation
-};
+module.exports = Transformation;
 
 const { error, arrayify, required, loadJSON } = require('./util');
-const { Concepts } = require('./concepts');
-const { Schema } = require('./schema');
-const { Query } = require('./query');
+const Concepts = require('./concepts');
+const Schema = require('./schema');
+const Query = require('./query');

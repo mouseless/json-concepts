@@ -7,7 +7,7 @@
             "$parameter:identifier*": "$type"
         }
     },
-    ":": {
+    "@types": {
         "identifier": "/^[a-zA-Z0-9]*$/",
         "method": [ "get", "post", "put", "delete" ]
     }

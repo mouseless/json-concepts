@@ -13,7 +13,7 @@ For below file, `identifier` is defined as a custom type and type of `$name` is
     "$service+": {
         "name": "$name:identifier"
     },
-    ":": {
+    "@types": {
         "identifier": { }
     }
 }
@@ -31,7 +31,7 @@ definition.
     "$service+": {
         "name": "$name:identifier"
     },
-    ":": {
+    "@types": {
         "identifier": { 
             "type": "string"
         }

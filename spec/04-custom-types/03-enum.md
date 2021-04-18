@@ -13,7 +13,7 @@ For following concepts file, `statusCode` is restricted to be either `200`,
     "$service+": {
         "statusCode": "$statusCode:httpStatus"
     },
-    ":": {
+    "@types": {
         "httpStatus": {
             "type": "number",
             "enum": [ 200, 400, 500 ]
@@ -31,7 +31,7 @@ Short-hand for enum validator is as follows;
     "$service+": {
         "statusCode": "$statusCode:httpStatus"
     },
-    ":": {
+    "@types": {
         "httpStatus": [ 200, 400, 500 ]
     }
 }
@@ -49,7 +49,7 @@ For following definition;
     "$service+": {
         "statusCode": "$statusCode:httpStatus"
     },
-    ":": {
+    "@types": {
         "httpStatus": [ 200, "400", 500 ]
     }
 }

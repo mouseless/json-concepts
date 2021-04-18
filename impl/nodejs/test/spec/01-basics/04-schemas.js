@@ -1,10 +1,9 @@
-const { Schema } = require('../../../index');
+const { Schema, Concepts } = require('../../../index');
 const { error } = require('../../../src/util');
 const fs = require('mock-fs');
 const nock = require('nock');
 const { use, should } = require('chai');
 const chaiAsPromised = require('chai-as-promised');
-const { Concepts } = require('../../../src/concepts');
 
 use(chaiAsPromised);
 should();

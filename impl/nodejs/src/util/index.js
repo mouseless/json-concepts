@@ -1,4 +1,4 @@
-const { SpecialCharacters } = require('./special-characters');
+const SpecialCharacters = require('./special-characters');
 const error = require('./error');
 const arrayify = require('./arrayify');
 const metaData = require('./meta-data');

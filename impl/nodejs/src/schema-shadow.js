@@ -151,8 +151,6 @@ class SchemaShadow {
     }
 }
 
-module.exports = {
-    SchemaShadow
-};
+module.exports = SchemaShadow;
 
 const { SpecialCharacters: SC, arrayify, required } = require('./util');

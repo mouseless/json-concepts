@@ -29,7 +29,7 @@ module.exports = {
 
 ```javascript
 function doSomething() {
-    something.helper();
+    something.help();
 }
 
 const { something } = require('./sub-package')
@@ -102,14 +102,38 @@ module.exports = {
 };
 ```
 
-### Abbreviation for Long Class Names
+### Packaging Classes
 
 ```javascript
 function doSomething() {
-    AVLCN.help();
+    const helper = new Helper();
+
+    helper.help();
 }
 
-const { AVeryLongClassName: AVLCN } = require('./a-very-long-class-name');
+const Helper = require('./helper');
+```
+
+`./helper.js`
+
+```javascript
+class Helper {
+    help() {
+
+    }
+}
+
+module.exports = Helper;
+```
+
+### Abbreviation for Long Names
+
+```javascript
+function doSomething() {
+    AVLN.help();
+}
+
+const AVLN = require('./a-very-long-name');
 ```
 
 ## Boolean Parameters

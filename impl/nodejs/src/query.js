@@ -107,9 +107,7 @@ class Query {
     }
 }
 
-module.exports = {
-    Query
-};
+module.exports = Query;
 
-const { Concepts } = require('./concepts');
+const Concepts = require('./concepts');
 const { error, required } = require('./util');

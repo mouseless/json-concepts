@@ -167,8 +167,6 @@ class ConceptsShadow {
     }
 }
 
-module.exports = {
-    ConceptsShadow
-};
+module.exports = ConceptsShadow;
 
 const { SpecialCharacters: SC, arrayify, required } = require('./util');

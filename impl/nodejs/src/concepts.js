@@ -189,8 +189,8 @@ function _validateValue(definition, schema) {
     return definition === schema;
 }
 
-module.exports = { Concepts };
+module.exports = Concepts;
 
-const { Schema } = require('./schema');
-const { ConceptsShadow } = require('./concepts-shadow');
+const Schema = require('./schema');
+const ConceptsShadow = require('./concepts-shadow');
 const { SpecialCharacters: SC, required, loadJSON } = require('./util');

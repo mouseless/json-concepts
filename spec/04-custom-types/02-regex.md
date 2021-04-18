@@ -12,7 +12,7 @@ pattern;
     "$service+": {
         "name": "$name:identifier"
     },
-    ":": {
+    "@types": {
         "identifier": {
             "type": "string",
             "regex": "/[a-zA-Z]/g"
@@ -28,7 +28,7 @@ Following definition demonstrates a short-hand usage of `regex` validator.
     "$service+": {
         "name": "$name:identifier"
     },
-    ":": {
+    "@types": {
         "identifier": "/[a-zA-Z]/g"
     }
 }
