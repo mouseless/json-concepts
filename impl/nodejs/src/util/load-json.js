@@ -20,7 +20,7 @@ async function loadJSON(path = required('path')) {
         }
     } else {
         try {
-            json = await fs.readFileSync(path);
+            json = fs.readFileSync(path);
         } catch {
             throw error.Cannot_load_FILE(path);
         }

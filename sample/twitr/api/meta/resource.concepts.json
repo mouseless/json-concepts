@@ -1,0 +1,42 @@
+{
+    "@concepts": {
+        "$resource+": {
+            "dependencies": [
+                "$dependencies"
+            ],
+            "$method:method+": [
+                {
+                    "serviceName": "$serviceName",
+                    "path": "$path"
+                }
+            ]
+        },
+        "@types": {
+            "method": [
+                "GET",
+                "POST"
+            ]
+        }
+    },
+    "url": {
+        "dependencies": [
+            "url"
+        ],
+        "GET": [
+            {
+                "serviceName": "List",
+                "path": "/api/v1/urls/"
+            },
+            {
+                "serviceName": "FindById",
+                "path": "/api/v1/urls/client"
+            }
+        ],
+        "POST": [
+            {
+                "serviceName": "Create",
+                "path": "/api/v1/urls/create"
+            }
+        ]
+    }
+}

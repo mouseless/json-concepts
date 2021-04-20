@@ -70,23 +70,6 @@
 }
 ```
 
-## Objet Arrays
-
-This is array of objects
-
-`service.concepts.json`
-
-```json
-{
-    "$service+": {
-        "parameters*": {
-            "name": "$name", //parent variable name is parameters -> $parameters.name
-            "type": "$type"
-        }
-    }
-}
-```
-
 ## Conflicting Parent Variable Name
 
 ```json

@@ -1,4 +1,14 @@
 class ConceptsShadow {
+    /**
+     * Quantifier represents the definition of allowed number of instances for
+     * a token.
+     * 
+     * @typedef {Object} Quantifier
+     * 
+     * @property {Number} min Minimum number of token to be allowed
+     * @property {Number} max Maximum number of token to be allowed
+     */
+
     /* const */ #name;
     /* const */ #variables;
     /* const */ #literals;
@@ -30,6 +40,12 @@ class ConceptsShadow {
      * @returns {String}
      */
     get name() { return this.#name; }
+    /**
+     * Quantifier definition of this node.
+     * 
+     * @returns {Quantifier}
+     */
+    get quantifier() { return { min: 1, max: 1 }; }
     /**
      * Array of variable nodes under this node.
      * 
@@ -132,8 +148,12 @@ class ConceptsShadow {
     }
 
     _build(definition) {
-        if (typeof definition === 'string' && SC.VARIABLE.matches(definition)) {
-            this._pushVariable(definition);
+        if (typeof definition === 'string') {
+            if (SC.VARIABLE.matches(definition)) {
+                this._pushVariable(definition);
+            } else {
+                this._pushLiteral(definition);
+            }
         } else if (typeof definition === 'object') {
             for (const key in definition) {
                 if (SC.VARIABLE.matches(key)) {
@@ -152,16 +172,16 @@ class ConceptsShadow {
         this.#variables[variable.name] = variable;
     }
 
-    _pushLiteral(key, definition) {
+    _pushLiteral(key, parentDefinition) {
         const literal = new ConceptsShadow(key);
-        literal.build(definition[key]);
+        literal.build(parentDefinition != null ? parentDefinition[key] : null);
 
         this.#literals[literal.name] = literal;
     }
 
-    _pushConcept(key, definition) {
+    _pushConcept(key, parentDefinition) {
         const concept = new ConceptsShadow(SC.VARIABLE.undecorate(key));
-        concept.build(definition[key]);
+        concept.build(parentDefinition[key]);
 
         this.#concepts[concept.name] = concept;
     }

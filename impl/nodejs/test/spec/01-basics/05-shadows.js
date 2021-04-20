@@ -31,6 +31,26 @@ describe('spec/basics/shadows', function () {
         })
     });
 
+    it('should have literal as leaf when no variable was given', function() {
+        const concepts = new Concepts({
+            "$service": {
+                "response": "string"
+            }
+        });
+
+        concepts.shadow.should.deep.equal({
+            concept: {
+                _: "service",
+                literal: {
+                    _: "response",
+                    literal: {
+                        _: "string"
+                    }
+                }
+            }
+        })
+    });
+
     describe('schema shadow', function () {
         it('should cast shadow', function () {
             const concepts = new Concepts({

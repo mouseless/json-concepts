@@ -44,7 +44,7 @@ describe('spec/basics/schemas', function () {
 
         await concepts.load()
             .should.be.rejectedWith(error.PARAMETER_is_required('path').message);
-            
+
         await Schema.load()
             .should.be.rejectedWith(error.PARAMETER_is_required('path').message);
     });
@@ -72,7 +72,14 @@ describe('spec/basics/schemas', function () {
         });
 
         await Schema.load('greeting.service.json', 'service.concepts.json')
-            .should.be.rejectedWith(error.SCHEMA_is_not_valid('greeting.service.json').message)
+            .should.be.rejectedWith(
+                error.SCHEMA_is_not_valid__Error_is_ERROR(
+                    'greeting.service.json',
+                    error.Definition_is_not_valid__because__REASON(
+                        because => because.LITERAL_is_missing('response')
+                    ).message
+                ).message
+            );
     });
 
     describe('self-validating schema', function () {

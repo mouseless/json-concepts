@@ -121,76 +121,150 @@
     }
 
     /**
-     * Validates schema against this concepts definition.
+     * Validates schema against this concepts definition, and throws error if
+     * it is not valid.
      * 
-     * @param {Schema|Object} schema Schema to validate. Accepts both an object
-     * and an instance of Schema.
-     * 
-     * @returns {boolean} `true` if schema is valid, `false` otherwise
+     * @param {Schema|Object} schema (Required) Schema to validate. Accepts
+     * definition or Schema itself.
      */
-    validate(schema = null) {
-        if (schema === null) {
-            return false;
+    validate(schema = required('schema')) {
+        if (schema instanceof Schema) {
+            schema = schema.definition;
         }
 
-        return _validate(this.#definition, schema);
+        _validate(this.#shadow, schema);
     }
 
     _build(shadow) {
         for (const concept of shadow.concepts) {
             this.#concepts[concept.name] = {
                 name: concept.name,
-                variables: this._variables(concept)
+                variables: _variables(concept)
             };
             this._build(concept);
         }
     }
-
-    _variables(shadow, result = {}) {
-        for (const variable of shadow.variables) {
-            result[variable.name] = { name: variable.name };
-        }
-
-        for(const literal of shadow.literals) {
-            this._variables(literal, result);
-        }
-
-        return result;
-    }
 }
 
-function _validate(definition, schema) {
-    if (typeof definition === 'string') {
-        return _validateValue(definition, schema);
+function _variables(shadow, result = {}) {
+    for (const variable of shadow.variables) {
+        result[variable.name] = { name: variable.name };
     }
 
-    for (const key in definition) {
-        let schemaKey = key;
-
-        if (SC.VARIABLE.matches(key)) {
-            schemaKey = Object.keys(schema)[0];
-        } else if (!schema.hasOwnProperty(key)) {
-            return false;
-        }
-
-        if (!_validate(definition[key], schema[schemaKey])) {
-            return false;
-        }
+    for (const literal of shadow.literals) {
+        _variables(literal, result);
     }
 
-    return Object.keys(definition).length == Object.keys(schema).length;
+    return result;
 }
 
-function _validateValue(definition, schema) {
-    if (SC.VARIABLE.matches(definition)) {
-        return true;
+/**
+ * 
+ * @param {ConceptsShadow} conceptsShadow 
+ * @param {Object} schemaDefinition 
+ */
+function _validate(conceptsShadow, schemaDefinition) {
+    if (conceptsShadow.hasAnyVariables()) {
+        //will validate variable here
+        return;
     }
 
-    return definition === schema;
+    if (typeof schemaDefinition == 'string') {
+        if (conceptsShadow.hasLiteral(schemaDefinition) &&
+            conceptsShadow.literals.length === 1 &&
+            !conceptsShadow.hasAnyConcepts()) {
+            return;
+        }
+
+        if (conceptsShadow.hasAnyLiterals()) {
+            let expectedLiteral = conceptsShadow.literals[0].name;
+            if (expectedLiteral === schemaDefinition) {
+                expectedLiteral = conceptsShadow.literals[1].name;
+            }
+
+            throw error.Definition_is_not_valid__because__REASON(
+                because => because.Expected_LITERAL_got_VALUE(expectedLiteral, schemaDefinition)
+            );
+        }
+
+        if (conceptsShadow.hasAnyConcepts()) {
+            throw error.Definition_is_not_valid__because__REASON(
+                because => because.CONCEPT_is_missing(conceptsShadow.concepts[0].name)
+            );
+        }
+
+        throw error.Definition_is_not_valid__because__REASON(
+            because => because.TOKEN_is_not_expected(schemaDefinition)
+        );
+    }
+
+    const schemaKeys = {};
+    if (schemaDefinition != null) {
+        Object.keys(schemaDefinition).forEach(key => schemaKeys[key] = true);
+    }
+
+    for (const literal of conceptsShadow.literals) {
+        if (schemaDefinition == null || !schemaDefinition.hasOwnProperty(literal.name)) {
+            throw error.Definition_is_not_valid__because__REASON(
+                because => because.LITERAL_is_missing(literal.name)
+            );
+        }
+
+        _validate(literal, schemaDefinition[literal.name]);
+
+        delete schemaKeys[literal.name];
+    }
+
+    const quantities = {};
+    const errors = {};
+
+    for (const concept of conceptsShadow.concepts) {
+        quantities[concept.name] = 0;
+
+        const remainingKeys = Object.keys(schemaKeys);
+        for (const remainingKey of remainingKeys) {
+            try {
+                _validate(concept, schemaDefinition[remainingKey]);
+
+                quantities[concept.name]++;
+                delete schemaKeys[remainingKey];
+                if (errors.hasOwnProperty(remainingKey)) {
+                    delete errors[remainingKey];
+                }
+            } catch (e) {
+                if (e.name != error.Names.SCHEMA_ERROR) {
+                    throw e;
+                }
+
+                arrayify.push(errors, remainingKey, { concept: concept, validationError: e });
+            }
+        }
+    }
+
+    const remainingKeys = Object.keys(schemaKeys);
+    if (remainingKeys.length > 0) {
+        const remainingKey = remainingKeys[0];
+
+        if (errors.hasOwnProperty(remainingKey)) {
+            throw arrayify.get(errors, remainingKey)[0].validationError;
+        } else {
+            throw error.Definition_is_not_valid__because__REASON(
+                because => because.TOKEN_is_not_expected(remainingKey)
+            );
+        }
+    }
+    
+    for (const concept of conceptsShadow.concepts) {
+        if (quantities[concept.name] < concept.quantifier.min) {
+            throw error.Definition_is_not_valid__because__REASON(
+                because => because.CONCEPT_is_missing(concept.name)
+            );
+        }
+    }
 }
 
 module.exports = Concepts;
 
 const Schema = require('./schema');
 const ConceptsShadow = require('./concepts-shadow');
-const { SpecialCharacters: SC, required, loadJSON } = require('./util');
+const { arrayify, error, required, loadJSON } = require('./util');

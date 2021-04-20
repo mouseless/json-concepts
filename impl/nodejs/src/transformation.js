@@ -80,9 +80,7 @@
         if (!(schema instanceof Schema)) {
             schema = this.#source.create(schema);
         } else {
-            if (!this.#source.validate(schema.definition)) {
-                throw error.SCHEMA_is_not_valid(schema.definition);
-            }
+            this.#source.validate(schema);
         }
 
         return this.#target.create(

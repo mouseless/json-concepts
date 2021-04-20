@@ -11,11 +11,11 @@ describe('spec/basics/variables', function () {
             }
         });
 
-        concepts.validate({
+        (() => concepts.validate({
             "sayHello": {
                 "name": "string"
             }
-        }).should.equal(true);
+        })).should.not.throw();
     });
 
     it('should validate schema 2',  function () {
@@ -25,10 +25,10 @@ describe('spec/basics/variables', function () {
             }
         });
 
-        concepts.validate({
+        (() => concepts.validate({
             "sayHello": {
                 "name": "text"
             }
-        }).should.equal(true);
+        })).should.not.throw();
     });
 });
