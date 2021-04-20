@@ -1,10 +1,15 @@
-const { Concepts } = require('../../../index');
+const { Concepts, Schema } = require('../../../index');
 const { error } = require('../../../src/util');
+const fs = require('mock-fs');
 const { should } = require('chai');
 
 should();
 
 describe('spec/quantifiers/exactly-one', function () {
+    after(function () {
+        fs.restore();
+    })
+
     it('should validate', function () {
         const concepts = new Concepts({
             "$service": {
@@ -17,6 +22,20 @@ describe('spec/quantifiers/exactly-one', function () {
                 "name": "string"
             }
         })).should.not.throw();
+    });
+
+    it('should give error with file name', async function () {
+        fs({
+            'service.concepts.json': JSON.stringify({
+                "$service": {
+                    "$parameter": "$type"
+                }
+            }),
+            'greeting.service.json': JSON.stringify({})
+        });
+
+        await Schema.load('greeting.service.json', 'service.concepts.json')
+            .should.be.rejectedWith("'greeting.service.json'");
     });
 
     describe('missing a concept', function () {
@@ -35,21 +54,68 @@ describe('spec/quantifiers/exactly-one', function () {
                 ).message
             );
         });
-
-        it('should give error with file name');
     });
 
     describe('missing more than one concept', function () {
-        it('should give error');
-        it('should give error with file name');
+        it('should give error', function () {
+            const concepts = new Concepts({
+                "$service": {
+                    "$parameter": "$type"
+                }
+            });
+
+            (() => concepts.create({})).should.throw(
+                error.Definition_is_not_valid__because__REASON(
+                    because => because.CONCEPT_is_missing('service')
+                ).message
+            );
+        });
     });
 
     describe('key literals', function () {
-        it('should give error');
-        it('should give error with file name');
+        it('should give error', function () {
+            const concepts = new Concepts({
+                "$service": {
+                    "response": "$responseType"
+                }
+            });
+
+            (() => concepts.create({
+                "sayHello": {}
+            })).should.throw(
+                error.Definition_is_not_valid__because__REASON(
+                    because => because.LITERAL_is_missing('response')
+                ).message
+            );
+        });
     });
 
     describe('null variables', function () {
-        it('should set null to variables in shadow');
+        it('should set null to variables in shadow', function () {
+            const concepts = new Concepts({
+                "$service": {
+                    "$parameter": "$type",
+                    "response": "$responseType"
+                }
+            });
+
+            const schema = concepts.create({
+                "sayHello": {
+                    "name": null,
+                    "response": null
+                }
+            });
+
+            schema.shadow.should.deep.equal({
+                "service": {
+                    "_": "sayHello",
+                    "parameter": {
+                        "_": "name",
+                        "type": null
+                    },
+                    "responseType": null
+                }
+            });
+        });
     });
 });
