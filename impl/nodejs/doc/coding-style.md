@@ -216,15 +216,20 @@ async function async(parameter) {
 
 }
 
-function _private() {
-    // no JSDoc for private functions
+/**
+ * @param {ParameterType} parameter
+ */
+function _private(parameter) {
+    // JSDoc is not required, but added when needed
 }
 
 class Class { // no JSDoc for classes
     /**
-     * Any anonymous object is documented at the top of its class.
+     * Any anonymous object is documented at the top of its class. Anonymous
+     * objects must have a Data prefix to not to confuse them with other
+     * classes.
      * 
-     * @typedef {Object} Type
+     * @typedef {Object} CustomData
      * @property {String} name Document properties like parameters
      */
 

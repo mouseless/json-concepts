@@ -109,16 +109,12 @@
     }
 
     _transform(schema, target, context = {}) {
-        if (target.hasAnyVariables()) {
-            const result = [];
-
-            for (const variable of target.variables) {
-                if (context.hasOwnProperty(variable.name)) {
-                    result.push(context[variable.name]);
-                }
+        if (target.hasOnlyVariableLeafNode()) {
+            if (!context.hasOwnProperty(target.variable.name)) {
+                return null;
             }
-
-            return result.length > 1 ? result : result.length > 0 ? result[0] : null;
+            
+            return context[target.variable.name];
         }
 
         const result = {};

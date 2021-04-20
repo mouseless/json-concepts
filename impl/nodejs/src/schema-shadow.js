@@ -98,13 +98,13 @@ class SchemaShadow {
      * @param {Object} definition (Required) Schema definition
      */
     build(definition = required('definition')) {
-        this._build(definition, this.#conceptsShadow);
+        this._build(this.#conceptsShadow, definition);
 
         if (this.#name != null) {
             this.#data[SC.SELF.value] = this.#name;
         }
 
-        if (this.#conceptsShadow.hasNothingButName()) {
+        if (this.#conceptsShadow.isLeafNode()) {
             this.#data = definition;
         } else {
             for (const shadow of this.variables) {
@@ -115,39 +115,29 @@ class SchemaShadow {
                 arrayify.push(this.#data, shadow.#conceptsShadow.name, shadow.#data);
             }
         }
+
+        return this;
     }
 
-    _build(definition, conceptsShadow) {
-        if (conceptsShadow.hasAnyVariables()) {
-            for (const variable of conceptsShadow.variables) {
-                this._pushVariable(definition, variable);
-            }
-        } else if (conceptsShadow.hasAnyConcepts() || conceptsShadow.hasAnyLiterals()) {
+    _build(conceptsShadow, definition) {
+        if (conceptsShadow.hasOnlyVariableLeafNode()) {
+            const shadow = new SchemaShadow(conceptsShadow.variable).build(definition);
+    
+            this.#variables[shadow.#conceptsShadow.name] = shadow;
+        } else {
             for (const key in definition) {
                 if (conceptsShadow.hasLiteral(key)) {
-                    this._build(definition[key], conceptsShadow.getLiteral(key));
+                    this._build(conceptsShadow.getLiteral(key), definition[key]);
                 } else {
                     for (const concept of conceptsShadow.concepts) {
-                        this._pushSchema(definition[key], concept, key);
+                        const shadow = new SchemaShadow(concept, key).build(definition[key]);
+                
+                        arrayify.push(this.#schemas, shadow.#conceptsShadow.name, shadow);
+                        this.#schemaArray.push(shadow);
                     }
                 }
             }
         }
-    }
-
-    _pushVariable(definition, variable) {
-        const shadow = new SchemaShadow(variable)
-        shadow.build(definition);
-
-        this.#variables[shadow.#conceptsShadow.name] = shadow;
-    }
-
-    _pushSchema(definition, concept, key) {
-        const shadow = new SchemaShadow(concept, key);
-        shadow.build(definition);
-
-        arrayify.push(this.#schemas, shadow.#conceptsShadow.name, shadow);
-        this.#schemaArray.push(shadow);
     }
 }
 
