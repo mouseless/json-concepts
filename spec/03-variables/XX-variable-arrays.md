@@ -16,7 +16,7 @@
 }
 ```
 
-## Objet Arrays
+## Object Arrays
 
 This is array of objects
 
