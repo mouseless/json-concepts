@@ -1,93 +1,33 @@
-class SpecialCharacter {
-    #value;
-
-    /**
-     * SpecialCharacter represents a special character that is used by JSON
-     * Concepts.
-     * 
-     * @param {String} value 
-     */
-    constructor(value) {
-        this.#value = value;
-    }
-
-    /**
-     * Value of this special character
-     * 
-     * @returns {String}
-     */
-    get value() { return this.#value; }
-
-    /**
-     * Validates given expression against this to check if it matches or not.
-     * 
-     * @param {String} expression (Required) Expression to check
-     * 
-     * @returns {boolean} `true` if it matches, `false` otherwise
-     */
-    matches(expression = required('expression')) {
-        return expression.startsWith(this.#value);
-    }
-
-    /**
-     * Decorates given key to conform to this special character.
-     * 
-     * @param {String} key (Required) Key to convert to an expression
-     * 
-     * @returns {String} A valid expression
-     */
-    decorate(key = required('key')) {
-        return `${this.#value}${key}`;
-    }
-
-    /**
-     * Undecorates given expression to a regular key.
-     * 
-     * @param {String} expression (Required) Expression to undecorate
-     * 
-     * @returns Undecorated version of given expression
-     */
-    undecorate(expression = required('expression')) {
-        if (!this.matches(expression)) {
-            return expression;
-        }
-
-        return expression.substring(this.#value.length);
-    }
-}
-
 /**
  * Contains all available special characters.
  * 
- * @enum {SpecialCharacter}
+ * @enum {String}
  */
 const SpecialCharacters = {
     /** `$variable` */
-    VARIABLE: new SpecialCharacter("$"),
+    VARIABLE: "$",
     /** `#preprocessor` */
-    PREPROCESSOR: new SpecialCharacter("#"),
+    PREPROCESSOR: "#",
     /** `:type` */
-    TYPE: new SpecialCharacter(":"),
+    TYPE: ":",
     /** `@metaData` */
-    META_DATA: new SpecialCharacter("@"),
+    META_DATA: "@",
     /** `zeroOrOne?` */
-    ZERO_OR_ONE: new SpecialCharacter("?"),
-    /** `oneOrMore+` */
-    ONE_OR_MORE: new SpecialCharacter("+"),
+    ZERO_OR_ONE: "?",
     /** `zeroOrMore*` */
-    ZERO_OR_MORE: new SpecialCharacter("*"),
+    ZERO_OR_MORE: "*",
+    /** `oneOrMore+` */
+    ONE_OR_MORE: "+",
     /** `/path/to/something` */
-    PATH: new SpecialCharacter("/"),
+    PATH: "/",
     /** `../parent` */
-    PARENT: new SpecialCharacter(".."),
+    PARENT: "..",
     /** `/*` */
-    ANY: new SpecialCharacter("*"),
+    ANY: "*",
     /** `/**` */
-    ANY_CHILD: new SpecialCharacter("**"),
+    ANY_CHILD: "**",
     /** `_` */
-    SELF: new SpecialCharacter("_")
+    SELF: "_"
 }
 
 module.exports = SpecialCharacters;
-
-const { required } = require("./validation");

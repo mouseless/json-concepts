@@ -1,4 +1,4 @@
-const { Transformation, Schema, Concepts } = require('../../../index');
+const { Transformation, Concepts } = require('../../..');
 const { error } = require('../../../src/util');
 const fs = require('mock-fs');
 const { use, should } = require('chai');

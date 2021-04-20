@@ -1,4 +1,4 @@
-const { Concepts } = require('../../../index');
+const { Concepts } = require('../../..');
 const { error } = require('../../../src/util');
 const { should } = require('chai');
 

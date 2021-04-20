@@ -101,7 +101,7 @@ class SchemaShadow {
         this._build(this.#conceptsShadow, definition);
 
         if (this.#name != null) {
-            this.#data[SC.SELF.value] = this.#name;
+            this.#data[SC.SELF] = this.#name;
         }
 
         if (this.#conceptsShadow.isLeafNode()) {

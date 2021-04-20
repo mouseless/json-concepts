@@ -265,10 +265,31 @@ const Enum = {
 ## Enums
 
 ```javascript
-const Example = {
+const Public = {
     VALUE_1: 1,
     VALUE_2: 2
 };
+
+const _private = {
+    VALUE_1 = 1,
+    VALUE_2 = 2
+};
+```
+
+## Modules
+
+```javascript
+const PublicConstant = { };
+
+const _privateConstant = "";
+
+function publicFunction() {
+
+}
+
+function _privateFunction() {
+
+}
 ```
 
 ## Classes
@@ -312,6 +333,7 @@ class Example {
 function _privateStaticMethods() {
     
 }
+
 ```
 
 ### Exported Publicly

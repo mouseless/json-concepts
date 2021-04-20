@@ -24,7 +24,7 @@
         }
 
         if (!(concepts instanceof Concepts)) {
-            if(typeof concepts === 'object') {
+            if (typeof concepts === 'object') {
                 concepts = new Concepts(concepts);
             } else {
                 concepts = await Concepts.load(concepts);

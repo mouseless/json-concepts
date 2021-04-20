@@ -1,4 +1,4 @@
-const { Schema, Concepts } = require('../../../index');
+const { Schema, Concepts } = require('../../..');
 const { should } = require('chai');
 
 should();

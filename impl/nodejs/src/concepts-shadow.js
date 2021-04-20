@@ -17,6 +17,7 @@ class ConceptsShadow {
 
     /* const */ #type;
     /* const */ #name;
+    /* const */ #quantifier;
     /* const */ #variable;
     /* const */ #literals;
     /* const */ #concepts;
@@ -33,15 +34,12 @@ class ConceptsShadow {
      * `undefined` for root node.
      */
     constructor(expression) {
-        if (expression === undefined) {
-            this.#type = Types.ROOT;
-            this.#name == null;
-        } else if (SC.VARIABLE.matches(expression)) {
-            this.#type = Types.VARIABLE;
-            this.#name = SC.VARIABLE.undecorate(expression);
-        } else {
-            this.#type = Types.LITERAL;
-            this.#name = expression;
+        if (expression !== undefined) {
+            const { type, name, quantifier } = keyExpression.parse(expression);
+
+            this.#type = type;
+            this.#name = name;
+            this.#quantifier = quantifier;
         }
 
         this.#variable = null;
@@ -61,7 +59,7 @@ class ConceptsShadow {
      * 
      * @returns {QuantifierData}
      */
-    get quantifier() { return { min: 1, max: 1 }; }
+    get quantifier() { return this.#quantifier; }
     /**
      * Array of variable nodes under this node.
      * 
@@ -160,25 +158,25 @@ class ConceptsShadow {
 
             const leaf = new ConceptsShadow(key).build();
 
-            if (leaf.#type == Types.VARIABLE) {
+            if (leaf.#type == keyExpression.Types.VARIABLE) {
                 this.#variable = leaf;
-            } else if (leaf.#type == Types.LITERAL) {
+            } else if (leaf.#type == keyExpression.Types.LITERAL) {
                 this.#literals[leaf.name] = leaf;
             }
         } else if (typeof definition === 'object') {
             for (const key in definition) {
                 const node = new ConceptsShadow(key).build(definition[key]);
 
-                if (node.#type == Types.VARIABLE) {
+                if (node.#type == keyExpression.Types.VARIABLE) {
                     this.#concepts[node.name] = node;
-                } else if (node.#type == Types.LITERAL) {
+                } else if (node.#type == keyExpression.Types.LITERAL) {
                     this.#literals[node.name] = node;
                 }
             }
         }
 
         if (this.#name != null) {
-            this.#data[SC.SELF.value] = this.#name;
+            this.#data[SC.SELF] = this.#name;
         }
 
         if (this.variable != null) {
@@ -281,6 +279,12 @@ class ConceptsShadow {
                 throw error.Definition_is_not_valid__because__REASON(
                     because => because.CONCEPT_is_missing(concept.name)
                 );
+            } else if (quantities[concept.name] > concept.quantifier.max) {
+                throw error.Definition_is_not_valid__because__REASON(
+                    because => because.Maximum_allowed_number_of_CONCEPT_is_MAX__but_got_COUNT(
+                        concept.name, concept.quantifier.max, quantities[concept.name]
+                    )
+                );
             }
         }
     }
@@ -298,12 +302,6 @@ class ConceptsShadow {
     }
 }
 
-const Types = {
-    ROOT: 1,
-    LITERAL: 2,
-    VARIABLE: 3
-}
-
 module.exports = ConceptsShadow;
 
-const { SpecialCharacters: SC, error, arrayify, required } = require('./util');
+const { SpecialCharacters: SC, error, arrayify, keyExpression, required } = require('./util');

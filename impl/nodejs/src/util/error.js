@@ -39,7 +39,9 @@ const InvalidSchemaReasons = {
     CONCEPT_is_missing: CONCEPT => `'${CONCEPT}' is missing`,
     LITERAL_is_missing: LITERAL => `'${LITERAL}' is missing`,
     Expected_LITERAL_got_VALUE: (LITERAL, VALUE) => `Expected '${LITERAL}', got '${VALUE}'`,
-    TOKEN_is_not_expected: TOKEN => `'${TOKEN}' is not expected`
+    TOKEN_is_not_expected: TOKEN => `'${TOKEN}' is not expected`,
+    Maximum_allowed_number_of_CONCEPT_is_MAX__but_got_COUNT:
+        (CONCEPT, MAX, COUNT) => `Maximum allowed number of '${CONCEPT}' is ${MAX}, but got ${COUNT}`
 }
 
 function _error(message, name = Names.ERROR) {

@@ -1,4 +1,4 @@
-const { Schema, Concepts } = require('../../../index');
+const { Schema, Concepts } = require('../../..');
 const { error } = require('../../../src/util');
 const fs = require('mock-fs');
 const nock = require('nock');
