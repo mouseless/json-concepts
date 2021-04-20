@@ -46,7 +46,7 @@ describe('spec/quantifiers/exactly-one', function () {
                 }
             });
 
-            (() => concepts.create({
+            (() => concepts.validate({
                 "sayHello": {}
             })).should.throw(
                 error.Definition_is_not_valid__because__REASON(
@@ -64,7 +64,7 @@ describe('spec/quantifiers/exactly-one', function () {
                 }
             });
 
-            (() => concepts.create({})).should.throw(
+            (() => concepts.validate({})).should.throw(
                 error.Definition_is_not_valid__because__REASON(
                     because => because.CONCEPT_is_missing('service')
                 ).message
@@ -80,7 +80,7 @@ describe('spec/quantifiers/exactly-one', function () {
                 }
             });
 
-            (() => concepts.create({
+            (() => concepts.validate({
                 "sayHello": {}
             })).should.throw(
                 error.Definition_is_not_valid__because__REASON(
