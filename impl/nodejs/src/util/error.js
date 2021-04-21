@@ -51,7 +51,10 @@ const InvalidSchemaReasons = {
         (CONCEPT, MIN, COUNT) => `Minimum allowed number of '${CONCEPT}' is ${MIN}, but got ${COUNT}`,
     LITERAL_requires_VARIABLE_array_to_have_at_least_MIN_item_s___but_got_COUNT:
         (LITERAL, VARIABLE, MIN, COUNT) => `${LITERAL} requires '${SC.VARIABLE}${VARIABLE}' array ` +
-            `to have at least ${MIN} item(s), but got ${COUNT}`
+            `to have at least ${MIN} item(s), but got ${COUNT}`,
+    LITERAL_requires_VARIABLE_array_to_have_at_most_MAX_item_s___but_got_COUNT:
+        (LITERAL, VARIABLE, MAX, COUNT) => `${LITERAL} requires '${SC.VARIABLE}${VARIABLE}' array ` +
+            `to have at most ${MAX} item(s), but got ${COUNT}`
 }
 
 function _error(message, name = Names.ERROR) {
@@ -84,6 +87,9 @@ module.exports = {
             `Concepts required to load ${SCHEMA}.` +
             ` Either specify @concepts meta-data within ${SCHEMA}, or pass concepts as a parameter.`
         );
+    },
+    Cannot_parse_quantifier__EXPRESSION(EXPRESSION) {
+        return _error(`Cannot parse quantifier: ${EXPRESSION}`)
     },
     /**
      * Selects reason from given reasons.

@@ -240,6 +240,12 @@ class ConceptsShadow {
                                 this.name, this.variable.name, this.quantifier.min, schemaDefinition.length
                             )
                         )
+                    } else if (schemaDefinition.length > this.quantifier.max) {
+                        throw error.Definition_is_not_valid__because__REASON(
+                            because => because.LITERAL_requires_VARIABLE_array_to_have_at_most_MAX_item_s___but_got_COUNT(
+                                this.name, this.variable.name, this.quantifier.max, schemaDefinition.length
+                            )
+                        );
                     }
                 }
             }

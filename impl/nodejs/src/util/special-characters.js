@@ -27,7 +27,13 @@ const SpecialCharacters = {
     /** `/**` */
     ANY_CHILD: "**",
     /** `_` */
-    SELF: "_"
+    SELF: "_",
+    /** `{` */
+    BEGIN_QUANTIFIER: "{",
+    /** `}` */
+    END_QUANTIFIER: "}",
+    /** `,` */
+    QUANTIFIER_SEPARATOR: ","
 }
 
 module.exports = SpecialCharacters;

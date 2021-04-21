@@ -1,4 +1,5 @@
 const SC = require('./special-characters');
+const error = require('./error');
 const { required } = require('./validation');
 
 /**
@@ -35,7 +36,10 @@ const _scHash = {
     [SC.VARIABLE]: SC.VARIABLE,
     [SC.ZERO_OR_ONE]: SC.ZERO_OR_ONE,
     [SC.ZERO_OR_MORE]: SC.ZERO_OR_MORE,
-    [SC.ONE_OR_MORE]: SC.ONE_OR_MORE
+    [SC.ONE_OR_MORE]: SC.ONE_OR_MORE,
+    [SC.BEGIN_QUANTIFIER]: SC.BEGIN_QUANTIFIER,
+    [SC.END_QUANTIFIER]: SC.END_QUANTIFIER,
+    [SC.QUANTIFIER_SEPARATOR]: SC.QUANTIFIER_SEPARATOR
 };
 
 /**
@@ -47,10 +51,10 @@ const _scHash = {
  * @see {SpecialCharacters}
  */
 const Quantifiers = {
-    DEFAULT: { min: 1, max: 1, data: null },
-    [SC.ZERO_OR_ONE]: { min: 0, max: 1, data: { min: 0, max: 1 } },
-    [SC.ONE_OR_MORE]: { min: 1, max: Number.POSITIVE_INFINITY, data: { min: 1 } },
-    [SC.ZERO_OR_MORE]: { min: 0, max: Number.POSITIVE_INFINITY, data: { min: 0 } }
+    DEFAULT: _quantifier(),
+    [SC.ZERO_OR_ONE]: _quantifier(0, 1),
+    [SC.ONE_OR_MORE]: _quantifier(1),
+    [SC.ZERO_OR_MORE]: _quantifier(0)
 };
 
 /**
@@ -92,11 +96,90 @@ function parse(expression = required('expression')) {
         result.name = token;
     }
 
-    token = tokens.shift();
-    if (token !== undefined) {
-        result.quantifier = Quantifiers[token];
+    result.quantifier = _parseQuantifier(tokens);
+
+    return result;
+}
+
+/**
+ * @param {Array.<String>} tokens 
+ * 
+ * @returns {QuantifierData}
+ */
+function _parseQuantifier(tokens) {
+    let token = tokens.shift();
+
+    if (token === undefined) {
+        return Quantifiers.DEFAULT;
+    }
+
+    if (token != SC.BEGIN_QUANTIFIER) {
+        if (!Quantifiers.hasOwnProperty(token)) {
+            throw error.Cannot_parse_quantifier__EXPRESSION(token);
+        }
+
+        return Quantifiers[token];
+    }
+
+    const quantifierTokens = [token];
+    while (token !== undefined && token != SC.END_QUANTIFIER) {
+        token = tokens.shift();
+
+        quantifierTokens.push(token);
+    }
+
+    if (quantifierTokens.length == 2) { // {}
+        return Quantifiers.DEFAULT;
+    }
+
+    if (quantifierTokens.length == 3) { // {#}
+        return _quantifier(quantifierTokens[1], quantifierTokens[1]);
+    }
+
+    if (quantifierTokens.length == 4) { // {,#} or {#,}
+        if (quantifierTokens[1] == SC.QUANTIFIER_SEPARATOR) { // {,#}
+            return _quantifier(undefined, quantifierTokens[2]);
+        }
+
+        return _quantifier(quantifierTokens[1]); // {#,}
+    }
+
+    if (quantifierTokens.length == 5) { // {#,#}
+        return _quantifier(quantifierTokens[1], quantifierTokens[3]);
+    }
+
+    throw error.Cannot_parse_quantifier__EXPRESSION(quantifierTokens.join(''));
+}
+
+/**
+ * @param {Number?} min 
+ * @param {Number?} max 
+ * 
+ * @returns {QuantifierData}
+ */
+function _quantifier(min, max) {
+    if (min == null && max == null) {
+        return { min: 1, max: 1, data: null };
+    }
+
+    const result = { data: {} };
+
+    if (min != null) {
+        min = Number.parseInt(min);
+
+        result.min = min;
+        result.data.min = min;
     } else {
-        result.quantifier = Quantifiers.DEFAULT;
+        result.min = 0;
+    }
+
+    if (max != null) {
+        max = Number.parseInt(max);
+
+        result.max = max;
+        result.data.max = max;
+    } else {
+        result.max = Number.POSITIVE_INFINITY;
     }
 
     return result;
