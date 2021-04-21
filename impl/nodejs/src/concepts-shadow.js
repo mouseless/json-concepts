@@ -5,8 +5,8 @@ class ConceptsShadow {
      * 
      * @typedef {Object} QuantifierData
      * 
-     * @property {Number} min Minimum number of token to be allowed
-     * @property {Number} max Maximum number of token to be allowed
+     * @property {Number} min Minimum number of tokens to be allowed
+     * @property {Number} max Maximum number of tokens to be allowed
      */
     /**
      * Variables are stored in an object instead of an array to provide quick
@@ -59,7 +59,7 @@ class ConceptsShadow {
      * 
      * @returns {QuantifierData}
      */
-    get quantifier() { return this.#quantifier; }
+    get quantifier() { return this.#quantifier != null ? this.#quantifier : keyExpression.Quantifiers.DEFAULT; }
     /**
      * Array of variable nodes under this node.
      * 
@@ -86,22 +86,6 @@ class ConceptsShadow {
      */
     get data() { return this.#data; }
 
-    /**
-     * Helper method to check if this node has a literal node with given name.
-     * 
-     * @param {String} name (Required) Literal name to check
-     * 
-     * @returns {boolean} `true` if it has, `false` otherwise
-     */
-    hasLiteral(name = required('name')) { return this.#literals.hasOwnProperty(name); }
-    /**
-     * Helper method to get literal node with given name.
-     * 
-     * @param {String} name (Required) Literal name to get
-     * 
-     * @returns {ConceptsShadow} Literal node with given name under this node
-     */
-    getLiteral(name = required('name')) { return this.#literals[name]; }
     /**
      * Makes a deep search and returns all variables in the tree.
      * 
@@ -179,6 +163,13 @@ class ConceptsShadow {
             this.#data[SC.SELF] = this.#name;
         }
 
+        if (this.#quantifier != null) {
+            this.#data.quantifier = {
+                min: this.#quantifier.min,
+                max: this.#quantifier.max
+            };
+        }
+
         if (this.variable != null) {
             this.#data.variable = this.#variable.#data;
         }
@@ -225,15 +216,15 @@ class ConceptsShadow {
         }
 
         for (const literal of this.literals) {
-            if (!schemaKeys[literal.name]) {
+            if (schemaKeys[literal.name]) {
+                literal.validate(schemaDefinition[literal.name]);
+
+                delete schemaKeys[literal.name];
+            } else if (literal.quantifier.min > 0) {
                 throw error.Definition_is_not_valid__because__REASON(
                     because => because.LITERAL_is_missing(literal.name)
                 );
             }
-
-            literal.validate(schemaDefinition[literal.name]);
-
-            delete schemaKeys[literal.name];
         }
 
         const quantities = {};

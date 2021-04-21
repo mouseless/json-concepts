@@ -10,7 +10,7 @@ optional under the `service` concept;
 ```json
 {
     "$service": {
-        "$parameter?": "string"
+        "$parameter?": "$type"
     }
 }
 ```
@@ -65,8 +65,8 @@ A key literal also becomes optional with `?` at the end;
 ```json
 {
     "$service": {
-        "$parameter?": "string",
-        "response?": "string"
+        "$parameter?": "$type",
+        "response?": "$responseType"
     }
 }
 ```

@@ -7,8 +7,8 @@ const { required } = require('./validation');
  * 
  * @typedef {Object} QuantifierData
  * 
- * @property {Number} min Minimum number of token to be allowed
- * @property {Number} max Maximum number of token to be allowed
+ * @property {Number} min Minimum number of tokens to be allowed
+ * @property {Number} max Maximum number of tokens to be allowed
  */
 /**
  * Carries type, name and quantifier information as a result of parsing.
@@ -36,15 +36,23 @@ const _scHash = {
     [SC.ONE_OR_MORE]: SC.ONE_OR_MORE
 };
 
-const _quantifiers = {
+/**
+ * Available quantifiers. Use quantifier special characters to get their
+ * quantifier data.
+ * 
+ * @see {SpecialCharacters}
+ * @enum {QuantifierData}
+ */
+const Quantifiers = {
+    DEFAULT: { min: 1, max: 1 },
     [SC.ZERO_OR_ONE]: { min: 0, max: 1 },
     [SC.ONE_OR_MORE]: { min: 1, max: Number.POSITIVE_INFINITY },
     [SC.ZERO_OR_MORE]: { min: 0, max: Number.POSITIVE_INFINITY }
 };
 
 /**
- * Parses key expression. If no quantifier exists in expression, it returns
- * default quantifier (min: 1, max: 1).
+ * Parses key expression. Quantifier is null when it does not exist in the
+ * expression.
  * 
  * @param {String} expression (Required) Key expression to parse
  * 
@@ -82,10 +90,8 @@ function parse(expression = required('expression')) {
     }
 
     token = tokens.shift();
-    if (token === undefined) {
-        result.quantifier = { min: 1, max: 1 };
-    } else {
-        result.quantifier = _quantifiers[token];
+    if (token !== undefined) {
+        result.quantifier = Quantifiers[token];
     }
 
     return result;
@@ -93,5 +99,6 @@ function parse(expression = required('expression')) {
 
 module.exports = {
     Types,
+    Quantifiers,
     parse
 };

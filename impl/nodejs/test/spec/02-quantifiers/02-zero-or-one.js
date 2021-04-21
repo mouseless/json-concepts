@@ -8,7 +8,7 @@ describe('spec/quantifiers/zero-or-one', function () {
     it('should validate schema 1', function () {
         const concepts = new Concepts({
             "$service": {
-                "$parameter?": "string"
+                "$parameter?": "$type"
             }
         });
 
@@ -17,30 +17,30 @@ describe('spec/quantifiers/zero-or-one', function () {
         })).should.not.throw();
     });
 
-    it('should validate schema 2', function() {
+    it('should validate schema 2', function () {
         const concepts = new Concepts({
             "$service": {
-                "$parameter?": "string"
+                "$parameter?": "$type"
             }
         });
 
         (() => concepts.validate({
-            "sayHello": { 
+            "sayHello": {
                 "name": "string"
             }
         })).should.not.throw();
     });
 
     describe('more than one concept fails validation', function () {
-        it('should give error', function() {
+        it('should give error', function () {
             const concepts = new Concepts({
                 "$service": {
-                    "$parameter?": "string"
+                    "$parameter?": "$type"
                 }
             });
-    
+
             (() => concepts.validate({
-                "sayHello": { 
+                "sayHello": {
                     "name": "string",
                     "surname": "string"
                 }
@@ -53,20 +53,141 @@ describe('spec/quantifiers/zero-or-one', function () {
     })
 
     describe('key literals', function () {
-        it('should validate');
+        it('should validate', function () {
+            const concepts = new Concepts({
+                "$service": {
+                    "$parameter?": "$type",
+                    "response?": "$responseType"
+                }
+            });
+
+            (() => concepts.validate({
+                "sayHello": {
+                    "name": "string"
+                }
+            })).should.not.throw();
+        });
     });
 
     describe('concepts shadow', function () {
-        it('should include quantifier information');
-    });
+        it('should include quantifier information', function () {
+            const concepts = new Concepts({
+                "$service": {
+                    "$parameter?": "$type",
+                    "response?": "$responseType"
+                }
+            });
 
-    describe('schema shadow', function () {
-        it('should set value to null for optional literals');
-        it('should set value to null for optional concepts');
-    });
+            concepts.shadow.should.deep.equal({
+                "concept": {
+                    "_": "service",
+                    "literal": {
+                        "_": "response",
+                        "quantifier": {
+                            "min": 0,
+                            "max": 1
+                        },
+                        "variable": {
+                            "_": "responseType"
+                        }
+                    },
+                    "concept": {
+                        "_": "parameter",
+                        "quantifier": {
+                            "min": 0,
+                            "max": 1
+                        },
+                        "variable": {
+                            "_": "type"
+                        }
+                    }
+                }
+            });
+        });
 
-    describe('null concepts', function () {
-        it('should allow null when everything under that concept is optional');
-        it('should include literal and concept keys even if they are not given');
+        describe('schema shadow', function () {
+            it('should set value to null for optional literals and', function () {
+                const concepts = new Concepts({
+                    "$service": {
+                        "$parameter?": "$type",
+                        "response?": "$responseType"
+                    }
+                });
+
+                const schema = concepts.create({
+                    "sayHello": {
+                        "name": "string"
+                    }
+                });
+
+                schema.shadow.should.deep.equal({
+                    "service": {
+                        "_": "sayHello",
+                        "parameter": {
+                            "_": "name",
+                            "type": "string"
+                        },
+                        "responseType": null
+                    }
+                });
+            });
+
+            it('should set value to null for optional concepts', function () {
+                const concepts = new Concepts({
+                    "$service": {
+                        "$parameter?": "$type",
+                        "response?": "$responseType"
+                    }
+                });
+
+                const schema = concepts.create({
+                    "sayHello": {}
+                });
+
+                schema.shadow.should.deep.equal({
+                    "service": {
+                        "_": "sayHello",
+                        "parameter": null,
+                        "responseType": null
+                    }
+                });
+            });
+        });
+
+        describe('null concepts', function () {
+            it('should allow null when everything under that concept is optional', function () {
+                const concepts = new Concepts({
+                    "$service": {
+                        "$parameter?": "$type",
+                        "response?": "$responseType"
+                    }
+                });
+
+                (() => concepts.validate({
+                    "sayHello": null
+                })).should.not.throw();
+            });
+
+            it('should include literal and concept keys even if they are not given', function () {
+                const concepts = new Concepts({
+                    "$service": {
+                        "$parameter?": "$type",
+                        "response?": "$responseType"
+                    }
+                });
+
+                const schema = concepts.create({
+                    "sayHello": null
+                });
+
+                schema.shadow.should.deep.equal({
+                    "service": {
+                        "_": "sayHello",
+                        "parameter": null,
+                        "responseType": null
+                    }
+                });
+            });
+        });
     });
 });

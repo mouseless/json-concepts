@@ -108,6 +108,13 @@
         }
     }
 
+    /**
+     * @param {SchemaShadow} schema 
+     * @param {ConceptsShadow} target 
+     * @param {Object} context 
+     * 
+     * @returns {Object}
+     */
     _transform(schema, target, context = {}) {
         if (target.hasOnlyVariableLeafNode()) {
             if (!context.hasOwnProperty(target.variable.name)) {
@@ -137,7 +144,9 @@
 
 module.exports = Transformation;
 
-const { error, arrayify, required, loadJSON } = require('./util');
 const Concepts = require('./concepts');
 const Schema = require('./schema');
 const Query = require('./query');
+const SchemaShadow = require('./schema-shadow');
+const ConceptsShadow = require('./concepts-shadow');
+const { error, arrayify, required, loadJSON } = require('./util');

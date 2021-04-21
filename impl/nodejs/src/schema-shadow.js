@@ -3,8 +3,8 @@ class SchemaShadow {
     /* const */ #name;
     /* const */ #variables;
     /* const */ #schemas;
-    /* const */ #schemaArray;
-    /* const */ #data;
+
+    /* let */ #data;
 
     /**
      * SchemaShadow is a traversable tree version of a schema. It also
@@ -26,8 +26,6 @@ class SchemaShadow {
 
         this.#variables = {};
         this.#schemas = {};
-        this.#schemaArray = [];
-        this.#data = {};
     }
 
     /**
@@ -43,12 +41,6 @@ class SchemaShadow {
      */
     get variables() { return Object.values(this.#variables); }
     /**
-     * Array of schema nodes under this node.
-     * 
-     * @returns {Array.<SchemaShadow>}
-     */
-    get schemas() { return this.#schemaArray; }
-    /**
      * Data representation of this node and all of is nodes under it as an
      * object.
      * 
@@ -56,15 +48,6 @@ class SchemaShadow {
      */
     get data() { return this.#data; }
 
-    /**
-     * Helper method to check if this node has a variable child node with given
-     * name.
-     * 
-     * @param {String} name (Required) Variable name to check 
-     * 
-     * @returns {boolean} `true` if it has, `false` otherwise
-     */
-    hasVariable(name = required('name')) { return this.#variables.hasOwnProperty(name); }
     /**
      * Helper method to get the variable node with given name.
      * 
@@ -74,15 +57,6 @@ class SchemaShadow {
      */
     getVariable(name = required('name')) { return this.#variables[name]; }
     /**
-     * Helper method to check if this node has any schema child node with given
-     * name.
-     * 
-     * @param {String} name (Required) Schema name to check 
-     * 
-     * @returns {boolean} `true` if it has, `false` otherwise
-     */
-    hasSchemas(name = required('name')) { return this.#schemas.hasOwnProperty(name); }
-    /**
      * Helper method to get schema nodes with given name.
      * 
      * @param {String} name (Required) Schema name to get
@@ -90,50 +64,89 @@ class SchemaShadow {
      * @returns {Array.<SchemaShadow>} Schema nodes with given name under this
      * node.
      */
-    getSchemas(name = required('name')) { return arrayify.get(this.#schemas, name); }
+    getSchemas(name = required('name')) { return this.#schemas[name]; }
 
     /**
      * Recursively builds this node using given schema definition.
      * 
-     * @param {Object} definition (Required) Schema definition
+     * @param {Object} definition Schema definition
      */
-    build(definition = required('definition')) {
-        this._build(this.#conceptsShadow, definition);
-
-        if (this.#name != null) {
-            this.#data[SC.SELF] = this.#name;
-        }
-
+    build(definition) {
         if (this.#conceptsShadow.isLeafNode()) {
             this.#data = definition;
         } else {
+            this._build(this.#conceptsShadow, definition);
+
+            this.#data = {};
+
+            if (this.#name != null) {
+                this.#data[SC.SELF] = this.#name;
+            }
+
             for (const shadow of this.variables) {
                 this.#data[shadow.#conceptsShadow.name] = shadow.#data;
             }
 
-            for (const shadow of this.#schemaArray) {
-                arrayify.push(this.#data, shadow.#conceptsShadow.name, shadow.#data);
+            for (const concept in this.#schemas) {
+                const schemas = this.#schemas[concept];
+                if (schemas.length == 0) {
+                    this.#data[concept] = null;
+                } else {
+                    for (const shadow of schemas) {
+                        arrayify.push(this.#data, concept, shadow.#data);
+                    }
+                }
             }
         }
 
         return this;
     }
 
-    _build(conceptsShadow, definition) {
+    /**
+     * @param {ConceptsShadow} conceptsShadow 
+     * @param {Object} definition 
+     */
+    _build(
+        conceptsShadow = required('conceptsShadow'),
+        definition
+    ) {
         if (conceptsShadow.hasOnlyVariableLeafNode()) {
             const shadow = new SchemaShadow(conceptsShadow.variable).build(definition);
-    
-            this.#variables[shadow.#conceptsShadow.name] = shadow;
+
+            this.#variables[conceptsShadow.variable.name] = shadow;
         } else {
-            for (const key in definition) {
-                if (conceptsShadow.hasLiteral(key)) {
-                    this._build(conceptsShadow.getLiteral(key), definition[key]);
+            const keys = {};
+            if(definition != null) {
+                Object.keys(definition).forEach(key => keys[key] = true);
+            }
+
+            for (const literal of conceptsShadow.literals) {
+                if (keys[literal.name]) {
+                    this._build(literal, definition[literal.name]);
+
+                    delete keys[literal.name];
                 } else {
-                    for (const concept of conceptsShadow.concepts) {
+                    this._build(literal, null);
+                }
+            }
+
+            for (const concept of conceptsShadow.concepts) {
+                this.#schemas[concept.name] = [];
+                for (const key of Object.keys(keys)) {
+                    try {
+                        concept.validate(definition[key]);
                         const shadow = new SchemaShadow(concept, key).build(definition[key]);
-                
-                        arrayify.push(this.#schemas, shadow.#conceptsShadow.name, shadow);
-                        this.#schemaArray.push(shadow);
+                        this.#schemas[concept.name].push(shadow);
+
+                        delete keys[key];
+                    } catch (e) {
+                        if (e.name == error.Names.SCHEMA_ERROR) {
+                            // this means that this concept should not handle this key,
+                            // so it is safe to skip this one
+                            continue;
+                        }
+
+                        throw e;
                     }
                 }
             }
@@ -143,4 +156,5 @@ class SchemaShadow {
 
 module.exports = SchemaShadow;
 
-const { SpecialCharacters: SC, arrayify, required } = require('./util');
+const ConceptsShadow = require('./concepts-shadow');
+const { SpecialCharacters: SC, error, arrayify, required } = require('./util');
