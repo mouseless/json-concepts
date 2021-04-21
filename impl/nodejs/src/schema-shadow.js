@@ -2,7 +2,7 @@ class SchemaShadow {
     /* const */ #conceptsShadow;
     /* const */ #name;
     /* const */ #variables;
-    /* const */ #schemas;
+    /* const */ #schemasByConcept;
 
     /* let */ #data;
 
@@ -25,7 +25,7 @@ class SchemaShadow {
         this.#name = name;
 
         this.#variables = {};
-        this.#schemas = {};
+        this.#schemasByConcept = {};
     }
 
     /**
@@ -46,7 +46,7 @@ class SchemaShadow {
      * 
      * @returns {Object}
      */
-    get data() { return Object.freeze(this.#data); }
+    get data() { return this.#data; }
 
     /**
      * Helper method to get the variable node with given name.
@@ -64,7 +64,7 @@ class SchemaShadow {
      * @returns {Array.<SchemaShadow>} Schema nodes with given name under this
      * node.
      */
-    getSchemas(name = required('name')) { return Object.freeze(this.#schemas[name]); }
+    getSchemas(name = required('name')) { return this.#schemasByConcept[name]; }
 
     /**
      * Recursively builds this node using given schema definition.
@@ -73,7 +73,11 @@ class SchemaShadow {
      */
     build(definition) {
         if (this.#conceptsShadow.isLeafNode()) {
-            this.#data = definition;
+            if (definition == null) {
+                this.#data = this.#conceptsShadow.parent.defaultValue;
+            } else {
+                this.#data = definition;
+            }
         } else {
             this._build(this.#conceptsShadow, definition);
 
@@ -87,10 +91,10 @@ class SchemaShadow {
                 this.#data[shadow.#conceptsShadow.name] = shadow.#data;
             }
 
-            for (const concept in this.#schemas) {
-                const schemas = this.#schemas[concept];
+            for (const concept in this.#schemasByConcept) {
+                const schemas = this.#schemasByConcept[concept];
                 if (schemas.length == 0) {
-                    this.#data[concept] = null;
+                    this.#data[concept] = this.#conceptsShadow.getConcept(concept).defaultValue;
                 } else {
                     for (const shadow of schemas) {
                         arrayify.push(this.#data, concept, shadow.#data);
@@ -131,12 +135,13 @@ class SchemaShadow {
             }
 
             for (const concept of conceptsShadow.concepts) {
-                this.#schemas[concept.name] = [];
+                this.#schemasByConcept[concept.name] = [];
                 for (const key of Object.keys(keys)) {
                     try {
                         concept.validate(definition[key]);
                         const shadow = new SchemaShadow(concept, key).build(definition[key]);
-                        this.#schemas[concept.name].push(shadow);
+
+                        this.#schemasByConcept[concept.name].push(shadow);
 
                         delete keys[key];
                     } catch (e) {

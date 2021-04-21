@@ -101,7 +101,7 @@ their min set to zero;
                 "min": 0
             },
             "variable": {
-                "_": "tags"
+                "_": "type"
             }
         }
     }

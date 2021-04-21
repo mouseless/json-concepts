@@ -9,6 +9,8 @@ const { required } = require('./validation');
  * 
  * @property {Number} min Minimum number of tokens to be allowed
  * @property {Number} max Maximum number of tokens to be allowed
+ * @property {{min:Number?, max:Number?}?} data Data representation of
+ * quantifier data.
  */
 /**
  * Carries type, name and quantifier information as a result of parsing.
@@ -40,14 +42,15 @@ const _scHash = {
  * Available quantifiers. Use quantifier special characters to get their
  * quantifier data.
  * 
- * @see {SpecialCharacters}
  * @enum {QuantifierData}
+ * 
+ * @see {SpecialCharacters}
  */
 const Quantifiers = {
-    DEFAULT: { min: 1, max: 1 },
-    [SC.ZERO_OR_ONE]: { min: 0, max: 1 },
-    [SC.ONE_OR_MORE]: { min: 1 },
-    [SC.ZERO_OR_MORE]: { min: 0 }
+    DEFAULT: { min: 1, max: 1, data: null },
+    [SC.ZERO_OR_ONE]: { min: 0, max: 1, data: { min: 0, max: 1 } },
+    [SC.ONE_OR_MORE]: { min: 1, max: Number.POSITIVE_INFINITY, data: { min: 1 } },
+    [SC.ZERO_OR_MORE]: { min: 0, max: Number.POSITIVE_INFINITY, data: { min: 0 } }
 };
 
 /**
@@ -92,6 +95,8 @@ function parse(expression = required('expression')) {
     token = tokens.shift();
     if (token !== undefined) {
         result.quantifier = Quantifiers[token];
+    } else {
+        result.quantifier = Quantifiers.DEFAULT;
     }
 
     return result;

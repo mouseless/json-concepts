@@ -18,6 +18,7 @@ class ConceptsShadow {
     /* const */ #type;
     /* const */ #name;
     /* const */ #quantifier;
+    /* const */ #parent;
     /* const */ #variable;
     /* const */ #literals;
     /* const */ #concepts;
@@ -33,7 +34,7 @@ class ConceptsShadow {
      * @param {String} expression Key expression of this node. It should be
      * `undefined` for root node.
      */
-    constructor(expression) {
+    constructor(expression, parent) {
         if (expression !== undefined) {
             const { type, name, quantifier } = keyExpression.parse(expression);
 
@@ -42,6 +43,7 @@ class ConceptsShadow {
             this.#quantifier = quantifier;
         }
 
+        this.#parent = parent;
         this.#variable = null;
         this.#literals = {};
         this.#concepts = {};
@@ -55,11 +57,22 @@ class ConceptsShadow {
      */
     get name() { return this.#name; }
     /**
+     * Quantifier definition of this node. Result is guaranteed to have min and
+     * max values.
+     * 
+     * @returns {QuantifierData}
+     */
+    get quantifier() { return this.#quantifier; }
+    /**
+     * Parent of this node. `undefined` for root node.
+     */
+    get parent() { return this.#parent; }
+    /**
      * Array of variable nodes under this node.
      * 
      * @returns {Array.<ConceptsShadow>}
      */
-    get variable() { return Object.freeze(this.#variable); }
+    get variable() { return this.#variable; }
     /**
      * Array of literal nodes under this node.
      * 
@@ -78,33 +91,14 @@ class ConceptsShadow {
      * 
      * @returns {Object}
      */
-    get data() { return Object.freeze(this.#data); }
+    get data() { return this.#data; }
 
-    /**
-     * Quantifier definition of this node. Result is guaranteed to have min and
-     * max values.
-     * 
-     * @returns {QuantifierData}
-     */
-    get quantifier() {
-        let result;
-
-        if (this.#quantifier == null) {
-            result = keyExpression.Quantifiers.DEFAULT;
-        } else {
-            let min = this.#quantifier.min;
-            if (min === undefined) {
-                min = 0;
-            }
-
-            let max = this.#quantifier.max;
-            if (max === undefined) {
-                max = Number.POSITIVE_INFINITY;
-            }
-            result = { min: min, max: max };
+    get defaultValue() {
+        if (this.quantifier.max > 1) {
+            return [];
         }
 
-        return Object.freeze(result);
+        return null;
     }
 
     /**
@@ -113,6 +107,15 @@ class ConceptsShadow {
      * @returns {VariablesData} Variables as key value pairs
      */
     getAllVariables() { return this._variables({}); }
+    /**
+     * Gets child concept node with given name. It returns `undefined` when no
+     * child concept with given name exists.
+     * 
+     * @param {String} (Required) Name of child concept node
+     * 
+     * @returns {ConceptsShadow}
+     */
+    getConcept(name = required('name')) { return this.#concepts[name]; }
 
     /**
      * Helper method to check if this node is a leaf node.
@@ -161,7 +164,7 @@ class ConceptsShadow {
         if (typeof definition === 'string') {
             const key = definition;
 
-            const leaf = new ConceptsShadow(key).build();
+            const leaf = new ConceptsShadow(key, this).build();
 
             if (leaf.#type == keyExpression.Types.VARIABLE) {
                 this.#variable = leaf;
@@ -170,7 +173,7 @@ class ConceptsShadow {
             }
         } else if (typeof definition === 'object') {
             for (const key in definition) {
-                const node = new ConceptsShadow(key).build(definition[key]);
+                const node = new ConceptsShadow(key, this).build(definition[key]);
 
                 if (node.#type == keyExpression.Types.VARIABLE) {
                     this.#concepts[node.name] = node;
@@ -185,7 +188,9 @@ class ConceptsShadow {
         }
 
         if (this.#quantifier != null) {
-            this.#data.quantifier = this.#quantifier;
+            if (this.#quantifier.data != null) {
+                this.#data.quantifier = this.#quantifier.data;
+            }
         }
 
         if (this.variable != null) {
@@ -214,11 +219,19 @@ class ConceptsShadow {
             if (this.#type == keyExpression.Types.LITERAL) {
                 if (this.quantifier.max > 1) {
                     if (!Array.isArray(schemaDefinition)) {
-                        throw error.Definition_is_not_valid__because__REASON(
-                            because => because.LITERAL_expects_an_array_for_VARIABLE__but_got_an_instance_of_TYPE(
-                                this.name, this.variable.name, typeof schemaDefinition
+                        if (schemaDefinition === null) {
+                            throw error.Definition_is_not_valid__because__REASON(
+                                because => because.LITERAL_expects_an_array_for_VARIABLE__but_got_null(
+                                    this.name, this.variable.name
+                                )
                             )
-                        );
+                        } else {
+                            throw error.Definition_is_not_valid__because__REASON(
+                                because => because.LITERAL_expects_an_array_for_VARIABLE__but_got_an_instance_of_TYPE(
+                                    this.name, this.variable.name, typeof schemaDefinition
+                                )
+                            );
+                        }
                     }
 
                     if (schemaDefinition.length < this.quantifier.min) {
