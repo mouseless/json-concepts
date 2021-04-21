@@ -216,38 +216,31 @@ class ConceptsShadow {
      */
     validate(schemaDefinition) {
         if (this.hasOnlyVariableLeafNode()) {
-            if (this.#type == keyExpression.Types.LITERAL) {
-                if (this.quantifier.max > 1) {
-                    if (!Array.isArray(schemaDefinition)) {
-                        if (schemaDefinition === null) {
-                            throw error.Definition_is_not_valid__because__REASON(
-                                because => because.LITERAL_expects_an_array_for_VARIABLE__but_got_null(
-                                    this.name, this.variable.name
-                                )
-                            )
-                        } else {
-                            throw error.Definition_is_not_valid__because__REASON(
-                                because => because.LITERAL_expects_an_array_for_VARIABLE__but_got_an_instance_of_TYPE(
-                                    this.name, this.variable.name, typeof schemaDefinition
-                                )
-                            );
-                        }
-                    }
+            if (this.#type != keyExpression.Types.LITERAL) { return; }
+            if (!Array.isArray(this.defaultValue)) { return; }
 
-                    if (schemaDefinition.length < this.quantifier.min) {
-                        throw error.Definition_is_not_valid__because__REASON(
-                            because => because.LITERAL_requires_VARIABLE_array_to_have_at_least_MIN_item_s___but_got_COUNT(
-                                this.name, this.variable.name, this.quantifier.min, schemaDefinition.length
-                            )
-                        )
-                    } else if (schemaDefinition.length > this.quantifier.max) {
-                        throw error.Definition_is_not_valid__because__REASON(
-                            because => because.LITERAL_requires_VARIABLE_array_to_have_at_most_MAX_item_s___but_got_COUNT(
-                                this.name, this.variable.name, this.quantifier.max, schemaDefinition.length
-                            )
-                        );
-                    }
-                }
+            if (!Array.isArray(schemaDefinition)) {
+                throw error.Definition_is_not_valid__because__REASON(
+                    because => because.LITERAL_expects_an_array_for_VARIABLE__but_got_VALUE(
+                        this.name, this.variable.name, schemaDefinition
+                    )
+                )
+            }
+
+            if (schemaDefinition.length < this.quantifier.min) {
+                throw error.Definition_is_not_valid__because__REASON(
+                    because => because.LITERAL_requires_VARIABLE_array_to_have_at_least_MIN_item_s___but_got_COUNT(
+                        this.name, this.variable.name, this.quantifier.min, schemaDefinition.length
+                    )
+                )
+            }
+
+            if (schemaDefinition.length > this.quantifier.max) {
+                throw error.Definition_is_not_valid__because__REASON(
+                    because => because.LITERAL_requires_VARIABLE_array_to_have_at_most_MAX_item_s___but_got_COUNT(
+                        this.name, this.variable.name, this.quantifier.max, schemaDefinition.length
+                    )
+                );
             }
 
             return;

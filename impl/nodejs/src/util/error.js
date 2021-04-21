@@ -47,6 +47,14 @@ const InvalidSchemaReasons = {
             `but got an instance of ${TYPE}`,
     LITERAL_expects_an_array_for_VARIABLE__but_got_null:
         (LITERAL, VARIABLE) => `'${LITERAL}' expects an array for '${SC.VARIABLE}${VARIABLE}', but got null`,
+    LITERAL_expects_an_array_for_VARIABLE__but_got_VALUE:
+        (LITERAL, VARIABLE, VALUE) => VALUE === null
+            ? InvalidSchemaReasons.LITERAL_expects_an_array_for_VARIABLE__but_got_null(
+                LITERAL, VARIABLE
+            )
+            : InvalidSchemaReasons.LITERAL_expects_an_array_for_VARIABLE__but_got_an_instance_of_TYPE(
+                LITERAL, VARIABLE, typeof VALUE
+            ),
     Minimum_allowed_number_of_CONCEPT_is_MIN__but_got_COUNT:
         (CONCEPT, MIN, COUNT) => `Minimum allowed number of '${CONCEPT}' is ${MIN}, but got ${COUNT}`,
     LITERAL_requires_VARIABLE_array_to_have_at_least_MIN_item_s___but_got_COUNT:

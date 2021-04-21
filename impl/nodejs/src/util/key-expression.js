@@ -66,7 +66,32 @@ const Quantifiers = {
  * @returns {KeyExpressionData} Parsed expression data
  */
 function parse(expression = required('expression')) {
+    const tokens = _scan(expression);
+
+    const result = {};
+
+    let token = tokens.shift();
+    if (token == SC.VARIABLE) {
+        result.type = Types.VARIABLE;
+        result.name = tokens.shift();
+    } else {
+        result.type = Types.LITERAL;
+        result.name = token;
+    }
+
+    result.quantifier = _parseQuantifier(tokens);
+
+    return result;
+}
+
+/**
+ * @param {String} expression 
+ * 
+ * @returns {Array.<String>}
+ */
+function _scan(expression = required('expression')) {
     const tokens = [];
+
     let current = "";
     for (const c of expression) {
         if (_scHash[c]) {
@@ -85,20 +110,7 @@ function parse(expression = required('expression')) {
         tokens.push(current);
     }
 
-    const result = {};
-
-    let token = tokens.shift();
-    if (token == SC.VARIABLE) {
-        result.type = Types.VARIABLE;
-        result.name = tokens.shift();
-    } else {
-        result.type = Types.LITERAL;
-        result.name = token;
-    }
-
-    result.quantifier = _parseQuantifier(tokens);
-
-    return result;
+    return tokens;
 }
 
 /**
