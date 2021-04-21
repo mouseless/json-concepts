@@ -24,7 +24,7 @@
         }
 
         if (!(concepts instanceof Concepts)) {
-            if(typeof concepts === 'object') {
+            if (typeof concepts === 'object') {
                 concepts = new Concepts(concepts);
             } else {
                 concepts = await Concepts.load(concepts);
@@ -35,7 +35,7 @@
             return new Schema(definition, concepts);
         } catch (e) {
             if (e.name === error.Names.SCHEMA_ERROR) {
-                throw error.SCHEMA_is_not_valid(path);
+                throw error.SCHEMA_is_not_valid__Error_is_ERROR(path, e.message);
             }
 
             throw e;
@@ -61,9 +61,7 @@
         definition = required('definition'),
         concepts = required('concepts')
     ) {
-        if (!concepts.validate(definition)) {
-            throw error.SCHEMA_is_not_valid(definition);
-        }
+        concepts.validate(definition);
 
         this.#definition = definition;
         this.#concepts = concepts;

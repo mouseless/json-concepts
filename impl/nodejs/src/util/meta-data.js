@@ -10,7 +10,7 @@ function exists(
     obj = required('obj'),
     name = required('name')
 ) {
-    return obj.hasOwnProperty(SpecialCharacters.META_DATA.decorate(name));
+    return obj.hasOwnProperty(`${SC.META_DATA}${name}`);
 }
 
 /**
@@ -32,7 +32,7 @@ function read(
         return null;
     }
 
-    const metaDataKey = SpecialCharacters.META_DATA.decorate(name);
+    const metaDataKey = `${SC.META_DATA}${name}`;
     const result = obj[metaDataKey];
 
     if (burnAfterReading) {
@@ -47,5 +47,5 @@ module.exports = {
     read
 };
 
-const SpecialCharacters = require('./special-characters');
+const SC = require('./special-characters');
 const { required } = require('./validation');

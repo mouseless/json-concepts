@@ -2,21 +2,21 @@
     /**
      * Data that represents a concept
      * 
-     * @typedef {Object} Concept
+     * @typedef {Object} ConceptData
      * @property {String} name Name of concept
-     * @property {Variables} variables Variables of concept
+     * @property {VariablesData} variables Variables of concept
      */
     /**
      * Variables are stored in an object instead of an array to provide quick
      * access via variable name.
      * 
-     * @typedef {Object} Variables
-     * @see Variable
+     * @typedef {Object} VariablesData
+     * @see VariableData
      */
     /**
      * Data that represent a variable
      * 
-     * @typedef {Object} Variable
+     * @typedef {Object} VariableData
      * @property {String} name Name of variable
      */
 
@@ -49,8 +49,7 @@
     constructor(definition = required('definition')) {
         this.#definition = definition;
 
-        this.#shadow = new ConceptsShadow();
-        this.#shadow.build(definition);
+        this.#shadow = new ConceptsShadow().build(definition);
         this.#concepts = {};
 
         this._build(this.#shadow);
@@ -71,7 +70,7 @@
     /**
      * Lists concepts in an array.
      * 
-     * @returns {Array.<Concept>}
+     * @returns {Array.<ConceptData>}
      */
     get list() { return Object.values(this.#concepts); }
 
@@ -90,7 +89,7 @@
      * 
      * @param {String} name (Required) Name of concept to get
      * 
-     * @returns {Concept} Concept with given name
+     * @returns {ConceptData} Concept with given name
      */
     get(name = required('name')) { return this.#concepts[name]; }
 
@@ -121,76 +120,33 @@
     }
 
     /**
-     * Validates schema against this concepts definition.
+     * Validates schema against this concepts definition, and throws error if
+     * it is not valid.
      * 
-     * @param {Schema|Object} schema Schema to validate. Accepts both an object
-     * and an instance of Schema.
-     * 
-     * @returns {boolean} `true` if schema is valid, `false` otherwise
+     * @param {Schema|Object} schema (Required) Schema to validate. Accepts
+     * definition or Schema itself.
      */
-    validate(schema = null) {
-        if (schema === null) {
-            return false;
+    validate(schema = required('schema')) {
+        if (schema instanceof Schema) {
+            schema = schema.definition;
         }
 
-        return _validate(this.#definition, schema);
+        this.#shadow.validate(schema);
     }
 
     _build(shadow) {
         for (const concept of shadow.concepts) {
             this.#concepts[concept.name] = {
                 name: concept.name,
-                variables: this._variables(concept)
+                variables: concept.getAllVariables()
             };
             this._build(concept);
         }
     }
-
-    _variables(shadow, result = {}) {
-        for (const variable of shadow.variables) {
-            result[variable.name] = { name: variable.name };
-        }
-
-        for(const literal of shadow.literals) {
-            this._variables(literal, result);
-        }
-
-        return result;
-    }
-}
-
-function _validate(definition, schema) {
-    if (typeof definition === 'string') {
-        return _validateValue(definition, schema);
-    }
-
-    for (const key in definition) {
-        let schemaKey = key;
-
-        if (SC.VARIABLE.matches(key)) {
-            schemaKey = Object.keys(schema)[0];
-        } else if (!schema.hasOwnProperty(key)) {
-            return false;
-        }
-
-        if (!_validate(definition[key], schema[schemaKey])) {
-            return false;
-        }
-    }
-
-    return Object.keys(definition).length == Object.keys(schema).length;
-}
-
-function _validateValue(definition, schema) {
-    if (SC.VARIABLE.matches(definition)) {
-        return true;
-    }
-
-    return definition === schema;
 }
 
 module.exports = Concepts;
 
 const Schema = require('./schema');
 const ConceptsShadow = require('./concepts-shadow');
-const { SpecialCharacters: SC, required, loadJSON } = require('./util');
+const { required, loadJSON } = require('./util');

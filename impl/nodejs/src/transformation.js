@@ -80,9 +80,7 @@
         if (!(schema instanceof Schema)) {
             schema = this.#source.create(schema);
         } else {
-            if (!this.#source.validate(schema.definition)) {
-                throw error.SCHEMA_is_not_valid(schema.definition);
-            }
+            this.#source.validate(schema);
         }
 
         return this.#target.create(
@@ -110,17 +108,20 @@
         }
     }
 
+    /**
+     * @param {SchemaShadow} schema 
+     * @param {ConceptsShadow} target 
+     * @param {Object} context 
+     * 
+     * @returns {Object}
+     */
     _transform(schema, target, context = {}) {
-        if (target.hasAnyVariables()) {
-            const result = [];
-
-            for (const variable of target.variables) {
-                if (context.hasOwnProperty(variable.name)) {
-                    result.push(context[variable.name]);
-                }
+        if (target.hasOnlyVariableLeafNode()) {
+            if (!context.hasOwnProperty(target.variable.name)) {
+                return null;
             }
-
-            return result.length > 1 ? result : result.length > 0 ? result[0] : null;
+            
+            return context[target.variable.name];
         }
 
         const result = {};
@@ -143,7 +144,9 @@
 
 module.exports = Transformation;
 
-const { error, arrayify, required, loadJSON } = require('./util');
 const Concepts = require('./concepts');
 const Schema = require('./schema');
 const Query = require('./query');
+const SchemaShadow = require('./schema-shadow');
+const ConceptsShadow = require('./concepts-shadow');
+const { error, arrayify, required, loadJSON } = require('./util');

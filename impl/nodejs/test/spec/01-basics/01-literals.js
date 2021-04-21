@@ -1,4 +1,4 @@
-const { Concepts } = require('../../../index');
+const { Concepts } = require('../../..');
 const { error } = require('../../../src/util');
 const { should } = require('chai');
 
@@ -12,14 +12,14 @@ describe('spec/basics/literals', function () {
             }
         });
 
-        concepts.validate({
+        (() => concepts.validate({
             "sayHello": {
                 "name": "string"
             }
-        }).should.equal(true);
+        })).should.not.throw();
     });
 
-    it('should give error when definition is not supplied to constructor', function() {
+    it('should give error when definition is not supplied to constructor', function () {
         (() => new Concepts())
             .should.throw(error.PARAMETER_is_required('definition').message);
     });
@@ -31,8 +31,14 @@ describe('spec/basics/literals', function () {
             }
         });
 
-        concepts.validate().should.equal(false);
-        concepts.validate(null).should.equal(false);
+        (() => concepts.validate())
+            .should.throw(error.PARAMETER_is_required('schema').message);
+        (() => concepts.validate(null))
+            .should.throw(
+                error.Definition_is_not_valid__because__REASON(
+                    because => because.CONCEPT_is_missing('sayHello')
+                ).message
+            );
     });
 
     it('should not validate if root keys does not exist', function () {
@@ -42,7 +48,12 @@ describe('spec/basics/literals', function () {
             }
         });
 
-        concepts.validate({}).should.equal(false);
+        (() => concepts.validate({}))
+            .should.throw(
+                error.Definition_is_not_valid__because__REASON(
+                    because => because.CONCEPT_is_missing('sayHello')
+                ).message
+            );
     });
 
     it('should not validate if all schema is not the same recursively', function () {
@@ -52,10 +63,13 @@ describe('spec/basics/literals', function () {
             }
         });
 
-        concepts.validate({
-            "sayHello": {
-            }
-        }).should.equal(false);
+        (() => concepts.validate({
+            "sayHello": {}
+        })).should.throw(
+            error.Definition_is_not_valid__because__REASON(
+                because => because.LITERAL_is_missing('name')
+            ).message
+        );
     });
 
     it('should not validate if schema has more things than concepts', function () {
@@ -65,12 +79,16 @@ describe('spec/basics/literals', function () {
             }
         });
 
-        concepts.validate({
+        (() => concepts.validate({
             "sayHello": {
                 "name": "string",
                 "surname": "string"
             }
-        }).should.equal(false);
+        })).should.throw(
+            error.Definition_is_not_valid__because__REASON(
+                because => because.TOKEN_is_not_expected('surname')
+            ).message
+        );
     });
 
     it('should not validate if value side does not fit concepts literal', function () {
@@ -80,10 +98,14 @@ describe('spec/basics/literals', function () {
             }
         });
 
-        concepts.validate({
+        (() => concepts.validate({
             "sayHello": {
                 "name": "text"
             }
-        }).should.equal(false);
+        })).should.throw(
+            error.Definition_is_not_valid__because__REASON(
+                because => because.Expected_LITERAL__but_got_VALUE('string', 'text')
+            ).message
+        );
     });
 });

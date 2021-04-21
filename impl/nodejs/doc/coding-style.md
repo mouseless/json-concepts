@@ -216,15 +216,20 @@ async function async(parameter) {
 
 }
 
-function _private() {
-    // no JSDoc for private functions
+/**
+ * @param {ParameterType} parameter
+ */
+function _private(parameter) {
+    // JSDoc is not required, but added when needed
 }
 
 class Class { // no JSDoc for classes
     /**
-     * Any anonymous object is documented at the top of its class.
+     * Any anonymous object is documented at the top of its class. Anonymous
+     * objects must have a Data prefix to not to confuse them with other
+     * classes.
      * 
-     * @typedef {Object} Type
+     * @typedef {Object} CustomData
      * @property {String} name Document properties like parameters
      */
 
@@ -260,10 +265,31 @@ const Enum = {
 ## Enums
 
 ```javascript
-const Example = {
+const Public = {
     VALUE_1: 1,
     VALUE_2: 2
 };
+
+const _private = {
+    VALUE_1 = 1,
+    VALUE_2 = 2
+};
+```
+
+## Modules
+
+```javascript
+const PublicConstant = { };
+
+const _privateConstant = "";
+
+function publicFunction() {
+
+}
+
+function _privateFunction() {
+
+}
 ```
 
 ## Classes
@@ -307,6 +333,7 @@ class Example {
 function _privateStaticMethods() {
     
 }
+
 ```
 
 ### Exported Publicly

@@ -1,4 +1,5 @@
-const { Concepts } = require('../../../index');
+const { Concepts } = require('../../..');
+const { error } = require('../../../src/util');
 const { should: buildShould } = require('chai');
 
 const should = buildShould();
@@ -11,11 +12,11 @@ describe('spec/basics/concepts', function () {
             }
         });
 
-        concepts.validate({
+        (() => concepts.validate({
             "sayGoodbye": {
                 "cry": "boolean"
             }
-        }).should.equal(true);
+        })).should.not.throw();
     });
 
     it('should be able to list all concepts', function () {
@@ -112,12 +113,12 @@ describe('spec/basics/concepts', function () {
                 }
             });
 
-            concepts.validate({
+            (() => concepts.validate({
                 "sayGoodbye": {
                     "cry": "boolean",
                     "response": "string"
                 }
-            }).should.equal(true);
+            })).should.not.throw();
         });
 
         it('should not validate', function () {
@@ -128,11 +129,13 @@ describe('spec/basics/concepts', function () {
                 }
             });
 
-            concepts.validate({
+            (() => concepts.validate({
                 "sayGoodbye": {
                     "cry": "boolean"
                 }
-            }).should.equal(false);
+            })).should.throw(error.Definition_is_not_valid__because__REASON(
+                because => because.LITERAL_is_missing('response')
+            ).message);
         });
     });
 
@@ -145,12 +148,14 @@ describe('spec/basics/concepts', function () {
                 }
             });
 
-            concepts.validate({
+            (() => concepts.validate({
                 "sayGoodbye": {
                     "response": "string",
                     "response": "string"
                 }
-            }).should.equal(false);
+            })).should.throw(error.Definition_is_not_valid__because__REASON(
+                because => because.CONCEPT_is_missing('parameter')
+            ).message);
         });
     });
 });

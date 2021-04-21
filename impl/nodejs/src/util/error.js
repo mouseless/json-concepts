@@ -13,33 +13,56 @@ const Names = {
 /**
  * Builds reason message for given concepts name.
  * 
- * @callback reasonMessageBuilder
+ * @callback invalidTransformationReasonBuilder
  * @param {String} concepts Name of concepts
  * 
  * @returns {String} Reason message
  */
 /**
- * Reason message builders
+ * Reason message builders for invalid transformations.
  */
-const Reasons = {
+const InvalidTransformationReasons = {
     /**
-     * Use this when a concept with given name was expected.
-     * 
-     * @param {String} CONCEPT Name of the expected concept
-     * 
-     * @returns {reasonMessageBuilder} Reason message builder to be used with a
-     * concepts name.
+     * @returns {invalidTransformationReasonBuilder}
      */
     CONCEPT_not_found: CONCEPT => CONCEPTS => `Concept named '${CONCEPT}' is not found in ${CONCEPTS} concepts`,
     /**
-     * Use this when a variable with given name was expected.
-     * 
-     * @param {String} VARIABLE Name of the expected variable
-     * 
-     * @returns {reasonMessageBuilder} Reason message builder to be used with a
-     * concepts name.
+     * @returns {invalidTransformationReasonBuilder}
      */
     VARIABLE_not_found: VARIABLE => CONCEPTS => `Variable named '${VARIABLE}' is not found in ${CONCEPTS} concepts`,
+}
+
+/**
+ * Reason messages for invalid schemas.
+ */
+const InvalidSchemaReasons = {
+    CONCEPT_is_missing: CONCEPT => `'${CONCEPT}' is missing`,
+    LITERAL_is_missing: LITERAL => `'${LITERAL}' is missing`,
+    Expected_LITERAL__but_got_VALUE: (LITERAL, VALUE) => `Expected '${LITERAL}', but got '${VALUE}'`,
+    TOKEN_is_not_expected: TOKEN => `'${TOKEN}' is not expected`,
+    Maximum_allowed_number_of_CONCEPT_is_MAX__but_got_COUNT:
+        (CONCEPT, MAX, COUNT) => `Maximum allowed number of '${CONCEPT}' is ${MAX}, but got ${COUNT}`,
+    LITERAL_expects_an_array_for_VARIABLE__but_got_an_instance_of_TYPE:
+        (LITERAL, VARIABLE, TYPE) => `'${LITERAL}' expects an array for '${SC.VARIABLE}${VARIABLE}', ` +
+            `but got an instance of ${TYPE}`,
+    LITERAL_expects_an_array_for_VARIABLE__but_got_null:
+        (LITERAL, VARIABLE) => `'${LITERAL}' expects an array for '${SC.VARIABLE}${VARIABLE}', but got null`,
+    LITERAL_expects_an_array_for_VARIABLE__but_got_VALUE:
+        (LITERAL, VARIABLE, VALUE) => VALUE === null
+            ? InvalidSchemaReasons.LITERAL_expects_an_array_for_VARIABLE__but_got_null(
+                LITERAL, VARIABLE
+            )
+            : InvalidSchemaReasons.LITERAL_expects_an_array_for_VARIABLE__but_got_an_instance_of_TYPE(
+                LITERAL, VARIABLE, typeof VALUE
+            ),
+    Minimum_allowed_number_of_CONCEPT_is_MIN__but_got_COUNT:
+        (CONCEPT, MIN, COUNT) => `Minimum allowed number of '${CONCEPT}' is ${MIN}, but got ${COUNT}`,
+    LITERAL_requires_VARIABLE_array_to_have_at_least_MIN_item_s___but_got_COUNT:
+        (LITERAL, VARIABLE, MIN, COUNT) => `${LITERAL} requires '${SC.VARIABLE}${VARIABLE}' array ` +
+            `to have at least ${MIN} item(s), but got ${COUNT}`,
+    LITERAL_requires_VARIABLE_array_to_have_at_most_MAX_item_s___but_got_COUNT:
+        (LITERAL, VARIABLE, MAX, COUNT) => `${LITERAL} requires '${SC.VARIABLE}${VARIABLE}' array ` +
+            `to have at most ${MAX} item(s), but got ${COUNT}`
 }
 
 function _error(message, name = Names.ERROR) {
@@ -52,7 +75,12 @@ function _error(message, name = Names.ERROR) {
 
 module.exports = {
     Names,
-    Reasons,
+    PARAMETER_is_required(PARAMETER) {
+        return _error(`${PARAMETER} is required`);
+    },
+    Expected_type_was_EXPECTED_got_ACTUAL(EXPECTED, ACTUAL) {
+        return _error(`Expected type was '${EXPECTED}', got '${ACTUAL}'`);
+    },
     FILE_is_not_a_valid_json(FILE) {
         return _error(`'${FILE}' is not a valid json`);
     },
@@ -68,39 +96,49 @@ module.exports = {
             ` Either specify @concepts meta-data within ${SCHEMA}, or pass concepts as a parameter.`
         );
     },
-    PARAMETER_is_required(PARAMETER) {
-        return _error(`${PARAMETER} is required`);
+    Cannot_parse_quantifier__EXPRESSION(EXPRESSION) {
+        return _error(`Cannot parse quantifier: ${EXPRESSION}`)
     },
-    SCHEMA_is_not_valid(SCHEMA) {
-        if (typeof SCHEMA === 'object') {
-            SCHEMA = 'Schema';
-        }
-
-        return _error(`${SCHEMA} is not valid`, Names.SCHEMA_ERROR);
-    },
-    Expected_type_was_EXPECTED_got_ACTUAL(EXPECTED, ACTUAL) {
-        return _error(`Expected type was '${EXPECTED}', got '${ACTUAL}'`);
-    },
-
     /**
      * Selects reason from given reasons.
      * 
-     * @callback reasonCallback
-     * @param {Reasons} reasons Reason builder
+     * @callback invalidSchemaReasonCallback
+     * @param {InvalidSchemaReasons}
      * 
-     * @returns {reasonMessageBuilder}
+     * @returns {String}
      */
     /**
+     * @param {invalidSchemaReasonCallback} REASON 
      * 
+     * @returns {Error} SchemaError
+     */
+    Definition_is_not_valid__because__REASON(REASON) {
+        return _error(
+            `Definition is not valid: ${REASON(InvalidSchemaReasons)}.`,
+            Names.SCHEMA_ERROR
+        );
+    },
+    SCHEMA_is_not_valid__Error_is_ERROR(SCHEMA, ERROR) {
+        return _error(`Schema '${SCHEMA}' is not valid. Error is: ${ERROR}`, Names.SCHEMA_ERROR);
+    },
+    /**
+     * Selects reason from given reasons.
+     * 
+     * @callback invalidTransformationReasonCallback
+     * @param {InvalidTransformationReasons} reasons Reason builder
+     * 
+     * @returns {invalidTransformationReasonBuilder}
+     */
+    /**
      * @param {String} CONCEPTS 
-     * @param {reasonCallback} REASON 
+     * @param {invalidTransformationReasonCallback} REASON 
      * 
-     * @returns {Error} An error with name set to `Names.SchemaError`
+     * @returns {Error} SchemaError
      */
     Definition_is_not_compatible_with_its_CONCEPTS__because__REASON(CONCEPTS, REASON) {
         return _error(
-            `Definition is not compatible with its ${CONCEPTS}, ` +
-            `because: ${REASON(Reasons)(CONCEPTS)}`,
+            `Definition is not compatible with its ${CONCEPTS}: ` +
+            `${REASON(InvalidTransformationReasons)(CONCEPTS)}`,
             Names.SCHEMA_ERROR
         );
     },
@@ -108,3 +146,5 @@ module.exports = {
         return _error(`Transformation '${TRANSFORMATION}' is not valid. Error is: ${ERROR}`);
     }
 };
+
+const SC = require('./special-characters');

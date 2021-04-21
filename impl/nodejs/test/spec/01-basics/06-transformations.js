@@ -1,4 +1,4 @@
-const { Transformation, Schema, Concepts } = require('../../../index');
+const { Transformation, Concepts } = require('../../..');
 const { error } = require('../../../src/util');
 const fs = require('mock-fs');
 const { use, should } = require('chai');
@@ -144,8 +144,11 @@ describe('spec/basics/transformations', function () {
         });
 
         (() => transformation.transform(targetInput))
-            .should.throw(error.SCHEMA_is_not_valid('Schema').message);
-
+            .should.throw(
+                error.Definition_is_not_valid__because__REASON(
+                    because => because.LITERAL_is_missing('response')
+                ).message
+            );
     });
 
     it('should verify that given source and target are compatible with transformation', function () {

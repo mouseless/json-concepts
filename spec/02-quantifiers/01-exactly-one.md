@@ -90,8 +90,21 @@ Error message should contain the missing literal;
 
 ## Null Variables
 
-`?` quantifier does not mean a variable is required. It is valid to set
-variables to `null`. So below schema is **VALID**;
+It is valid to set variables to `null`. Below concepts has two variables `type`
+and `responseType`.
+
+`CONCEPTS: service.concepts.json`
+
+```json
+{
+    "$service": {
+        "$parameter": "$type",
+        "response": "$responseType"
+    }
+}
+```
+
+Below schema is **VALID**;
 
 `SCHEMA: greeting.service.json`
 

@@ -10,7 +10,7 @@ optional under the `service` concept;
 ```json
 {
     "$service": {
-        "$parameter?": "string"
+        "$parameter?": "$type"
     }
 }
 ```
@@ -53,7 +53,8 @@ But below is **NOT** valid, because at most one parameter was expected;
 Validation is not expected to specify exactly what is wrong. A message like
 this is sufficient;
 
-`ERROR: 'greeting.service.json' is not valid, 'surname' was not expected`
+`ERROR: 'greeting.service.json' is not valid, maximum allowed number of`
+`'parameter' is 1, but got 2`
 
 ## Key Literals
 
@@ -64,8 +65,8 @@ A key literal also becomes optional with `?` at the end;
 ```json
 {
     "$service": {
-        "$parameter?": "string",
-        "response?": "string"
+        "$parameter?": "$type",
+        "response?": "$responseType"
     }
 }
 ```

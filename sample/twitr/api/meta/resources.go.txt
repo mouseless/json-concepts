@@ -1,0 +1,58 @@
+package service
+
+import (
+	"errors"
+	"net/http"
+)
+
+const (
+	__METHOD__ = "__METHOD__" // #method
+)
+
+func WriteError(x interface{}, y interface{}, z interface{}) {
+
+}
+
+func write(w interface{}, y interface{}) {
+
+}
+
+/* #resource */
+type __Resource__Handler struct {
+	__dependency__Service service.__Dependency__Service // #dependency
+}
+
+func New__Resource__Handler( /* #dependency */ __dependency__Service service.__Dependency__Service /* ,/ */) *__Resource__Handler {
+	return &__Resource__Handler{ /* #dependency */ __dependency__Service: __dependency__Service /* ,/ */}
+}
+
+func (h *__Resource__Handler) Handle__Resource__(w http.ResponseWriter, r *http.Request) {
+	switch r.Method {
+	/* #method */
+	case __METHOD__:
+		h.__ServiceName__(w, r)
+	/* / */
+	default:
+		WriteError(w, nil, http.StatusMethodNotAllowed)
+	}
+}
+
+/* #method */
+func (h *__Resource__Handler) __ServiceName__(w http.ResponseWriter, r *http.Request) {
+	id := r.URL.Path[len("__path__"):]
+	if id == "" {
+		WriteError(w, errors.New("__resource__ id is required"), http.StatusBadRequest)
+		return
+	}
+
+	u, err := h.__dependency__Service.__ServiceName__(id)
+	if err != nil {
+		WriteError(w, err, http.StatusInternalServerError)
+		return
+	}
+	write(w, u)
+}
+
+/* / */
+
+/* / */

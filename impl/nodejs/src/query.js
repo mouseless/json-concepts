@@ -61,7 +61,7 @@ class Query {
      * Executed for each source found in given schema.
      * 
      * @callback executeCallback
-     * @param {Object} childSchema Child schema found in given schema
+     * @param {SchemaShadow} childSchema Child schema found in given schema
      * @param {Object} variableContext Projected variable context 
      */
     /**
@@ -69,7 +69,7 @@ class Query {
      * target schema. For every child schema calls back given function with
      * child schema and projected variable context.
      * 
-     * @param {Object} schema Schema on which this query will be executed
+     * @param {SchemaShadow} schema Schema on which this query will be executed
      * @param {executeCallback} callback  Function to callback for each child
      * schema.
      */
@@ -84,23 +84,27 @@ class Query {
         }
     };
 
+    /**
+     * @param {SchemaShadow} schema 
+     * 
+     * @returns {Array.<SchemaShadow>}
+     */
     _from(schema) {
-        if (!schema.hasSchemas(this.#definition.from)) {
-            return [];
-        }
-
         return schema.getSchemas(this.#definition.from);
     }
 
+    /**
+     * @param {SchemaShadow} schema 
+     * 
+     * @returns {Object}
+     */
     _select(schema) {
         const projection = {};
 
         for (const targetKey in this.#definition.select) {
             const sourceKey = this.#definition.select[targetKey];
 
-            if (schema.hasVariable(sourceKey)) {
-                projection[targetKey] = schema.getVariable(sourceKey).data;
-            }
+            projection[targetKey] = schema.getVariable(sourceKey).data;
         }
 
         return projection;
@@ -110,4 +114,5 @@ class Query {
 module.exports = Query;
 
 const Concepts = require('./concepts');
+const SchemaShadow = require('./schema-shadow');
 const { error, required } = require('./util');

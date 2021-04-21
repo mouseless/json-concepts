@@ -22,8 +22,8 @@ For example;
 ```json
 {
     "$service{1,3}": {
-        "$parameter{0,2}": "$type",
-        "response{,1}": "$responseType",
+        "$parameter{,2}": "$type",
+        "response{1}": "$responseType",
         "tags{0,}": "$tags"
 
     }
@@ -46,6 +46,7 @@ This concepts definition should have following shadow;
             {
                 "_": "response",
                 "quantifier": {
+                    "min": 1,
                     "max": 1
                 },
                 "variable": {
@@ -65,17 +66,19 @@ This concepts definition should have following shadow;
         "concept": {
             "_": "parameter",
             "quantifier": {
-                "min": 0,
                 "max": 2
             },
             "variable": {
-                "_": "responseType"
+                "_": "type"
             }
         }
     }
 }
 ```
 
-It is trivial to give schema validation examples here. The only thing that
-matters is when `max` is `1`, corresponding concept or variable becomes an
-object, otherwise it is an array.
+It is trivial to give schema validation examples here. Any concept or literal
+should not have less occurrence than its minimum quantifier, and should not
+have more occurrence than its maximum quantifier.
+
+Lastly, when `max` is `1`, corresponding concept or variable becomes an
+object, otherwise it should always be an array.
