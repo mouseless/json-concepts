@@ -118,24 +118,17 @@ have a max;
 {
     "concept": {
         "_": "service", 
-        "quantifier": {
-            "min": 1
-        },
+        "quantifier": { "min": 1 },
         "literal": {
             "_": "tags",
-            "quantifier": {
-                "min": 1
-            },
+            "quantifier": { "min": 1 },
             "variable": {
                 "_": "tags"
             }
         },
         "concept": {
             "_": "parameter",
-            "quantifier": {
-                "min": 0,
-                "max": 1
-            },
+            "quantifier": { "min": 0, "max": 1 },
             "variable": {
                 "_": "type"
             }

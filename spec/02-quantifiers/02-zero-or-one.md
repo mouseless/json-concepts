@@ -108,20 +108,14 @@ Concepts shadow is as follows;
         "_": "service",
         "literal": {
             "_": "response",
-            "quantifier": {
-                "min": 0,
-                "max": 1
-            },
+            "quantifier": { "min": 0, "max": 1 },
             "variable": {
                 "_": "responseType"
             }
         },
         "concept": {
             "_": "parameter",
-            "quantifier": {
-                "min": 0,
-                "max": 1
-            },
+            "quantifier": { "min": 0, "max": 1 },
             "variable": {
                 "_": "type"
             }

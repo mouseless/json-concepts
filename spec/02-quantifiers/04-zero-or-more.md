@@ -83,23 +83,17 @@ their min set to zero;
 {
     "concept": {
         "_": "service",
-        "quantifier": {
-            "min": 1
-        },
+        "quantifier": { "min": 1 },
         "literal": {
             "_": "tags",
-            "quantifier": {
-                "min": 0
-            },
+            "quantifier": { "min": 0 },
             "variable": {
                 "_": "tags"
             }
         },
         "concept": {
             "_": "parameter",
-            "quantifier": {
-                "min": 0
-            },
+            "quantifier": { "min": 0 },
             "variable": {
                 "_": "type"
             }
