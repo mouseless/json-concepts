@@ -182,7 +182,7 @@ in an array. Key literals are also stored in an array. Below is an example;
             "tags": [ "readonly", "friendly" ]
         },
         {
-            "_": "sayHello",
+            "_": "sayGoodbye",
             "parameter": null,
             "tags": [ "readonly" ]
         }

@@ -104,7 +104,7 @@ describe('spec/basics/literals', function () {
             }
         })).should.throw(
             error.Definition_is_not_valid__because__REASON(
-                because => because.Expected_LITERAL_got_VALUE('string', 'text')
+                because => because.Expected_LITERAL__but_got_VALUE('string', 'text')
             ).message
         );
     });

@@ -55,17 +55,11 @@ class ConceptsShadow {
      */
     get name() { return this.#name; }
     /**
-     * Quantifier definition of this node.
-     * 
-     * @returns {QuantifierData}
-     */
-    get quantifier() { return this.#quantifier != null ? this.#quantifier : keyExpression.Quantifiers.DEFAULT; }
-    /**
      * Array of variable nodes under this node.
      * 
      * @returns {Array.<ConceptsShadow>}
      */
-    get variable() { return this.#variable; }
+    get variable() { return Object.freeze(this.#variable); }
     /**
      * Array of literal nodes under this node.
      * 
@@ -84,7 +78,34 @@ class ConceptsShadow {
      * 
      * @returns {Object}
      */
-    get data() { return this.#data; }
+    get data() { return Object.freeze(this.#data); }
+
+    /**
+     * Quantifier definition of this node. Result is guaranteed to have min and
+     * max values.
+     * 
+     * @returns {QuantifierData}
+     */
+    get quantifier() {
+        let result;
+
+        if (this.#quantifier == null) {
+            result = keyExpression.Quantifiers.DEFAULT;
+        } else {
+            let min = this.#quantifier.min;
+            if (min === undefined) {
+                min = 0;
+            }
+
+            let max = this.#quantifier.max;
+            if (max === undefined) {
+                max = Number.POSITIVE_INFINITY;
+            }
+            result = { min: min, max: max };
+        }
+
+        return Object.freeze(result);
+    }
 
     /**
      * Makes a deep search and returns all variables in the tree.
@@ -164,10 +185,7 @@ class ConceptsShadow {
         }
 
         if (this.#quantifier != null) {
-            this.#data.quantifier = {
-                min: this.#quantifier.min,
-                max: this.#quantifier.max
-            };
+            this.#data.quantifier = this.#quantifier;
         }
 
         if (this.variable != null) {
@@ -193,7 +211,25 @@ class ConceptsShadow {
      */
     validate(schemaDefinition) {
         if (this.hasOnlyVariableLeafNode()) {
-            // variable validation here
+            if (this.#type == keyExpression.Types.LITERAL) {
+                if (this.quantifier.max > 1) {
+                    if (!Array.isArray(schemaDefinition)) {
+                        throw error.Definition_is_not_valid__because__REASON(
+                            because => because.LITERAL_expects_an_array_for_VARIABLE__but_got_an_instance_of_TYPE(
+                                this.name, this.variable.name, typeof schemaDefinition
+                            )
+                        );
+                    }
+
+                    if (schemaDefinition.length < this.quantifier.min) {
+                        throw error.Definition_is_not_valid__because__REASON(
+                            because => because.LITERAL_requires_VARIABLE_array_to_have_at_least_MIN_item_s___but_got_COUNT(
+                                this.name, this.variable.name, this.quantifier.min, schemaDefinition.length
+                            )
+                        )
+                    }
+                }
+            }
 
             return;
         }
@@ -203,7 +239,7 @@ class ConceptsShadow {
 
             if (schemaDefinition !== literal.name) {
                 throw error.Definition_is_not_valid__because__REASON(
-                    because => because.Expected_LITERAL_got_VALUE(literal.name, schemaDefinition)
+                    because => because.Expected_LITERAL__but_got_VALUE(literal.name, schemaDefinition)
                 );
             }
 
@@ -267,9 +303,17 @@ class ConceptsShadow {
 
         for (const concept of this.concepts) {
             if (quantities[concept.name] < concept.quantifier.min) {
-                throw error.Definition_is_not_valid__because__REASON(
-                    because => because.CONCEPT_is_missing(concept.name)
-                );
+                if (concept.quantifier == keyExpression.Quantifiers.DEFAULT) {
+                    throw error.Definition_is_not_valid__because__REASON(
+                        because => because.CONCEPT_is_missing(concept.name)
+                    );
+                } else {
+                    throw error.Definition_is_not_valid__because__REASON(
+                        because => because.Minimum_allowed_number_of_CONCEPT_is_MIN__but_got_COUNT(
+                            concept.name, concept.quantifier.min, quantities[concept.name]
+                        )
+                    );
+                }
             } else if (quantities[concept.name] > concept.quantifier.max) {
                 throw error.Definition_is_not_valid__because__REASON(
                     because => because.Maximum_allowed_number_of_CONCEPT_is_MAX__but_got_COUNT(

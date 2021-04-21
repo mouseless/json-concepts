@@ -46,8 +46,8 @@ const _scHash = {
 const Quantifiers = {
     DEFAULT: { min: 1, max: 1 },
     [SC.ZERO_OR_ONE]: { min: 0, max: 1 },
-    [SC.ONE_OR_MORE]: { min: 1, max: Number.POSITIVE_INFINITY },
-    [SC.ZERO_OR_MORE]: { min: 0, max: Number.POSITIVE_INFINITY }
+    [SC.ONE_OR_MORE]: { min: 1 },
+    [SC.ZERO_OR_MORE]: { min: 0 }
 };
 
 /**

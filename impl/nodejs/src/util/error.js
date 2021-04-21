@@ -38,10 +38,18 @@ const InvalidTransformationReasons = {
 const InvalidSchemaReasons = {
     CONCEPT_is_missing: CONCEPT => `'${CONCEPT}' is missing`,
     LITERAL_is_missing: LITERAL => `'${LITERAL}' is missing`,
-    Expected_LITERAL_got_VALUE: (LITERAL, VALUE) => `Expected '${LITERAL}', got '${VALUE}'`,
+    Expected_LITERAL__but_got_VALUE: (LITERAL, VALUE) => `Expected '${LITERAL}', but got '${VALUE}'`,
     TOKEN_is_not_expected: TOKEN => `'${TOKEN}' is not expected`,
     Maximum_allowed_number_of_CONCEPT_is_MAX__but_got_COUNT:
-        (CONCEPT, MAX, COUNT) => `Maximum allowed number of '${CONCEPT}' is ${MAX}, but got ${COUNT}`
+        (CONCEPT, MAX, COUNT) => `Maximum allowed number of '${CONCEPT}' is ${MAX}, but got ${COUNT}`,
+    LITERAL_expects_an_array_for_VARIABLE__but_got_an_instance_of_TYPE:
+        (LITERAL, VARIABLE, TYPE) => `'${LITERAL}' expects an array for '${SC.VARIABLE}${VARIABLE}', ` +
+        `but got an instance of ${TYPE}`,
+    Minimum_allowed_number_of_CONCEPT_is_MIN__but_got_COUNT:
+        (CONCEPT, MIN, COUNT) => `Minimum allowed number of '${CONCEPT}' is ${MIN}, but got ${COUNT}`,
+    LITERAL_requires_VARIABLE_array_to_have_at_least_MIN_item_s___but_got_COUNT:
+        (LITERAL, VARIABLE, MIN, COUNT) => `${LITERAL} requires '${SC.VARIABLE}${VARIABLE}' array ` +
+        `to have at least ${MIN} item(s), but got ${COUNT}`
 }
 
 function _error(message, name = Names.ERROR) {
@@ -122,3 +130,5 @@ module.exports = {
         return _error(`Transformation '${TRANSFORMATION}' is not valid. Error is: ${ERROR}`);
     }
 };
+
+const SC = require('./special-characters');

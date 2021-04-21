@@ -46,7 +46,7 @@ class SchemaShadow {
      * 
      * @returns {Object}
      */
-    get data() { return this.#data; }
+    get data() { return Object.freeze(this.#data); }
 
     /**
      * Helper method to get the variable node with given name.
@@ -64,7 +64,7 @@ class SchemaShadow {
      * @returns {Array.<SchemaShadow>} Schema nodes with given name under this
      * node.
      */
-    getSchemas(name = required('name')) { return this.#schemas[name]; }
+    getSchemas(name = required('name')) { return Object.freeze(this.#schemas[name]); }
 
     /**
      * Recursively builds this node using given schema definition.
@@ -116,7 +116,7 @@ class SchemaShadow {
             this.#variables[conceptsShadow.variable.name] = shadow;
         } else {
             const keys = {};
-            if(definition != null) {
+            if (definition != null) {
                 Object.keys(definition).forEach(key => keys[key] = true);
             }
 
