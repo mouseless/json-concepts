@@ -13,3 +13,5 @@
     }
 }
 ```
+
+> Concept name types must inherit from string

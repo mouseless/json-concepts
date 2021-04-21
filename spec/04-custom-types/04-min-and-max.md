@@ -1,4 +1,4 @@
-# Min & Max
+# Min and Max
 
 Min and max validators validate either a `number` or the length of a `string`.
 

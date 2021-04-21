@@ -1,11 +1,11 @@
 # Regex
 
-Regex validator can be applied to custom types that inherits from `string`. You
+Regex validator can be applied to custom types that inherit from `string`. You
 can define a regex pattern under `regex` key. For the following concepts
 definition, `identifier` type only accepts values that match the given regex
 pattern;
 
-`service.concepts.json`
+`CONCEPTS: service.concepts.json`
 
 ```json
 {
@@ -23,6 +23,8 @@ pattern;
 
 Following definition demonstrates a short-hand usage of `regex` validator.
 
+`CONCEPTS: service.concepts.json`
+
 ```json
 {
     "$service+": {
@@ -34,17 +36,40 @@ Following definition demonstrates a short-hand usage of `regex` validator.
 }
 ```
 
-For above concepts definition following data;
+Both of the concepts definitions have following meta-data in their shadow;
+
+`CONCEPTS SHADOW`
 
 ```json
 {
-    "service": [
-        {
-            "_key": "say hello"
-        }
-    ]
+    ...
+    "metaData": {
+        "types": [
+            {
+                "_": "identifier",
+                "type": "string",
+                "validator": {
+                    "_": "regex",
+                    "value": "/[a-zA-Z]/g"
+                }
+            }
+        ]
+    }
 }
 ```
 
-does **NOT** create a schema because `say hello` does **NOT** match
-`/[a-zA-Z]/g` pattern. So it gives a proper validation error.
+For above concepts definition following schema is **NOT** valid;
+
+`SCHEMA: greeting.service.json`
+
+```json
+{
+    "service": {
+        "name": "say hello"
+    }
+}
+```
+
+Because `say hello` does **NOT** match `/[a-zA-Z]/g` pattern.
+
+`ERROR: 'greeting.service.json' is not valid, 'say hello' is not a valid identifier`
