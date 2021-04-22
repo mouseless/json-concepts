@@ -74,6 +74,9 @@ or this;
 }
 ```
 
+> TBD - what happens when it has a concept with same name? probably it will
+> become an invalid concepts definition
+
 ## Concepts Under Object Arrays
 
 > TBD should below definition, restrict each item to be the same, or should they

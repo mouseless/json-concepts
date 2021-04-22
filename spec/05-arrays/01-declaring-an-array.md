@@ -1,19 +1,6 @@
 # Declaring an Array
 
-When a literal has `+` or `*` quantifiers it means that value of that literal
-should be an array.
-
-`CONCEPTS: service.concepts.json`
-
-```json
-{
-    "$service+": {
-        "tags*": "$tags"
-    }
-}
-```
-
-A more convenient way of declaring an array is as follows;
+Below is an array declaration for a literal.
 
 `CONCEPTS: service.concepts.json`
 
@@ -25,8 +12,7 @@ A more convenient way of declaring an array is as follows;
 }
 ```
 
-Two concepts definitions above have exactly the same validation rules, but their
-shadow differ. Below shadow is for the latter;
+Below is its shadow;
 
 `CONCEPTS SHADOW`
 
@@ -40,7 +26,7 @@ shadow differ. Below shadow is for the latter;
             "quantifier": { "min": 0, "max": 1 },
             "variable": {
                 "_": "tags",
-                "array": true //??? not sure
+                "array": true
             }
         }
     }
@@ -91,21 +77,33 @@ shadow differ. Below shadow is for the latter;
 
 > TBD -> Maybe forcing array is not a good idea, maybe `"surname": "string"`
 > should also be valid. if so, revise previous specs which were forcing literals
-> to have an array. This would also spread arrayify behavior everywhere.
+> to have an array. This would also spread arrayify behavior everywhere. This
+> way any array variable will accept `null` in schema, but shadow will always
+> have an array.
 >
-> Also maybe shadows SHOULD interpret schema a little bit. Otherwise there will
-> be an unnecessarily extra work for anyone who uses shadow without a library,
-> which makes the shadows pretty much useless...? quantifiers all should have
-> min & max no matter what. literal with a `*` or `+` should have
-> `"array": true`(??) for variables.
+> TBD -> Also maybe shadows SHOULD interpret schema a little bit. Otherwise
+> there will be an unnecessarily extra work for anyone who uses shadow without a
+> library, which makes shadows pretty much useless...? quantifiers all should
+> have min & max no matter what. literal with a `*` or `+` should have
+> `"array": true`(??) for variables. So all implicit things will go into shadow,
+> like variable type will exist in shadow `"type": "any"`.
 
 ```json
 {
     "$service+": {
-        "tags*": [ "$tagLists" ], // what does this mean, a double array?
-        "matrix?": [ [ "$matrix" ] ], // and this is same as tagLists?
-        
-        // so this can go on forever...? yes
+        "matrix?": [ [ "$matrix" ] ], // this is double array
     }
 }
 ```
+
+> TBD -> Maybe allowing `*` and `+` for literals wasn't a good idea, it damages
+> consistency;
+>
+> - `"tags?": [ "$tags" ]` is the same as `"$parameter?": [ "$types" ]`
+> - `"tags*": "$tags"` is not the same `"$parameter*": "$type"`
+>
+> For the first one, both can appear once, and both has arrays. For the
+> second one, `tags` can appear once and has an array, but `parameter` can
+> appear more than once and it has a single value.
+>
+> Let's not allow `*` or `+` in literals. And voila! Inconsistency is gone!
