@@ -2,13 +2,13 @@
 
 This is array of objects;
 
-`service.concepts.json`
+`CONCEPTS: service.concepts.json`
 
 ```json
 {
     "$service+": {
         "parameters*": {
-            "name": "$name", //parent variable name is parameters -> $parameters.name
+            "name": "$name",
             "type": "$type"
         }
     }

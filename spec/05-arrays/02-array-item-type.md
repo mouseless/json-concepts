@@ -9,7 +9,7 @@ This is array of values (same for `+`)
     "$service+": {
         "$parameter*": "$type",
         "response?": "$responseType",
-        "tags*": "$tags:string", //support :any, :boolean, :number, :customType,
+        "tags*": "$tags:string", //support :any, :boolean, :number, :customType
         "marks?": [ "$marks:string" ]
     }
 }

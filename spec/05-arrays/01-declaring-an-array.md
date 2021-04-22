@@ -89,9 +89,15 @@ shadow differ. Below shadow is for the latter;
 }
 ```
 
-> TBD -> maybe forcing array is not a good idea, maybe `"surname": "string"`
-> should also be valid. if so, revise previous specs which was forcing literal
-> to have an array.
+> TBD -> Maybe forcing array is not a good idea, maybe `"surname": "string"`
+> should also be valid. if so, revise previous specs which were forcing literals
+> to have an array. This would also spread arrayify behavior everywhere.
+>
+> Also maybe shadows SHOULD interpret schema a little bit. Otherwise there will
+> be an unnecessarily extra work for anyone who uses shadow without a library,
+> which makes the shadows pretty much useless...? quantifiers all should have
+> min & max no matter what. literal with a `*` or `+` should have
+> `"array": true`(??) for variables.
 
 ```json
 {
