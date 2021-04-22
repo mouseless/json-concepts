@@ -1,11 +1,12 @@
 # Min and Max
 
-Min and max validators validate either a `number` or the length of a `string`.
+Min and max validators can be applied to `number` or `string` variables. When
+applied to a `string`, they validate its length.
 
-For following concepts file, length of `name` should be between `1` and `10`,
-and `dailyCallLimit` should be between `10` and `100`.
+In following concepts definition, length of `name` should be between `1` and
+`10`, and value `dailyCallLimit` should be between `10` and `100`.
 
-`service.concepts.json`
+`CONCEPTS: service.concepts.json`
 
 ```json
 {
@@ -28,47 +29,129 @@ and `dailyCallLimit` should be between `10` and `100`.
 }
 ```
 
-So for following data;
+Above definition has following schema;
 
-`greeting.json`
-
-```json
-{
-    "service": [
-        {
-            "name": "sayHello",
-            "dailyCallLimit": 35
-        }
-    ]
-}
-```
-
-it will create this schema;
-
-`greeting.service.json`
+`CONCEPTS SHADOW`
 
 ```json
 {
-    "sayHello": {
-        "dailyCallLimit": 35
+    "concept": {
+        "_": "service",
+        "quantifier": { "min": 1 },
+        "literal": [
+            {
+                "_": "name",
+                "variable": {
+                    "_": "name",
+                    "type": "identifier"
+                }
+            },
+            {
+                "_": "dailyCallLimit",
+                "variable": {
+                    "_": "dailyCallLimit",
+                    "type": "limit"
+                }
+            }
+        ]
+    },
+    "metaData": {
+        "types": [
+            {
+                "_": "identifier",
+                "type": "string",
+                "validators": [
+                    {
+                        "_": "min",
+                        "value": 1
+                    },
+                    {
+                        "_": "max",
+                        "value": 10
+                    }
+                ]
+            },
+            {
+                "_": "limit",
+                "type": "string",
+                "validators": [
+                    {
+                        "_": "min",
+                        "value": 10
+                    },
+                    {
+                        "_": "max",
+                        "value": 100
+                    }
+                ]
+            }
+        ]
     }
 }
 ```
 
-But for following data;
+Below schemas are **INVALID** because of min-max validations;
 
-`greeting.json`
+---
+
+`SCHEMA 1: greeting.service.json`
 
 ```json
 {
-    "service": [
-        {
-            "name": "sayHello",
-            "dailyCallLimit": 101
-        }
-    ]
+    "sayHello": {
+        "name": "string",
+        "dailyCallLimit": 9
+    }
 }
 ```
 
-It will **NOT** create a schema, because `dailyCallLimit` cannot be larger than
-`100`. So it will give a proper validation error.
+`ERROR: 'greeting.service.json' is not valid, '$dailyCallLimit' cannot be less`
+`than 10.`
+
+---
+
+`SCHEMA 2: greeting.service.json`
+
+```json
+{
+    "sayHello": {
+        "name": "string",
+        "dailyCallLimit": 101
+    }
+}
+```
+
+`ERROR: 'greeting.service.json' is not valid, '$dailyCallLimit' cannot be more`
+`than 100.`
+
+---
+
+`SCHEMA 3: greeting.service.json`
+
+```json
+{
+    "sayHello": {
+        "name": "",
+        "dailyCallLimit": 9
+    }
+}
+```
+
+`ERROR: 'greeting.service.json' is not valid, length of '$name' cannot be less`
+`than 1.`
+
+---
+
+`SCHEMA 4: greeting.service.json`
+
+```json
+{
+    "sayHello": {
+        "name": "01234567890",
+        "dailyCallLimit": 9
+    }
+}
+```
+
+`ERROR: 'greeting.service.json' is not valid, length of '$name' cannot be more`
+`than 10.`

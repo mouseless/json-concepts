@@ -14,4 +14,5 @@ concepts definition is **NOT** valid
 }
 ```
 
-`ERROR: 'example.concepts.json' is not valid, 'concept' cannot have '$value' more than once`
+`ERROR: 'example.concepts.json' is not valid, 'concept' cannot have '$value'`
+`more than once.`

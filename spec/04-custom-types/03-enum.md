@@ -57,10 +57,12 @@ Short-hand for enum validator is as follows;
             {
                 "_": "httpStatus",
                 "type": "number",
-                "validator": {
-                    "_": "enum",
-                    "value": [ 200, 400, 500 ]
-                }
+                "validators": [
+                    {
+                        "_": "enum",
+                        "value": [ 200, 400, 500 ]
+                    }
+                ]
             }
         ]
     }
@@ -83,7 +85,7 @@ definition;
 }
 ```
 
-`ERROR: 'greeting.service.json' is not valid, '404' is not a valid http status`
+`ERROR: 'greeting.service.json' is not valid, '404' is not a valid http status.`
 
 ## Enum of `any` Type
 

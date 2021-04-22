@@ -48,10 +48,12 @@ Both of the concepts definitions have following meta-data in their shadow;
             {
                 "_": "identifier",
                 "type": "string",
-                "validator": {
-                    "_": "regex",
-                    "value": "/[a-zA-Z]/g"
-                }
+                "validators": [
+                    {
+                        "_": "regex",
+                        "value": "/[a-zA-Z]/g"
+                    }
+                ]
             }
         ]
     }
@@ -72,4 +74,5 @@ For above concepts definition following schema is **NOT** valid;
 
 Because `say hello` does **NOT** match `/[a-zA-Z]/g` pattern.
 
-`ERROR: 'greeting.service.json' is not valid, 'say hello' is not a valid identifier`
+`ERROR: 'greeting.service.json' is not valid, 'say hello' is not a valid`
+`identifier.`
