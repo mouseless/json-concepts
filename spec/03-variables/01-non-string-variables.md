@@ -1,7 +1,7 @@
 # Non-String Variables
 
-A value of a variable can be a boolean or a number, surrounding quotes are will
-not be expected in a schema.
+A value of a variable can be a boolean or a number, surrounding quotes will not
+be expected in a schema.
 
 For below concepts definition;
 

@@ -89,4 +89,4 @@ only `string` values.
 ```
 
 > `type` can either be one of the built-in variable types (`boolean`, `string`,
-> `number`, `object` or `any`). Or it can be another custom type.
+> `number` or `any`). Or it can be another custom type.
