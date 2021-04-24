@@ -1,21 +1,6 @@
 # Object Arrays
 
-This is array of objects;
-
-`CONCEPTS: service.concepts.json`
-
-```json
-{
-    "$service+": {
-        "parameters*": {
-            "name": "$name",
-            "type": "$type"
-        }
-    }
-}
-```
-
-or this;
+Below is how to define array of objects;
 
 `CONCEPTS: service.concepts.json`
 
@@ -24,20 +9,22 @@ or this;
     "$service+": {
         "parameters?": [
             {
-                "name": "$pName",
-                "type": "$pType"
+                "name": "$name",
+                "type": "$type"
             }
         ]
     }
 }
 ```
 
+A valid schema is as follows;
+
 `SCHEMA: greeting.service.json`
 
 ```json
 {
     "sayHello": {
-        "parameter": [
+        "parameters": [
             {
                 "name": "name",
                 "type": "string"
@@ -51,46 +38,86 @@ or this;
 }
 ```
 
+Normally shadows does not contain literal names, however in this case name of
+the array is taken from its literal.
+
 `SHADOW SCHEMA`
 
 ```json
 {
     "service": {
         "_": "sayHello",
-
-        // normally literals does not go to shadow, but this one goes
-        // because otherwise name and type cannot be in object format
-        "parameter": [ 
+        "parameters": [ 
             {
-                "pName": "name",
-                "pType": "string"
+                "name": "name",
+                "type": "string"
             },
             {
-                "pName": "surname",
-                "pType": "string"
+                "name": "surname",
+                "type": "string"
             }
         ]
     }
 }
 ```
 
-> TBD - what happens when it has a concept with same name? probably it will
-> become an invalid concepts definition
+## Literal and Concept Conflicts
 
-## Concepts Under Object Arrays
+When a literal is in schema shadow, there occurs a chance of conflict between
+literal and concept names. So a literal and a concept cannot share their name if
+they are under the same scope. Below concepts definition is not valid;
 
-> TBD should below definition, restrict each item to be the same, or should they
-> be free to differ? maybe no, if you want to restrict, restrict them in
-> concepts using literals...? if you restrict, what is the meaning of having an
-> array anyway... it should not restrict, it should validate each item
-> separately
+`CONCEPTS: invalid.concepts.json`
 
 ```json
 {
-    "$service+": {
-        "response?": [ { 
-            "$property*": "$value"
-        } ]
+    "$conflict": "concept",
+    "conflict": "literal"
+}
+```
+
+`ERROR: 'invalid.concepts.json' is not valid, 'conflict' cannot be a literal`
+`and concept at the same time.`
+
+## Concepts and Object Arrays
+
+Object arrays cannot be under a concept, it can only be declared under a
+literal.
+
+So this is invalid;
+
+`CONCEPTS: service.concepts.json`
+
+```json
+{
+    "$service+": { 
+        "$parameters*": [
+            {
+                "type": "$type"
+            }
+        ]
     }
 }
 ```
+
+`ERROR: 'service.concepts.json' is not valid, cannot declare an object array`
+`under a concept`
+
+It is also invalid to declare a concept within an object array;
+
+`CONCEPTS: service.concepts.json`
+
+```json
+{
+    "$service+": { 
+        "parameters?": [
+            {
+                "$property": "$value"
+            }
+        ]
+    }
+}
+```
+
+`ERROR: 'service.concepts.json' is not valid, cannot declare a concept under an`
+`object array`

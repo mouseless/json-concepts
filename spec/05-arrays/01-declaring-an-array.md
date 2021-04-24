@@ -35,6 +35,8 @@ Below is its shadow;
 
 ## Arrays for Concepts
 
+Array declaration is the same with concepts, below is an example;
+
 `CONCEPTS: service.concepts.json`
 
 ```json
@@ -57,12 +59,27 @@ Below is its shadow;
             "quantifier": { "min": 0 },
             "variable": {
                 "_": "types",
-                "array": true //??? not sure
+                "array": true
             }
         }
     }
 }
 ```
+
+## Schemas
+
+`CONCEPTS: service.concepts.json`
+
+```json
+{
+    "$service+": {
+        "$parameter*": [ "$types" ],
+        "tags?": [ "$tags" ]
+    }
+}
+```
+
+Given this concepts definition, below schema is valid;
 
 `SCHEMA: greeting.service.json`
 
@@ -70,40 +87,66 @@ Below is its shadow;
 {
     "sayHello": {
         "name": [ "string", "text" ],
-        "surname": [ "string" ]
+        "tags": [ ]
     }
 }
 ```
 
-> TBD -> Maybe forcing array is not a good idea, maybe `"surname": "string"`
-> should also be valid. if so, revise previous specs which were forcing literals
-> to have an array. This would also spread arrayify behavior everywhere. This
-> way any array variable will accept `null` in schema, but shadow will always
-> have an array.
->
-> TBD -> Also maybe shadows SHOULD interpret schema a little bit. Otherwise
-> there will be an unnecessarily extra work for anyone who uses shadow without a
-> library, which makes shadows pretty much useless...? quantifiers all should
-> have min & max no matter what. literal with a `*` or `+` should have
-> `"array": true`(??) for variables. So all implicit things will go into shadow,
-> like variable type will exist in shadow `"type": "any"`.
+## Single Item
+
+An array variable is allowed to have a single item without array notation.
+
+`SCHEMA: greeting.service.json`
 
 ```json
 {
-    "$service+": {
-        "matrix?": [ [ "$matrix" ] ], // this is double array
+    "sayHello": {
+        "name": "string",
     }
 }
 ```
 
-> TBD -> Maybe allowing `*` and `+` for literals wasn't a good idea, it damages
-> consistency;
->
-> - `"tags?": [ "$tags" ]` is the same as `"$parameter?": [ "$types" ]`
-> - `"tags*": "$tags"` is not the same `"$parameter*": "$type"`
->
-> For the first one, both can appear once, and both has arrays. For the
-> second one, `tags` can appear once and has an array, but `parameter` can
-> appear more than once and it has a single value.
->
-> Let's not allow `*` or `+` in literals. And voila! Inconsistency is gone!
+Its shadow still contains an array;
+
+`SCHEMA SHADOW`
+
+```json
+{
+    "service": [
+        {
+            "_": "sayHello",
+            "parameter": [
+                {
+                    "_": "name",
+                    "types": [ "string" ]
+                }
+            ]
+        }
+    ]
+}
+```
+
+## Multi-Dimensional Arrays
+
+Below concepts definition has a double array for `$matrix` variable;
+
+`CONCEPTS: matrix.concepts.json`
+
+```json
+{
+    "$matrices*": [ [ "$matrix" ] ]
+}
+```
+
+Multi-dimensional arrays allow single items as well. Below schema is a valid
+one;
+
+`SCHEMA: sample.matrix.json`
+
+```json
+{
+    "matrix-a": [ [ 1, 2, 3 ], [ 4, 5, 6 ] ],
+    "matrix-b": [ 1, 2, 3 ],
+    "matrix-c": 1
+}
+```

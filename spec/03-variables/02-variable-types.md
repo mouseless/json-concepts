@@ -54,12 +54,9 @@ Below is an **INVALID** schema;
 ## Available Variable Types
 
 - `:any` allows any type of value to be set to corresponding variable
-- `:object` allows only objects without a validation
 - `:string` allows only string values
 - `:boolean` allows only `true` or `false`
 - `:number` allows only numbers
-
-> Note that `:object` does not allow a primitive for its variable.
 
 By default a variable type is `:any`. Below concept definitions behaves exactly
 the same;

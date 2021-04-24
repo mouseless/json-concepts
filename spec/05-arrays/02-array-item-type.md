@@ -1,16 +1,51 @@
 # Array Item Type
 
-This is array of values (same for `+`)
+Variable type syntax (`:`) also applies to array variables. When an array
+variable has a type, it means all items of that array is required to be of that
+type. Below is an example;
 
-`service.concepts.json`
+`CONCEPTS: tags.concepts.json`
 
 ```json
 {
-    "$service+": {
-        "$parameter*": "$type",
-        "response?": "$responseType",
-        "tags*": "$tags:string", //support :any, :boolean, :number, :customType
-        "marks?": [ "$marks:string" ]
+    "tags?": [ "$tags:string" ]
+}
+```
+
+Below schema is now invalid because all items in `tags` should be `string`;
+
+`SCHEMA: invalid.tags.json`
+
+```json
+{
+    "tags": [ "number", "not", "allowed", 0 ]
+}
+```
+
+## Custom Types
+
+Custom types are also supported.
+
+`CONCEPTS: season.concepts.json`
+
+```json
+{
+    "$season*": [ "$months:month" ],
+    "@types": {
+        "month": [
+            "JAN", "FEB", "MAR",
+            "APR", "MAY", "JUN",
+            "JUL", "AUG", "SEP",
+            "OCT", "NOV", "DEC"
+        ]
     }
+}
+```
+
+`SCHEMA: invalid.season.json`
+
+```json
+{
+    "summer": [ "JN", "JL", "AG" ]
 }
 ```
