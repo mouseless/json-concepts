@@ -3,10 +3,10 @@
 Enum validator enables you to restrict value of a custom type to be one of the
 items in a given list.
 
-For following concepts file, `statusCode` is restricted to be either `200`,
-`400` or `500`.
+For following concepts definition, `statusCode` is restricted to be either
+`200`, `400` or `500`.
 
-`service.concepts.json`
+`CONCEPTS: service.concepts.json`
 
 ```json
 {
@@ -24,7 +24,7 @@ For following concepts file, `statusCode` is restricted to be either `200`,
 
 Short-hand for enum validator is as follows;
 
-`service.concepts.json`
+`CONCEPTS: service.concepts.json`
 
 ```json
 {
@@ -37,12 +37,59 @@ Short-hand for enum validator is as follows;
 }
 ```
 
+`CONCEPTS SHADOW`
+
+```json
+{
+    "concept": {
+        "_": "service",
+        "quantifier": { "min": 1 },
+        "literal": {
+            "_": "statusCode",
+            "variable": {
+                "_": "statusCode",
+                "type": "httpStatus"
+            }
+        }
+    },
+    "metaData": {
+        "types": [
+            {
+                "_": "httpStatus",
+                "type": "number",
+                "validators": [
+                    {
+                        "_": "enum",
+                        "value": [ 200, 400, 500 ]
+                    }
+                ]
+            }
+        ]
+    }
+}
+```
+
 Here `httpStatus` automatically inherits from `number`, because every item in
 the array is a `number`.
 
-For following definition;
+Below schema is **NOT** valid, because `404` is not listed in `httpStatus`
+definition;
 
-`service.concepts.json`
+`SCHEMA: greeting.service.json`
+
+```json
+{
+    "sayHello": {
+        "statusCode": 404
+    }
+}
+```
+
+`ERROR: 'greeting.service.json' is not valid, '404' is not a valid http status.`
+
+## Enum of `any` Type
+
+`CONCEPTS: service.concepts.json`
 
 ```json
 {
@@ -55,5 +102,5 @@ For following definition;
 }
 ```
 
-base type of `httpStatus` is automatically set to `any`, because not all of the
+type of `httpStatus` is automatically set to `any`, because not all of the
 items are of the same type.

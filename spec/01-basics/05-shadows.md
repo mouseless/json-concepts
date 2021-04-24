@@ -4,7 +4,7 @@ Shadows are traversable versions of concepts and schemas. They are to be
 generated automatically given a schema or concepts.
 
 > These are called shadows because they are not direct output of JSON Concepts,
-> rather they are handy data structures to make use of concepts and schema files.
+> rather they are handy data structures.
 
 Let's begin with a concept;
 
@@ -53,7 +53,6 @@ Assume there is below schema that conforms to above concepts;
 
 ```json
 {
-    "@concepts": "service.concepts.json",
     "sayHello": {
         "name": "string",
         "response": "string"

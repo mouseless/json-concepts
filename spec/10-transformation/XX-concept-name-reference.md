@@ -5,7 +5,7 @@
     "function": {
         "from": "service",
         "select": {
-            "_": "_.pascalCase()",
+            "_": "_ | pascal-case",
         }
     }
 }

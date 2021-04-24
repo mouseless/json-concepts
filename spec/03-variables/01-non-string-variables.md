@@ -1,40 +1,25 @@
 # Non-String Variables
 
-When a value of a variable is a boolean or a number, surrounding quotes are
-removed in output schema.
+A value of a variable can be a boolean or a number, surrounding quotes will not
+be expected in a schema.
 
-For this schema;
+For below concepts definition;
 
-`service.concepts.json`
+`CONCEPTS: service.concepts.json`
 
 ```json
 {
     "$service+": {
-        "async": "$async",
+        "$flag*": "$enabled",
         "limit": "$limit"
     }
 }
 ```
 
-When `$async` and `$limit` variables have `true` and `100`;
+`$enabled` and `$limit` variables can be `true` and `100` respectively. Below
+schema is **valid** and its shadow is as follows;
 
-`greeting.json`
-
-```json
-{
-    "service": [
-        {
-            "_key": "sayGoodbye",
-            "async": true,
-            "limit": 100
-        }
-    ]
-}
-```
-
-Result is;
-
-`greeting.service.json`
+`SCHEMA: greeting.service.json`
 
 ```json
 {
@@ -42,5 +27,24 @@ Result is;
         "async": true,
         "limit": 100
     }
+}
+```
+
+`SCHEMA SHADOW`
+
+```json
+{
+    "service": [
+        {
+            "_": "sayGoodbye",
+            "flag": [
+                {
+                    "_": "async",
+                    "enabled": true
+                }
+            ],
+            "limit": 100
+        }
+    ]
 }
 ```
