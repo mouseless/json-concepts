@@ -2,12 +2,16 @@
 
 ```json
 {
-    "services+": {
-        "name": "$name",
-        "parameters*": {
+    "services": [
+        {
             "name": "$name",
-            "type": "$type"
+            "parameters?": [
+                {
+                    "name": "$name",
+                    "type": "$type"
+                }
+            ]
         }
-    }
+    ]
 }
 ```

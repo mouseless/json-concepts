@@ -1,11 +1,11 @@
-# Concept Name Reference
+# Select Default Value
 
 ```json
 {
     "function": {
         "from": "service",
         "select": {
-            "_": "_ | pascal-case",
+            "something": "'default-value'"
         }
     }
 }

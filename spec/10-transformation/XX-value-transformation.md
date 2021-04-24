@@ -5,10 +5,10 @@
     "function": {
         "from": "service",
         "map": {
-            "returnType": "responseType.capitalize()"
+            "returnType": "responseType | capitalize"
         }
     }
 }
 ```
 
-> TBD - list all supported functions
+> TBD - list all supported filters

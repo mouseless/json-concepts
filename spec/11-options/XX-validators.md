@@ -1,27 +1,31 @@
 # Validators
 
-> TBD - will only be available in js
+> TBD - create a language agnostic spec, and force all impl to support custom
+> validators
 
 ```json
 {
     "$service+": {
-        "name": "$name:name"
+        "name": "$name:identifier"
     },
     "@": {
         "types": {
-            "name": {
+            "identifier": {
                 "type": "string",
-                "custom": {
-                    "option1": true, 
-                    "option2": false
+                "range": {
+                    "min": 1, 
+                    "max": 5
                 }
-            }
-        },
-        "options": {
-            "validators": {
-                "custom": "custom.validator.js"
             }
         }
     }
 }
+```
+
+```javascript
+const jc = require('json-concepts');
+
+jc.options.addValidator('custom', function(value, args) {
+    return value.length >= args.min && value.length <= args.max;
+});
 ```

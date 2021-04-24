@@ -23,11 +23,11 @@
     "function": {
         "from": "service",
         "where": {
-            "say*": { } //this is a template object
+            "/say.*/": { } //this is a template object, match by regex
         },
         "select": {
-            "_": "_.after('say').camelCase()",
-            "returnType": "responseType.capitalize()"
+            "_": "_ | after 'say' | camel-case",
+            "returnType": "responseType | capitalize"
         }
     },
     "argument": {
@@ -46,15 +46,15 @@
     "function": {
         "from": "service",
         "select": {
-            "_": "_.after('say').camelCase()",
-            "returnType": "responseType.capitalize()"
+            "_": "_ | after 'say' | camel-case",
+            "returnType": "responseType | capitalize"
         }
     },
     "argument": {
         "from": "parameter",
         "where": {
             "..": {
-                "say*": { }
+                "/say.*/": { }
              } //parameters where their parent starts with say
         },
         "select": {
@@ -72,18 +72,18 @@
         "from": "service",
         "where": {
             "**": { 
-                "*name": "/.*/"
+                "/.*name/": "/.*/"
             } // a parameter 
         },
         "select": {
-            "_": "_.after('say').camelCase()",
-            "returnType": "responseType.capitalize()"
+            "_": "_ | after 'say' | camel-case",
+            "returnType": "responseType | capitalize"
         }
     },
     "argument": {
         "from": "parameter",
         "select": {
-            "type": "type.capitalize()"
+            "type": "type | capitalize"
         }
     }
 }
