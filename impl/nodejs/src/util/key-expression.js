@@ -10,6 +10,7 @@ const { required } = require('./validation');
  * 
  * @property {Number} min Minimum number of tokens to be allowed
  * @property {Number} max Maximum number of tokens to be allowed
+ * @property {String} expression Quantifier expression
  * @property {{min:Number?, max:Number?}?} data Data representation of
  * quantifier data.
  */
@@ -52,9 +53,9 @@ const _scHash = {
  */
 const Quantifiers = {
     DEFAULT: _quantifier(),
-    [SC.ZERO_OR_ONE]: _quantifier(0, 1),
-    [SC.ONE_OR_MORE]: _quantifier(1),
-    [SC.ZERO_OR_MORE]: _quantifier(0)
+    [SC.ZERO_OR_ONE]: _quantifier(0, 1, '?'),
+    [SC.ONE_OR_MORE]: _quantifier(1, undefined, '+'),
+    [SC.ZERO_OR_MORE]: _quantifier(0, undefined, '*')
 };
 
 /**
@@ -169,9 +170,9 @@ function _parseQuantifier(tokens) {
  * 
  * @returns {QuantifierData}
  */
-function _quantifier(min, max) {
+function _quantifier(min, max, expression) {
     if (min == null && max == null) {
-        return { min: 1, max: 1, data: null };
+        return { min: 1, max: 1, expression: "", data: null };
     }
 
     const result = { data: {} };
@@ -192,6 +193,21 @@ function _quantifier(min, max) {
         result.data.max = max;
     } else {
         result.max = Number.POSITIVE_INFINITY;
+    }
+
+    if (expression === undefined) {
+        result.expression =
+            `{` +
+            `${result.data.min === undefined
+                ? ''
+                : result.data.min
+            },` +
+            `${result.data.max === undefined
+                ? ''
+                : result.data.max
+            }}`;
+    } else {
+        result.expression = expression;
     }
 
     return result;

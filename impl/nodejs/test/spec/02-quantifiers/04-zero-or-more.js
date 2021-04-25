@@ -23,66 +23,15 @@ describe('spec/quantifiers/zero-or-more', function () {
 
     describe('key literals', function () {
         it('should allow a literal to not exist', function () {
-            const concepts = new Concepts({
+            (() => new Concepts({
                 "$service+": {
                     "$parameter*": "$type",
                     "tags*": "$tags"
-                }
-            });
-
-            (() => concepts.validate({
-                "sayHello": {
-                    "name": "string",
-                    "surname": "string",
-                    "tags": ["readonly", "friendly"]
-                },
-                "sayGoodbye": {}
-            })).should.not.throw();
-        });
-
-        it('should allow a literal to have an empty array', function () {
-            const concepts = new Concepts({
-                "$service+": {
-                    "$parameter*": "$type",
-                    "tags*": "$tags"
-                }
-            });
-
-            (() => concepts.validate({
-                "sayHello": {
-                    "tags": []
-                }
-            })).should.not.throw();
-        });
-
-        it('should give error when null or a non-array is given to a literal array', function () {
-            const concepts = new Concepts({
-                "$service+": {
-                    "$parameter*": "$type",
-                    "tags*": "$tags"
-                }
-            });
-
-            (() => concepts.validate({
-                "sayHello": {
-                    "tags": null
                 }
             })).should.throw(
-                error.Definition_is_not_valid__because__REASON(
-                    because => because.LITERAL_expects_an_array_for_VARIABLE__but_got_null(
-                        'tags', 'tags'
-                    )
-                ).message
-            );
-
-            (() => concepts.validate({
-                "sayHello": {
-                    "tags": "readonly"
-                }
-            })).should.throw(
-                error.Definition_is_not_valid__because__REASON(
-                    because => because.LITERAL_expects_an_array_for_VARIABLE__but_got_an_instance_of_TYPE(
-                        'tags', 'tags', 'string'
+                error.Concepts_definition_is_not_valid__because__REASON(
+                    because => because.LITERAL_cannot_have_QUANTIFIER(
+                        'tags', '*'
                     )
                 ).message
             );
@@ -93,31 +42,17 @@ describe('spec/quantifiers/zero-or-more', function () {
         it('should have set quantifier min to zero', function () {
             const concepts = new Concepts({
                 "$service+": {
-                    "$parameter*": "$type",
-                    "tags*": "$tags"
+                    "$parameter*": "$type"
                 }
             });
 
             concepts.shadow.should.deep.equal({
                 "concept": {
                     "_": "service",
-                    "quantifier": {
-                        "min": 1
-                    },
-                    "literal": {
-                        "_": "tags",
-                        "quantifier": {
-                            "min": 0
-                        },
-                        "variable": {
-                            "_": "tags"
-                        }
-                    },
+                    "quantifier": { "min": 1 },
                     "concept": {
                         "_": "parameter",
-                        "quantifier": {
-                            "min": 0
-                        },
+                        "quantifier": { "min": 0 },
                         "variable": {
                             "_": "type"
                         }
@@ -131,16 +66,14 @@ describe('spec/quantifiers/zero-or-more', function () {
         it('should have empty arrays instead of null values', function () {
             const concepts = new Concepts({
                 "$service+": {
-                    "$parameter*": "$type",
-                    "tags*": "$tags"
+                    "$parameter*": "$type"
                 }
             });
 
             const schema = concepts.create({
                 "sayHello": {
                     "name": "string",
-                    "surname": "string",
-                    "tags": ["readonly", "friendly"]
+                    "surname": "string"
                 },
                 "sayGoodbye": {}
             });
@@ -158,13 +91,11 @@ describe('spec/quantifiers/zero-or-more', function () {
                                 "_": "surname",
                                 "type": "string"
                             }
-                        ],
-                        "tags": ["readonly", "friendly"]
+                        ]
                     },
                     {
                         "_": "sayGoodbye",
-                        "parameter": [],
-                        "tags": []
+                        "parameter": []
                     }
                 ]
             });

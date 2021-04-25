@@ -73,9 +73,9 @@ describe('spec/basics/schemas', function () {
 
         await Schema.load('greeting.service.json', 'service.concepts.json')
             .should.be.rejectedWith(
-                error.SCHEMA_is_not_valid__Error_is_ERROR(
+                error.SCHEMA_is_not_valid__Error_is__ERROR(
                     'greeting.service.json',
-                    error.Definition_is_not_valid__because__REASON(
+                    error.Schema_definition_is_not_valid__because__REASON(
                         because => because.LITERAL_is_missing('response')
                     ).message
                 ).message

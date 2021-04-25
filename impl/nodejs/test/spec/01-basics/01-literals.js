@@ -35,7 +35,7 @@ describe('spec/basics/literals', function () {
             .should.throw(error.PARAMETER_is_required('schema').message);
         (() => concepts.validate(null))
             .should.throw(
-                error.Definition_is_not_valid__because__REASON(
+                error.Schema_definition_is_not_valid__because__REASON(
                     because => because.CONCEPT_is_missing('sayHello')
                 ).message
             );
@@ -50,7 +50,7 @@ describe('spec/basics/literals', function () {
 
         (() => concepts.validate({}))
             .should.throw(
-                error.Definition_is_not_valid__because__REASON(
+                error.Schema_definition_is_not_valid__because__REASON(
                     because => because.CONCEPT_is_missing('sayHello')
                 ).message
             );
@@ -66,7 +66,7 @@ describe('spec/basics/literals', function () {
         (() => concepts.validate({
             "sayHello": {}
         })).should.throw(
-            error.Definition_is_not_valid__because__REASON(
+            error.Schema_definition_is_not_valid__because__REASON(
                 because => because.LITERAL_is_missing('name')
             ).message
         );
@@ -85,7 +85,7 @@ describe('spec/basics/literals', function () {
                 "surname": "string"
             }
         })).should.throw(
-            error.Definition_is_not_valid__because__REASON(
+            error.Schema_definition_is_not_valid__because__REASON(
                 because => because.TOKEN_is_not_expected('surname')
             ).message
         );
@@ -103,7 +103,7 @@ describe('spec/basics/literals', function () {
                 "name": "text"
             }
         })).should.throw(
-            error.Definition_is_not_valid__because__REASON(
+            error.Schema_definition_is_not_valid__because__REASON(
                 because => because.Expected_LITERAL__but_got_VALUE('string', 'text')
             ).message
         );

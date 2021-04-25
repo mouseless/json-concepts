@@ -35,7 +35,7 @@
             return new Schema(definition, concepts);
         } catch (e) {
             if (e.name === error.Names.SCHEMA_ERROR) {
-                throw error.SCHEMA_is_not_valid__Error_is_ERROR(path, e.message);
+                throw error.SCHEMA_is_not_valid__Error_is__ERROR(path, e.message);
             }
 
             throw e;

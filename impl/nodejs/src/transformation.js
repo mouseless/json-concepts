@@ -21,7 +21,7 @@
             return new Transformation(definition, source, target);
         } catch (e) {
             if (e.name === error.Names.SCHEMA_ERROR) {
-                throw error.TRANSFORMATION_is_not_valid__Error_is_ERROR(path, e.message);
+                throw error.TRANSFORMATION_is_not_valid__Error_is__ERROR(path, e.message);
             }
 
             throw e;
