@@ -31,7 +31,15 @@
     static async load(path = required('path')) {
         const definition = await loadJSON(path);
 
-        return new Concepts(definition);
+        try {
+            return new Concepts(definition);
+        } catch (e) {
+            if(e.name == error.Names.SCHEMA_ERROR) {
+                throw error.CONCEPTS_is_not_valid__Error_is__ERROR(path, e.message);
+            }
+
+            throw e;
+        }
     }
 
     /* const */ #definition;
@@ -134,6 +142,9 @@
         this.#shadow.validate(schema);
     }
 
+    /**
+     * @param {ConceptsShadow} shadow 
+     */
     _build(shadow) {
         for (const concept of shadow.concepts) {
             this.#concepts[concept.name] = {
@@ -149,4 +160,4 @@ module.exports = Concepts;
 
 const Schema = require('./schema');
 const ConceptsShadow = require('./concepts-shadow');
-const { required, loadJSON } = require('./util');
+const { error, required, loadJSON } = require('./util');

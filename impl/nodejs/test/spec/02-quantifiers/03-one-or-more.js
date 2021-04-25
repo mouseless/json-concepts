@@ -1,5 +1,6 @@
 const { Concepts } = require('../../..');
 const { error } = require('../../../src/util');
+const fs = require('mock-fs');
 const { should } = require('chai');
 
 should();
@@ -40,6 +41,10 @@ describe('spec/quantifiers/one-or-more', function () {
     });
 
     describe('key literals', function () {
+        after(function () {
+            fs.restore();
+        });
+
         it('should allow arrays as values of key literals', function () {
             (() => new Concepts({
                 "$service+": {
@@ -49,6 +54,28 @@ describe('spec/quantifiers/one-or-more', function () {
             })).should.throw(
                 error.Concepts_definition_is_not_valid__because__REASON(
                     because => because.LITERAL_cannot_have_QUANTIFIER('tags', '+')
+                ).message
+            );
+        });
+
+        it('should give error with file path when loaded from file', async function () {
+            fs({
+                'service.concepts.json': JSON.stringify({
+                    "$service+": {
+                        "$parameter?": "$type",
+                        "tags+": "$tags"
+                    }
+                })
+            });
+
+            await Concepts.load('service.concepts.json').should.be.rejectedWith(
+                error.CONCEPTS_is_not_valid__Error_is__ERROR(
+                    'service.concepts.json',
+                    error.Concepts_definition_is_not_valid__because__REASON(
+                        because => because.LITERAL_cannot_have_QUANTIFIER(
+                            'tags', '+'
+                        )
+                    ).message
                 ).message
             );
         });

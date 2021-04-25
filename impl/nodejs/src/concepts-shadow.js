@@ -38,7 +38,7 @@ class ConceptsShadow {
         if (expression !== undefined) {
             const { type, name, quantifier } = keyExpression.parse(expression);
 
-            if(type == keyExpression.Types.LITERAL && quantifier.max > 1) {
+            if (type == keyExpression.Types.LITERAL && quantifier.max > 1) {
                 throw error.Concepts_definition_is_not_valid__because__REASON(
                     because => because.LITERAL_cannot_have_QUANTIFIER(
                         name, quantifier.expression
@@ -76,9 +76,9 @@ class ConceptsShadow {
      */
     get parent() { return this.#parent; }
     /**
-     * Array of variable nodes under this node.
+     * Variable node under this node.
      * 
-     * @returns {Array.<ConceptsShadow>}
+     * @returns {ConceptsShadow>}
      */
     get variable() { return this.#variable; }
     /**
@@ -100,9 +100,21 @@ class ConceptsShadow {
      * @returns {Object}
      */
     get data() { return this.#data; }
+    /**
+     * Checks if this node allows more than one instance.
+     * 
+     * @returns {boolean} `true` if it is, `false` otherwise
+     */
+    get allowsMultiple() { return this.quantifier.max > 1; }
 
+    /**
+     * Returns default value for this concept. This is used in schema shadow
+     * when concept does not exist in a schema definition.
+     * 
+     * @returns {Array|Object}
+     */
     get defaultValue() {
-        if (this.quantifier.max > 1) {
+        if (this.allowsMultiple) {
             return [];
         }
 
