@@ -30,49 +30,34 @@ Following schema is now valid;
 
 ## Key Literals
 
-When a key literal has `*` it means that it may not exist in a schema, and when
-it does, it should be a an array. An example is as follows;
+Key literals cannot have `*` quantifier, because they cannot occur more than
+once. Below concepts definition is invalid;
 
 `CONCEPTS: service.concepts.json`
 
 ```json
 {
     "$service+": {
-        "$parameter*": "$type",
+        "$parameter?": "$type",
         "tags*": "$tags"
     }
 }
 ```
 
-Here `tags*` expression tells us that there may or may not be a `tags` literal
-in schemas, and when there is, it should be assigned to an array. Following
-schema is valid;
-
-`SCHEMA: greeting.service.json`
-
-```json
-{
-    "sayHello": {
-        "name": "string",
-        "surname": "string",
-        "tags": [ "readonly", "friendly" ]
-    },
-    "sayGoodbye": { }
-}
-```
+`ERROR: 'service.concepts.json' is not valid, 'tags' cannot have '*'`
+`quantifier.`
 
 ## Concepts Shadow
 
-For following concepts definition, quantifiers of `parameter` and `tags` have
-their min set to zero;
+For following concepts definition, quantifier of `parameter` has its min set to
+zero;
 
 `CONCEPTS: service.concepts.json`
 
 ```json
 {
     "$service+": {
-        "$parameter*": "$type",
-        "tags*": "$tags"
+        "$parameter*": "$type"
     }
 }
 ```
@@ -84,13 +69,6 @@ their min set to zero;
     "concept": {
         "_": "service",
         "quantifier": { "min": 1 },
-        "literal": {
-            "_": "tags",
-            "quantifier": { "min": 0 },
-            "variable": {
-                "_": "tags"
-            }
-        },
         "concept": {
             "_": "parameter",
             "quantifier": { "min": 0 },
@@ -110,8 +88,7 @@ their min set to zero;
 {
     "sayHello": {
         "name": "string",
-        "surname": "string",
-        "tags": [ "readonly", "friendly" ]
+        "surname": "string"
     },
     "sayGoodbye": { }
 }
@@ -133,17 +110,15 @@ their min set to zero;
                     "_": "surname",
                     "type": "string"
                 }
-            ],
-            "tags": [ "readonly", "friendly" ]
+            ]
         },
         {
             "_": "sayGoodbye",
-            "parameter": [ ],
-            "tags": [ ]
+            "parameter": [ ]
         }
     ]
 }
 ```
 
-> Notice that `parameter` and `tags` were set to empty arrays instead of
-> `null`, because their quantifiers allow more than one instance.
+> Notice that `parameter` was set to an empty array instead of `null`, because
+> its quantifier allows more than one instance.

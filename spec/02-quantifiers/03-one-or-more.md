@@ -28,47 +28,6 @@ Below schema is now valid;
 }
 ```
 
-## Key Literals
-
-Unlike a concept, when a key literal has `+` quantifier it does not mean that
-a key literal can occur more than once, because that means having the same key
-in an object more than once, which is not allowed in JSON. So, to have a `+`
-quantifier in a key literal means that right-hand side value should be an
-array.
-
-Below is an example concepts definition;
-
-`CONCEPTS: service.concepts.json`
-
-```json
-{
-    "$service+": {
-        "$parameter?": "$type",
-        "tags+": "$tags"
-    }
-}
-```
-
-This definition allows us to define an array in a schema. Below is a valid
-schema;
-
-`SCHEMA: greeting.service.json`
-
-```json
-{
-    "sayHello": {
-        "name": "string",
-        "tags": [ "readonly", "friendly" ]
-    },
-    "sayGoodbye": {
-        "tags": [ "readonly" ]
-    }
-}
-```
-
-> Notice that this key literal would only accept an array now. So `tags` cannot
-> have `null` or a `string`, it should be an array;
-
 ## Requires At Least One
 
 When no concept is given, schema becomes **INVALID**;
@@ -83,23 +42,10 @@ When no concept is given, schema becomes **INVALID**;
 `ERROR: 'greeting.service.json' is not valid, at least one 'service' was`
 `expected.`
 
-A key literal is also expected to have at least one item in it. So below schema
-is **NOT** valid as well;
+## Key Literals
 
-`SCHEMA: greeting.service.json`
-
-```json
-{
-    "sayGoodbye": {
-        "tags": [ ]
-    }
-}
-```
-
-## Concepts Shadow
-
-For following concepts definition, quantifiers of `service` and `tags` don't
-have a max;
+Key literals cannot have `+` quantifier, because they cannot occur more than
+once. Below concepts definition is invalid;
 
 `CONCEPTS: service.concepts.json`
 
@@ -112,6 +58,23 @@ have a max;
 }
 ```
 
+`ERROR: 'service.concepts.json' is not valid, 'tags' cannot have '+'`
+`quantifier.`
+
+## Concepts Shadow
+
+For following concepts definition, quantifier of `service` doesn't have a max;
+
+`CONCEPTS: service.concepts.json`
+
+```json
+{
+    "$service+": {
+        "$parameter?": "$type"
+    }
+}
+```
+
 `CONCEPTS SHADOW`
 
 ```json
@@ -119,13 +82,6 @@ have a max;
     "concept": {
         "_": "service", 
         "quantifier": { "min": 1 },
-        "literal": {
-            "_": "tags",
-            "quantifier": { "min": 1 },
-            "variable": {
-                "_": "tags"
-            }
-        },
         "concept": {
             "_": "parameter",
             "quantifier": { "min": 0, "max": 1 },
@@ -137,15 +93,10 @@ have a max;
 }
 ```
 
-> It looks like `variable` should have `quantifier` key instead of `literal`
-> because literal is not affected by it. However this would be interpreting the
-> definition, not shadowing. Remember that shadows are only easy-to-code and
-> **traversable** versions of concepts definitions, not **interpretation**s.
-
 ## Schema Shadow
 
-When there exists more than one concept in a schema, schema shadow stores them
-in an array. Key literals are also stored in an array. Below is an example;
+When there more than one concept is allowed in a schema, schema shadow stores
+them in an array;
 
 `SCHEMA: greeting.service.json`
 
@@ -153,10 +104,40 @@ in an array. Key literals are also stored in an array. Below is an example;
 {
     "sayHello": {
         "name": "string",
-        "tags": [ "readonly", "friendly" ]
     },
-    "sayGoodbye": {
-        "tags": [ "readonly" ]
+    "sayGoodbye": { }
+}
+```
+
+`SCHEMA SHADOW`
+
+```json
+{
+    "service": [
+        {
+            "_": "sayHello",
+            "parameter": {
+                "_": "name",
+                "type": "string"
+            }
+        },
+        {
+            "_": "sayGoodbye",
+            "parameter": null
+        }
+    ]
+}
+```
+
+Even if there is only one `service` instance, schema shadow still has it in an
+array;
+
+`SCHEMA: greeting.service.json`
+
+```json
+{
+    "sayHello": {
+        "name": "string",
     }
 }
 ```
@@ -171,13 +152,7 @@ in an array. Key literals are also stored in an array. Below is an example;
             "parameter": {
                 "_": "name",
                 "type": "string"
-            },
-            "tags": [ "readonly", "friendly" ]
-        },
-        {
-            "_": "sayGoodbye",
-            "parameter": null,
-            "tags": [ "readonly" ]
+            }
         }
     ]
 }
