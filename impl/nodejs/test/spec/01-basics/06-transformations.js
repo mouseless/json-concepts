@@ -145,7 +145,7 @@ describe('spec/basics/transformations', function () {
 
         (() => transformation.transform(targetInput))
             .should.throw(
-                error.Definition_is_not_valid__because__REASON(
+                error.Schema_definition_is_not_valid__because__REASON(
                     because => because.LITERAL_is_missing('response')
                 ).message
             );
@@ -244,7 +244,7 @@ describe('spec/basics/transformations', function () {
 
         await Transformation.load('client.from.service.json', source, target)
             .should.be.rejectedWith(
-                error.TRANSFORMATION_is_not_valid__Error_is_ERROR(
+                error.TRANSFORMATION_is_not_valid__Error_is__ERROR(
                     'client.from.service.json',
                     error.Definition_is_not_compatible_with_its_CONCEPTS__because__REASON(
                         'target', because => because.VARIABLE_not_found('returnType_')

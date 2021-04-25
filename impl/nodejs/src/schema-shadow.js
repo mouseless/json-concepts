@@ -93,12 +93,16 @@ class SchemaShadow {
 
             for (const concept in this.#schemasByConcept) {
                 const schemas = this.#schemasByConcept[concept];
-                if (schemas.length == 0) {
-                    this.#data[concept] = this.#conceptsShadow.getConcept(concept).defaultValue;
-                } else {
+                
+                const conceptShadow = this.#conceptsShadow.getConcept(concept)
+                this.#data[concept] = conceptShadow.defaultValue;
+
+                if (conceptShadow.allowsMultiple) {
                     for (const shadow of schemas) {
-                        arrayify.push(this.#data, concept, shadow.#data);
+                        this.#data[concept].push(shadow.#data);
                     }
+                } else if(schemas.length > 0) {
+                    this.#data[concept] = schemas[0].#data;
                 }
             }
         }

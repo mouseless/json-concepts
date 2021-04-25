@@ -45,7 +45,7 @@ describe('spec/quantifiers/zero-or-one', function () {
                     "surname": "string"
                 }
             })).should.throw(
-                error.Definition_is_not_valid__because__REASON(
+                error.Schema_definition_is_not_valid__because__REASON(
                     because => because.Maximum_allowed_number_of_CONCEPT_is_MAX__but_got_COUNT('parameter', 1, 2)
                 ).message
             );
@@ -83,20 +83,14 @@ describe('spec/quantifiers/zero-or-one', function () {
                     "_": "service",
                     "literal": {
                         "_": "response",
-                        "quantifier": {
-                            "min": 0,
-                            "max": 1
-                        },
+                        "quantifier": { "min": 0, "max": 1 },
                         "variable": {
                             "_": "responseType"
                         }
                     },
                     "concept": {
                         "_": "parameter",
-                        "quantifier": {
-                            "min": 0,
-                            "max": 1
-                        },
+                        "quantifier": { "min": 0, "max": 1 },
                         "variable": {
                             "_": "type"
                         }

@@ -13,15 +13,22 @@ Below is a sample concepts file;
 
 ```json
 {
-    "$endpoint+": {
-        "$method+": {
+    "$endpoint:path+": {
+        "$method:method+": {
             "$parameter*": "$model",
-            "response?": "$responseModel",
-            "status*": "$status:httpStatus"
+            "response?": "$model",
+            "status": [ "$status:status" ]
         }
     },
-    ":": {
-        "httpStatus": [ 200, 400, 404 ]
+    "models?": {
+        "$model+": {
+            "$field*": "$type"
+        },
+    },
+    "@types": {
+        "path": "/\/.*/g",
+        "method": [ "GET", "POST", "PUT", "PATCH", "DELETE" ],
+        "status": [ 200, 201, 202, 204, 400, 401, 403, 404, 500 ]
     }
 }
 ```
@@ -34,16 +41,23 @@ Below is a sample schema;
 {
     "@concepts": "endpoint.concepts.json",
     
-    "users": {
-        "get": {
+    "/users": {
+        "GET": {
             "name": "string",
             "response": "user",
             "status": [ 200, 404 ]
         },
-        "post": {
+        "POST": {
             "name": "string",
             "surname": "string",
             "status": [ 200, 400 ]
+        }
+    },
+    "models": {
+        "user": {
+            "name": "string",
+            "surname": "string",
+            "email": "string"
         }
     }
 }

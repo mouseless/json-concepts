@@ -23,8 +23,9 @@ For example;
 {
     "$service{1,3}": {
         "$parameter{,2}": "$type",
-        "response{1}": "$responseType",
-        "tags{0,}": "$tags"
+        "response{1}": {
+            "$status{0,}": "$responseType"
+        }
     }
 }
 ```
@@ -38,22 +39,17 @@ This concepts definition should have following shadow;
     "concept": {
         "_": "service",
         "quantifier": { "min": 1, "max": 3 },
-        "literal": [
-            {
-                "_": "response",
-                "quantifier": { "min": 1, "max": 1 },
+        "literal": {
+            "_": "response",
+            "quantifier": { "min": 1, "max": 1 },
+            "concept": {
+                "_": "status",
+                "quantifier": { "min": 0 },
                 "variable": {
                     "_": "responseType"
                 }
-            },
-            {
-                "_": "tags",
-                "quantifier": { "min": 0 },
-                "variable": {
-                    "_": "tags"
-                }
             }
-        ],
+        },
         "concept": {
             "_": "parameter",
             "quantifier": { "max": 2 },
@@ -66,8 +62,9 @@ This concepts definition should have following shadow;
 ```
 
 It is trivial to give schema validation examples here. Any concept or literal
-should not have less occurrences than its minimum quantifier, and should not
-have more occurrences than its maximum quantifier.
+should not have less occurrences than their minimum quantifiers, and should not
+have more occurrences than their maximum quantifiers.
 
-Lastly, when `max` is `1`, corresponding concept or variable becomes an
-object, otherwise it should always be an array.
+> Literals can only have four valid custom quantifiers `{,1}`, `{0,1}`, `{1}`,
+> `{1,1}`. All of these can be represented with default or `?` quantifier.
+> So it is trivial, but still supported for the sake of consistency.

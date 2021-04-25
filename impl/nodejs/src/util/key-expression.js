@@ -10,6 +10,7 @@ const { required } = require('./validation');
  * 
  * @property {Number} min Minimum number of tokens to be allowed
  * @property {Number} max Maximum number of tokens to be allowed
+ * @property {String} expression Quantifier expression
  * @property {{min:Number?, max:Number?}?} data Data representation of
  * quantifier data.
  */
@@ -52,9 +53,9 @@ const _scHash = {
  */
 const Quantifiers = {
     DEFAULT: _quantifier(),
-    [SC.ZERO_OR_ONE]: _quantifier(0, 1),
-    [SC.ONE_OR_MORE]: _quantifier(1),
-    [SC.ZERO_OR_MORE]: _quantifier(0)
+    [SC.ZERO_OR_ONE]: _quantifier(0, 1, SC.ZERO_OR_ONE),
+    [SC.ONE_OR_MORE]: _quantifier(1, undefined, SC.ONE_OR_MORE),
+    [SC.ZERO_OR_MORE]: _quantifier(0, undefined, SC.ZERO_OR_MORE)
 };
 
 /**
@@ -144,20 +145,22 @@ function _parseQuantifier(tokens) {
         return Quantifiers.DEFAULT;
     }
 
+    const expression = quantifierTokens.join('');
+
     if (quantifierTokens.length == 3) { // {#}
-        return _quantifier(quantifierTokens[1], quantifierTokens[1]);
+        return _quantifier(quantifierTokens[1], quantifierTokens[1], expression);
     }
 
     if (quantifierTokens.length == 4) { // {,#} or {#,}
         if (quantifierTokens[1] == SC.QUANTIFIER_SEPARATOR) { // {,#}
-            return _quantifier(undefined, quantifierTokens[2]);
+            return _quantifier(undefined, quantifierTokens[2], expression);
         }
 
-        return _quantifier(quantifierTokens[1]); // {#,}
+        return _quantifier(quantifierTokens[1], undefined, expression); // {#,}
     }
 
     if (quantifierTokens.length == 5) { // {#,#}
-        return _quantifier(quantifierTokens[1], quantifierTokens[3]);
+        return _quantifier(quantifierTokens[1], quantifierTokens[3], expression);
     }
 
     throw error.Cannot_parse_quantifier__EXPRESSION(quantifierTokens.join(''));
@@ -169,9 +172,9 @@ function _parseQuantifier(tokens) {
  * 
  * @returns {QuantifierData}
  */
-function _quantifier(min, max) {
+function _quantifier(min, max, expression) {
     if (min == null && max == null) {
-        return { min: 1, max: 1, data: null };
+        return { min: 1, max: 1, expression: null, data: null };
     }
 
     const result = { data: {} };
@@ -193,6 +196,8 @@ function _quantifier(min, max) {
     } else {
         result.max = Number.POSITIVE_INFINITY;
     }
+
+    result.expression = expression;
 
     return result;
 }

@@ -38,6 +38,14 @@ class ConceptsShadow {
         if (expression !== undefined) {
             const { type, name, quantifier } = keyExpression.parse(expression);
 
+            if (type == keyExpression.Types.LITERAL && quantifier.max > 1) {
+                throw error.Concepts_definition_is_not_valid__because__REASON(
+                    because => because.LITERAL_cannot_have_QUANTIFIER(
+                        name, quantifier.expression
+                    )
+                );
+            }
+
             this.#type = type;
             this.#name = name;
             this.#quantifier = quantifier;
@@ -68,9 +76,9 @@ class ConceptsShadow {
      */
     get parent() { return this.#parent; }
     /**
-     * Array of variable nodes under this node.
+     * Variable node under this node.
      * 
-     * @returns {Array.<ConceptsShadow>}
+     * @returns {ConceptsShadow>}
      */
     get variable() { return this.#variable; }
     /**
@@ -92,9 +100,21 @@ class ConceptsShadow {
      * @returns {Object}
      */
     get data() { return this.#data; }
+    /**
+     * Checks if this node allows more than one instance.
+     * 
+     * @returns {boolean} `true` if it is, `false` otherwise
+     */
+    get allowsMultiple() { return this.quantifier.max > 1; }
 
+    /**
+     * Returns default value for this concept. This is used in schema shadow
+     * when concept does not exist in a schema definition.
+     * 
+     * @returns {Array|Object}
+     */
     get defaultValue() {
-        if (this.quantifier.max > 1) {
+        if (this.allowsMultiple) {
             return [];
         }
 
@@ -216,32 +236,7 @@ class ConceptsShadow {
      */
     validate(schemaDefinition) {
         if (this.hasOnlyVariableLeafNode()) {
-            if (this.#type != keyExpression.Types.LITERAL) { return; }
-            if (!Array.isArray(this.defaultValue)) { return; }
-
-            if (!Array.isArray(schemaDefinition)) {
-                throw error.Definition_is_not_valid__because__REASON(
-                    because => because.LITERAL_expects_an_array_for_VARIABLE__but_got_VALUE(
-                        this.name, this.variable.name, schemaDefinition
-                    )
-                )
-            }
-
-            if (schemaDefinition.length < this.quantifier.min) {
-                throw error.Definition_is_not_valid__because__REASON(
-                    because => because.LITERAL_requires_VARIABLE_array_to_have_at_least_MIN_item_s___but_got_COUNT(
-                        this.name, this.variable.name, this.quantifier.min, schemaDefinition.length
-                    )
-                )
-            }
-
-            if (schemaDefinition.length > this.quantifier.max) {
-                throw error.Definition_is_not_valid__because__REASON(
-                    because => because.LITERAL_requires_VARIABLE_array_to_have_at_most_MAX_item_s___but_got_COUNT(
-                        this.name, this.variable.name, this.quantifier.max, schemaDefinition.length
-                    )
-                );
-            }
+            // todo variable validation
 
             return;
         }
@@ -250,7 +245,7 @@ class ConceptsShadow {
             const literal = this.literals[0];
 
             if (schemaDefinition !== literal.name) {
-                throw error.Definition_is_not_valid__because__REASON(
+                throw error.Schema_definition_is_not_valid__because__REASON(
                     because => because.Expected_LITERAL__but_got_VALUE(literal.name, schemaDefinition)
                 );
             }
@@ -269,7 +264,7 @@ class ConceptsShadow {
 
                 delete schemaKeys[literal.name];
             } else if (literal.quantifier.min > 0) {
-                throw error.Definition_is_not_valid__because__REASON(
+                throw error.Schema_definition_is_not_valid__because__REASON(
                     because => because.LITERAL_is_missing(literal.name)
                 );
             }
@@ -307,7 +302,7 @@ class ConceptsShadow {
             if (errors.hasOwnProperty(remainingKey)) {
                 throw arrayify.get(errors, remainingKey)[0];
             } else {
-                throw error.Definition_is_not_valid__because__REASON(
+                throw error.Schema_definition_is_not_valid__because__REASON(
                     because => because.TOKEN_is_not_expected(remainingKey)
                 );
             }
@@ -316,18 +311,18 @@ class ConceptsShadow {
         for (const concept of this.concepts) {
             if (quantities[concept.name] < concept.quantifier.min) {
                 if (concept.quantifier == keyExpression.Quantifiers.DEFAULT) {
-                    throw error.Definition_is_not_valid__because__REASON(
+                    throw error.Schema_definition_is_not_valid__because__REASON(
                         because => because.CONCEPT_is_missing(concept.name)
                     );
                 } else {
-                    throw error.Definition_is_not_valid__because__REASON(
+                    throw error.Schema_definition_is_not_valid__because__REASON(
                         because => because.Minimum_allowed_number_of_CONCEPT_is_MIN__but_got_COUNT(
                             concept.name, concept.quantifier.min, quantities[concept.name]
                         )
                     );
                 }
             } else if (quantities[concept.name] > concept.quantifier.max) {
-                throw error.Definition_is_not_valid__because__REASON(
+                throw error.Schema_definition_is_not_valid__because__REASON(
                     because => because.Maximum_allowed_number_of_CONCEPT_is_MAX__but_got_COUNT(
                         concept.name, concept.quantifier.max, quantities[concept.name]
                     )
