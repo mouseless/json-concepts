@@ -22,9 +22,17 @@ const { required } = require('./validation');
  * @property {String} name Name of key expression
  * @property {QuantifierData} quantifier Quantifier of key expression
  */
+/**
+ * Carries type, name and variable type information as a result of parsing.
+ * 
+ * @typedef {Object} ValueExpressionData
+ * @property {Number} type Type of value expression
+ * @property {String} name Name of value expression
+ * @property {String} variable Variable type of value expression
+ */
 
 /**
- * Possible types of key expressions.
+ * Possible types of expressions.
  * 
  * @enum {Number}
  */
@@ -32,16 +40,6 @@ const Types = {
     VARIABLE: 1,
     LITERAL: 2
 }
-
-const _scHash = {
-    [SC.VARIABLE]: SC.VARIABLE,
-    [SC.ZERO_OR_ONE]: SC.ZERO_OR_ONE,
-    [SC.ZERO_OR_MORE]: SC.ZERO_OR_MORE,
-    [SC.ONE_OR_MORE]: SC.ONE_OR_MORE,
-    [SC.BEGIN_QUANTIFIER]: SC.BEGIN_QUANTIFIER,
-    [SC.END_QUANTIFIER]: SC.END_QUANTIFIER,
-    [SC.QUANTIFIER_SEPARATOR]: SC.QUANTIFIER_SEPARATOR
-};
 
 /**
  * Available quantifiers. Use quantifier special characters to get their
@@ -58,6 +56,21 @@ const Quantifiers = {
     [SC.ZERO_OR_MORE]: _quantifier(0, undefined, SC.ZERO_OR_MORE)
 };
 
+const _keySC = {
+    [SC.VARIABLE]: SC.VARIABLE,
+    [SC.ZERO_OR_ONE]: SC.ZERO_OR_ONE,
+    [SC.ZERO_OR_MORE]: SC.ZERO_OR_MORE,
+    [SC.ONE_OR_MORE]: SC.ONE_OR_MORE,
+    [SC.BEGIN_QUANTIFIER]: SC.BEGIN_QUANTIFIER,
+    [SC.END_QUANTIFIER]: SC.END_QUANTIFIER,
+    [SC.QUANTIFIER_SEPARATOR]: SC.QUANTIFIER_SEPARATOR
+};
+
+const _valueSC = {
+    [SC.VARIABLE]: SC.VARIABLE,
+    [SC.TYPE]: SC.TYPE
+};
+
 /**
  * Parses key expression. Quantifier is null when it does not exist in the
  * expression.
@@ -66,8 +79,8 @@ const Quantifiers = {
  * 
  * @returns {KeyExpressionData} Parsed expression data
  */
-function parse(expression = required('expression')) {
-    const tokens = _scan(expression);
+function parseKey(expression = required('expression')) {
+    const tokens = _scan(expression, _keySC);
 
     const result = {};
 
@@ -86,22 +99,60 @@ function parse(expression = required('expression')) {
 }
 
 /**
- * @param {String} expression 
+ * Parses value expression.
+ * 
+ * @param {String} expression (Required) Value expression to parse
+ * 
+ * @returns {ValueExpressionData} Parsed expression data
+ */
+function parseValue(expression = required('expression')) {
+    const tokens = _scan(expression, _valueSC);
+
+    const result = {};
+
+    let token = tokens.shift();
+    if (token == SC.VARIABLE) {
+        result.type = Types.VARIABLE;
+        result.name = tokens.shift();
+
+        token = tokens.shift();
+        if(token == SC.TYPE) {
+            token = tokens.shift();
+            if(token === undefined) {
+                throw new Error('type expected');
+            }
+
+            result.variable = token;
+        }
+    } else {
+        result.type = Types.LITERAL;
+        result.name = token;
+    }
+
+    return result;
+}
+
+/**
+ * @param {String} expression
+ * @param {Object} scHash
  * 
  * @returns {Array.<String>}
  */
-function _scan(expression = required('expression')) {
+function _scan(
+    expression = required('expression'),
+    scHash = required('scHash')
+) {
     const tokens = [];
 
     let current = "";
     for (const c of expression) {
-        if (_scHash[c]) {
+        if (scHash[c]) {
             if (current.length > 0) {
                 tokens.push(current);
                 current = "";
             }
 
-            tokens.push(_scHash[c]);
+            tokens.push(scHash[c]);
         } else {
             current += c;
         }
@@ -205,5 +256,6 @@ function _quantifier(min, max, expression) {
 module.exports = {
     Types,
     Quantifiers,
-    parse
+    parseKey,
+    parseValue
 };

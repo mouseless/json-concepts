@@ -9,6 +9,22 @@ class ConceptsShadow {
      * @property {Number} max Maximum number of tokens to be allowed
      */
     /**
+     * Carries type, name and quantifier information as a result of parsing.
+     * 
+     * @typedef {Object} KeyExpressionData
+     * @property {Number} type Type of key expression
+     * @property {String} name Name of key expression
+     * @property {QuantifierData} quantifier Quantifier of key expression
+     */
+    /**
+     * Carries type, name and variable type information as a result of parsing.
+     * 
+     * @typedef {Object} ValueExpressionData
+     * @property {Number} type Type of value expression
+     * @property {String} name Name of value expression
+     * @property {String} variable Variable type of value expression
+     */
+    /**
      * Variables are stored in an object instead of an array to provide quick
      * access via variable name.
      * 
@@ -18,6 +34,7 @@ class ConceptsShadow {
     /* const */ #type;
     /* const */ #name;
     /* const */ #quantifier;
+    /* const */ #variableType;
     /* const */ #parent;
     /* const */ #variable;
     /* const */ #literals;
@@ -31,24 +48,26 @@ class ConceptsShadow {
      * This constructor only initializes a shadow instance. It should be built
      * after construction.
      * 
-     * @param {String} expression Key expression of this node. It should be
-     * `undefined` for root node.
+     * @param {KeyExpressionData|ValueExpressionData} exp Expression of this
+     * node. It should be `undefined` for root node.
      */
-    constructor(expression, parent) {
-        if (expression !== undefined) {
-            const { type, name, quantifier } = keyExpression.parse(expression);
+    constructor(exp, parent) {
+        if (exp !== undefined) {
+            this.#type = exp.type;
+            this.#name = exp.name;
+            this.#quantifier = exp.quantifier;
 
-            if (type == keyExpression.Types.LITERAL && quantifier.max > 1) {
+            if (this.#type == expression.Types.LITERAL &&
+                this.#quantifier !== undefined &&
+                this.#quantifier.max > 1) {
                 throw error.Concepts_definition_is_not_valid__because__REASON(
                     because => because.LITERAL_cannot_have_QUANTIFIER(
-                        name, quantifier.expression
+                        this.#name, this.#quantifier.expression
                     )
                 );
+            } else if (this.#type == expression.Types.VARIABLE) {
+                this.#variableType = exp.variable;
             }
-
-            this.#type = type;
-            this.#name = name;
-            this.#quantifier = quantifier;
         }
 
         this.#parent = parent;
@@ -182,22 +201,22 @@ class ConceptsShadow {
      */
     build(definition) {
         if (typeof definition === 'string') {
-            const key = definition;
+            const leaf = new ConceptsShadow(expression.parseValue(definition), this)
+                .build();
 
-            const leaf = new ConceptsShadow(key, this).build();
-
-            if (leaf.#type == keyExpression.Types.VARIABLE) {
+            if (leaf.#type == expression.Types.VARIABLE) {
                 this.#variable = leaf;
-            } else if (leaf.#type == keyExpression.Types.LITERAL) {
+            } else if (leaf.#type == expression.Types.LITERAL) {
                 this.#literals[leaf.name] = leaf;
             }
         } else if (typeof definition === 'object') {
             for (const key in definition) {
-                const node = new ConceptsShadow(key, this).build(definition[key]);
+                const node = new ConceptsShadow(expression.parseKey(key), this)
+                    .build(definition[key]);
 
-                if (node.#type == keyExpression.Types.VARIABLE) {
+                if (node.#type == expression.Types.VARIABLE) {
                     this.#concepts[node.name] = node;
-                } else if (node.#type == keyExpression.Types.LITERAL) {
+                } else if (node.#type == expression.Types.LITERAL) {
                     this.#literals[node.name] = node;
                 }
             }
@@ -211,6 +230,10 @@ class ConceptsShadow {
             if (this.#quantifier.data != null) {
                 this.#data.quantifier = this.#quantifier.data;
             }
+        }
+
+        if (this.#variableType != null) {
+            this.#data.type = this.#variableType;
         }
 
         if (this.variable != null) {
@@ -310,7 +333,7 @@ class ConceptsShadow {
 
         for (const concept of this.concepts) {
             if (quantities[concept.name] < concept.quantifier.min) {
-                if (concept.quantifier == keyExpression.Quantifiers.DEFAULT) {
+                if (concept.quantifier == expression.Quantifiers.DEFAULT) {
                     throw error.Schema_definition_is_not_valid__because__REASON(
                         because => because.CONCEPT_is_missing(concept.name)
                     );
@@ -346,4 +369,10 @@ class ConceptsShadow {
 
 module.exports = ConceptsShadow;
 
-const { SpecialCharacters: SC, error, arrayify, keyExpression, required } = require('./util');
+const {
+    SpecialCharacters: SC,
+    error,
+    arrayify,
+    expression,
+    required
+} = require('./util');
