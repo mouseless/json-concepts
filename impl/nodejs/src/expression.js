@@ -69,11 +69,15 @@ class Expression {
             if (token == SC.TYPE) {
                 token = tokens.shift();
                 if (token === undefined) {
-                    throw error.Cannot_parse_EXPRESSION__type_expected(expression);
+                    throw error.Concepts_definition_is_not_valid__because__REASON(
+                        because => because.Cannot_parse_EXPRESSION__type_expected(expression)
+                    );
                 }
 
                 if (!types[token]) {
-                    throw error.Unknown_type_TYPE_in_EXPRESSION(token, expression);
+                    throw error.Concepts_definition_is_not_valid__because__REASON(
+                        because => because.Unknown_type_TYPE_in_EXPRESSION(token, expression)
+                    );
                 }
 
                 type = types[token];
@@ -258,8 +262,10 @@ function _parseQuantifier(tokens) {
     }
 
     if (token != SC.BEGIN_QUANTIFIER) {
-        if (!Quantifiers.hasOwnProperty(token)) {
-            throw error.Cannot_parse_quantifier__EXPRESSION(token);
+        if (!Quantifiers[token]) {
+            throw error.Concepts_definition_is_not_valid__because__REASON(
+                because => because.Cannot_parse_quantifier__EXPRESSION(token)
+            );
         }
 
         return Quantifiers[token];
@@ -294,7 +300,9 @@ function _parseQuantifier(tokens) {
         return _quantifier(quantifierTokens[1], quantifierTokens[3], expression);
     }
 
-    throw error.Cannot_parse_quantifier__EXPRESSION(quantifierTokens.join(''));
+    throw error.Concepts_definition_is_not_valid__because__REASON(
+        because => because.Cannot_parse_quantifier__EXPRESSION(quantifierTokens.join(''))
+    );
 }
 
 /**

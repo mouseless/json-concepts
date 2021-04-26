@@ -18,8 +18,17 @@ const InvalidConceptsReasons = {
         (LITERAL, QUANTIFIER) => `'${LITERAL}' cannot have '${QUANTIFIER}' quantifier`,
     CONCEPT_cannot_have_VARIABLE_more_than_once:
         (CONCEPT, VARIABLE) => `'${CONCEPT}' cannot have '${SC.VARIABLE}${VARIABLE}' ` +
-            `more than once`
-
+            `more than once`,
+    VALIDATOR_does_not_support_TYPE:
+        (VALIDATOR, TYPE) => `${VALIDATOR} does not support ${TYPE}'`,
+    Unknown_type_TYPE_in_EXPRESSION:
+        (TYPE, EXPRESSION) => `Unknown type '${TYPE}' in '${EXPRESSION}`,
+    Unknown_type_TYPE:
+        (TYPE) => `Unknown type '${TYPE}'`,
+    Cannot_parse_EXPRESSION__type_expected:
+        (EXPRESSION) => `Cannot parse '${EXPRESSION}', type expected`,
+    Cannot_parse_quantifier__EXPRESSION:
+        (EXPRESSION) => `Cannot parse quantifier: ${EXPRESSION}`
 };
 
 /**
@@ -70,37 +79,25 @@ function _error(message, name = Names.ERROR) {
 module.exports = {
     Names,
     PARAMETER_is_required(PARAMETER) {
-        return _error(`${PARAMETER} is required`);
+        return _error(`${PARAMETER} is required.`);
     },
     Expected_type_was_EXPECTED_got_ACTUAL(EXPECTED, ACTUAL) {
-        return _error(`Expected type was '${EXPECTED}', got '${ACTUAL}'`);
+        return _error(`Expected type was '${EXPECTED}', got '${ACTUAL}'.`);
     },
     FILE_is_not_a_valid_json(FILE) {
-        return _error(`'${FILE}' is not a valid json`);
+        return _error(`'${FILE}' is not a valid json.`);
     },
     Cannot_load_URL(URL) {
-        return _error(`Cannot load '${URL}'`);
+        return _error(`Cannot load '${URL}'.`);
     },
     Cannot_load_FILE(FILE) {
-        return _error(`Cannot load '${FILE}'`);
+        return _error(`Cannot load '${FILE}'.`);
     },
     Concepts_required_to_load_SCHEMA(SCHEMA) {
         return _error(
             `Concepts required to load ${SCHEMA}.` +
             ` Either specify @concepts meta-data within ${SCHEMA}, or pass concepts as a parameter.`
         );
-    },
-    Cannot_parse_quantifier__EXPRESSION(EXPRESSION) {
-        return _error(`Cannot parse quantifier: ${EXPRESSION}`)
-    },
-    Cannot_parse_EXPRESSION__type_expected(EXPRESSION) {
-        return _error(`Cannot parse '${EXPRESSION}', type expected.`)
-    },
-    Unknown_type_TYPE_in_EXPRESSION(TYPE, EXPRESSION) {
-        return _error(`Unknown type '${TYPE}' in '${EXPRESSION}`);
-    },
-    Unknown_type_TYPE(TYPE) {
-        return _error(`Unknown type '${TYPE}'`);
     },
     /**
      * Selects reason from given reasons.
@@ -117,14 +114,16 @@ module.exports = {
      */
     Concepts_definition_is_not_valid__because__REASON(REASON) {
         return _error(
-            `Concepts definition is not valid: ${REASON(InvalidConceptsReasons)}`,
+            `Concepts definition is not valid: ${REASON(InvalidConceptsReasons)}.`,
             Names.SCHEMA_ERROR
         );
     },
     CONCEPTS_is_not_valid__Error_is__ERROR(CONCEPTS, ERROR) {
-        return _error(`'${CONCEPTS}' is not valid. Error is: ${ERROR}`, Names.SCHEMA_ERROR);
+        return _error(
+            `'${CONCEPTS}' is not valid. Error is: ${ERROR}`,
+            Names.SCHEMA_ERROR
+        );
     },
-
     /**
      * Selects reason from given reasons.
      * 
@@ -145,7 +144,10 @@ module.exports = {
         );
     },
     SCHEMA_is_not_valid__Error_is__ERROR(SCHEMA, ERROR) {
-        return _error(`'${SCHEMA}' is not valid. Error is: ${ERROR}`, Names.SCHEMA_ERROR);
+        return _error(
+            `'${SCHEMA}' is not valid. Error is: ${ERROR}`,
+            Names.SCHEMA_ERROR
+        );
     },
     /**
      * Selects reason from given reasons.
@@ -164,12 +166,15 @@ module.exports = {
     Definition_is_not_compatible_with_its_CONCEPTS__because__REASON(CONCEPTS, REASON) {
         return _error(
             `Definition is not compatible with its ${CONCEPTS}: ` +
-            `${REASON(InvalidTransformationReasons)(CONCEPTS)}`,
+            `${REASON(InvalidTransformationReasons)(CONCEPTS)}.`,
             Names.SCHEMA_ERROR
         );
     },
     TRANSFORMATION_is_not_valid__Error_is__ERROR(TRANSFORMATION, ERROR) {
-        return _error(`'${TRANSFORMATION}' is not valid. Error is: ${ERROR}`, Names.SCHEMA_ERROR);
+        return _error(
+            `'${TRANSFORMATION}' is not valid. Error is: ${ERROR}`,
+            Names.SCHEMA_ERROR
+        );
     }
 };
 

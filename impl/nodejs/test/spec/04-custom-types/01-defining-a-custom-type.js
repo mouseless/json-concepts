@@ -107,7 +107,9 @@ describe('spec/custom-types/defining-a-custom-type', function () {
                     }
                 }
             })).should.throw(
-                error.Unknown_type_TYPE('text').message
+                error.Concepts_definition_is_not_valid__because__REASON(
+                    because => because.Unknown_type_TYPE('text')
+                ).message
             );
         });
     });

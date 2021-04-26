@@ -34,8 +34,10 @@ describe('spec/variables/variable-types', function () {
                 "$flag*": "$enabled:"
             }
         })).should.throw(
-            error.Cannot_parse_EXPRESSION__type_expected(
-                '$enabled:'
+            error.Concepts_definition_is_not_valid__because__REASON(
+                because => because.Cannot_parse_EXPRESSION__type_expected(
+                    '$enabled:'
+                )
             ).message
         );
     });
@@ -119,8 +121,10 @@ describe('spec/variables/variable-types', function () {
                     "$flag*": "$enabled:text"
                 }
             })).should.throw(
-                error.Unknown_type_TYPE_in_EXPRESSION(
-                    'text', '$enabled:text'
+                error.Concepts_definition_is_not_valid__because__REASON(
+                    because => because.Unknown_type_TYPE_in_EXPRESSION(
+                        'text', '$enabled:text'
+                    )
                 ).message
             );
         });
