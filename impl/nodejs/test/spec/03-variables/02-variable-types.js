@@ -1,11 +1,11 @@
 const { Concepts } = require('../../..');
 const { error } = require('../../../src/util');
-const { should } = require('chai');
+const { should: buildShould } = require('chai');
 
-should();
+const should = buildShould();
 
-describe('spec/variables/variable-types', function() {
-    it('should parse variable type', function() {
+describe('spec/variables/variable-types', function () {
+    it('should parse variable type', function () {
         const concepts = new Concepts({
             "$service+": {
                 "$flag*": "$enabled:boolean"
@@ -28,15 +28,123 @@ describe('spec/variables/variable-types', function() {
         });
     });
 
-    it('should give error when type is not defined after :');
-    it('should give error when given type is not supported');
-    it('should validate variable values against types');
+    it('should give error when type is not defined after :', function () {
+        (() => new Concepts({
+            "$service+": {
+                "$flag*": "$enabled:"
+            }
+        })).should.throw(
+            error.Cannot_parse_EXPRESSION__type_expected(
+                '$enabled:'
+            ).message
+        );
+    });
 
-    describe('available variable types', function() {
-        it('should support any');
-        it('should support string');
-        it('should support boolean');
-        it('should support number');
-        it('should allow any value when type is not specified');
+    describe('available variable types', function () {
+        it('should support any', function () {
+            const concepts = new Concepts({
+                "$key*": "$any:any"
+            });
+
+            (() => concepts.validate({
+                "boolean": true,
+                "number": 1,
+                "string": "text"
+            })).should.not.throw();
+        });
+
+        it('should support string', function () {
+            const concepts = new Concepts({
+                "key": "$string:string"
+            });
+
+            (() => concepts.validate({
+                "key": "text"
+            })).should.not.throw();
+
+            (() => concepts.validate({
+                "key": true
+            })).should.throw(
+                error.Schema_definition_is_not_valid__because__REASON(
+                    because => because.VALUE_is_not_a_valid_TYPE(
+                        'true', 'string'
+                    )
+                ).message
+            );
+        });
+
+        it('should support boolean', function () {
+            const concepts = new Concepts({
+                "key": "$boolean:boolean"
+            });
+
+            (() => concepts.validate({
+                "key": true
+            })).should.not.throw();
+
+            (() => concepts.validate({
+                "key": "string"
+            })).should.throw(
+                error.Schema_definition_is_not_valid__because__REASON(
+                    because => because.VALUE_is_not_a_valid_TYPE(
+                        'string', 'boolean'
+                    )
+                ).message
+            );
+        });
+
+        it('should support number', function () {
+            const concepts = new Concepts({
+                "key": "$number:number"
+            });
+
+            (() => concepts.validate({
+                "key": 0
+            })).should.not.throw();
+
+            (() => concepts.validate({
+                "key": "string"
+            })).should.throw(
+                error.Schema_definition_is_not_valid__because__REASON(
+                    because => because.VALUE_is_not_a_valid_TYPE(
+                        'string', 'number'
+                    )
+                ).message
+            );
+        });
+
+        it('should give error when given type is not supported', function () {
+            (() => new Concepts({
+                "$service+": {
+                    "$flag*": "$enabled:text"
+                }
+            })).should.throw(
+                error.Unknown_type_TYPE_in_EXPRESSION(
+                    'text', '$enabled:text'
+                ).message
+            );
+        });
+
+        it('should allow any value when type is not specified', function () {
+            const concepts = new Concepts({
+                "$key*": "$any"
+            });
+
+            (() => concepts.validate({
+                "boolean": true,
+                "number": 1,
+                "string": "text"
+            })).should.not.throw();
+        });
+
+        it('should include type only when type is given explicitly', function() {
+            const concepts = new Concepts({
+                "implicit": "$implicit",
+                "explicit": "$explicit:any"
+            });
+
+            should.not.exist(concepts.shadow.literal[0].variable.type);
+            concepts.shadow.literal[1].variable.type.should.equal('any');
+        });
     });
 });

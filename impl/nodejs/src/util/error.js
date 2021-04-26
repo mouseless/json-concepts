@@ -28,7 +28,8 @@ const InvalidSchemaReasons = {
     Minimum_allowed_number_of_CONCEPT_is_MIN__but_got_COUNT:
         (CONCEPT, MIN, COUNT) => `Minimum allowed number of '${CONCEPT}' is ${MIN}, but got ${COUNT}`,
     Maximum_allowed_number_of_CONCEPT_is_MAX__but_got_COUNT:
-        (CONCEPT, MAX, COUNT) => `Maximum allowed number of '${CONCEPT}' is ${MAX}, but got ${COUNT}`
+        (CONCEPT, MAX, COUNT) => `Maximum allowed number of '${CONCEPT}' is ${MAX}, but got ${COUNT}`,
+    VALUE_is_not_a_valid_TYPE: (VALUE, TYPE) => `'${VALUE}' is not a valid ${TYPE}`
 }
 
 /**
@@ -86,6 +87,12 @@ module.exports = {
     },
     Cannot_parse_quantifier__EXPRESSION(EXPRESSION) {
         return _error(`Cannot parse quantifier: ${EXPRESSION}`)
+    },
+    Cannot_parse_EXPRESSION__type_expected(EXPRESSION) {
+        return _error(`Cannot parse '${EXPRESSION}', type expected.`)
+    },
+    Unknown_type_TYPE_in_EXPRESSION(TYPE, EXPRESSION) {
+        return _error(`Unknown type '${TYPE}' in '${EXPRESSION}`);
     },
     /**
      * Selects reason from given reasons.

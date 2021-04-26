@@ -1,4 +1,5 @@
 const { SpecialCharacters: SC, error, required } = require('./util');
+const Types = require('./type');
 
 class Expression {
     /**
@@ -47,10 +48,14 @@ class Expression {
      * expression.
      * 
      * @param {String} expression (Required) Value expression to parse
+     * @param {Types} types Type map
      * 
      * @returns {Expression} Parsed expression object
      */
-    static parseValue(expression = required('expression')) {
+    static parseValue(
+        expression = required('expression'),
+        types = Types
+    ) {
         const tokens = _scan(expression, _valueSC);
 
         let isVariable, name, type;
@@ -64,10 +69,14 @@ class Expression {
             if (token == SC.TYPE) {
                 token = tokens.shift();
                 if (token === undefined) {
-                    throw new Error('type expected');
+                    throw error.Cannot_parse_EXPRESSION__type_expected(expression);
                 }
 
-                type = token;
+                if (!types.hasOwnProperty(token)) {
+                    throw error.Unknown_type_TYPE_in_EXPRESSION(token, expression);
+                }
+
+                type = types[token];
             }
         } else {
             isVariable = false;
@@ -91,7 +100,7 @@ class Expression {
      * 
      * @param {Boolean} isVariable 
      * @param {String} name 
-     * @param {String} type 
+     * @param {import('./type').TypeData} type 
      * @param {QuantifierData} quantifier 
      */
     constructor(isVariable, name, type, quantifier) {
@@ -131,7 +140,7 @@ class Expression {
      * Type part of parsed expression. Returns `undefined` when type did not
      * exist in parsed expression.
      * 
-     * @returns {String}
+     * @returns {import('./type').TypeData}
      */
     get type() { return this.#type; }
     /**

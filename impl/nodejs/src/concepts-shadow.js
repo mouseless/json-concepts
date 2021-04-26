@@ -1,20 +1,4 @@
 class ConceptsShadow {
-    /**
-     * Quantifier represents the definition of allowed number of instances for
-     * a token.
-     * 
-     * @typedef {Object} QuantifierData
-     * 
-     * @property {Number} min Minimum number of tokens to be allowed
-     * @property {Number} max Maximum number of tokens to be allowed
-     */
-    /**
-     * Variables are stored in an object instead of an array to provide quick
-     * access via variable name.
-     * 
-     * @typedef {Object} VariablesData
-     */
-
     /* const */ #expression;
     /* const */ #parent;
     /* const */ #variable;
@@ -66,7 +50,7 @@ class ConceptsShadow {
      * Quantifier definition of this node. Result is either null or an object
      * with min and max values.
      * 
-     * @returns {QuantifierData}
+     * @returns {import('./expression').QuantifierData}
      */
     get quantifier() { return this.#expression != null ? this.#expression.quantifier : null; }
     /**
@@ -76,17 +60,21 @@ class ConceptsShadow {
      */
     get allowsMultiple() { return this.#expression != null && this.#expression.allowsMultiple; }
     /**
-     * Variable type of this node. Available only when this node is a leaf node.
+     * Variable type of this node. Available only when this node is a variable.
+     * 
+     * @returns {import('./type').TypeData}
      */
     get type() { return this.#expression != null ? this.#expression.type : null; }
     /**
      * Parent of this node. `undefined` for root node.
+     * 
+     * @returns {ConceptsShadow}
      */
     get parent() { return this.#parent; }
     /**
      * Variable node under this node.
      * 
-     * @returns {ConceptsShadow>}
+     * @returns {ConceptsShadow}
      */
     get variable() { return this.#variable; }
     /**
@@ -126,7 +114,8 @@ class ConceptsShadow {
     /**
      * Makes a deep search and returns all variables in the tree.
      * 
-     * @returns {VariablesData} Variables as key value pairs
+     * @returns {import('./concepts').VariablesData} Variables as key value
+     * pairs.
      */
     getAllVariables() { return this._variables({}); }
     /**
@@ -185,7 +174,7 @@ class ConceptsShadow {
     build(definition) {
         if (typeof definition === 'string') {
             const expression = Expression.parseValue(definition);
-            
+
             const leaf = new ConceptsShadow(expression, this).build();
             if (leaf.isVariable) {
                 this.#variable = leaf;
@@ -214,7 +203,7 @@ class ConceptsShadow {
         }
 
         if (this.type != null) {
-            this.#data.type = this.type;
+            this.#data.type = this.type.name;
         }
 
         if (this.variable != null) {
@@ -240,7 +229,9 @@ class ConceptsShadow {
      */
     validate(schemaDefinition) {
         if (this.hasOnlyVariableLeafNode()) {
-            // todo variable validation
+            if (this.variable.type !== undefined) {
+                this.variable.type.validate(schemaDefinition);
+            }
 
             return;
         }
@@ -320,7 +311,7 @@ class ConceptsShadow {
     /**
      * @param {Object} result 
      * 
-     * @returns {Object}
+     * @returns {import('./concepts').VariablesData}
      */
     _variables(result = required('result')) {
         if (this.hasOnlyVariableLeafNode()) {

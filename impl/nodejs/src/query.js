@@ -1,13 +1,4 @@
 class Query {
-    /**
-     * Data that represents a concept
-     * 
-     * @typedef {Object} Concept
-     * @property {Object} variables
-     * 
-     * @see Concepts
-     */
-
     /* const */ #definition;
 
     /**
@@ -27,8 +18,8 @@ class Query {
      * Validates this query against given target concept and source concepts.
      * An error will be thrown if validation fails.
      * 
-     * @param {Concept} targetConcept Target concept data. Pass the concept
-     * data to which result of this query will be set.
+     * @param {import('./concepts').ConceptData} targetConcept Target concept
+     * data. Pass the concept data to which result of this query will be set.
      * @param {Concepts} source Source concepts from which this query will
      * fetch its result.
      */
