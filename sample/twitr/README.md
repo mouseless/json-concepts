@@ -36,7 +36,7 @@ of any concepts within a project.
     - [ ] :gRpc(*)
   - [ ] feed (react)
     - [ ] :rest(*)
-  - [ ] board (angular)
+  - [ ] board (vue)
     - [ ] :graphQL(*)
 
 _PS: Any previous task was lost before converting this file to an .md file._
