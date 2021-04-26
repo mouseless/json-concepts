@@ -51,20 +51,6 @@ Short-hand for enum validator is as follows;
                 "type": "httpStatus"
             }
         }
-    },
-    "metaData": {
-        "types": [
-            {
-                "_": "httpStatus",
-                "type": "number",
-                "validators": [
-                    {
-                        "_": "enum",
-                        "value": [ 200, 400, 500 ]
-                    }
-                ]
-            }
-        ]
     }
 }
 ```

@@ -36,30 +36,6 @@ Following definition demonstrates a short-hand usage of `regex` validator.
 }
 ```
 
-Both of the concepts definitions have following meta-data in their shadow;
-
-`CONCEPTS SHADOW`
-
-```json
-{
-    ...
-    "metaData": {
-        "types": [
-            {
-                "_": "identifier",
-                "type": "string",
-                "validators": [
-                    {
-                        "_": "regex",
-                        "value": "/[a-zA-Z]/g"
-                    }
-                ]
-            }
-        ]
-    }
-}
-```
-
 For above concepts definition following schema is **NOT** valid;
 
 `SCHEMA: greeting.service.json`

@@ -54,38 +54,6 @@ Above definition has following schema;
                 }
             }
         ]
-    },
-    "metaData": {
-        "types": [
-            {
-                "_": "identifier",
-                "type": "string",
-                "validators": [
-                    {
-                        "_": "min",
-                        "value": 1
-                    },
-                    {
-                        "_": "max",
-                        "value": 10
-                    }
-                ]
-            },
-            {
-                "_": "limit",
-                "type": "string",
-                "validators": [
-                    {
-                        "_": "min",
-                        "value": 10
-                    },
-                    {
-                        "_": "max",
-                        "value": 100
-                    }
-                ]
-            }
-        ]
     }
 }
 ```
@@ -132,7 +100,7 @@ Below schemas are **INVALID** because of min-max validations;
 {
     "sayHello": {
         "name": "",
-        "dailyCallLimit": 9
+        "dailyCallLimit": 50
     }
 }
 ```
@@ -148,7 +116,7 @@ Below schemas are **INVALID** because of min-max validations;
 {
     "sayHello": {
         "name": "01234567890",
-        "dailyCallLimit": 9
+        "dailyCallLimit": 50
     }
 }
 ```

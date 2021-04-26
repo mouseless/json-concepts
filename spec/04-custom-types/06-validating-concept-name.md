@@ -39,30 +39,6 @@ Concept names can also be validated like variable values;
                 }
             }
         }
-    },
-    "metaData": {
-        "types": [
-            {
-                "_": "identifier",
-                "type": "string",
-                "validators": [
-                    {
-                        "_": "regex",
-                        "value": "/^[a-zA-Z][0-9a-zA-Z]*$/g"
-                    }
-                ]
-            },
-            {
-                "_": "method",
-                "type": "string",
-                "validators": [
-                    {
-                        "_": "enum",
-                        "value": [ "get", "post", "put", "delete" ]
-                    }
-                ]
-            }
-        ]
     }
 }
 ```
