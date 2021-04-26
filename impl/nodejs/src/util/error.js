@@ -14,7 +14,12 @@ const Names = {
  * Reason messages for invalid concepts.
  */
 const InvalidConceptsReasons = {
-    LITERAL_cannot_have_QUANTIFIER: (LITERAL, QUANTIFIER) => `'${LITERAL}' cannot have '${QUANTIFIER}' quantifier`
+    LITERAL_cannot_have_QUANTIFIER:
+        (LITERAL, QUANTIFIER) => `'${LITERAL}' cannot have '${QUANTIFIER}' quantifier`,
+    CONCEPT_cannot_have_VARIABLE_more_than_once:
+        (CONCEPT, VARIABLE) => `'${CONCEPT}' cannot have '${SC.VARIABLE}${VARIABLE}' ` +
+            `more than once`
+
 };
 
 /**

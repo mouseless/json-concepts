@@ -117,7 +117,7 @@ class ConceptsShadow {
      * @returns {import('./concepts').VariablesData} Variables as key value
      * pairs.
      */
-    getAllVariables() { return this._variables({}); }
+    getAllVariables() { return this._variables(this.name, {}); }
     /**
      * Gets child concept node with given name. It returns `undefined` when no
      * child concept with given name exists.
@@ -309,16 +309,28 @@ class ConceptsShadow {
     }
 
     /**
-     * @param {Object} result 
+     * @param {String} name
+     * @param {import('./concepts').VariablesData} result
      * 
      * @returns {import('./concepts').VariablesData}
      */
-    _variables(result = required('result')) {
+    _variables(
+        name = required('name'),
+        result = required('result')
+    ) {
         if (this.hasOnlyVariableLeafNode()) {
+            if (result.hasOwnProperty(this.#variable.name)) {
+                throw error.Concepts_definition_is_not_valid__because__REASON(
+                    because => because.CONCEPT_cannot_have_VARIABLE_more_than_once(
+                        name, this.#variable.name
+                    )
+                )
+            }
+
             result[this.#variable.name] = { name: this.#variable.name };
         } else {
             for (const literal of this.literals) {
-                literal._variables(result);
+                literal._variables(name, result);
             }
         }
 
