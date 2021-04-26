@@ -62,8 +62,21 @@ describe('spec/custom-types/regex', function () {
         );
     });
 
-    it('should give error for an unknown validator', function() {
-        throw new Error('not implemented');
+    it('should give error for an unknown validator', function () {
+        (() => new Concepts({
+            "@types": {
+                "identifier": {
+                    "type": "number",
+                    "non-existing-validator": null
+                }
+            }
+        })).should.throw(
+            error.Concepts_definition_is_not_valid__because__REASON(
+                because => because.VALIDATOR_does_not_exist(
+                    'non-existing-validator'
+                )
+            ).message
+        );
     });
 
     describe('short-hand usage', function () {
@@ -90,8 +103,18 @@ describe('spec/custom-types/regex', function () {
             );
         });
 
-        it('should give error for an unsupported shortcut', function() {
-            throw new Error('not implemented');
+        it('should give error for an unsupported shortcut', function () {
+            (() => new Concepts({
+                "@types": {
+                    "identifier": "invalid shortcut"
+                }
+            })).should.throw(
+                error.Concepts_definition_is_not_valid__because__REASON(
+                    because => because.Cannot_create_a_validator_from_EXPRESSION(
+                        'invalid shortcut'
+                    )
+                ).message
+            );
         });
     });
 });

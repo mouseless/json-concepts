@@ -13,11 +13,21 @@
  * @property {String} name Name of type
  * @property {validate} validate Validate function to validate a value
  */
+/**
+ * CustomTypeData represents a variable custom type.
+ * 
+ * @typedef {Object} CustomTypeData
+ * @property {String} name Name of type
+ * @property {validate} validate Validate function to validate a value
+ * @property {import('./validators').ValidatorObject} _validator Validator
+ * object.
+ * @property {TypeData} _base Base type of this custom type
+ */
 
 /**
  * @type {Object.<string, TypeData>}
  */
-const DefaultTypes = Object.freeze({
+const BuiltInTypes = Object.freeze({
     any: Object.freeze({
         name: 'any',
         validate: _validateAny
@@ -37,21 +47,6 @@ const DefaultTypes = Object.freeze({
 });
 
 /**
- * @callback isValid
- * @param {*} definition
- * @param {Number|String|Boolean} value
- */
-/**
- * @type {Object.<string,{validTypes:Array.<string>,isValid:isValid}>}
- */
-const _validators = {
-    regex: {
-        validTypes: ['string'],
-        isValid: (pattern, value) => new RegExp(pattern).test(value)
-    }
-};
-
-/**
  * Creates custom types from definitions.
  * 
  * @param {Object} definitions (Required) Definition object of custom types
@@ -59,43 +54,33 @@ const _validators = {
  * @returns {Object.<string, TypeData>}
  */
 function createTypes(definitions = required('definitions')) {
-    /** @type {Object.<string, TypeData>} */
+    /** @type {Object.<string, CustomTypeData>} */
     const result = {};
 
-    Object.setPrototypeOf(result, DefaultTypes);
+    Object.setPrototypeOf(result, BuiltInTypes);
 
     for (const type in definitions) {
-        const definition = _parseDefinition(definitions[type]);
-
-        result[type] = Object.freeze({
+        result[type] = {
             name: type,
             validate: _validateCustomType,
-            _definition: definition,
-            _types: result,
-            _base: definition.type ? definition.type : 'any'
-        });
+            _validator: createValidator(definitions[type])
+        };
     }
 
     for (const definition in definitions) {
         const type = result[definition];
 
-        if (!result[type._base]) {
+        const base = type._validator.type ? type._validator.type : 'any';
+        if (!result[base]) {
             throw error.Concepts_definition_is_not_valid__because__REASON(
-                because => because.Unknown_type_TYPE(type._base)
+                because => because.Unknown_type_TYPE(base)
             );
         }
 
-        for (const validator in type._definition) {
-            if (validator === 'type') { continue; }
+        type._base = result[base];
+        type._validator.validateBaseType(base);
 
-            if (!_validators[validator].validTypes.includes(type._base)) {
-                throw error.Concepts_definition_is_not_valid__because__REASON(
-                    because => because.VALIDATOR_does_not_support_TYPE(
-                        validator, type._base
-                    )
-                );
-            }
-        }
+        Object.freeze(type);
     }
 
     return Object.freeze(result);
@@ -121,18 +106,14 @@ function _validateBuiltInType(value) {
  * @param {Number|String|Boolean} value 
  */
 function _validateCustomType(value) {
-    for (const key in this._definition) {
-        if (key === 'type') { continue; }
-
-        if (!_validators[key].isValid(this._definition[key], value)) {
-            throw error.Schema_definition_is_not_valid__because__REASON(
-                because => because.VALUE_is_not_a_valid_TYPE(value, this.name)
-            );
-        }
+    if (!this._validator.isValid(value)) {
+        throw error.Schema_definition_is_not_valid__because__REASON(
+            because => because.VALUE_is_not_a_valid_TYPE(value, this.name)
+        );
     }
 
     try {
-        this._types[this._base].validate(value);
+        this._base.validate(value);
     } catch {
         throw error.Schema_definition_is_not_valid__because__REASON(
             because => because.VALUE_is_not_a_valid_TYPE(value, this.name)
@@ -140,30 +121,10 @@ function _validateCustomType(value) {
     }
 }
 
-/**
- * @param {Object|Array|String} definition 
- */
-function _parseDefinition(definition = required('definition')) {
-    if (typeof definition === 'object') {
-        return definition;
-    }
-
-    if (typeof definition === 'string' &&
-        definition.startsWith('/') &&
-        definition.endsWith('/g')
-    ) {
-        return {
-            type: "string",
-            regex: definition
-        };
-    }
-
-    throw new Error('unhandled');
-}
-
 module.exports = {
-    DefaultTypes,
+    BuiltInTypes,
     createTypes
 };
 
+const { createValidator } = require('./validators');
 const { error, required } = require('./util');

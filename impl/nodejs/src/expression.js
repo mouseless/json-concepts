@@ -1,5 +1,5 @@
 const { SpecialCharacters: SC, error, required } = require('./util');
-const { DefaultTypes } = require('./types');
+const { BuiltInTypes } = require('./types');
 
 class Expression {
     /**
@@ -54,7 +54,7 @@ class Expression {
      */
     static parseValue(
         expression = required('expression'),
-        types = DefaultTypes
+        types = BuiltInTypes
     ) {
         const tokens = _scan(expression, _valueSC);
 
