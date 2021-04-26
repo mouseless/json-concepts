@@ -62,7 +62,7 @@ class ConceptsShadow {
     /**
      * Variable type of this node. Available only when this node is a variable.
      * 
-     * @returns {import('./type').TypeData}
+     * @returns {import('./types').TypeData}
      */
     get type() { return this.#expression != null ? this.#expression.type : null; }
     /**
@@ -168,12 +168,13 @@ class ConceptsShadow {
      * definition is given, it means this node is a leaf node.
      * 
      * @param {Object} definition Concepts definition
+     * @param {Object.<string, import('./types').TypeData>} types Types map
      * 
      * @return {ConceptsShadow} Itself after build
      */
-    build(definition) {
+    build(definition, types) {
         if (typeof definition === 'string') {
-            const expression = Expression.parseValue(definition);
+            const expression = Expression.parseValue(definition, types);
 
             const leaf = new ConceptsShadow(expression, this).build();
             if (leaf.isVariable) {
@@ -185,7 +186,7 @@ class ConceptsShadow {
             for (const key in definition) {
                 const expression = Expression.parseKey(key);
 
-                const node = new ConceptsShadow(expression, this).build(definition[key]);
+                const node = new ConceptsShadow(expression, this).build(definition[key], types);
                 if (node.isVariable) {
                     this.#concepts[node.name] = node;
                 } else if (node.isLiteral) {

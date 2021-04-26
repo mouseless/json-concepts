@@ -137,7 +137,7 @@ describe('spec/variables/variable-types', function () {
             })).should.not.throw();
         });
 
-        it('should include type only when type is given explicitly', function() {
+        it('should include type only when type is given explicitly', function () {
             const concepts = new Concepts({
                 "implicit": "$implicit",
                 "explicit": "$explicit:any"

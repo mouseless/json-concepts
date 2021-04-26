@@ -10,8 +10,7 @@
      * Variables are stored in an object instead of an array to provide quick
      * access via variable name.
      * 
-     * @typedef {Object} VariablesData
-     * @see VariableData
+     * @typedef {Object.<string, VariableData>} VariablesData
      */
     /**
      * Data that represent a variable
@@ -57,7 +56,9 @@
     constructor(definition = required('definition')) {
         this.#definition = definition;
 
-        this.#shadow = new ConceptsShadow().build(definition);
+        const typeDefinitions = metaData.read(definition, 'types', /* burnAfterReading */ true);
+
+        this.#shadow = new ConceptsShadow().build(definition, createTypes(typeDefinitions));
         this.#concepts = {};
 
         this._build(this.#shadow);
@@ -160,4 +161,5 @@ module.exports = Concepts;
 
 const Schema = require('./schema');
 const ConceptsShadow = require('./concepts-shadow');
-const { error, required, loadJSON } = require('./util');
+const { createTypes } = require('./types');
+const { error, metaData, required, loadJSON } = require('./util');

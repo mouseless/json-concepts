@@ -99,6 +99,9 @@ module.exports = {
     Unknown_type_TYPE_in_EXPRESSION(TYPE, EXPRESSION) {
         return _error(`Unknown type '${TYPE}' in '${EXPRESSION}`);
     },
+    Unknown_type_TYPE(TYPE) {
+        return _error(`Unknown type '${TYPE}'`);
+    },
     /**
      * Selects reason from given reasons.
      * 
