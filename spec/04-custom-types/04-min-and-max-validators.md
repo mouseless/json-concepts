@@ -1,4 +1,4 @@
-# Min and Max
+# Min and Max Validators
 
 Min and max validators can be applied to `number` or `string` variables. When
 applied to a `string`, they validate its length.

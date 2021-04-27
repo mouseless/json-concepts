@@ -1,4 +1,4 @@
-# Regex
+# Regex Validator
 
 Regex validator can be applied to custom types that inherit from `string`. You
 can define a regex pattern under `regex` key. For the following concepts

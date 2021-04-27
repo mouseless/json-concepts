@@ -4,7 +4,7 @@ const { should } = require('chai');
 
 should();
 
-describe('spec/custom-types/regex', function () {
+describe('spec/custom-types/regex-validator', function () {
     it('should validate value against given regex pattern', function () {
         const concepts = new Concepts({
             "$service+": {

@@ -4,7 +4,7 @@ const { should } = require('chai');
 
 should();
 
-describe('spec/custom-types/enum', function () {
+describe('spec/custom-types/enum-validator', function () {
     it('should allow only one of enum members', function () {
         const concepts = new Concepts({
             "$service+": {

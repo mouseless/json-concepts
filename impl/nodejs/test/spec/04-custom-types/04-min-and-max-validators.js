@@ -4,7 +4,7 @@ const { should } = require('chai');
 
 should();
 
-describe('spec/custom-types/min-and-max', function () {
+describe('spec/custom-types/min-and-max-validators', function () {
     it('should allow only values more than or equal to min', function () {
         const concepts = new Concepts({
             "$service+": {

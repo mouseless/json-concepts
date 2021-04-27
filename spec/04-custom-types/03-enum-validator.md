@@ -1,4 +1,4 @@
-# Enum
+# Enum Validator
 
 Enum validator enables you to restrict value of a custom type to be one of the
 items in a given list.

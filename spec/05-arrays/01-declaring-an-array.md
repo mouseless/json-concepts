@@ -26,7 +26,7 @@ Below is its shadow;
             "quantifier": { "min": 0, "max": 1 },
             "variable": {
                 "_": "tags",
-                "array": true
+                "dimensions": 1
             }
         }
     }
@@ -59,7 +59,7 @@ Array declaration is the same with concepts, below is an example;
             "quantifier": { "min": 0 },
             "variable": {
                 "_": "types",
-                "array": true
+                "dimensions": 1
             }
         }
     }
@@ -128,13 +128,28 @@ Its shadow still contains an array;
 
 ## Multi-Dimensional Arrays
 
-Below concepts definition has a double array for `$matrix` variable;
+Below concepts definition has a double array for `$value` variable;
 
 `CONCEPTS: matrix.concepts.json`
 
 ```json
 {
-    "$matrices*": [ [ "$matrix" ] ]
+    "$matrix*": [ [ "$value" ] ]
+}
+```
+
+`CONCEPTS SHADOW`
+
+```json
+{
+    "concept": {
+        "_": "matrix",
+        "quantifier": { "min": 0 },
+        "variable": {
+            "_": "value",
+            "dimensions": 2
+        }
+    }
 }
 ```
 
