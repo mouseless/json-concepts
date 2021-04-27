@@ -93,7 +93,7 @@ class SchemaShadow {
 
             for (const concept in this.#schemasByConcept) {
                 const schemas = this.#schemasByConcept[concept];
-                
+
                 const conceptShadow = this.#conceptsShadow.getConcept(concept)
                 this.#data[concept] = conceptShadow.defaultValue;
 
@@ -101,7 +101,7 @@ class SchemaShadow {
                     for (const shadow of schemas) {
                         this.#data[concept].push(shadow.#data);
                     }
-                } else if(schemas.length > 0) {
+                } else if (schemas.length > 0) {
                     this.#data[concept] = schemas[0].#data;
                 }
             }

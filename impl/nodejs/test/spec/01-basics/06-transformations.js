@@ -145,7 +145,7 @@ describe('spec/basics/transformations', function () {
 
         (() => transformation.transform(targetInput))
             .should.throw(
-                error.Schema_definition_is_not_valid__because__REASON(
+                error.Schema_definition_is_not_valid__REASON(
                     because => because.LITERAL_is_missing('response')
                 ).message
             );
@@ -172,7 +172,7 @@ describe('spec/basics/transformations', function () {
                 }
             }
         }, source, target)).should.throw(error
-            .Definition_is_not_compatible_with_its_CONCEPTS__because__REASON(
+            .Definition_is_not_compatible_with_its_CONCEPTS__REASON(
                 'source', because => because.CONCEPT_not_found('service_')
             ).message
         );
@@ -185,7 +185,7 @@ describe('spec/basics/transformations', function () {
                 }
             }
         }, source, target)).should.throw(error
-            .Definition_is_not_compatible_with_its_CONCEPTS__because__REASON(
+            .Definition_is_not_compatible_with_its_CONCEPTS__REASON(
                 'source', because => because.VARIABLE_not_found('responseType_')
             ).message
         );
@@ -198,7 +198,7 @@ describe('spec/basics/transformations', function () {
                 }
             }
         }, source, target)).should.throw(error
-            .Definition_is_not_compatible_with_its_CONCEPTS__because__REASON(
+            .Definition_is_not_compatible_with_its_CONCEPTS__REASON(
                 'target', because => because.CONCEPT_not_found('function_')
             ).message
         );
@@ -211,7 +211,7 @@ describe('spec/basics/transformations', function () {
                 }
             }
         }, source, target)).should.throw(error
-            .Definition_is_not_compatible_with_its_CONCEPTS__because__REASON(
+            .Definition_is_not_compatible_with_its_CONCEPTS__REASON(
                 'target', because => because.VARIABLE_not_found('returnType_')
             ).message
         );
@@ -246,7 +246,7 @@ describe('spec/basics/transformations', function () {
             .should.be.rejectedWith(
                 error.TRANSFORMATION_is_not_valid__Error_is__ERROR(
                     'client.from.service.json',
-                    error.Definition_is_not_compatible_with_its_CONCEPTS__because__REASON(
+                    error.Definition_is_not_compatible_with_its_CONCEPTS__REASON(
                         'target', because => because.VARIABLE_not_found('returnType_')
                     ).message
                 ).message

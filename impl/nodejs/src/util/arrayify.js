@@ -49,9 +49,33 @@ function push(
     }
 }
 
+/**
+ * Calculates array dimensions of given value. Returns 0 if given value is not
+ * an array.
+ * 
+ * @param {*} value Any value to calculate its dimensions
+ * 
+ * @returns {Number} Number of dimensions
+ */
+function dimensions(value = null) {
+    let result;
+
+    for (result = 0; Array.isArray(value); result++) {
+        if (value.length <= 0) {
+            result++;
+            break;
+        }
+
+        value = value[0];
+    }
+
+    return result;
+}
+
 module.exports = {
     get,
-    push
+    push,
+    dimensions
 };
 
 const { required } = require("./validation");

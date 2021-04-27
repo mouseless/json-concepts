@@ -95,7 +95,7 @@ function createValidator(definition = required('definition')) {
     }
 
     if (typeof definition !== 'object') {
-        throw error.Concepts_definition_is_not_valid__because__REASON(
+        throw error.Concepts_definition_is_not_valid__REASON(
             because => because.Cannot_create_a_validator_from_EXPRESSION(definition)
         )
     }
@@ -111,7 +111,7 @@ function createValidator(definition = required('definition')) {
         if (validator === 'type') { continue; }
 
         if (!_validators[validator]) {
-            throw error.Concepts_definition_is_not_valid__because__REASON(
+            throw error.Concepts_definition_is_not_valid__REASON(
                 because => because.VALIDATOR_does_not_exist(validator)
             );
         }
@@ -132,7 +132,7 @@ function createValidator(definition = required('definition')) {
 function _validateRootType(root) {
     for (const validation of this._validations) {
         if (!validation.validator.validTypes.includes(root)) {
-            throw error.Concepts_definition_is_not_valid__because__REASON(
+            throw error.Concepts_definition_is_not_valid__REASON(
                 because => because.VALIDATOR_does_not_support_TYPE(
                     validation.name, root
                 )

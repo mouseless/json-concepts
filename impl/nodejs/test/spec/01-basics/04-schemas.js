@@ -75,7 +75,7 @@ describe('spec/basics/schemas', function () {
             .should.be.rejectedWith(
                 error.SCHEMA_is_not_valid__Error_is__ERROR(
                     'greeting.service.json',
-                    error.Schema_definition_is_not_valid__because__REASON(
+                    error.Schema_definition_is_not_valid__REASON(
                         because => because.LITERAL_is_missing('response')
                     ).message
                 ).message

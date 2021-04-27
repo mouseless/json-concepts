@@ -91,7 +91,7 @@
     _build() {
         for (const concept in this.#definition) {
             if (!this.#target.has(concept)) {
-                throw error.Definition_is_not_compatible_with_its_CONCEPTS__because__REASON(
+                throw error.Definition_is_not_compatible_with_its_CONCEPTS__REASON(
                     'target', reason => reason.CONCEPT_not_found(concept)
                 );
             }

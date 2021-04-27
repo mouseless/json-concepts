@@ -78,4 +78,34 @@ describe('arrayify', function () {
                 .should.throw(error.PARAMETER_is_required('value').message);
         });
     })
+
+    describe('#dimensions', function () {
+        it('should return zero for regular variables', function () {
+            arrayify.dimensions("test")
+                .should.be.equal(0);
+        });
+
+        it('should return one for empty array', function () {
+            arrayify.dimensions([])
+                .should.be.equal(1);
+        })
+
+        it('should return one for one dimensional array', function () {
+            arrayify.dimensions(["test"])
+                .should.be.equal(1);
+        })
+
+        it('should return n for n dimensional array', function () {
+            arrayify.dimensions([[[[[]]]]])
+                .should.be.equal(5);
+        })
+
+        it('should return zero for undefined or null', function () {
+            arrayify.dimensions()
+                .should.be.equal(0);
+
+            arrayify.dimensions(null)
+                .should.be.equal(0);
+        })
+    })
 });

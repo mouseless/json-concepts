@@ -34,7 +34,7 @@ describe('spec/variables/variable-types', function () {
                 "$flag*": "$enabled:"
             }
         })).should.throw(
-            error.Concepts_definition_is_not_valid__because__REASON(
+            error.Concepts_definition_is_not_valid__REASON(
                 because => because.Cannot_parse_EXPRESSION__a_type_was_expected_after_symbol(
                     '$enabled:'
                 )
@@ -67,7 +67,7 @@ describe('spec/variables/variable-types', function () {
             (() => concepts.validate({
                 "key": true
             })).should.throw(
-                error.Schema_definition_is_not_valid__because__REASON(
+                error.Schema_definition_is_not_valid__REASON(
                     because => because.VALUE_is_not_a_valid_TYPE(
                         'true', 'string'
                     )
@@ -87,7 +87,7 @@ describe('spec/variables/variable-types', function () {
             (() => concepts.validate({
                 "key": "string"
             })).should.throw(
-                error.Schema_definition_is_not_valid__because__REASON(
+                error.Schema_definition_is_not_valid__REASON(
                     because => because.VALUE_is_not_a_valid_TYPE(
                         'string', 'boolean'
                     )
@@ -107,7 +107,7 @@ describe('spec/variables/variable-types', function () {
             (() => concepts.validate({
                 "key": "string"
             })).should.throw(
-                error.Schema_definition_is_not_valid__because__REASON(
+                error.Schema_definition_is_not_valid__REASON(
                     because => because.VALUE_is_not_a_valid_TYPE(
                         'string', 'number'
                     )
@@ -121,7 +121,7 @@ describe('spec/variables/variable-types', function () {
                     "$flag*": "$enabled:text"
                 }
             })).should.throw(
-                error.Concepts_definition_is_not_valid__because__REASON(
+                error.Concepts_definition_is_not_valid__REASON(
                     because => because.Unknown_type_TYPE_in_EXPRESSION(
                         'text', '$enabled:text'
                     )

@@ -25,7 +25,7 @@ class Query {
      */
     validate(targetConcept, source) {
         if (!source.has(this.#definition.from)) {
-            throw error.Definition_is_not_compatible_with_its_CONCEPTS__because__REASON(
+            throw error.Definition_is_not_compatible_with_its_CONCEPTS__REASON(
                 'source', reason => reason.CONCEPT_not_found(this.#definition.from)
             );
         }
@@ -35,13 +35,13 @@ class Query {
             const sourceVariable = this.#definition.select[targetVariable];
 
             if (!targetConcept.variables.hasOwnProperty(targetVariable)) {
-                throw error.Definition_is_not_compatible_with_its_CONCEPTS__because__REASON(
+                throw error.Definition_is_not_compatible_with_its_CONCEPTS__REASON(
                     'target', reason => reason.VARIABLE_not_found(targetVariable)
                 );
             }
 
             if (!sourceConcept.variables.hasOwnProperty(sourceVariable)) {
-                throw error.Definition_is_not_compatible_with_its_CONCEPTS__because__REASON(
+                throw error.Definition_is_not_compatible_with_its_CONCEPTS__REASON(
                     'source', reason => reason.VARIABLE_not_found(sourceVariable)
                 );
             }

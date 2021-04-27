@@ -133,7 +133,7 @@ describe('spec/basics/concepts', function () {
                 "sayGoodbye": {
                     "cry": "boolean"
                 }
-            })).should.throw(error.Schema_definition_is_not_valid__because__REASON(
+            })).should.throw(error.Schema_definition_is_not_valid__REASON(
                 because => because.LITERAL_is_missing('response')
             ).message);
         });
@@ -153,7 +153,7 @@ describe('spec/basics/concepts', function () {
                     "response": "string",
                     "response": "string"
                 }
-            })).should.throw(error.Schema_definition_is_not_valid__because__REASON(
+            })).should.throw(error.Schema_definition_is_not_valid__REASON(
                 because => because.CONCEPT_is_missing('parameter')
             ).message);
         });

@@ -60,7 +60,7 @@ describe('spec/custom-types/defining-a-custom-type', function () {
                     "name": 100
                 }
             })).should.throw(
-                error.Schema_definition_is_not_valid__because__REASON(
+                error.Schema_definition_is_not_valid__REASON(
                     because => because.VALUE_is_not_a_valid_TYPE('100', 'identifier')
                 ).message
             );
@@ -107,7 +107,7 @@ describe('spec/custom-types/defining-a-custom-type', function () {
                     }
                 }
             })).should.throw(
-                error.Concepts_definition_is_not_valid__because__REASON(
+                error.Concepts_definition_is_not_valid__REASON(
                     because => because.Unknown_type_TYPE('text')
                 ).message
             );

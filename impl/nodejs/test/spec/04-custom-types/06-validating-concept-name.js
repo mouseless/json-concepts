@@ -42,7 +42,7 @@ describe('spec/custom-types/validating-concept-name', function () {
         (() => concepts.validate({
             "/users": {}
         })).should.throw(
-            error.Schema_definition_is_not_valid__because__REASON(
+            error.Schema_definition_is_not_valid__REASON(
                 because => because.VALUE_is_not_a_valid_TYPE(
                     '/users', 'identifier'
                 )
@@ -54,7 +54,7 @@ describe('spec/custom-types/validating-concept-name', function () {
                 "PATCH": {}
             }
         })).should.throw(
-            error.Schema_definition_is_not_valid__because__REASON(
+            error.Schema_definition_is_not_valid__REASON(
                 because => because.VALUE_is_not_a_valid_TYPE(
                     'PATCH', 'method'
                 )
@@ -66,7 +66,7 @@ describe('spec/custom-types/validating-concept-name', function () {
         (() => new Concepts({
             "$service:number+": "$type"
         })).should.throw(
-            error.Concepts_definition_is_not_valid__because__REASON(
+            error.Concepts_definition_is_not_valid__REASON(
                 because => because.CONCEPT_cannot_be_TYPE__only_string_allowed(
                     'service', 'number'
                 )
@@ -79,7 +79,7 @@ describe('spec/custom-types/validating-concept-name', function () {
                 "identifier": { "type": "number" }
             }
         })).should.throw(
-            error.Concepts_definition_is_not_valid__because__REASON(
+            error.Concepts_definition_is_not_valid__REASON(
                 because => because.CONCEPT_cannot_be_TYPE__only_string_allowed_but_TYPE_is_ROOT(
                     'service', 'identifier', 'number'
                 )
@@ -103,7 +103,7 @@ describe('spec/custom-types/validating-concept-name', function () {
                 "decimal": { "type": "number" }
             }
         })).should.throw(
-            error.Concepts_definition_is_not_valid__because__REASON(
+            error.Concepts_definition_is_not_valid__REASON(
                 because => because.CONCEPT_cannot_be_TYPE__only_string_allowed_but_TYPE_is_ROOT(
                     'service', 'money', 'number'
                 )
@@ -119,7 +119,7 @@ describe('spec/custom-types/validating-concept-name', function () {
                 "text": { "type": "string" }
             }
         })).should.throw(
-            error.Concepts_definition_is_not_valid__because__REASON(
+            error.Concepts_definition_is_not_valid__REASON(
                 because => because.Cannot_parse_EXPRESSION__a_type_was_expected_after_symbol(
                     '$service:+'
                 )

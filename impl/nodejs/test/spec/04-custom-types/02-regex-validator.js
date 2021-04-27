@@ -29,7 +29,7 @@ describe('spec/custom-types/regex-validator', function () {
                 "name": "say hello"
             }
         })).should.throw(
-            error.Schema_definition_is_not_valid__because__REASON(
+            error.Schema_definition_is_not_valid__REASON(
                 because => because.VALUE_is_not_a_valid_TYPE(
                     'say hello', 'identifier'
                 )
@@ -46,7 +46,7 @@ describe('spec/custom-types/regex-validator', function () {
                 }
             }
         })).should.throw(
-            error.Concepts_definition_is_not_valid__because__REASON(
+            error.Concepts_definition_is_not_valid__REASON(
                 because => because.VALIDATOR_does_not_support_TYPE(
                     'regex', 'number'
                 )
@@ -60,7 +60,7 @@ describe('spec/custom-types/regex-validator', function () {
                 }
             }
         })).should.throw(
-            error.Concepts_definition_is_not_valid__because__REASON(
+            error.Concepts_definition_is_not_valid__REASON(
                 because => because.VALIDATOR_does_not_support_TYPE(
                     'regex', 'any'
                 )
@@ -77,7 +77,7 @@ describe('spec/custom-types/regex-validator', function () {
                 }
             }
         })).should.throw(
-            error.Concepts_definition_is_not_valid__because__REASON(
+            error.Concepts_definition_is_not_valid__REASON(
                 because => because.VALIDATOR_does_not_exist(
                     'non-existing-validator'
                 )
@@ -101,7 +101,7 @@ describe('spec/custom-types/regex-validator', function () {
                     "name": "say hello"
                 }
             })).should.throw(
-                error.Schema_definition_is_not_valid__because__REASON(
+                error.Schema_definition_is_not_valid__REASON(
                     because => because.VALUE_is_not_a_valid_TYPE(
                         'say hello', 'identifier'
                     )
@@ -115,7 +115,7 @@ describe('spec/custom-types/regex-validator', function () {
                     "identifier": "invalid shortcut"
                 }
             })).should.throw(
-                error.Concepts_definition_is_not_valid__because__REASON(
+                error.Concepts_definition_is_not_valid__REASON(
                     because => because.Cannot_create_a_validator_from_EXPRESSION(
                         'invalid shortcut'
                     )

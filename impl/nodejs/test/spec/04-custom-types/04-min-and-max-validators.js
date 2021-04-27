@@ -29,7 +29,7 @@ describe('spec/custom-types/min-and-max-validators', function () {
                 "dailyCallLimit": 9
             }
         })).should.throw(
-            error.Schema_definition_is_not_valid__because__REASON(
+            error.Schema_definition_is_not_valid__REASON(
                 because => because.VALUE_is_not_a_valid_TYPE(
                     '9', 'limit'
                 )
@@ -61,7 +61,7 @@ describe('spec/custom-types/min-and-max-validators', function () {
                 "dailyCallLimit": 101
             }
         })).should.throw(
-            error.Schema_definition_is_not_valid__because__REASON(
+            error.Schema_definition_is_not_valid__REASON(
                 because => because.VALUE_is_not_a_valid_TYPE(
                     '101', 'limit'
                 )
@@ -92,7 +92,7 @@ describe('spec/custom-types/min-and-max-validators', function () {
                 "name": "a very long name"
             }
         })).should.throw(
-            error.Schema_definition_is_not_valid__because__REASON(
+            error.Schema_definition_is_not_valid__REASON(
                 because => because.VALUE_is_not_a_valid_TYPE(
                     'a very long name', 'short-identifier'
                 )
@@ -104,7 +104,7 @@ describe('spec/custom-types/min-and-max-validators', function () {
                 "surname": "short"
             }
         })).should.throw(
-            error.Schema_definition_is_not_valid__because__REASON(
+            error.Schema_definition_is_not_valid__REASON(
                 because => because.VALUE_is_not_a_valid_TYPE(
                     'short', 'long-identifier'
                 )
@@ -161,7 +161,7 @@ describe('spec/custom-types/min-and-max-validators', function () {
                 "dailyCallLimit": 9
             }
         })).should.throw(
-            error.Schema_definition_is_not_valid__because__REASON(
+            error.Schema_definition_is_not_valid__REASON(
                 because => because.VALUE_is_not_a_valid_TYPE(
                     '9', 'limit'
                 )
@@ -174,7 +174,7 @@ describe('spec/custom-types/min-and-max-validators', function () {
                 "dailyCallLimit": 101
             }
         })).should.throw(
-            error.Schema_definition_is_not_valid__because__REASON(
+            error.Schema_definition_is_not_valid__REASON(
                 because => because.VALUE_is_not_a_valid_TYPE(
                     '101', 'limit'
                 )
@@ -187,7 +187,7 @@ describe('spec/custom-types/min-and-max-validators', function () {
                 "dailyCallLimit": 50
             }
         })).should.throw(
-            error.Schema_definition_is_not_valid__because__REASON(
+            error.Schema_definition_is_not_valid__REASON(
                 because => because.VALUE_is_not_a_valid_TYPE(
                     '', 'identifier'
                 )
@@ -200,7 +200,7 @@ describe('spec/custom-types/min-and-max-validators', function () {
                 "dailyCallLimit": 50
             }
         })).should.throw(
-            error.Schema_definition_is_not_valid__because__REASON(
+            error.Schema_definition_is_not_valid__REASON(
                 because => because.VALUE_is_not_a_valid_TYPE(
                     '01234567890', 'identifier'
                 )

@@ -41,12 +41,12 @@ class Expression {
                 type = _parseType(tokens, types);
             } catch (e) {
                 if (e.message == '' || _keySC[e.message]) {
-                    throw error.Concepts_definition_is_not_valid__because__REASON(
+                    throw error.Concepts_definition_is_not_valid__REASON(
                         because => because.Cannot_parse_EXPRESSION__a_type_was_expected_after_symbol(expression)
                     );
                 }
 
-                throw error.Concepts_definition_is_not_valid__because__REASON(
+                throw error.Concepts_definition_is_not_valid__REASON(
                     because => because.Unknown_type_TYPE_in_EXPRESSION(e.message, expression)
                 );
             }
@@ -87,12 +87,12 @@ class Expression {
                 type = _parseType(tokens, types);
             } catch (e) {
                 if (e.message == '') {
-                    throw error.Concepts_definition_is_not_valid__because__REASON(
+                    throw error.Concepts_definition_is_not_valid__REASON(
                         because => because.Cannot_parse_EXPRESSION__a_type_was_expected_after_symbol(expression)
                     );
                 }
 
-                throw error.Concepts_definition_is_not_valid__because__REASON(
+                throw error.Concepts_definition_is_not_valid__REASON(
                     because => because.Unknown_type_TYPE_in_EXPRESSION(e.message, expression)
                 );
             }
@@ -130,7 +130,7 @@ class Expression {
         if (this.isLiteral && this.isKey &&
             this.allowsMultiple
         ) {
-            throw error.Concepts_definition_is_not_valid__because__REASON(
+            throw error.Concepts_definition_is_not_valid__REASON(
                 because => because.LITERAL_cannot_have_QUANTIFIER(
                     this.name, this.quantifier.expression
                 )
@@ -140,7 +140,7 @@ class Expression {
         if (this.isVariable && this.isKey &&
             this.type !== undefined && this.type.root.name !== 'string'
         ) {
-            throw error.Concepts_definition_is_not_valid__because__REASON(
+            throw error.Concepts_definition_is_not_valid__REASON(
                 because => because.CONCEPT_cannot_be_TYPE__only_string_allowed_but_TYPE_is_ROOT(
                     this.name, this.type.name, this.type.root.name
                 )
@@ -209,18 +209,18 @@ class Expression {
     validate(quantity = required('quantity')) {
         if (quantity < this.#quantifier.min) {
             if (this.#quantifier == Quantifiers.DEFAULT) {
-                throw error.Schema_definition_is_not_valid__because__REASON(
+                throw error.Schema_definition_is_not_valid__REASON(
                     because => because.CONCEPT_is_missing(this.#name)
                 );
             } else {
-                throw error.Schema_definition_is_not_valid__because__REASON(
+                throw error.Schema_definition_is_not_valid__REASON(
                     because => because.Minimum_allowed_number_of_CONCEPT_is_MIN__but_got_COUNT(
                         this.#name, this.#quantifier.min, quantity
                     )
                 );
             }
         } else if (quantity > this.#quantifier.max) {
-            throw error.Schema_definition_is_not_valid__because__REASON(
+            throw error.Schema_definition_is_not_valid__REASON(
                 because => because.Maximum_allowed_number_of_CONCEPT_is_MAX__but_got_COUNT(
                     this.#name, this.#quantifier.max, quantity
                 )
@@ -331,7 +331,7 @@ function _parseQuantifier(tokens) {
 
     if (token != SC.BEGIN_QUANTIFIER) {
         if (!Quantifiers[token]) {
-            throw error.Concepts_definition_is_not_valid__because__REASON(
+            throw error.Concepts_definition_is_not_valid__REASON(
                 because => because.Cannot_parse_quantifier__EXPRESSION(token)
             );
         }
@@ -368,7 +368,7 @@ function _parseQuantifier(tokens) {
         return _quantifier(quantifierTokens[1], quantifierTokens[3], expression);
     }
 
-    throw error.Concepts_definition_is_not_valid__because__REASON(
+    throw error.Concepts_definition_is_not_valid__REASON(
         because => because.Cannot_parse_quantifier__EXPRESSION(quantifierTokens.join(''))
     );
 }

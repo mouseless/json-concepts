@@ -41,7 +41,9 @@ const InvalidConceptsReasons = {
     CONCEPT_cannot_be_TYPE__only_string_allowed_but_TYPE_is_ROOT:
         (CONCEPT, TYPE, ROOT) => TYPE === ROOT
             ? InvalidConceptsReasons.CONCEPT_cannot_be_TYPE__only_string_allowed(CONCEPT, TYPE)
-            : `'${CONCEPT}' cannot be '${TYPE}', only string is allowed but '${TYPE}' is '${ROOT}'`
+            : `'${CONCEPT}' cannot be '${TYPE}', only string is allowed but '${TYPE}' is '${ROOT}'`,
+    KEY_is_only_allowed_an_array_with_one_item:
+        (KEY) => `'${KEY}' is only allowed an array with one item`
 };
 
 /**
@@ -56,7 +58,12 @@ const InvalidSchemaReasons = {
         (CONCEPT, MIN, COUNT) => `Minimum allowed number of '${CONCEPT}' is ${MIN}, but got ${COUNT}`,
     Maximum_allowed_number_of_CONCEPT_is_MAX__but_got_COUNT:
         (CONCEPT, MAX, COUNT) => `Maximum allowed number of '${CONCEPT}' is ${MAX}, but got ${COUNT}`,
-    VALUE_is_not_a_valid_TYPE: (VALUE, TYPE) => `'${VALUE}' is not a valid ${TYPE}`
+    VALUE_is_not_a_valid_TYPE: (VALUE, TYPE) => `'${VALUE}' is not a valid ${TYPE}`,
+    VARIABLE_is_not_an_array: (VARIABLE) => `'${VARIABLE}' is not an array`,
+    VARIABLE_expects_at_most_EXPECTED_dimensional_array__but_got_ACTUAL:
+        (VARIABLE, EXPECTED, ACTUAL) => EXPECTED == 0
+            ? InvalidSchemaReasons.VARIABLE_is_not_an_array(VARIABLE)
+            : `'${VARIABLE}' expects at most ${EXPECTED} dimensional array, but got ${ACTUAL}`
 }
 
 /**
@@ -124,7 +131,7 @@ module.exports = {
      * 
      * @returns {Error} SchemaError
      */
-    Concepts_definition_is_not_valid__because__REASON(REASON) {
+    Concepts_definition_is_not_valid__REASON(REASON) {
         return _error(
             `Concepts definition is not valid: ${REASON(InvalidConceptsReasons)}.`,
             Names.SCHEMA_ERROR
@@ -149,7 +156,7 @@ module.exports = {
      * 
      * @returns {Error} SchemaError
      */
-    Schema_definition_is_not_valid__because__REASON(REASON) {
+    Schema_definition_is_not_valid__REASON(REASON) {
         return _error(
             `Schema definition is not valid: ${REASON(InvalidSchemaReasons)}.`,
             Names.SCHEMA_ERROR
@@ -175,7 +182,7 @@ module.exports = {
      * 
      * @returns {Error} SchemaError
      */
-    Definition_is_not_compatible_with_its_CONCEPTS__because__REASON(CONCEPTS, REASON) {
+    Definition_is_not_compatible_with_its_CONCEPTS__REASON(CONCEPTS, REASON) {
         return _error(
             `Definition is not compatible with its ${CONCEPTS}: ` +
             `${REASON(InvalidTransformationReasons)(CONCEPTS)}.`,

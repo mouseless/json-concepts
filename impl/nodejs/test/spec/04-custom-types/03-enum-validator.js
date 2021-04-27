@@ -57,7 +57,7 @@ describe('spec/custom-types/enum-validator', function () {
                 "statusCode": 404
             }
         })).should.throw(
-            error.Schema_definition_is_not_valid__because__REASON(
+            error.Schema_definition_is_not_valid__REASON(
                 because => because.VALUE_is_not_a_valid_TYPE(
                     '404', 'httpStatus'
                 )
@@ -87,7 +87,7 @@ describe('spec/custom-types/enum-validator', function () {
                     "statusCode": 404
                 }
             })).should.throw(
-                error.Schema_definition_is_not_valid__because__REASON(
+                error.Schema_definition_is_not_valid__REASON(
                     because => because.VALUE_is_not_a_valid_TYPE(
                         '404', 'httpStatus'
                     )

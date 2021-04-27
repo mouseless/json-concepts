@@ -34,7 +34,7 @@ describe('spec/custom-types/inheritance', function () {
                 "name": "float"
             }
         })).should.throw(
-            error.Schema_definition_is_not_valid__because__REASON(
+            error.Schema_definition_is_not_valid__REASON(
                 because => because.VALUE_is_not_a_valid_TYPE(
                     "float", "primitive"
                 )
@@ -52,7 +52,7 @@ describe('spec/custom-types/inheritance', function () {
                     "c": { "type": "a" }
                 }
             })).should.throw(
-                error.Concepts_definition_is_not_valid__because__REASON(
+                error.Concepts_definition_is_not_valid__REASON(
                     because => because.TYPE_cannot_inherit_from_BASE__it_would_cause_a_circular_dependency(
                         'c', 'a'
                     )

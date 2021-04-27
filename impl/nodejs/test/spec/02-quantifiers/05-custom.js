@@ -53,7 +53,7 @@ describe('spec/quantifiers/custom', function () {
 
         (() => concepts.validate({}))
             .should.throw(
-                error.Schema_definition_is_not_valid__because__REASON(
+                error.Schema_definition_is_not_valid__REASON(
                     because => because.Minimum_allowed_number_of_CONCEPT_is_MIN__but_got_COUNT(
                         'service', 1, 0
                     )
@@ -66,7 +66,7 @@ describe('spec/quantifiers/custom', function () {
             "c": { "response": { "200": "string", "400": "string" } },
             "d": { "response": { "200": "string", "400": "string" } }
         })).should.throw(
-            error.Schema_definition_is_not_valid__because__REASON(
+            error.Schema_definition_is_not_valid__REASON(
                 because => because.Maximum_allowed_number_of_CONCEPT_is_MAX__but_got_COUNT(
                     'service', 3, 4
                 )
@@ -81,7 +81,7 @@ describe('spec/quantifiers/custom', function () {
                 "response": { "200": "string", "400": "string" }
             }
         })).should.throw(
-            error.Schema_definition_is_not_valid__because__REASON(
+            error.Schema_definition_is_not_valid__REASON(
                 because => because.Maximum_allowed_number_of_CONCEPT_is_MAX__but_got_COUNT(
                     'parameter', 2, 3
                 )
@@ -91,7 +91,7 @@ describe('spec/quantifiers/custom', function () {
         (() => concepts.validate({
             "sayHello": {}
         })).should.throw(
-            error.Schema_definition_is_not_valid__because__REASON(
+            error.Schema_definition_is_not_valid__REASON(
                 because => because.LITERAL_is_missing('response')
             ).message
         );
@@ -101,7 +101,7 @@ describe('spec/quantifiers/custom', function () {
                 "response": { "200": "string" }
             }
         })).should.throw(
-            error.Schema_definition_is_not_valid__because__REASON(
+            error.Schema_definition_is_not_valid__REASON(
                 because => because.Minimum_allowed_number_of_CONCEPT_is_MIN__but_got_COUNT(
                     'status', 2, 1
                 )
@@ -129,7 +129,7 @@ describe('spec/quantifiers/custom', function () {
         (() => new Concepts({
             "service{,2}": {}
         })).should.throw(
-            error.Concepts_definition_is_not_valid__because__REASON(
+            error.Concepts_definition_is_not_valid__REASON(
                 because => because.LITERAL_cannot_have_QUANTIFIER(
                     'service', '{,2}'
                 )

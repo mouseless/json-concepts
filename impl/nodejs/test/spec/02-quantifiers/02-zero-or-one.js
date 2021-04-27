@@ -45,7 +45,7 @@ describe('spec/quantifiers/zero-or-one', function () {
                     "surname": "string"
                 }
             })).should.throw(
-                error.Schema_definition_is_not_valid__because__REASON(
+                error.Schema_definition_is_not_valid__REASON(
                     because => because.Maximum_allowed_number_of_CONCEPT_is_MAX__but_got_COUNT('parameter', 1, 2)
                 ).message
             );

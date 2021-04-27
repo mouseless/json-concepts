@@ -62,7 +62,7 @@ function createTypes(definitions = required('definitions')) {
 
         const base = type._validator.type ? type._validator.type : 'any';
         if (!result[base]) {
-            throw error.Concepts_definition_is_not_valid__because__REASON(
+            throw error.Concepts_definition_is_not_valid__REASON(
                 because => because.Unknown_type_TYPE(base)
             );
         }
@@ -117,7 +117,7 @@ function _validateAny(value) { }
  */
 function _validateType(value) {
     if (typeof value !== this.name) {
-        throw error.Schema_definition_is_not_valid__because__REASON(
+        throw error.Schema_definition_is_not_valid__REASON(
             because => because.VALUE_is_not_a_valid_TYPE(value, this.name)
         );
     }
@@ -128,7 +128,7 @@ function _validateType(value) {
  */
 function _validateCustomType(value) {
     if (!this._validator.isValid(value)) {
-        throw error.Schema_definition_is_not_valid__because__REASON(
+        throw error.Schema_definition_is_not_valid__REASON(
             because => because.VALUE_is_not_a_valid_TYPE(value, this.name)
         );
     }
@@ -136,7 +136,7 @@ function _validateCustomType(value) {
     try {
         this.base.validate(value);
     } catch {
-        throw error.Schema_definition_is_not_valid__because__REASON(
+        throw error.Schema_definition_is_not_valid__REASON(
             because => because.VALUE_is_not_a_valid_TYPE(value, this.name)
         );
     }
@@ -161,7 +161,7 @@ function _findRoot(
         hit[type.name] = true;
 
         if (hit[type.base.name]) {
-            throw error.Concepts_definition_is_not_valid__because__REASON(
+            throw error.Concepts_definition_is_not_valid__REASON(
                 because => because.TYPE_cannot_inherit_from_BASE__it_would_cause_a_circular_dependency(
                     type.name, type.base.name
                 )

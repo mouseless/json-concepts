@@ -92,6 +92,25 @@ Given this concepts definition, below schema is valid;
 }
 ```
 
+`SCHEMA SHADOW`
+
+```json
+{
+    "service": [
+        {
+            "_": "sayHello",
+            "parameter": [
+                {
+                    "_": "name",
+                    "types": [ "string", "text" ]
+                }
+            ],
+            "tags": [ ]
+        }
+    ]
+}
+```
+
 ## Single Item
 
 An array variable is allowed to have a single item without array notation.

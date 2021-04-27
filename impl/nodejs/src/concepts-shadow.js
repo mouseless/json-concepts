@@ -1,6 +1,7 @@
 class ConceptsShadow {
     /* const */ #expression;
     /* const */ #parent;
+    /* const */ #dimensions;
     /* const */ #variable;
     /* const */ #literals;
     /* const */ #concepts;
@@ -17,10 +18,13 @@ class ConceptsShadow {
      * `undefined` for root node.
      * @param {ConceptsShadow} parent Parent of this node. It should be
      * `undefined` for root node.
+     * @param {Number} dimensions (Default: 0) Allowed number of dimensions for
+     * this node.
      */
-    constructor(expression, parent) {
+    constructor(expression, parent, dimensions = 0) {
         this.#expression = expression;
         this.#parent = parent;
+        this.#dimensions = dimensions;
 
         this.#variable = null;
         this.#literals = {};
@@ -71,6 +75,12 @@ class ConceptsShadow {
      * @returns {ConceptsShadow}
      */
     get parent() { return this.#parent; }
+    /**
+     * Number of array dimensions allowed for this node. Zero for non-arrays.
+     * 
+     * @returns {Number}
+     */
+    get dimensions() { return this.#dimensions; }
     /**
      * Variable node under this node.
      * 
@@ -173,10 +183,21 @@ class ConceptsShadow {
      * @return {ConceptsShadow} Itself after build
      */
     build(definition, types) {
+        const dimensions = arrayify.dimensions(definition);
+        while (Array.isArray(definition)) {
+            if (definition.length != 1) {
+                throw error.Concepts_definition_is_not_valid__REASON(
+                    because => because.KEY_is_only_allowed_an_array_with_one_item(this.name)
+                );
+            }
+
+            definition = definition[0];
+        }
+
         if (typeof definition === 'string') {
             const expression = Expression.parseValue(definition, types);
 
-            const leaf = new ConceptsShadow(expression, this).build();
+            const leaf = new ConceptsShadow(expression, this, dimensions).build();
             if (leaf.isVariable) {
                 this.#variable = leaf;
             } else if (leaf.isLiteral) {
@@ -201,6 +222,10 @@ class ConceptsShadow {
 
         if (this.quantifier != null && this.quantifier.data != null) {
             this.#data.quantifier = this.quantifier.data;
+        }
+
+        if (this.#dimensions > 0) {
+            this.#data.dimensions = this.#dimensions;
         }
 
         if (this.type != null) {
@@ -230,6 +255,15 @@ class ConceptsShadow {
      */
     validate(schemaDefinition) {
         if (this.hasOnlyVariableLeafNode()) {
+            const dimensions = arrayify.dimensions(schemaDefinition);
+            if (dimensions > this.variable.dimensions) {
+                throw error.Schema_definition_is_not_valid__REASON(
+                    because => because.VARIABLE_expects_at_most_EXPECTED_dimensional_array__but_got_ACTUAL(
+                        this.variable.name, this.variable.dimensions, dimensions
+                    )
+                );
+            }
+
             if (this.variable.type !== undefined) {
                 this.variable.type.validate(schemaDefinition);
             }
@@ -241,7 +275,7 @@ class ConceptsShadow {
             const literal = this.literals[0];
 
             if (schemaDefinition !== literal.name) {
-                throw error.Schema_definition_is_not_valid__because__REASON(
+                throw error.Schema_definition_is_not_valid__REASON(
                     because => because.Expected_LITERAL__but_got_VALUE(literal.name, schemaDefinition)
                 );
             }
@@ -260,7 +294,7 @@ class ConceptsShadow {
 
                 delete schemaKeys[literal.name];
             } else if (literal.quantifier.min > 0) {
-                throw error.Schema_definition_is_not_valid__because__REASON(
+                throw error.Schema_definition_is_not_valid__REASON(
                     because => because.LITERAL_is_missing(literal.name)
                 );
             }
@@ -302,7 +336,7 @@ class ConceptsShadow {
             if (errors.hasOwnProperty(remainingKey)) {
                 throw arrayify.get(errors, remainingKey)[0];
             } else {
-                throw error.Schema_definition_is_not_valid__because__REASON(
+                throw error.Schema_definition_is_not_valid__REASON(
                     because => because.TOKEN_is_not_expected(remainingKey)
                 );
             }
@@ -325,7 +359,7 @@ class ConceptsShadow {
     ) {
         if (this.hasOnlyVariableLeafNode()) {
             if (result.hasOwnProperty(this.#variable.name)) {
-                throw error.Concepts_definition_is_not_valid__because__REASON(
+                throw error.Concepts_definition_is_not_valid__REASON(
                     because => because.CONCEPT_cannot_have_VARIABLE_more_than_once(
                         name, this.#variable.name
                     )
