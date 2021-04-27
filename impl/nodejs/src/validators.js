@@ -38,6 +38,26 @@ const _validators = {
     enum: {
         validTypes: ['string', 'number', 'boolean', 'any'],
         test: (validValues, value) => validValues.includes(value)
+    },
+    min: {
+        validTypes: ['number', 'string'],
+        test: (lowerBound, value) => {
+            if(typeof value === 'string') {
+                value = value.length;
+            }
+
+            return value >= lowerBound;
+        }
+    },
+    max: {
+        validTypes: ['number', 'string'],
+        test: (upperBound, value) => {
+            if(typeof value === 'string') {
+                value = value.length;
+            }
+
+            return value <= upperBound;
+        }
     }
 };
 

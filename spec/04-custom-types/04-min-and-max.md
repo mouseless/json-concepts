@@ -73,8 +73,7 @@ Below schemas are **INVALID** because of min-max validations;
 }
 ```
 
-`ERROR: 'greeting.service.json' is not valid, '$dailyCallLimit' cannot be less`
-`than 10.`
+`ERROR: 'greeting.service.json' is not valid, '9' is not a valid limit.`
 
 ---
 
@@ -89,8 +88,7 @@ Below schemas are **INVALID** because of min-max validations;
 }
 ```
 
-`ERROR: 'greeting.service.json' is not valid, '$dailyCallLimit' cannot be more`
-`than 100.`
+`ERROR: 'greeting.service.json' is not valid, '101' is not a valid limit.`
 
 ---
 
@@ -105,8 +103,7 @@ Below schemas are **INVALID** because of min-max validations;
 }
 ```
 
-`ERROR: 'greeting.service.json' is not valid, length of '$name' cannot be less`
-`than 1.`
+`ERROR: 'greeting.service.json' is not valid, '' is not a valid identifier.`
 
 ---
 
@@ -121,5 +118,4 @@ Below schemas are **INVALID** because of min-max validations;
 }
 ```
 
-`ERROR: 'greeting.service.json' is not valid, length of '$name' cannot be more`
-`than 10.`
+`ERROR: 'greeting.service.json' is not valid, '01234567890' is not a valid identifier.`
