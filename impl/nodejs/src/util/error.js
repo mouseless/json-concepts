@@ -28,9 +28,9 @@ const InvalidConceptsReasons = {
     Cannot_parse_EXPRESSION__type_expected:
         (EXPRESSION) => `Cannot parse '${EXPRESSION}', type expected`,
     Cannot_parse_quantifier__EXPRESSION:
-        (EXPRESSION) => `Cannot parse quantifier: ${EXPRESSION}`,
+        (EXPRESSION) => `Cannot parse quantifier: '${EXPRESSION}'`,
     VALIDATOR_does_not_exist:
-        (VALIDATOR) => `${VALIDATOR} does not exist`,
+        (VALIDATOR) => `Validator '${VALIDATOR}' does not exist`,
     Cannot_create_a_validator_from_EXPRESSION:
         (EXPRESSION) => `Cannot create a validator from '${EXPRESSION}'`
 };

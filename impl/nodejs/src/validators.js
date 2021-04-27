@@ -34,6 +34,10 @@ const _validators = {
     regex: {
         validTypes: ['string'],
         test: (pattern, value) => new RegExp(pattern).test(value)
+    },
+    enum: {
+        validTypes: ['string', 'number', 'boolean', 'any'],
+        test: (validValues, value) => validValues.includes(value)
     }
 };
 
@@ -52,6 +56,21 @@ function createValidator(definition = required('definition')) {
         definition = {
             type: "string",
             regex: definition
+        };
+    }
+
+    if (Array.isArray(definition)) {
+        let type = null;
+        for (const member of definition) {
+            if (type === null) {
+                type = typeof member;
+            } else if (typeof member !== type) {
+                type = "any";
+            }
+        }
+        definition = {
+            type: type,
+            enum: definition
         };
     }
 

@@ -33,7 +33,7 @@
         try {
             return new Concepts(definition);
         } catch (e) {
-            if(e.name == error.Names.SCHEMA_ERROR) {
+            if (e.name == error.Names.SCHEMA_ERROR) {
                 throw error.CONCEPTS_is_not_valid__Error_is__ERROR(path, e.message);
             }
 
@@ -44,6 +44,7 @@
     /* const */ #definition;
     /* const */ #shadow;
     /* const */ #concepts;
+    /* const */ #types;
 
     /**
      * Concepts represents a schema for a schema. It contains a set of concept
@@ -56,9 +57,11 @@
     constructor(definition = required('definition')) {
         this.#definition = definition;
 
-        const typeDefinitions = metaData.read(definition, 'types', /* burnAfterReading */ true);
+        this.#types = createTypes(
+            metaData.read(definition, 'types', /* burnAfterReading */ true)
+        );
 
-        this.#shadow = new ConceptsShadow().build(definition, createTypes(typeDefinitions));
+        this.#shadow = new ConceptsShadow().build(definition, this.#types);
         this.#concepts = {};
 
         this._build(this.#shadow);
@@ -82,6 +85,12 @@
      * @returns {Array.<ConceptData>}
      */
     get list() { return Object.values(this.#concepts); }
+    /**
+     * Lists all type definitions including built-in and custom types.
+     * 
+     * @returns {Array.<import('./types').TypeData>}
+     */
+    get types() { return Object.values(this.#types); }
 
     get _shadow() { return this.#shadow; }
 

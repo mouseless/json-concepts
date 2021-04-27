@@ -22,21 +22,6 @@ For following concepts definition, `statusCode` is restricted to be either
 }
 ```
 
-Short-hand for enum validator is as follows;
-
-`CONCEPTS: service.concepts.json`
-
-```json
-{
-    "$service+": {
-        "statusCode": "$statusCode:httpStatus"
-    },
-    "@types": {
-        "httpStatus": [ 200, 400, 500 ]
-    }
-}
-```
-
 `CONCEPTS SHADOW`
 
 ```json
@@ -55,9 +40,6 @@ Short-hand for enum validator is as follows;
 }
 ```
 
-Here `httpStatus` automatically inherits from `number`, because every item in
-the array is a `number`.
-
 Below schema is **NOT** valid, because `404` is not listed in `httpStatus`
 definition;
 
@@ -71,7 +53,27 @@ definition;
 }
 ```
 
-`ERROR: 'greeting.service.json' is not valid, '404' is not a valid http status.`
+`ERROR: 'greeting.service.json' is not valid, '404' is not a valid httpStatus.`
+
+## Short-Hand Usage
+
+Short-hand for enum validator is as follows;
+
+`CONCEPTS: service.concepts.json`
+
+```json
+{
+    "$service+": {
+        "statusCode": "$statusCode:httpStatus"
+    },
+    "@types": {
+        "httpStatus": [ 200, 400, 500 ]
+    }
+}
+```
+
+Here `httpStatus` automatically inherits from `number`, because every item in
+the array is a `number`.
 
 ## Enum of `any` Type
 

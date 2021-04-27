@@ -19,9 +19,9 @@
  * @typedef {Object} CustomTypeData
  * @property {String} name Name of type
  * @property {validate} validate Validate function to validate a value
+ * @property {TypeData|CustomTypeData} base Base type of this custom type
  * @property {import('./validators').ValidatorObject} _validator Validator
  * object.
- * @property {TypeData} _base Base type of this custom type
  */
 
 /**
@@ -77,7 +77,7 @@ function createTypes(definitions = required('definitions')) {
             );
         }
 
-        type._base = result[base];
+        type.base = result[base];
         type._validator.validateBaseType(base);
 
         Object.freeze(type);
@@ -113,7 +113,7 @@ function _validateCustomType(value) {
     }
 
     try {
-        this._base.validate(value);
+        this.base.validate(value);
     } catch {
         throw error.Schema_definition_is_not_valid__because__REASON(
             because => because.VALUE_is_not_a_valid_TYPE(value, this.name)
