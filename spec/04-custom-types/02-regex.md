@@ -15,7 +15,7 @@ pattern;
     "@types": {
         "identifier": {
             "type": "string",
-            "regex": "/[a-zA-Z]/g"
+            "regex": "/^[a-zA-Z]*$/g"
         }
     }
 }
@@ -50,7 +50,7 @@ Following definition demonstrates a short-hand usage of `regex` validator.
         "name": "$name:identifier"
     },
     "@types": {
-        "identifier": "/[a-zA-Z]/g"
+        "identifier": "/^[a-zA-Z]*$/g"
     }
 }
 ```

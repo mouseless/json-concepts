@@ -2,7 +2,7 @@
  * Validates if given base type is supported by this validator, throws error if
  * base type is not supported.
  * 
- * @callback validateBaseType
+ * @callback validateRootType
  * @param {String} base Base type name to check
  */
 /**
@@ -18,7 +18,7 @@
  * 
  * @typedef {Object} ValidatorObject
  * @property {String} type Base type of custom type
- * @property {validateBaseType} validateBaseType
+ * @property {validateRootType} validateRootType
  * @property {isValid} isValid
  */
 
@@ -33,7 +33,7 @@
 const _validators = {
     regex: {
         validTypes: ['string'],
-        test: (pattern, value) => new RegExp(pattern).test(value)
+        test: (pattern, value) => new RegExp(pattern.substring(1, pattern.length - 2), 'g').test(value)
     },
     enum: {
         validTypes: ['string', 'number', 'boolean', 'any'],
@@ -42,7 +42,7 @@ const _validators = {
     min: {
         validTypes: ['number', 'string'],
         test: (lowerBound, value) => {
-            if(typeof value === 'string') {
+            if (typeof value === 'string') {
                 value = value.length;
             }
 
@@ -52,7 +52,7 @@ const _validators = {
     max: {
         validTypes: ['number', 'string'],
         test: (upperBound, value) => {
-            if(typeof value === 'string') {
+            if (typeof value === 'string') {
                 value = value.length;
             }
 
@@ -103,7 +103,7 @@ function createValidator(definition = required('definition')) {
     const result = {
         type: definition.type,
         _validations: [],
-        validateBaseType: _validateBaseType,
+        validateRootType: _validateRootType,
         isValid: _isValid
     };
 
@@ -129,7 +129,7 @@ function createValidator(definition = required('definition')) {
 /**
  * @param {String} base 
  */
-function _validateBaseType(base) {
+function _validateRootType(base) {
     for (const validation of this._validations) {
         if (!validation.validator.validTypes.includes(base)) {
             throw error.Concepts_definition_is_not_valid__because__REASON(

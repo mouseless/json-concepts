@@ -32,7 +32,10 @@ const InvalidConceptsReasons = {
     VALIDATOR_does_not_exist:
         (VALIDATOR) => `Validator '${VALIDATOR}' does not exist`,
     Cannot_create_a_validator_from_EXPRESSION:
-        (EXPRESSION) => `Cannot create a validator from '${EXPRESSION}'`
+        (EXPRESSION) => `Cannot create a validator from '${EXPRESSION}'`,
+    TYPE_cannot_inherit_from_BASE__it_would_cause_a_circular_dependency:
+        (TYPE, BASE) => `'${TYPE}' cannot inherit from '${BASE}', it would ` +
+            `cause a circular dependency`
 };
 
 /**
@@ -98,8 +101,7 @@ module.exports = {
         return _error(`Cannot load '${FILE}'.`);
     },
     Concepts_required_to_load_SCHEMA(SCHEMA) {
-        return _error(
-            `Concepts required to load ${SCHEMA}.` +
+        return _error(`Concepts required to load ${SCHEMA}.` +
             ` Either specify @concepts meta-data within ${SCHEMA}, or pass concepts as a parameter.`
         );
     },

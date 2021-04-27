@@ -13,10 +13,16 @@ describe('spec/custom-types/regex', function () {
             "@types": {
                 "identifier": {
                     "type": "string",
-                    "regex": "/[a-zA-Z]/g"
+                    "regex": "/^[a-zA-Z]*$/g"
                 }
             }
         });
+
+        (() => concepts.validate({
+            "service": {
+                "name": "sayHello"
+            }
+        })).should.not.throw();
 
         (() => concepts.validate({
             "service": {
@@ -36,7 +42,7 @@ describe('spec/custom-types/regex', function () {
             "@types": {
                 "identifier": {
                     "type": "number",
-                    "regex": "/[a-zA-Z]/g"
+                    "regex": "/^[a-zA-Z]*$/g"
                 }
             }
         })).should.throw(
@@ -50,7 +56,7 @@ describe('spec/custom-types/regex', function () {
         (() => new Concepts({
             "@types": {
                 "identifier": {
-                    "regex": "/[a-zA-Z]/g"
+                    "regex": "/^[a-zA-Z]*$/g"
                 }
             }
         })).should.throw(
@@ -86,7 +92,7 @@ describe('spec/custom-types/regex', function () {
                     "name": "$name:identifier"
                 },
                 "@types": {
-                    "identifier": "/[a-zA-Z]/g"
+                    "identifier": "/^[a-zA-Z]*$/g"
                 }
             });
 
