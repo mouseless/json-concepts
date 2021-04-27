@@ -127,14 +127,14 @@ function createValidator(definition = required('definition')) {
 }
 
 /**
- * @param {String} base 
+ * @param {String} root 
  */
-function _validateRootType(base) {
+function _validateRootType(root) {
     for (const validation of this._validations) {
-        if (!validation.validator.validTypes.includes(base)) {
+        if (!validation.validator.validTypes.includes(root)) {
             throw error.Concepts_definition_is_not_valid__because__REASON(
                 because => because.VALIDATOR_does_not_support_TYPE(
-                    validation.name, base
+                    validation.name, root
                 )
             );
         }

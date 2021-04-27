@@ -184,7 +184,7 @@ class ConceptsShadow {
             }
         } else if (typeof definition === 'object') {
             for (const key in definition) {
-                const expression = Expression.parseKey(key);
+                const expression = Expression.parseKey(key, types);
 
                 const node = new ConceptsShadow(expression, this).build(definition[key], types);
                 if (node.isVariable) {
@@ -274,6 +274,10 @@ class ConceptsShadow {
 
             for (const schemaKey of Object.keys(schemaKeys)) {
                 try {
+                    if (concept.type) {
+                        concept.type.validate(schemaKey);
+                    }
+
                     concept.validate(schemaDefinition[schemaKey]);
 
                     quantities[concept.name]++;

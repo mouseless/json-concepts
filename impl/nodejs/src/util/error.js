@@ -22,11 +22,11 @@ const InvalidConceptsReasons = {
     VALIDATOR_does_not_support_TYPE:
         (VALIDATOR, TYPE) => `${VALIDATOR} does not support ${TYPE}'`,
     Unknown_type_TYPE_in_EXPRESSION:
-        (TYPE, EXPRESSION) => `Unknown type '${TYPE}' in '${EXPRESSION}`,
+        (TYPE, EXPRESSION) => `Unknown type '${TYPE}' in '${EXPRESSION}'`,
     Unknown_type_TYPE:
         (TYPE) => `Unknown type '${TYPE}'`,
-    Cannot_parse_EXPRESSION__type_expected:
-        (EXPRESSION) => `Cannot parse '${EXPRESSION}', type expected`,
+    Cannot_parse_EXPRESSION__a_type_was_expected_after_symbol:
+        (EXPRESSION) => `Cannot parse '${EXPRESSION}', a type was expected after '${SC.TYPE}'`,
     Cannot_parse_quantifier__EXPRESSION:
         (EXPRESSION) => `Cannot parse quantifier: '${EXPRESSION}'`,
     VALIDATOR_does_not_exist:
@@ -35,7 +35,13 @@ const InvalidConceptsReasons = {
         (EXPRESSION) => `Cannot create a validator from '${EXPRESSION}'`,
     TYPE_cannot_inherit_from_BASE__it_would_cause_a_circular_dependency:
         (TYPE, BASE) => `'${TYPE}' cannot inherit from '${BASE}', it would ` +
-            `cause a circular dependency`
+            `cause a circular dependency`,
+    CONCEPT_cannot_be_TYPE__only_string_allowed:
+        (CONCEPT, TYPE) => `'${CONCEPT}' cannot be '${TYPE}', only string is allowed`,
+    CONCEPT_cannot_be_TYPE__only_string_allowed_but_TYPE_is_ROOT:
+        (CONCEPT, TYPE, ROOT) => TYPE === ROOT
+            ? InvalidConceptsReasons.CONCEPT_cannot_be_TYPE__only_string_allowed(CONCEPT, TYPE)
+            : `'${CONCEPT}' cannot be '${TYPE}', only string is allowed but '${TYPE}' is '${ROOT}'`
 };
 
 /**

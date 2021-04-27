@@ -1,5 +1,4 @@
 const { SpecialCharacters: SC, error, required } = require('./util');
-const { BuiltInTypes } = require('./types');
 
 class Expression {
     /**
@@ -20,10 +19,15 @@ class Expression {
      * expression.
      * 
      * @param {String} expression (Required) Key expression to parse
+     * @param {Object.<string, import('./types').TypeData>} types (Required)
+     * Type map.
      * 
      * @returns {Expression} Parsed expression object
      */
-    static parseKey(expression = required('expression')) {
+    static parseKey(
+        expression = required('expression'),
+        types = required('types')
+    ) {
         const tokens = _scan(expression, _keySC);
 
         let isVariable, name, type, quantifier;
@@ -32,12 +36,25 @@ class Expression {
         if (token == SC.VARIABLE) {
             isVariable = true;
             name = tokens.shift();
+
+            try {
+                type = _parseType(tokens, types);
+            } catch (e) {
+                if (e.message == '' || _keySC[e.message]) {
+                    throw error.Concepts_definition_is_not_valid__because__REASON(
+                        because => because.Cannot_parse_EXPRESSION__a_type_was_expected_after_symbol(expression)
+                    );
+                }
+
+                throw error.Concepts_definition_is_not_valid__because__REASON(
+                    because => because.Unknown_type_TYPE_in_EXPRESSION(e.message, expression)
+                );
+            }
         } else {
             isVariable = false;
             name = token;
         }
 
-        type = null;
         quantifier = _parseQuantifier(tokens);
 
         return new Expression(isVariable, name, type, quantifier);
@@ -48,13 +65,14 @@ class Expression {
      * expression.
      * 
      * @param {String} expression (Required) Value expression to parse
-     * @param {Object.<string, import('./types').TypeData>} types Type map
+     * @param {Object.<string, import('./types').TypeData>} types (Required)
+     * Type map.
      * 
      * @returns {Expression} Parsed expression object
      */
     static parseValue(
         expression = required('expression'),
-        types = BuiltInTypes
+        types = required('types')
     ) {
         const tokens = _scan(expression, _valueSC);
 
@@ -65,22 +83,18 @@ class Expression {
             isVariable = true;
             name = tokens.shift();
 
-            token = tokens.shift();
-            if (token == SC.TYPE) {
-                token = tokens.shift();
-                if (token === undefined) {
+            try {
+                type = _parseType(tokens, types);
+            } catch (e) {
+                if (e.message == '') {
                     throw error.Concepts_definition_is_not_valid__because__REASON(
-                        because => because.Cannot_parse_EXPRESSION__type_expected(expression)
+                        because => because.Cannot_parse_EXPRESSION__a_type_was_expected_after_symbol(expression)
                     );
                 }
 
-                if (!types[token]) {
-                    throw error.Concepts_definition_is_not_valid__because__REASON(
-                        because => because.Unknown_type_TYPE_in_EXPRESSION(token, expression)
-                    );
-                }
-
-                type = types[token];
+                throw error.Concepts_definition_is_not_valid__because__REASON(
+                    because => because.Unknown_type_TYPE_in_EXPRESSION(e.message, expression)
+                );
             }
         } else {
             isVariable = false;
@@ -113,10 +127,22 @@ class Expression {
         this.#type = type;
         this.#quantifier = quantifier;
 
-        if (this.isLiteral && this.allowsMultiple) {
+        if (this.isLiteral && this.isKey &&
+            this.allowsMultiple
+        ) {
             throw error.Concepts_definition_is_not_valid__because__REASON(
                 because => because.LITERAL_cannot_have_QUANTIFIER(
                     this.name, this.quantifier.expression
+                )
+            );
+        }
+
+        if (this.isVariable && this.isKey &&
+            this.type !== undefined && this.type.root.name !== 'string'
+        ) {
+            throw error.Concepts_definition_is_not_valid__because__REASON(
+                because => because.CONCEPT_cannot_be_TYPE__only_string_allowed_but_TYPE_is_ROOT(
+                    this.name, this.type.name, this.type.root.name
                 )
             );
         }
@@ -155,12 +181,24 @@ class Expression {
      */
     get quantifier() { return this.#quantifier; }
     /**
+     * Checks if this expression is a key expression.
+     * 
+     * @returns {Boolean} `true` if it is, `false` otherwise
+     */
+    get isKey() { return this.#quantifier !== undefined; }
+    /**
+     * Checks if this expression is a value expression.
+     * 
+     * @returns {Boolean} `true` if it is, `false` otherwise
+     */
+    get isValue() { return this.#quantifier === undefined; }
+    /**
      * Checks if this key expression allows multiple instances according to its
      * quantifier data.
      * 
      * @returns {Boolean} `true` if it does, `false` otherwise.
      */
-    get allowsMultiple() { return this.#quantifier !== undefined && this.#quantifier.max > 1; }
+    get allowsMultiple() { return this.isKey && this.#quantifier.max > 1; }
 
     /**
      * Validates given quantity against its quantifier. Works only for key
@@ -203,6 +241,7 @@ const Quantifiers = {
 
 const _keySC = {
     [SC.VARIABLE]: SC.VARIABLE,
+    [SC.TYPE]: SC.TYPE,
     [SC.ZERO_OR_ONE]: SC.ZERO_OR_ONE,
     [SC.ZERO_OR_MORE]: SC.ZERO_OR_MORE,
     [SC.ONE_OR_MORE]: SC.ONE_OR_MORE,
@@ -247,6 +286,35 @@ function _scan(
     }
 
     return tokens;
+}
+
+/**
+ * 
+ * @param {Array.<String>} tokens 
+ * @param {Object.<string, import('./types').TypeData>} types
+ * @param {String} expression
+ * 
+ * @returns {TypeData}
+ */
+function _parseType(
+    tokens = required('tokens'),
+    types = required('types')
+) {
+    let token = tokens.shift();
+
+    if (token !== SC.TYPE) {
+        tokens.unshift(token);
+
+        return undefined;
+    }
+
+    const name = tokens.shift();
+
+    if (!types[name]) {
+        throw new Error(name);
+    }
+
+    return types[name];
 }
 
 /**

@@ -11,6 +11,7 @@
  * 
  * @typedef {Object} TypeData
  * @property {String} name Name of type
+ * @property {TypeData} root Self reference
  * @property {validate} validate Validate function to validate a value
  */
 /**
@@ -18,9 +19,9 @@
  * 
  * @typedef {Object} CustomTypeData
  * @property {String} name Name of type
+ * @property {TypeData} root Root type of this custom type
  * @property {validate} validate Validate function to validate a value
  * @property {TypeData|CustomTypeData} base Base type of this custom type
- * @property {TypeData} _root Root type of this custom type
  * @property {import('./validators').ValidatorObject} _validator Validator
  * object.
  */
@@ -28,23 +29,11 @@
 /**
  * @type {Object.<string, TypeData>}
  */
-const BuiltInTypes = Object.freeze({
-    any: Object.freeze({
-        name: 'any',
-        validate: _validateAny
-    }),
-    boolean: Object.freeze({
-        name: 'boolean',
-        validate: _validateBuiltInType
-    }),
-    number: Object.freeze({
-        name: 'number',
-        validate: _validateBuiltInType
-    }),
-    string: Object.freeze({
-        name: 'string',
-        validate: _validateBuiltInType
-    }),
+const _builtInTypes = Object.freeze({
+    any: _builtInType('any', _validateAny),
+    boolean: _builtInType('boolean', _validateType),
+    number: _builtInType('number', _validateType),
+    string: _builtInType('string', _validateType)
 });
 
 /**
@@ -58,7 +47,7 @@ function createTypes(definitions = required('definitions')) {
     /** @type {Object.<string, CustomTypeData>} */
     const result = {};
 
-    Object.setPrototypeOf(result, BuiltInTypes);
+    Object.setPrototypeOf(result, _builtInTypes);
 
     for (const name in definitions) {
         result[name] = {
@@ -84,16 +73,36 @@ function createTypes(definitions = required('definitions')) {
     for (const name in definitions) {
         const type = result[name];
 
-        type._root = _findRoot(type);
+        type.root = _findRoot(type);
     }
 
     for (const name in definitions) {
         const type = result[name];
 
-        type._validator.validateRootType(type._root.name);
+        type._validator.validateRootType(type.root.name);
 
         Object.freeze(type);
     }
+
+    return Object.freeze(result);
+}
+
+/**
+ * @param {String} name 
+ * @param {validate} validate 
+ * 
+ * @returns {TypeData}
+ */
+function _builtInType(
+    name = required('name'),
+    validate = required('validate')
+) {
+    const result = {
+        name: name,
+        validate: validate
+    };
+
+    result.root = result;
 
     return Object.freeze(result);
 }
@@ -106,7 +115,7 @@ function _validateAny(value) { }
 /**
  * @param {Number|String|Boolean} value
  */
-function _validateBuiltInType(value) {
+function _validateType(value) {
     if (typeof value !== this.name) {
         throw error.Schema_definition_is_not_valid__because__REASON(
             because => because.VALUE_is_not_a_valid_TYPE(value, this.name)
@@ -166,7 +175,6 @@ function _findRoot(
 }
 
 module.exports = {
-    BuiltInTypes,
     createTypes
 };
 

@@ -35,7 +35,7 @@ describe('spec/variables/variable-types', function () {
             }
         })).should.throw(
             error.Concepts_definition_is_not_valid__because__REASON(
-                because => because.Cannot_parse_EXPRESSION__type_expected(
+                because => because.Cannot_parse_EXPRESSION__a_type_was_expected_after_symbol(
                     '$enabled:'
                 )
             ).message
