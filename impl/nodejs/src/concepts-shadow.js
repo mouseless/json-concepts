@@ -188,7 +188,7 @@ class ConceptsShadow {
                     because => because.Expected_a_variable__but_got_a_literal__EXPRESSION(definition)
                 );
             }
-            
+
             const leaf = new ConceptsShadow(expression, this, dimensions).build();
             if (leaf.isVariable) {
                 this.#variable = leaf;
@@ -257,7 +257,7 @@ class ConceptsShadow {
             }
 
             if (this.variable.type !== undefined) {
-                this.variable.type.validate(schemaDefinition);
+                arrayify.each(schemaDefinition, item => this.variable.type.validate(item));
             }
 
             return;

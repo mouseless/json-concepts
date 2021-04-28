@@ -22,6 +22,8 @@ Below schema is now invalid because all items in `tags` should be `string`;
 }
 ```
 
+`ERROR: 'invalid.tags.json' is not valid, '0' is not a valid string.`
+
 ## Custom Types
 
 Custom types are also supported.
@@ -46,6 +48,8 @@ Custom types are also supported.
 
 ```json
 {
-    "summer": [ "JN", "JL", "AG" ]
+    "summer": [ "JUN", "JUL", "AUH" ]
 }
 ```
+
+`ERROR: 'invalid.season.json' is not valid, 'AUH' is not a valid month.`

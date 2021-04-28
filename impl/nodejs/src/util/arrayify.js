@@ -98,11 +98,38 @@ function make(
     return value;
 }
 
+/**
+ * Action callback to be called for every item in an n dimensional array.
+ * 
+ * @callback eachAction
+ * @param {*} item An item in n dimensional array
+ */
+/**
+ * Iterates through an n dimensional array, and perform given action for every
+ * item. If value is not an array, it simply performs given action on value.
+ * 
+ * @param {*} value Value to iterate
+ * @param {eachAction} action (Required) Action to perform
+ */
+function each(
+    value,
+    action = required('action')
+) {
+    if (Array.isArray(value)) {
+        for (const item of value) {
+            each(item, action);
+        }
+    } else {
+        action(value);
+    }
+}
+
 module.exports = {
     get,
     push,
     dimensions,
-    make
+    make,
+    each
 };
 
 const { required } = require("./validation");
