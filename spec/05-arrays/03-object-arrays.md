@@ -9,8 +9,8 @@ Below is how to define array of objects;
     "$service+": {
         "parameters?": [
             {
-                "name": "$name",
-                "type": "$type"
+                "name": "$pName",
+                "type": "$pType"
             }
         ]
     }
@@ -36,11 +36,11 @@ node does not have a `"_"` key.
                 "literal": [
                     {
                         "_": "name",
-                        "variable": { "_": "name" }
+                        "variable": { "_": "pName" }
                     },
                     {
                         "_": "type",
-                        "variable": { "_": "type" }
+                        "variable": { "_": "pType" }
                     }
                 ]
             }
@@ -79,21 +79,74 @@ the array is taken from its literal.
 
 ```json
 {
-    "service": {
-        "_": "sayHello",
-        "parameters": [ 
+    "service": [
             {
-                "name": "name",
-                "type": "string"
-            },
-            {
-                "name": "surname",
-                "type": "string"
-            }
-        ]
-    }
+            "_": "sayHello",
+            "parameters": [ 
+                {
+                    "pName": "name",
+                    "pType": "string"
+                },
+                {
+                    "pName": "surname",
+                    "pType": "string"
+                }
+            ]
+        }
+    ]
 }
 ```
+
+## Multi-Dimensional Array
+
+It should support multi-dimensional array definitions. Below is an example;
+
+`CONCEPTS: matrix.concepts.json`
+
+```json
+{
+    "matrix": [ [ { "value": "$value" } ] ]
+}
+```
+
+`SCHEMA 1: two.matrix.json`
+
+```json
+{
+    "matrix": [ [ { "value": 1 }, { "value": 2 } ] ]
+}
+```
+
+Note that just like regular arrays, it allows less dimensions;
+
+`SCHEMA 2: one.matrix.json`
+
+```json
+{
+    "matrix": [ { "value": 1 }, { "value": 2 } ]
+}
+```
+
+`SCHEMA 2: zero.matrix.json`
+
+```json
+{
+    "matrix": { "value": 1 }
+}
+```
+
+But does not allow more dimensions;
+
+`SCHEMA 3: invalid.matrix.json`
+
+```json
+{
+    "matrix": [ [ [ { "value": 1 } ] ] ]
+}
+```
+
+`ERROR: 'invalid.matrix.json' is not valid, 'matrix' expects at most 2`
+`dimensions, but got 3.`
 
 ## Literal and Concept Conflicts
 

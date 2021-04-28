@@ -113,15 +113,75 @@ function make(
  */
 function each(
     value,
-    action = required('action')
+    action = required('action'),
+    indices = []
 ) {
     if (Array.isArray(value)) {
-        for (const item of value) {
-            each(item, action);
+        for (let i = 0; i < value.length; i++) {
+            const item = value[i];
+
+            each(item, action, indices.concat([i]));
         }
     } else {
-        action(value);
+        action(value, indices);
     }
+}
+
+/**
+ * @param {Array} array 
+ * @param {Array.<Number>|Number} indices 
+ * @param {*} value 
+ */
+function set(
+    array = required('array'),
+    indices,
+    value
+) {
+    if (!Array.isArray(indices)) {
+        indices = [indices];
+    }
+
+    for (let i = 0; i < indices.length - 1; i++) {
+        const ix = indices[i];
+        if (array[ix] == null) {
+            array[ix] = [];
+        }
+        array = array[ix];
+    }
+
+    array[indices[indices.length - 1]] = value;
+}
+
+/**
+ * @param {Array} array 
+ * @param {Array.<Number>|Number} indices 
+ * @param {*} value 
+ */
+function getM(
+    array = required('array'),
+    indices,
+    defaultValue
+) {
+    if (!Array.isArray(indices)) {
+        indices = [indices];
+    }
+
+    for (let i = 0; i < indices.length - 1; i++) {
+        const ix = indices[i];
+        if (array[ix] == null) {
+            array[ix] = [];
+        }
+        array = array[ix];
+    }
+
+    const result = array[indices[indices.length - 1]];
+
+    if (result == null) {
+        array[indices[indices.length - 1]] = defaultValue;
+        return defaultValue;
+    }
+
+    return result;
 }
 
 module.exports = {
@@ -129,7 +189,9 @@ module.exports = {
     push,
     dimensions,
     make,
-    each
+    each,
+    set,
+    getM
 };
 
 const { required } = require("./validation");

@@ -137,4 +137,34 @@ describe('arrayify', function () {
                 .should.deep.equal([["test"]]);
         });
     });
+
+    describe('#set', function () {
+        it('should set value at specified index', function () {
+            const array = ["old"];
+            arrayify.set(array, 0, "new");
+
+            array[0].should.be.equal('new');
+        });
+
+        it('should add value at if it does not exist', function () {
+            const array = ["old"];
+            arrayify.set(array, 1, "new");
+
+            array[1].should.be.equal('new');
+        });
+
+        it('should set multiple dimensional array', function () {
+            const array = [["old"]];
+            arrayify.set(array, [0, 0], "new");
+
+            array[0][0].should.be.equal('new');
+        });
+
+        it('should add dimension if it does not exist', function () {
+            const array = [];
+            arrayify.set(array, [0, 0], "new");
+
+            array[0][0].should.be.equal('new');
+        });
+    });
 });

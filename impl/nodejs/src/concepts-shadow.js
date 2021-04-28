@@ -15,7 +15,7 @@ class ConceptsShadow {
      * after construction.
      * 
      * @param {Expression} expression Expression of this node. It should be
-     * `undefined` for root node.
+     * `undefined` for root node and object array nodes.
      * @param {ConceptsShadow} parent Parent of this node. It should be
      * `undefined` for root node.
      * @param {Number} dimensions (Default: 0) Allowed number of dimensions for
@@ -69,12 +69,6 @@ class ConceptsShadow {
      * @returns {import('./types').TypeData}
      */
     get type() { return this.#expression != null ? this.#expression.type : null; }
-    /**
-     * Parent of this node. `undefined` for root node.
-     * 
-     * @returns {ConceptsShadow}
-     */
-    get parent() { return this.#parent; }
     /**
      * Number of array dimensions allowed for this node. Zero for non-arrays.
      * 
@@ -140,11 +134,20 @@ class ConceptsShadow {
      * 
      * @returns {boolean} `true` if it has, `false` otherwise
      */
-    hasOnlyVariableLeafNode() {
+    hasOnlyVariableNode() {
         return this.variable != null &&
-            this.variable.isLeafNode() &&
             this.literals.length == 0 &&
             this.concepts.length == 0;
+    }
+
+    /**
+     * Checks if this node has only one variable leaf node.
+     * 
+     * @returns {boolean} `true` if it has, `false` otherwise
+     */
+    hasOnlyVariableLeafNode() {
+        return this.hasOnlyVariableNode() &&
+            this.variable.isLeafNode();
     }
 
     /**
@@ -196,15 +199,21 @@ class ConceptsShadow {
                 this.#literals[leaf.name] = leaf;
             }
         } else if (typeof definition === 'object') {
-            for (const key in definition) {
-                const expression = Expression.parseKey(key, types);
+            if (dimensions == 0) {
+                for (const key in definition) {
+                    const expression = Expression.parseKey(key, types);
 
-                const node = new ConceptsShadow(expression, this).build(definition[key], types);
-                if (node.isVariable) {
-                    this.#concepts[node.name] = node;
-                } else if (node.isLiteral) {
-                    this.#literals[node.name] = node;
+                    const node = new ConceptsShadow(expression, this).build(definition[key], types);
+                    if (node.isVariable) {
+                        this.#concepts[node.name] = node;
+                    } else if (node.isLiteral) {
+                        this.#literals[node.name] = node;
+                    }
                 }
+            } else {
+                const node = new ConceptsShadow(undefined, this, dimensions).build(definition, types);
+
+                this.#variable = node;
             }
         }
 
@@ -225,7 +234,7 @@ class ConceptsShadow {
         }
 
         if (this.variable != null) {
-            this.#data.variable = this.#variable.#data;
+            this.#data.variable = this.variable.#data;
         }
 
         for (const literal of this.literals) {
@@ -275,8 +284,27 @@ class ConceptsShadow {
             return;
         }
 
+        if (this.hasOnlyVariableNode()) {
+            const dimensions = arrayify.dimensions(schemaDefinition);
+            if (this.variable.dimensions < dimensions) {
+                throw error.Schema_definition_is_not_valid__REASON(
+                    because => because.VARIABLE_expects_at_most_EXPECTED_dimensional_array__but_got_ACTUAL(
+                        this.name, this.variable.dimensions, dimensions
+                    )
+                );
+            }
+
+            arrayify.each(schemaDefinition, item => this.variable.validate(item));
+
+            return;
+        }
+
         const schemaKeys = {};
-        if (schemaDefinition != null && typeof schemaDefinition === 'object') {
+        if (Array.isArray(schemaDefinition)) {
+            throw error.Schema_definition_is_not_valid__REASON(
+                because => because.VARIABLE_is_not_an_array(this.name)
+            );
+        } else if (schemaDefinition != null) {
             Object.keys(schemaDefinition).forEach(key => schemaKeys[key] = true);
         }
 
