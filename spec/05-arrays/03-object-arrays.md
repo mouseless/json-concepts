@@ -17,6 +17,40 @@ Below is how to define array of objects;
 }
 ```
 
+In concepts shadow, object array is represented as a variable with dimension of
+array definition, however since object array does not have a name, this variable
+node does not have a `"_"` key.
+
+`CONCEPTS SHADOW`
+
+```json
+{
+    "concept": {
+        "_": "service",
+        "quantifier": { "min": 1 },
+        "literal": {
+            "_": "parameters",
+            "quantifier": { "min": 0, "max": 1 },
+            "variable": {
+                "dimensions": 1,
+                "literal": [
+                    {
+                        "_": "name",
+                        "variable": { "_": "name" }
+                    },
+                    {
+                        "_": "type",
+                        "variable": { "_": "type" }
+                    }
+                ]
+            }
+        }
+    }
+}
+```
+
+## Schema
+
 A valid schema is as follows;
 
 `SCHEMA: greeting.service.json`
