@@ -13,7 +13,7 @@ describe('spec/custom-types/regex-validator', function () {
             "@types": {
                 "identifier": {
                     "type": "string",
-                    "regex": "/^[a-zA-Z]*$/g"
+                    "regex": "^[a-zA-Z]*$"
                 }
             }
         });
@@ -42,7 +42,7 @@ describe('spec/custom-types/regex-validator', function () {
             "@types": {
                 "identifier": {
                     "type": "number",
-                    "regex": "/^[a-zA-Z]*$/g"
+                    "regex": "^[a-zA-Z]*$"
                 }
             }
         })).should.throw(
@@ -56,7 +56,7 @@ describe('spec/custom-types/regex-validator', function () {
         (() => new Concepts({
             "@types": {
                 "identifier": {
-                    "regex": "/^[a-zA-Z]*$/g"
+                    "regex": "^[a-zA-Z]*$"
                 }
             }
         })).should.throw(
@@ -92,7 +92,7 @@ describe('spec/custom-types/regex-validator', function () {
                     "name": "$name:identifier"
                 },
                 "@types": {
-                    "identifier": "/^[a-zA-Z]*$/g"
+                    "identifier": "^[a-zA-Z]*$"
                 }
             });
 
@@ -112,12 +112,12 @@ describe('spec/custom-types/regex-validator', function () {
         it('should give error for an unsupported shortcut', function () {
             (() => new Concepts({
                 "@types": {
-                    "identifier": "invalid shortcut"
+                    "identifier": 0
                 }
             })).should.throw(
                 error.Concepts_definition_is_not_valid__REASON(
                     because => because.Cannot_create_a_validator_from_EXPRESSION(
-                        'invalid shortcut'
+                        '0'
                     )
                 ).message
             );

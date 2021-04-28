@@ -208,7 +208,7 @@ class Expression {
      */
     validate(quantity = required('quantity')) {
         if (quantity < this.#quantifier.min) {
-            if (this.#quantifier == Quantifiers.DEFAULT) {
+            if (this.#quantifier == _quantifiers.DEFAULT) {
                 throw error.Schema_definition_is_not_valid__REASON(
                     because => because.CONCEPT_is_missing(this.#name)
                 );
@@ -232,7 +232,7 @@ class Expression {
 /**
  * @enum {QuantifierData}
  */
-const Quantifiers = {
+const _quantifiers = {
     DEFAULT: _quantifier(),
     [SC.ZERO_OR_ONE]: _quantifier(0, 1, SC.ZERO_OR_ONE),
     [SC.ONE_OR_MORE]: _quantifier(1, undefined, SC.ONE_OR_MORE),
@@ -326,17 +326,17 @@ function _parseQuantifier(tokens) {
     let token = tokens.shift();
 
     if (token === undefined) {
-        return Quantifiers.DEFAULT;
+        return _quantifiers.DEFAULT;
     }
 
     if (token != SC.BEGIN_QUANTIFIER) {
-        if (!Quantifiers[token]) {
+        if (!_quantifiers[token]) {
             throw error.Concepts_definition_is_not_valid__REASON(
                 because => because.Cannot_parse_quantifier__EXPRESSION(token)
             );
         }
 
-        return Quantifiers[token];
+        return _quantifiers[token];
     }
 
     const quantifierTokens = [token];
@@ -347,7 +347,7 @@ function _parseQuantifier(tokens) {
     }
 
     if (quantifierTokens.length == 2) { // {}
-        return Quantifiers.DEFAULT;
+        return _quantifiers.DEFAULT;
     }
 
     const expression = quantifierTokens.join('');

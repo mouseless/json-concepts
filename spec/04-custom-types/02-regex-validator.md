@@ -15,7 +15,7 @@ pattern;
     "@types": {
         "identifier": {
             "type": "string",
-            "regex": "/^[a-zA-Z]*$/g"
+            "regex": "^[a-zA-Z]*$"
         }
     }
 }
@@ -33,7 +33,7 @@ For above concepts definition following schema is **NOT** valid;
 }
 ```
 
-Because `say hello` does **NOT** match `/[a-zA-Z]/g` pattern.
+Because `say hello` does **NOT** match `^[a-zA-Z]*$` pattern.
 
 `ERROR: 'greeting.service.json' is not valid, 'say hello' is not a valid`
 `identifier.`
@@ -50,7 +50,7 @@ Following definition demonstrates a short-hand usage of `regex` validator.
         "name": "$name:identifier"
     },
     "@types": {
-        "identifier": "/^[a-zA-Z]*$/g"
+        "identifier": "^[a-zA-Z]*$"
     }
 }
 ```

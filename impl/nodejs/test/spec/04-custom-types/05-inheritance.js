@@ -19,7 +19,7 @@ describe('spec/custom-types/inheritance', function () {
                     "type": "identifier",
                     "enum": ["string", "number", "boolean", "date", "email", "_"]
                 },
-                "identifier": "/^[a-zA-Z][0-9a-zA-Z]*$/g"
+                "identifier": "^[a-zA-Z][0-9a-zA-Z]*$"
             }
         });
 

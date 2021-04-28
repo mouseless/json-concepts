@@ -139,7 +139,8 @@ Its shadow still contains an array;
                     "_": "name",
                     "types": [ "string" ]
                 }
-            ]
+            ],
+            "tags": [ ]
         }
     ]
 }

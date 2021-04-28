@@ -19,7 +19,7 @@ type is going to be validated against all validators in the inheritance chain.
             "type": "identifier",
             "enum": [ "string", "number", "boolean", "date", "email" ]
         },
-        "identifier": "/^[a-zA-Z][0-9a-zA-Z]*$/g"
+        "identifier": "^[a-zA-Z][0-9a-zA-Z]*$"
     }
 }
 ```

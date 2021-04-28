@@ -128,7 +128,36 @@ describe('spec/arrays/declaring-an-array', function () {
     });
 
     describe('single item', function () {
-        it('should allow zero dimensions, but shadow should have it in array');
+        it('should allow zero dimensions, but shadow should have it in array', function () {
+            const concepts = new Concepts({
+                "$service+": {
+                    "$parameter*": ["$types"],
+                    "tags?": ["$tags"]
+                }
+            });
+
+            const schema = concepts.create({
+                "sayHello": {
+                    "name": "string",
+                }
+            });
+
+            schema.shadow.should.deep.equal({
+                "service": [
+                    {
+                        "_": "sayHello",
+                        "parameter": [
+                            {
+                                "_": "name",
+                                "types": ["string"]
+                            }
+                        ],
+                        "tags": []
+                    }
+                ]
+            });
+        });
+        
         it('should allow null, but treat it as a single item');
     });
 

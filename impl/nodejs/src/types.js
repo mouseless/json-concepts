@@ -79,7 +79,7 @@ function createTypes(definitions = required('definitions')) {
     for (const name in definitions) {
         const type = result[name];
 
-        type._validator.validateRootType(type.root.name);
+        type._validator.validateRoot(type.root.name);
 
         Object.freeze(type);
     }
@@ -152,8 +152,8 @@ function _findRoot(
     type = required('type'),
     hit = {}
 ) {
-    if (type._root) {
-        return type._root;
+    if (type.root) {
+        return type.root;
     }
 
     if (type.base) {

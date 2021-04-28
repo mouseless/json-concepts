@@ -12,7 +12,7 @@ Concept names can also be validated like variable values;
         }
     },
     "@types": {
-        "identifier": "/^[a-zA-Z][0-9a-zA-Z]*$/g",
+        "identifier": "^[a-zA-Z][0-9a-zA-Z]*$",
         "method": [ "get", "post", "put", "delete" ]
     }
 }

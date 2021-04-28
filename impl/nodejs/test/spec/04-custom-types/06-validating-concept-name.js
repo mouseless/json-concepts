@@ -13,7 +13,7 @@ describe('spec/custom-types/validating-concept-name', function () {
                 }
             },
             "@types": {
-                "identifier": "/^[a-zA-Z][0-9a-zA-Z]*$/g",
+                "identifier": "^[a-zA-Z][0-9a-zA-Z]*$",
                 "method": ["GET", "POST", "PUT", "DELETE"]
             }
         });

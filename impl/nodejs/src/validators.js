@@ -1,9 +1,9 @@
 /**
- * Validates if given base type is supported by this validator, throws error if
- * base type is not supported.
+ * Validates if given type is supported by this validator, throws error if type
+ * is not supported.
  * 
- * @callback validateRootType
- * @param {String} base Base type name to check
+ * @callback validateRoot
+ * @param {String} root Type to check
  */
 /**
  * Checks if given value is valid according to this validator.
@@ -18,7 +18,7 @@
  * 
  * @typedef {Object} ValidatorObject
  * @property {String} type Base type of custom type
- * @property {validateRootType} validateRootType
+ * @property {validateRoot} validateRoot
  * @property {isValid} isValid
  */
 
@@ -33,7 +33,7 @@
 const _validators = {
     regex: {
         validTypes: ['string'],
-        test: (pattern, value) => new RegExp(pattern.substring(1, pattern.length - 2), 'g').test(value)
+        test: (pattern, value) => new RegExp(pattern, 'g').test(value)
     },
     enum: {
         validTypes: ['string', 'number', 'boolean', 'any'],
@@ -69,10 +69,7 @@ const _validators = {
  * @returns {ValidatorObject} Validator object for given definition
  */
 function createValidator(definition = required('definition')) {
-    if (typeof definition === 'string' &&
-        definition.startsWith('/') &&
-        definition.endsWith('/g')
-    ) {
+    if (typeof definition === 'string') {
         definition = {
             type: "string",
             regex: definition
@@ -88,6 +85,7 @@ function createValidator(definition = required('definition')) {
                 type = "any";
             }
         }
+        
         definition = {
             type: type,
             enum: definition
@@ -103,7 +101,7 @@ function createValidator(definition = required('definition')) {
     const result = {
         type: definition.type,
         _validations: [],
-        validateRootType: _validateRootType,
+        validateRoot: _validateRoot,
         isValid: _isValid
     };
 
@@ -129,7 +127,7 @@ function createValidator(definition = required('definition')) {
 /**
  * @param {String} root 
  */
-function _validateRootType(root) {
+function _validateRoot(root) {
     for (const validation of this._validations) {
         if (!validation.validator.validTypes.includes(root)) {
             throw error.Concepts_definition_is_not_valid__REASON(
