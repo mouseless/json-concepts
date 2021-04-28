@@ -87,7 +87,7 @@ Given this concepts definition, below schema is valid;
 {
     "sayHello": {
         "name": [ "string", "text" ],
-        "tags": [ ]
+        "tags": [ "readonly", "friendly" ]
     }
 }
 ```
@@ -105,7 +105,7 @@ Given this concepts definition, below schema is valid;
                     "types": [ "string", "text" ]
                 }
             ],
-            "tags": [ ]
+            "tags": [ "readonly", "friendly" ]
         }
     ]
 }
@@ -121,6 +121,7 @@ An array variable is allowed to have a single item without array notation.
 {
     "sayHello": {
         "name": "string",
+        "tags": "readonly"
     }
 }
 ```
@@ -140,7 +141,7 @@ Its shadow still contains an array;
                     "types": [ "string" ]
                 }
             ],
-            "tags": [ ]
+            "tags": [ "readonly" ]
         }
     ]
 }
@@ -183,5 +184,26 @@ one;
     "matrix-a": [ [ 1, 2, 3 ], [ 4, 5, 6 ] ],
     "matrix-b": [ 1, 2, 3 ],
     "matrix-c": 1
+}
+```
+
+`SCHEMA SHADOW`
+
+```json
+{
+    "matrix": [
+        {
+            "_": "matrix-a",
+            "value": [ [ 1, 2, 3 ], [ 4, 5, 6 ] ]
+        },
+        {
+            "_": "matrix-b",
+            "value": [ [ 1, 2, 3 ] ]
+        },
+        {
+            "_": "matrix-c",
+            "value": [ [ 1 ] ]
+        }
+    ]
 }
 ```

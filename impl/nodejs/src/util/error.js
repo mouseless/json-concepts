@@ -43,7 +43,9 @@ const InvalidConceptsReasons = {
             ? InvalidConceptsReasons.CONCEPT_cannot_be_TYPE__only_string_allowed(CONCEPT, TYPE)
             : `'${CONCEPT}' cannot be '${TYPE}', only string is allowed but '${TYPE}' is '${ROOT}'`,
     KEY_is_only_allowed_an_array_with_one_item:
-        (KEY) => `'${KEY}' is only allowed an array with one item`
+        (KEY) => `'${KEY}' is only allowed an array with one item`,
+    Expected_a_variable__but_got_a_literal__EXPRESSION:
+        (EXPRESSION) => `Expected a variable, but got a literal: '${EXPRESSION}'`
 };
 
 /**

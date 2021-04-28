@@ -108,4 +108,33 @@ describe('arrayify', function () {
                 .should.be.equal(0);
         })
     })
+
+    describe('#make', function () {
+        it('should return value as is if given value matches desired dimensions', function () {
+            arrayify.make(0, "test")
+                .should.be.equal("test");
+
+            arrayify.make(1, [])
+                .should.deep.equal([]);
+
+            arrayify.make(2, [[]])
+                .should.deep.equal([[]]);
+        });
+
+        it('should add missing dimensions', function () {
+            arrayify.make(3, "test")
+                .should.deep.equal([[["test"]]]);
+
+            arrayify.make(3, ["test"])
+                .should.deep.equal([[["test"]]]);
+
+            arrayify.make(3, [["test"]])
+                .should.deep.equal([[["test"]]]);
+        });
+
+        it('should return value as is if given value has more than desired dimensions', function () {
+            arrayify.make(1, [["test"]])
+                .should.deep.equal([["test"]]);
+        });
+    });
 });

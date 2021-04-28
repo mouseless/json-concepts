@@ -108,20 +108,6 @@ class ConceptsShadow {
     get data() { return this.#data; }
 
     /**
-     * Returns default value for this concept. This is used in schema shadow
-     * when concept does not exist in a schema definition.
-     * 
-     * @returns {Array|Object}
-     */
-    get defaultValue() {
-        if (this.#expression.allowsMultiple) {
-            return [];
-        }
-
-        return null;
-    }
-
-    /**
      * Makes a deep search and returns all variables in the tree.
      * 
      * @returns {import('./concepts').VariablesData} Variables as key value
@@ -197,6 +183,12 @@ class ConceptsShadow {
         if (typeof definition === 'string') {
             const expression = Expression.parseValue(definition, types);
 
+            if (expression.isLiteral && dimensions > 0) {
+                throw error.Concepts_definition_is_not_valid__REASON(
+                    because => because.Expected_a_variable__but_got_a_literal__EXPRESSION(definition)
+                );
+            }
+            
             const leaf = new ConceptsShadow(expression, this, dimensions).build();
             if (leaf.isVariable) {
                 this.#variable = leaf;

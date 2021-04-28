@@ -72,10 +72,37 @@ function dimensions(value = null) {
     return result;
 }
 
+/**
+ * Creates an n dimensional array using given value. If given value is already
+ * an array with desired or more number of dimensions, it returns value as is.
+ * 
+ * @param {Number} dimensions Number of desired dimensions
+ * @param {*} value Any value to make a n dimensional array
+ * 
+ * @returns {Array} An n dimensional array
+ */
+function make(
+    dimensions = 0,
+    value = null
+) {
+    dimensions = dimensions - this.dimensions(value);
+
+    for (let i = 0; i < dimensions; i++) {
+        if (value == null) {
+            value = [];
+        } else {
+            value = [value];
+        }
+    }
+
+    return value;
+}
+
 module.exports = {
     get,
     push,
-    dimensions
+    dimensions,
+    make
 };
 
 const { required } = require("./validation");

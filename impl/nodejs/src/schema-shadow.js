@@ -73,11 +73,7 @@ class SchemaShadow {
      */
     build(definition) {
         if (this.#conceptsShadow.isLeafNode()) {
-            if (definition == null) {
-                this.#data = this.#conceptsShadow.parent.defaultValue;
-            } else {
-                this.#data = definition;
-            }
+            this.#data = arrayify.make(this.#conceptsShadow.dimensions, definition);
         } else {
             this._build(this.#conceptsShadow, definition);
 
@@ -95,7 +91,7 @@ class SchemaShadow {
                 const schemas = this.#schemasByConcept[concept];
 
                 const conceptShadow = this.#conceptsShadow.getConcept(concept)
-                this.#data[concept] = conceptShadow.defaultValue;
+                this.#data[concept] = conceptShadow.allowsMultiple ? [] : null;
 
                 if (conceptShadow.allowsMultiple) {
                     for (const shadow of schemas) {
