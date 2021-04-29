@@ -17,7 +17,7 @@ describe('spec/custom-types/inheritance', function () {
                 },
                 "type": {
                     "type": "identifier",
-                    "enum": ["string", "number", "boolean", "date", "email", "_"]
+                    "enum": ["string", "number", "boolean", "date", "email"]
                 },
                 "identifier": "^[a-zA-Z][0-9a-zA-Z]*$"
             }
