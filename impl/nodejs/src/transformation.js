@@ -98,7 +98,7 @@
 
             this.#queriesMap[concept] = [];
 
-            const queries = arrayify.get(this.#definition, concept);
+            const queries = arrayify.pull(this.#definition, concept);
             for (const definition of queries) {
                 const query = new Query(definition);
                 query.validate(this.#target.get(concept), this.#source);

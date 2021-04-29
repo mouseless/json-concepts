@@ -8,12 +8,10 @@ describe('spec/arrays/object-arrays', function () {
     it('should allow object arrays for literals', function () {
         const concepts = new Concepts({
             "$service+": {
-                "parameters?": [
-                    {
-                        "name": "$pName",
-                        "type": "$pType"
-                    }
-                ]
+                "parameters?": [{
+                    "name": "$pName",
+                    "type": "$pType"
+                }]
             }
         });
 
@@ -46,12 +44,10 @@ describe('spec/arrays/object-arrays', function () {
         it('should validate object arrays', function () {
             const concepts = new Concepts({
                 "$service+": {
-                    "parameters?": [
-                        {
-                            "name": "$pName",
-                            "type": "$pType"
-                        }
-                    ]
+                    "parameters?": [{
+                        "name": "$pName",
+                        "type": "$pType"
+                    }]
                 }
             });
 
@@ -92,12 +88,10 @@ describe('spec/arrays/object-arrays', function () {
         it('should validate every item in object array', function () {
             const concepts = new Concepts({
                 "$service+": {
-                    "parameters?": [
-                        {
-                            "name": "$name",
-                            "type?": "$type"
-                        }
-                    ]
+                    "parameters?": [{
+                        "name": "$name",
+                        "type?": "$type"
+                    }]
                 }
             });
 
@@ -141,8 +135,29 @@ describe('spec/arrays/object-arrays', function () {
             );
         });
 
-        it('should treat the literal that holds the object array like a concept', function () {
-            throw new Error('not implemented');
+        it('should treat the literal that holds the object array as a schema node', function () {
+            const concepts = new Concepts({
+                "$service+": {
+                    "parameters?": [{
+                        "name": "$pName"
+                    }]
+                }
+            });
+
+            const schema = concepts.create({
+                "sayHello": {
+                    "parameters": [{
+                        "name": "name"
+                    }]
+                }
+            });
+
+            const sayHello = schema._shadow.getSchemas('service')[0];
+            const parameters = sayHello.getSchemas('parameters')[0];
+
+            parameters.data.should.deep.equal({
+                "pName": "name"
+            });
         });
     });
 

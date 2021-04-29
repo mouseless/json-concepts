@@ -354,7 +354,7 @@ class ConceptsShadow {
             const remainingKey = remainingKeys[0];
 
             if (errors.hasOwnProperty(remainingKey)) {
-                throw arrayify.get(errors, remainingKey)[0];
+                throw arrayify.pull(errors, remainingKey)[0];
             } else {
                 throw error.Schema_definition_is_not_valid__REASON(
                     because => because.TOKEN_is_not_expected(remainingKey)

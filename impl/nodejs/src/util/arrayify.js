@@ -1,14 +1,14 @@
 /**
- * Gets data at given key from source as an array. This function returns is
- * guaranteed to return an array. If key does not exist in source, then an
- * empty array is returned.
+ * Pulls (but not removes) data at given key from source as an array. This
+ * function is guaranteed to return an array. If key does not exist in source,
+ * then an empty array is returned.
  * 
- * @param {Object} source (Required) The object to retrieve data from
- * @param {String} key (Required) Key of data to retrieve
+ * @param {Object} source (Required) The object to pull data from
+ * @param {String} key (Required) Key of data to pull
  * 
  * @returns {Array.<Object>} Data at source[key] as an array
  */
-function get(
+function pull(
     source = required('source'),
     key = required('key')
 ) {
@@ -99,35 +99,6 @@ function make(
 }
 
 /**
- * Action callback to be called for every item in an n dimensional array.
- * 
- * @callback eachAction
- * @param {*} item An item in n dimensional array
- */
-/**
- * Iterates through an n dimensional array, and perform given action for every
- * item. If value is not an array, it simply performs given action on value.
- * 
- * @param {*} value Value to iterate
- * @param {eachAction} action (Required) Action to perform
- */
-function each(
-    value,
-    action = required('action'),
-    indices = []
-) {
-    if (Array.isArray(value)) {
-        for (let i = 0; i < value.length; i++) {
-            const item = value[i];
-
-            each(item, action, indices.concat([i]));
-        }
-    } else {
-        action(value, indices);
-    }
-}
-
-/**
  * @param {Array} array 
  * @param {Array.<Number>|Number} indices 
  * @param {*} value 
@@ -153,45 +124,54 @@ function set(
 }
 
 /**
- * @param {Array} array 
- * @param {Array.<Number>|Number} indices 
- * @param {*} value 
+ * Action callback to be called for every item in an n dimensional array.
+ * 
+ * @callback eachAction
+ * @param {*} item An item in n dimensional array
+ * @param {Array.<Number>} indices Indices of this item
  */
-function getM(
-    array = required('array'),
-    indices,
-    defaultValue
+/**
+ * Iterates through an n dimensional array, and perform given action for every
+ * item. If value is not an array, it simply performs given action on value.
+ * 
+ * @param {*} value Value to iterate
+ * @param {eachAction} action (Required) Action to perform
+ */
+function each(
+    value,
+    action = required('action')
 ) {
-    if (!Array.isArray(indices)) {
-        indices = [indices];
-    }
+    _each(value, action);
+}
 
-    for (let i = 0; i < indices.length - 1; i++) {
-        const ix = indices[i];
-        if (array[ix] == null) {
-            array[ix] = [];
+/**
+ * @param {*} value 
+ * @param {eachAction} action 
+ * @param {Array.<Number>} indices 
+ */
+function _each(
+    value,
+    action = required('action'),
+    indices = []
+) {
+    if (Array.isArray(value)) {
+        for (let i = 0; i < value.length; i++) {
+            const item = value[i];
+
+            _each(item, action, indices.concat([i]));
         }
-        array = array[ix];
+    } else {
+        action(value, indices);
     }
-
-    const result = array[indices[indices.length - 1]];
-
-    if (result == null) {
-        array[indices[indices.length - 1]] = defaultValue;
-        return defaultValue;
-    }
-
-    return result;
 }
 
 module.exports = {
-    get,
+    pull,
     push,
     dimensions,
     make,
-    each,
     set,
-    getM
+    each
 };
 
 const { required } = require("./validation");

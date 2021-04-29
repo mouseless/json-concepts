@@ -7,12 +7,10 @@ Below is how to define array of objects;
 ```json
 {
     "$service+": {
-        "parameters?": [
-            {
-                "name": "$pName",
-                "type": "$pType"
-            }
-        ]
+        "parameters?": [ {
+            "name": "$pName",
+            "type": "$pType"
+        } ]
     }
 }
 ```
@@ -178,11 +176,9 @@ So this is invalid;
 ```json
 {
     "$service+": { 
-        "$parameters*": [
-            {
-                "type": "$type"
-            }
-        ]
+        "$parameters*": [ {
+            "type": "$type"
+        } ]
     }
 }
 ```
@@ -197,11 +193,9 @@ It is also invalid to declare a concept within an object array;
 ```json
 {
     "$service+": { 
-        "parameters?": [
-            {
-                "$property": "$value"
-            }
-        ]
+        "parameters?": [ {
+            "$property": "$value"
+        } ]
     }
 }
 ```

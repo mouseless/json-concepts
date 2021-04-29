@@ -1,5 +1,17 @@
 # Coding Style
 
+## Unused Parameters Of Callbacks
+
+Use underscore (`_`) for unused callback parameters.
+
+```javascript
+_ => doSomething();
+
+(_, secondIsUsed) => doSomething(secondIsUsed);
+
+function(_) { doSomething(); }
+```
+
 ## `require` and `module.exports` Usage
 
 ### Within a Package

@@ -4,9 +4,9 @@ const { should } = require('chai');
 should();
 
 describe('arrayify', function () {
-    describe('#get', function () {
+    describe('#pull', function () {
         it('should return as is if source[key] is already an array', function () {
-            const actual = arrayify.get({ array: [1, 2] }, 'array');
+            const actual = arrayify.pull({ array: [1, 2] }, 'array');
 
             actual.should.be.an('array');
             actual.length.should.equal(2);
@@ -15,7 +15,7 @@ describe('arrayify', function () {
         });
 
         it('should return in an array if source[key] is not array', function () {
-            const actual = arrayify.get({ string: "test" }, 'string');
+            const actual = arrayify.pull({ string: "test" }, 'string');
 
             actual.should.be.an('array');
             actual.length.should.equal(1);
@@ -23,17 +23,17 @@ describe('arrayify', function () {
         });
 
         it('should return empty array if source[key] is undefined', function () {
-            const actual = arrayify.get({}, 'ghost');
+            const actual = arrayify.pull({}, 'ghost');
 
             actual.should.be.an('array');
             actual.length.should.equal(0);
         });
 
         it('should throw error when a parameter is not given', function () {
-            (() => arrayify.get())
+            (() => arrayify.pull())
                 .should.throw(error.PARAMETER_is_required('source').message);
 
-            (() => arrayify.get({}))
+            (() => arrayify.pull({}))
                 .should.throw(error.PARAMETER_is_required('key').message);
         });
     });
@@ -165,6 +165,39 @@ describe('arrayify', function () {
             arrayify.set(array, [0, 0], "new");
 
             array[0][0].should.be.equal('new');
+        });
+    });
+
+    describe('#each', function () {
+        it('should iterate through each item of n dimensional array', function () {
+            const array = [[[0, 1], [2, 3]], [[4, 5], [6, 7]]];
+
+            const result = [];
+            arrayify.each(array, item => {
+                result.push(item);
+            });
+
+            result.should.deep.equal([0, 1, 2, 3, 4, 5, 6, 7]);
+        });
+
+        it('should pass indices for every iteration', function () {
+            const array = [[[0, 1], [2, 3]], [[4, 5], [6, 7]]];
+
+            const result = [];
+            arrayify.each(array, (_, indices) => {
+                result.push(indices);
+            });
+
+            result.should.deep.equal([
+                [0,0,0],
+                [0,0,1],
+                [0,1,0],
+                [0,1,1],
+                [1,0,0],
+                [1,0,1],
+                [1,1,0],
+                [1,1,1]
+            ]);
         });
     });
 });

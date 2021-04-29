@@ -2,7 +2,6 @@ class SchemaShadow {
     /* const */ #conceptsShadow;
     /* const */ #name;
     /* const */ #variables;
-    /* const */ #variablesArray;
     /* const */ #schemasByConcept;
 
     /* let */ #data;
@@ -26,7 +25,6 @@ class SchemaShadow {
         this.#name = name;
 
         this.#variables = {};
-        this.#variablesArray = [];
         this.#schemasByConcept = {};
     }
 
@@ -68,24 +66,8 @@ class SchemaShadow {
      * @param {Object} definition Schema definition
      */
     build(definition) {
-        definition = arrayify.make(this.#conceptsShadow.dimensions, definition);
-
         if (this.#conceptsShadow.isLeafNode()) {
-            this.#data = definition;
-        } else if (this.#conceptsShadow.dimensions > 0) {
-            this._build(this.#conceptsShadow, definition);
-
-            this.#data = [];
-            arrayify.each(this.#variablesArray, (item, indices) => {
-
-                const obj = {};
-                for (const name in item) {
-                    const shadow = item[name];
-
-                    obj[name] = shadow.#data;
-                }
-                arrayify.set(this.#data, indices, obj);
-            });
+            this.#data = arrayify.make(this.#conceptsShadow.dimensions, definition);
         } else {
             this._build(this.#conceptsShadow, definition);
 
@@ -104,15 +86,23 @@ class SchemaShadow {
             for (const concept in this.#schemasByConcept) {
                 const schemas = this.#schemasByConcept[concept];
 
-                const conceptShadow = this.#conceptsShadow.getConcept(concept)
-                this.#data[concept] = conceptShadow.allowsMultiple ? [] : null;
+                const conceptShadow = this.#conceptsShadow.getConcept(concept);
+                if (conceptShadow) {
+                    this.#data[concept] = conceptShadow.allowsMultiple ? [] : null;
 
-                if (conceptShadow.allowsMultiple) {
-                    for (const shadow of schemas) {
-                        this.#data[concept].push(shadow.#data);
+                    if (conceptShadow.allowsMultiple) {
+                        for (const shadow of schemas) {
+                            this.#data[concept].push(shadow.#data);
+                        }
+                    } else if (schemas.length > 0) {
+                        this.#data[concept] = schemas[0].#data;
                     }
-                } else if (schemas.length > 0) {
-                    this.#data[concept] = schemas[0].#data;
+                } else {
+                    this.#data[concept] = [];
+                    arrayify.each(schemas, (item, indices) => {
+
+                        arrayify.set(this.#data[concept], indices, item.#data);
+                    });
                 }
             }
         }
@@ -127,46 +117,22 @@ class SchemaShadow {
      */
     _build(
         conceptsShadow = required('conceptsShadow'),
-        definition,
-        indices
+        definition
     ) {
         if (conceptsShadow.hasOnlyVariableLeafNode()) {
             const shadow = new SchemaShadow(conceptsShadow.variable).build(definition);
-
-            if (indices) {
-                let variables = arrayify.getM(this.#variablesArray, indices, {});
-
-                variables[conceptsShadow.variable.name] = shadow;
-            } else {
-                this.#variables[conceptsShadow.variable.name] = shadow;
-            }
+            this.#variables[conceptsShadow.variable.name] = shadow;
 
             return;
         }
 
-        if (conceptsShadow.variable != null) {
-            const shadow = new SchemaShadow(conceptsShadow.variable).build(definition)
-            this.#variables[conceptsShadow.name] = shadow;
+        if (conceptsShadow.hasOnlyVariableNode()) {
+            this.#schemasByConcept[conceptsShadow.name] = [];
 
-            return;
-        }
-
-        if (conceptsShadow.dimensions > 0) {
+            definition = arrayify.make(conceptsShadow.variable.dimensions, definition);
             arrayify.each(definition, (item, indices) => {
-                const keys = {};
-                if (item != null) {
-                    Object.keys(item).forEach(key => keys[key] = true);
-                }
-
-                for (const literal of conceptsShadow.literals) {
-                    if (keys[literal.name]) {
-                        this._build(literal, item[literal.name], indices);
-
-                        delete keys[literal.name];
-                    } else {
-                        this._build(literal, null, indices);
-                    }
-                }
+                const shadow = new SchemaShadow(conceptsShadow.variable).build(item);
+                arrayify.set(this.#schemasByConcept[conceptsShadow.name], indices, shadow);
             });
 
             return;
