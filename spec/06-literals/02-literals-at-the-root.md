@@ -1,6 +1,6 @@
 # Literals At The Root
 
-Literals can be at the root of the concepts definition.
+Literals can be at the root of the concepts definition;
 
 `CONCEPTS: service.concepts.json`
 
