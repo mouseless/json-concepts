@@ -83,9 +83,10 @@ function createValidator(definition = required('definition')) {
                 type = typeof member;
             } else if (typeof member !== type) {
                 type = "any";
+                break;
             }
         }
-        
+
         definition = {
             type: type,
             enum: definition

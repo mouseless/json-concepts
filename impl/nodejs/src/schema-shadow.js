@@ -100,7 +100,6 @@ class SchemaShadow {
                 } else {
                     this.#data[concept] = [];
                     arrayify.each(schemas, (item, indices) => {
-
                         arrayify.set(this.#data[concept], indices, item.#data);
                     });
                 }
