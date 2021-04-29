@@ -60,3 +60,5 @@ concept. And if it fits to none of the concepts, then schema is invalid.
 ```
 
 This should not fail, because first is `property`, second is `method`.
+
+## Conflicts

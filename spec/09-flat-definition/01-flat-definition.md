@@ -11,16 +11,11 @@ definition it should be an array.
 ```json
 [
     { 
-        "path": "/",
-        "concept": {
-            "$service": { }
-        }
+        "$service": { },
     },
     {
-        "path": "/$service",
-        "concept": {
-            "$parameter": "string"
-        }
+        "$parameter": "string",
+        "@path": "/service"
     }
 ]
 ```

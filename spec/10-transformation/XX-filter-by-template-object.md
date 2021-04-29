@@ -26,7 +26,7 @@
             "/say.*/": { } //this is a template object, match by regex
         },
         "select": {
-            "_": "_ | after 'say' | camel-case",
+            "_": "_ | after 'say' | camelCase",
             "returnType": "responseType | capitalize"
         }
     },
@@ -46,7 +46,7 @@
     "function": {
         "from": "service",
         "select": {
-            "_": "_ | after 'say' | camel-case",
+            "_": "_ | after 'say' | camelCase",
             "returnType": "responseType | capitalize"
         }
     },
@@ -58,7 +58,7 @@
              } //parameters where their parent starts with say
         },
         "select": {
-            "type": "type.capitalize()"
+            "type": "type | capitalize"
         }
     }
 }
@@ -76,7 +76,7 @@
             } // a parameter 
         },
         "select": {
-            "_": "_ | after 'say' | camel-case",
+            "_": "_ | after 'say' | camelCase",
             "returnType": "responseType | capitalize"
         }
     },

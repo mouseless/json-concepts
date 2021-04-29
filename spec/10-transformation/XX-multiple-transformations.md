@@ -6,16 +6,16 @@
     {
         "from": "service",
         "map": {
-            "_": "_.after('say').camelCase()",
+            "_": "_ | after 'say' | camelCase",
             "rootPath": "_",
-            "returnType": "responseType.capitalize()"
+            "returnType": "responseType | capitalize"
         }
     },
     {
         "from": "parameter",
         "map": {
             "_": "_",
-            "type": "type.capitalize()"
+            "type": "type | capitalize"
         }
     }
     ]
