@@ -15,10 +15,6 @@ Below is how to define array of objects;
 }
 ```
 
-In concepts shadow, object array is represented as a variable with dimension of
-array definition, however since object array does not have a name, this variable
-node does not have a `"_"` key.
-
 `CONCEPTS SHADOW`
 
 ```json
@@ -47,6 +43,10 @@ node does not have a `"_"` key.
 }
 ```
 
+> In concepts shadow, object array is represented as a variable with the
+> dimensions of the array definition. Since object array does not have a name,
+> this variable node does not have a `"_"` key.
+
 ## Schema
 
 A valid schema is as follows;
@@ -56,7 +56,7 @@ A valid schema is as follows;
 ```json
 {
     "sayHello": {
-        "parameters": [
+        "parameter": [
             {
                 "name": "name",
                 "type": "string"
@@ -73,14 +73,14 @@ A valid schema is as follows;
 Normally shadows does not contain literal names, however in this case name of
 the array is taken from its literal.
 
-`SHADOW SCHEMA`
+`SCHEMA SHADOW`
 
 ```json
 {
     "service": [
             {
             "_": "sayHello",
-            "parameters": [ 
+            "parameter": [ 
                 {
                     "pName": "name",
                     "pType": "string"
@@ -94,6 +94,132 @@ the array is taken from its literal.
     ]
 }
 ```
+
+## Concepts vs Object Arrays
+
+Object arrays and concepts can be two different flavors to get to the same
+schema shadow. Below is an example to get exactly the same schema shadow from
+two different concepts definition.
+
+- Using concepts
+
+    `CONCEPTS: service.concepts.json`
+
+    ```json
+    {
+        "$service+": {
+            "$parameter*": "$type"
+        }
+    } 
+    ```
+
+    `SCHEMA: greeting.service.json`
+
+    ```json
+    {
+        "sayHello": {
+            "name": "string",
+            "surname": "string"
+        }
+    }
+    ```
+
+- Using object arrays
+
+    `CONCEPTS: service.concepts.json`
+
+    ```json
+    {
+        "$service+": {
+            "parameter?": [ {
+                "name": "$_",
+                "type": "$type"
+            } ]
+        }
+    } 
+    ```
+
+    `SCHEMA: greeting.service.json`
+
+    ```json
+    {
+        "sayHello": {
+            "parameter": [
+                {
+                    "name": "name",
+                    "type": "string"
+                },
+                {
+                    "name": "surname",
+                    "type": "string"
+                }
+            ]
+        }
+    }
+    ```
+
+`SCHEMA SHADOW`
+
+```json
+{
+    "service": [
+        {
+            "_": "sayHello",
+            "parameter": [
+                {
+                    "_": "name",
+                    "type": "string"
+                },
+                {
+                    "_": "surname",
+                    "type": "string"
+                }
+            ]
+        }
+    ]
+}
+```
+
+## Concepts and Object Arrays
+
+Concepts and object arrays does not have a use case that makes sense, however an
+implementation might allow such definitions.
+
+There are 3 possible cases for such definitions.
+
+1. Concepts under object arrays:
+
+    ```json
+    {
+        "array?": [ {
+            "$field*": "$value"
+        } ]
+    }
+    ```
+
+2. Object arrays under concepts:
+
+    ```json
+    {
+        "$data*": [ {
+            "name": "$name",
+            "value": "$value"
+        } ]
+    }
+    ```
+
+3. Concepts under object arrays under concepts;
+
+    ```json
+    {
+        "$data*": [ {
+            "$field*": "$value"
+        } ]
+    }
+
+No schema validation or shadow creation is specified since there are no apparent
+use cases for above definitions. So implementations are free to handle above
+definitions in whatever way they choose to.
 
 ## Multi-Dimensional Array
 
@@ -145,60 +271,3 @@ But does not allow more dimensions;
 
 `ERROR: 'invalid.matrix.json' is not valid, 'matrix' expects at most 2`
 `dimensions, but got 3.`
-
-## Literal and Concept Conflicts
-
-When a literal is in schema shadow, there occurs a chance of conflict between
-literal and concept names. So a literal and a concept cannot share their name if
-they are under the same scope. Below concepts definition is not valid;
-
-`CONCEPTS: invalid.concepts.json`
-
-```json
-{
-    "$conflict": "concept",
-    "conflict": "literal"
-}
-```
-
-`ERROR: 'invalid.concepts.json' is not valid, 'conflict' cannot be a literal`
-`and concept at the same time.`
-
-## Concepts and Object Arrays
-
-Object arrays cannot be under a concept, it can only be declared under a
-literal.
-
-So this is invalid;
-
-`CONCEPTS: service.concepts.json`
-
-```json
-{
-    "$service+": { 
-        "$parameters*": [ {
-            "type": "$type"
-        } ]
-    }
-}
-```
-
-`ERROR: 'service.concepts.json' is not valid, cannot declare an object array`
-`under a concept`
-
-It is also invalid to declare a concept within an object array;
-
-`CONCEPTS: service.concepts.json`
-
-```json
-{
-    "$service+": { 
-        "parameters?": [ {
-            "$property": "$value"
-        } ]
-    }
-}
-```
-
-`ERROR: 'service.concepts.json' is not valid, cannot declare a concept under an`
-`object array`

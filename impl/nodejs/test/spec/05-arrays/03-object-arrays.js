@@ -161,6 +161,76 @@ describe('spec/arrays/object-arrays', function () {
         });
     });
 
+    describe('concepts vs object arrays', function () {
+        it('should cast the same schema shadow', function () {
+            const concepts = new Concepts({
+                "$service+": {
+                    "$parameter*": "$type"
+                }
+            });
+
+            const schema1 = concepts.create({
+                "sayHello": {
+                    "name": "string",
+                    "surname": "string"
+                }
+            });
+
+            const objectArray = new Concepts({
+                "$service+": {
+                    "parameter?": [{
+                        "name": "$_",
+                        "type": "$type"
+                    }]
+                }
+            });
+
+            const schema2 = objectArray.create({
+                "sayHello": {
+                    "parameter": [
+                        {
+                            "name": "name",
+                            "type": "string"
+                        },
+                        {
+                            "name": "surname",
+                            "type": "string"
+                        }
+                    ]
+                }
+            });
+
+            schema1.shadow.should.deep.equal(schema2.shadow);
+        });
+    });
+
+    describe('concepts and object arrays', function () {
+        it('should allow concepts under object arrays', function () {
+            (() => new Concepts({
+                "array?": [{
+                    "$field*": "$value"
+                }]
+            })).should.not.throw();
+        });
+
+        it('should allow object arrays under concepts', function () {
+            (() => new Concepts({
+                "$data*": [{
+                    "name": "$name",
+                    "value": "$value"
+                }]
+            })).should.not.throw();
+        });
+
+        it('should concepts under object arrays under concepts', function () {
+            (() => new Concepts({
+                "$data*": [{
+                    "$field*": "$value"
+                }]
+            })).should.not.throw();
+        });
+    });
+
     describe('multi-dimensional array', function () {
         it('should allow more than one dimensions', function () {
             const concepts = new Concepts({
@@ -221,16 +291,5 @@ describe('spec/arrays/object-arrays', function () {
                 ).message
             );
         });
-    });
-
-    describe('literal and concept conflicts', function () {
-        it('should give error when a concept and a literal share same name');
-        it('should allow conflicting literal name under another concept');
-        it('should not allow conflicting literal under same concept even if it is nested');
-    });
-
-    describe('concepts and object arrays', function () {
-        it('should not allow object array under a concept');
-        it('should not allow concept inside an object array');
     });
 });
