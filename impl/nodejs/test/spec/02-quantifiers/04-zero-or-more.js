@@ -29,7 +29,7 @@ describe('spec/quantifiers/zero-or-more', function () {
                     "tags*": "$tags"
                 }
             })).should.throw(
-                error.Concepts_definition_is_not_valid__because__REASON(
+                error.Concepts_definition_is_not_valid__REASON(
                     because => because.LITERAL_cannot_have_QUANTIFIER(
                         'tags', '*'
                     )

@@ -26,7 +26,7 @@ Below is its shadow;
             "quantifier": { "min": 0, "max": 1 },
             "variable": {
                 "_": "tags",
-                "array": true
+                "dimensions": 1
             }
         }
     }
@@ -59,7 +59,7 @@ Array declaration is the same with concepts, below is an example;
             "quantifier": { "min": 0 },
             "variable": {
                 "_": "types",
-                "array": true
+                "dimensions": 1
             }
         }
     }
@@ -87,8 +87,27 @@ Given this concepts definition, below schema is valid;
 {
     "sayHello": {
         "name": [ "string", "text" ],
-        "tags": [ ]
+        "tags": [ "readonly", "friendly" ]
     }
+}
+```
+
+`SCHEMA SHADOW`
+
+```json
+{
+    "service": [
+        {
+            "_": "sayHello",
+            "parameter": [
+                {
+                    "_": "name",
+                    "types": [ "string", "text" ]
+                }
+            ],
+            "tags": [ "readonly", "friendly" ]
+        }
+    ]
 }
 ```
 
@@ -102,6 +121,7 @@ An array variable is allowed to have a single item without array notation.
 {
     "sayHello": {
         "name": "string",
+        "tags": "readonly"
     }
 }
 ```
@@ -120,7 +140,8 @@ Its shadow still contains an array;
                     "_": "name",
                     "types": [ "string" ]
                 }
-            ]
+            ],
+            "tags": [ "readonly" ]
         }
     ]
 }
@@ -128,13 +149,28 @@ Its shadow still contains an array;
 
 ## Multi-Dimensional Arrays
 
-Below concepts definition has a double array for `$matrix` variable;
+Below concepts definition has a double array for `$value` variable;
 
 `CONCEPTS: matrix.concepts.json`
 
 ```json
 {
-    "$matrices*": [ [ "$matrix" ] ]
+    "$matrix*": [ [ "$value" ] ]
+}
+```
+
+`CONCEPTS SHADOW`
+
+```json
+{
+    "concept": {
+        "_": "matrix",
+        "quantifier": { "min": 0 },
+        "variable": {
+            "_": "value",
+            "dimensions": 2
+        }
+    }
 }
 ```
 
@@ -148,5 +184,26 @@ one;
     "matrix-a": [ [ 1, 2, 3 ], [ 4, 5, 6 ] ],
     "matrix-b": [ 1, 2, 3 ],
     "matrix-c": 1
+}
+```
+
+`SCHEMA SHADOW`
+
+```json
+{
+    "matrix": [
+        {
+            "_": "matrix-a",
+            "value": [ [ 1, 2, 3 ], [ 4, 5, 6 ] ]
+        },
+        {
+            "_": "matrix-b",
+            "value": [ [ 1, 2, 3 ] ]
+        },
+        {
+            "_": "matrix-c",
+            "value": [ [ 1 ] ]
+        }
+    ]
 }
 ```

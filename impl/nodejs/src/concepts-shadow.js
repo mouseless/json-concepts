@@ -1,24 +1,7 @@
 class ConceptsShadow {
-    /**
-     * Quantifier represents the definition of allowed number of instances for
-     * a token.
-     * 
-     * @typedef {Object} QuantifierData
-     * 
-     * @property {Number} min Minimum number of tokens to be allowed
-     * @property {Number} max Maximum number of tokens to be allowed
-     */
-    /**
-     * Variables are stored in an object instead of an array to provide quick
-     * access via variable name.
-     * 
-     * @typedef {Object} VariablesData
-     */
-
-    /* const */ #type;
-    /* const */ #name;
-    /* const */ #quantifier;
+    /* const */ #expression;
     /* const */ #parent;
+    /* const */ #dimensions;
     /* const */ #variable;
     /* const */ #literals;
     /* const */ #concepts;
@@ -31,27 +14,18 @@ class ConceptsShadow {
      * This constructor only initializes a shadow instance. It should be built
      * after construction.
      * 
-     * @param {String} expression Key expression of this node. It should be
+     * @param {Expression} expression Expression of this node. It should be
+     * `undefined` for root node and object array nodes.
+     * @param {ConceptsShadow} parent Parent of this node. It should be
      * `undefined` for root node.
+     * @param {Number} dimensions (Default: 0) Allowed number of dimensions for
+     * this node.
      */
-    constructor(expression, parent) {
-        if (expression !== undefined) {
-            const { type, name, quantifier } = keyExpression.parse(expression);
-
-            if (type == keyExpression.Types.LITERAL && quantifier.max > 1) {
-                throw error.Concepts_definition_is_not_valid__because__REASON(
-                    because => because.LITERAL_cannot_have_QUANTIFIER(
-                        name, quantifier.expression
-                    )
-                );
-            }
-
-            this.#type = type;
-            this.#name = name;
-            this.#quantifier = quantifier;
-        }
-
+    constructor(expression, parent, dimensions = 0) {
+        this.#expression = expression;
         this.#parent = parent;
+        this.#dimensions = dimensions;
+
         this.#variable = null;
         this.#literals = {};
         this.#concepts = {};
@@ -59,26 +33,52 @@ class ConceptsShadow {
     }
 
     /**
-     * Name of this node
+     * Checks if this node has variable expression.
+     * 
+     * @returns {Boolean} `true` if it has, `false` otherwise
+     */
+    get isVariable() { return this.#expression != null && this.#expression.isVariable; }
+    /**
+     * Checks if this node has literal expression.
+     * 
+     * @returns {Boolean} `true` if it has, `false` otherwise
+     */
+    get isLiteral() { return this.#expression != null && this.#expression.isLiteral; }
+    /**
+     * Name of this node. `undefined` for root node.
      * 
      * @returns {String}
      */
-    get name() { return this.#name; }
+    get name() { return this.#expression != null ? this.#expression.name : null; }
     /**
-     * Quantifier definition of this node. Result is guaranteed to have min and
-     * max values.
+     * Quantifier definition of this node. Result is either null or an object
+     * with min and max values.
      * 
-     * @returns {QuantifierData}
+     * @returns {import('./expression').QuantifierData}
      */
-    get quantifier() { return this.#quantifier; }
+    get quantifier() { return this.#expression != null ? this.#expression.quantifier : null; }
     /**
-     * Parent of this node. `undefined` for root node.
+     * Checks if this node allows more than one instance.
+     * 
+     * @returns {Boolean} `true` if it is, `false` otherwise
      */
-    get parent() { return this.#parent; }
+    get allowsMultiple() { return this.#expression != null && this.#expression.allowsMultiple; }
+    /**
+     * Variable type of this node. Available only when this node is a variable.
+     * 
+     * @returns {import('./types').TypeData}
+     */
+    get type() { return this.#expression != null ? this.#expression.type : null; }
+    /**
+     * Number of array dimensions allowed for this node. Zero for non-arrays.
+     * 
+     * @returns {Number}
+     */
+    get dimensions() { return this.#dimensions; }
     /**
      * Variable node under this node.
      * 
-     * @returns {ConceptsShadow>}
+     * @returns {ConceptsShadow}
      */
     get variable() { return this.#variable; }
     /**
@@ -100,33 +100,14 @@ class ConceptsShadow {
      * @returns {Object}
      */
     get data() { return this.#data; }
-    /**
-     * Checks if this node allows more than one instance.
-     * 
-     * @returns {boolean} `true` if it is, `false` otherwise
-     */
-    get allowsMultiple() { return this.quantifier.max > 1; }
-
-    /**
-     * Returns default value for this concept. This is used in schema shadow
-     * when concept does not exist in a schema definition.
-     * 
-     * @returns {Array|Object}
-     */
-    get defaultValue() {
-        if (this.allowsMultiple) {
-            return [];
-        }
-
-        return null;
-    }
 
     /**
      * Makes a deep search and returns all variables in the tree.
      * 
-     * @returns {VariablesData} Variables as key value pairs
+     * @returns {import('./concepts').VariablesData} Variables as key value
+     * pairs.
      */
-    getAllVariables() { return this._variables({}); }
+    getAllVariables() { return this._variables(this.name, {}); }
     /**
      * Gets child concept node with given name. It returns `undefined` when no
      * child concept with given name exists.
@@ -153,11 +134,20 @@ class ConceptsShadow {
      * 
      * @returns {boolean} `true` if it has, `false` otherwise
      */
-    hasOnlyVariableLeafNode() {
+    hasOnlyVariableNode() {
         return this.variable != null &&
-            this.variable.isLeafNode() &&
             this.literals.length == 0 &&
             this.concepts.length == 0;
+    }
+
+    /**
+     * Checks if this node has only one variable leaf node.
+     * 
+     * @returns {boolean} `true` if it has, `false` otherwise
+     */
+    hasOnlyVariableLeafNode() {
+        return this.hasOnlyVariableNode() &&
+            this.variable.isLeafNode();
     }
 
     /**
@@ -177,44 +167,74 @@ class ConceptsShadow {
      * definition is given, it means this node is a leaf node.
      * 
      * @param {Object} definition Concepts definition
+     * @param {Object.<string, import('./types').TypeData>} types Types map
      * 
      * @return {ConceptsShadow} Itself after build
      */
-    build(definition) {
+    build(definition, types) {
+        const dimensions = arrayify.dimensions(definition);
+        while (Array.isArray(definition)) {
+            if (definition.length != 1) {
+                throw error.Concepts_definition_is_not_valid__REASON(
+                    because => because.KEY_is_only_allowed_an_array_with_one_item(this.name)
+                );
+            }
+
+            definition = definition[0];
+        }
+
         if (typeof definition === 'string') {
-            const key = definition;
+            const expression = Expression.parseValue(definition, types);
 
-            const leaf = new ConceptsShadow(key, this).build();
+            if (expression.isLiteral && dimensions > 0) {
+                throw error.Concepts_definition_is_not_valid__REASON(
+                    because => because.Expected_a_variable__but_got_a_literal__EXPRESSION(definition)
+                );
+            }
 
-            if (leaf.#type == keyExpression.Types.VARIABLE) {
+            const leaf = new ConceptsShadow(expression, this, dimensions).build();
+            if (leaf.isVariable) {
                 this.#variable = leaf;
-            } else if (leaf.#type == keyExpression.Types.LITERAL) {
+            } else if (leaf.isLiteral) {
                 this.#literals[leaf.name] = leaf;
             }
         } else if (typeof definition === 'object') {
-            for (const key in definition) {
-                const node = new ConceptsShadow(key, this).build(definition[key]);
+            if (dimensions == 0) {
+                for (const key in definition) {
+                    const expression = Expression.parseKey(key, types);
 
-                if (node.#type == keyExpression.Types.VARIABLE) {
-                    this.#concepts[node.name] = node;
-                } else if (node.#type == keyExpression.Types.LITERAL) {
-                    this.#literals[node.name] = node;
+                    const node = new ConceptsShadow(expression, this).build(definition[key], types);
+                    if (node.isVariable) {
+                        this.#concepts[node.name] = node;
+                    } else if (node.isLiteral) {
+                        this.#literals[node.name] = node;
+                    }
                 }
+            } else {
+                const node = new ConceptsShadow(undefined, this, dimensions).build(definition, types);
+
+                this.#variable = node;
             }
         }
 
-        if (this.#name != null) {
-            this.#data[SC.SELF] = this.#name;
+        if (this.name != null) {
+            this.#data[SC.SELF] = this.name;
         }
 
-        if (this.#quantifier != null) {
-            if (this.#quantifier.data != null) {
-                this.#data.quantifier = this.#quantifier.data;
-            }
+        if (this.quantifier != null && this.quantifier.data != null) {
+            this.#data.quantifier = this.quantifier.data;
+        }
+
+        if (this.#dimensions > 0) {
+            this.#data.dimensions = this.#dimensions;
+        }
+
+        if (this.type != null) {
+            this.#data.type = this.type.name;
         }
 
         if (this.variable != null) {
-            this.#data.variable = this.#variable.#data;
+            this.#data.variable = this.variable.#data;
         }
 
         for (const literal of this.literals) {
@@ -236,7 +256,18 @@ class ConceptsShadow {
      */
     validate(schemaDefinition) {
         if (this.hasOnlyVariableLeafNode()) {
-            // todo variable validation
+            const dimensions = arrayify.dimensions(schemaDefinition);
+            if (dimensions > this.variable.dimensions) {
+                throw error.Schema_definition_is_not_valid__REASON(
+                    because => because.VARIABLE_expects_at_most_EXPECTED_dimensional_array__but_got_ACTUAL(
+                        this.variable.name, this.variable.dimensions, dimensions
+                    )
+                );
+            }
+
+            if (this.variable.type !== undefined) {
+                arrayify.each(schemaDefinition, item => this.variable.type.validate(item));
+            }
 
             return;
         }
@@ -245,7 +276,7 @@ class ConceptsShadow {
             const literal = this.literals[0];
 
             if (schemaDefinition !== literal.name) {
-                throw error.Schema_definition_is_not_valid__because__REASON(
+                throw error.Schema_definition_is_not_valid__REASON(
                     because => because.Expected_LITERAL__but_got_VALUE(literal.name, schemaDefinition)
                 );
             }
@@ -253,8 +284,27 @@ class ConceptsShadow {
             return;
         }
 
+        if (this.hasOnlyVariableNode()) {
+            const dimensions = arrayify.dimensions(schemaDefinition);
+            if (this.variable.dimensions < dimensions) {
+                throw error.Schema_definition_is_not_valid__REASON(
+                    because => because.VARIABLE_expects_at_most_EXPECTED_dimensional_array__but_got_ACTUAL(
+                        this.name, this.variable.dimensions, dimensions
+                    )
+                );
+            }
+
+            arrayify.each(schemaDefinition, item => this.variable.validate(item));
+
+            return;
+        }
+
         const schemaKeys = {};
-        if (schemaDefinition != null && typeof schemaDefinition === 'object') {
+        if (Array.isArray(schemaDefinition)) {
+            throw error.Schema_definition_is_not_valid__REASON(
+                because => because.VARIABLE_is_not_an_array(this.name)
+            );
+        } else if (schemaDefinition != null) {
             Object.keys(schemaDefinition).forEach(key => schemaKeys[key] = true);
         }
 
@@ -264,7 +314,7 @@ class ConceptsShadow {
 
                 delete schemaKeys[literal.name];
             } else if (literal.quantifier.min > 0) {
-                throw error.Schema_definition_is_not_valid__because__REASON(
+                throw error.Schema_definition_is_not_valid__REASON(
                     because => because.LITERAL_is_missing(literal.name)
                 );
             }
@@ -278,6 +328,10 @@ class ConceptsShadow {
 
             for (const schemaKey of Object.keys(schemaKeys)) {
                 try {
+                    if (concept.type) {
+                        concept.type.validate(schemaKey);
+                    }
+
                     concept.validate(schemaDefinition[schemaKey]);
 
                     quantities[concept.name]++;
@@ -300,43 +354,42 @@ class ConceptsShadow {
             const remainingKey = remainingKeys[0];
 
             if (errors.hasOwnProperty(remainingKey)) {
-                throw arrayify.get(errors, remainingKey)[0];
+                throw arrayify.pull(errors, remainingKey)[0];
             } else {
-                throw error.Schema_definition_is_not_valid__because__REASON(
+                throw error.Schema_definition_is_not_valid__REASON(
                     because => because.TOKEN_is_not_expected(remainingKey)
                 );
             }
         }
 
         for (const concept of this.concepts) {
-            if (quantities[concept.name] < concept.quantifier.min) {
-                if (concept.quantifier == keyExpression.Quantifiers.DEFAULT) {
-                    throw error.Schema_definition_is_not_valid__because__REASON(
-                        because => because.CONCEPT_is_missing(concept.name)
-                    );
-                } else {
-                    throw error.Schema_definition_is_not_valid__because__REASON(
-                        because => because.Minimum_allowed_number_of_CONCEPT_is_MIN__but_got_COUNT(
-                            concept.name, concept.quantifier.min, quantities[concept.name]
-                        )
-                    );
-                }
-            } else if (quantities[concept.name] > concept.quantifier.max) {
-                throw error.Schema_definition_is_not_valid__because__REASON(
-                    because => because.Maximum_allowed_number_of_CONCEPT_is_MAX__but_got_COUNT(
-                        concept.name, concept.quantifier.max, quantities[concept.name]
-                    )
-                );
-            }
+            concept.#expression.validate(quantities[concept.name]);
         }
     }
 
-    _variables(result = required('result')) {
+    /**
+     * @param {String} name
+     * @param {import('./concepts').VariablesData} result
+     * 
+     * @returns {import('./concepts').VariablesData}
+     */
+    _variables(
+        name = required('name'),
+        result = required('result')
+    ) {
         if (this.hasOnlyVariableLeafNode()) {
+            if (result.hasOwnProperty(this.#variable.name)) {
+                throw error.Concepts_definition_is_not_valid__REASON(
+                    because => because.CONCEPT_cannot_have_VARIABLE_more_than_once(
+                        name, this.#variable.name
+                    )
+                )
+            }
+
             result[this.#variable.name] = { name: this.#variable.name };
         } else {
             for (const literal of this.literals) {
-                literal._variables(result);
+                literal._variables(name, result);
             }
         }
 
@@ -346,4 +399,5 @@ class ConceptsShadow {
 
 module.exports = ConceptsShadow;
 
-const { SpecialCharacters: SC, error, arrayify, keyExpression, required } = require('./util');
+const Expression = require('./expression');
+const { SpecialCharacters: SC, error, arrayify, required } = require('./util');

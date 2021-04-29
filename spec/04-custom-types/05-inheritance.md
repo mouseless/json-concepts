@@ -17,16 +17,15 @@ type is going to be validated against all validators in the inheritance chain.
         },
         "type": {
             "type": "identifier",
-            "enum": [ "string", "number", "boolean", "date", "email", "_" ]
+            "enum": [ "string", "number", "boolean", "date", "email" ]
         },
-        "identifier": "/^[a-zA-Z][0-9a-zA-Z]*$/g"
+        "identifier": "^[a-zA-Z][0-9a-zA-Z]*$"
     }
 }
 ```
 
 Here `primitive` custom type can have `float`, but `type` cannot. This means
-`float` can never be used. Also `type` allows `_`, but `identifier` does not. So
-`_` is also never going to be used.
+`float` can never be used.
 
 `SCHEMA: greeting.service.json`
 
@@ -49,21 +48,14 @@ definition is not valid;
 
 ```json
 {
-    "$service+": {
-        "$parameter*": "$type:primitive"
-    },
+    "circular": "$type:a",
     "@types": {
-        "primitive": {
-            "type": "type",
-            "enum": [ "number", "boolean", "float" ]
-        },
-        "type": {
-            "type": "primitive",
-            "enum": [ "string", "number", "boolean", "date", "email"]
-        }
+        "a": { "type": "b" },
+        "b": { "type": "c" },
+        "c": { "type": "a" }
     }
 }
 ```
 
-`ERROR: 'service.concepts.json' is not valid, 'type' cannot inherit from`
-`'primitive'.`
+`ERROR: 'service.concepts.json' is not valid, 'c' cannot inherit from`
+`'a'.`

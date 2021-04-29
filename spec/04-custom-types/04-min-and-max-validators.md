@@ -1,4 +1,4 @@
-# Min and Max
+# Min and Max Validators
 
 Min and max validators can be applied to `number` or `string` variables. When
 applied to a `string`, they validate its length.
@@ -54,38 +54,6 @@ Above definition has following schema;
                 }
             }
         ]
-    },
-    "metaData": {
-        "types": [
-            {
-                "_": "identifier",
-                "type": "string",
-                "validators": [
-                    {
-                        "_": "min",
-                        "value": 1
-                    },
-                    {
-                        "_": "max",
-                        "value": 10
-                    }
-                ]
-            },
-            {
-                "_": "limit",
-                "type": "string",
-                "validators": [
-                    {
-                        "_": "min",
-                        "value": 10
-                    },
-                    {
-                        "_": "max",
-                        "value": 100
-                    }
-                ]
-            }
-        ]
     }
 }
 ```
@@ -105,8 +73,7 @@ Below schemas are **INVALID** because of min-max validations;
 }
 ```
 
-`ERROR: 'greeting.service.json' is not valid, '$dailyCallLimit' cannot be less`
-`than 10.`
+`ERROR: 'greeting.service.json' is not valid, '9' is not a valid limit.`
 
 ---
 
@@ -121,8 +88,7 @@ Below schemas are **INVALID** because of min-max validations;
 }
 ```
 
-`ERROR: 'greeting.service.json' is not valid, '$dailyCallLimit' cannot be more`
-`than 100.`
+`ERROR: 'greeting.service.json' is not valid, '101' is not a valid limit.`
 
 ---
 
@@ -132,13 +98,12 @@ Below schemas are **INVALID** because of min-max validations;
 {
     "sayHello": {
         "name": "",
-        "dailyCallLimit": 9
+        "dailyCallLimit": 50
     }
 }
 ```
 
-`ERROR: 'greeting.service.json' is not valid, length of '$name' cannot be less`
-`than 1.`
+`ERROR: 'greeting.service.json' is not valid, '' is not a valid identifier.`
 
 ---
 
@@ -148,10 +113,9 @@ Below schemas are **INVALID** because of min-max validations;
 {
     "sayHello": {
         "name": "01234567890",
-        "dailyCallLimit": 9
+        "dailyCallLimit": 50
     }
 }
 ```
 
-`ERROR: 'greeting.service.json' is not valid, length of '$name' cannot be more`
-`than 10.`
+`ERROR: 'greeting.service.json' is not valid, '01234567890' is not a valid identifier.`

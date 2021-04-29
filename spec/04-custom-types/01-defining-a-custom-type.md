@@ -35,13 +35,6 @@ Concepts shadow keeps meta-data in the root under `metaData`;
                 "type": "identifier"
             }
         }
-    },
-    "metaData": {
-        "types": [
-            {
-                "_": "identifier"
-            }
-        ]
     }
 }
 ```
@@ -72,21 +65,5 @@ definition.
 Now `$name` variable is an `identifier` which is a `string`. So it will allow
 only `string` values.
 
-`CONCEPTS SHADOW`
-
-```json
-{
-    ...
-    "metaData": {
-        "types": [
-            {
-                "_": "identifier",
-                "type": "string"
-            }
-        ]
-    }
-}
-```
-
-> `type` can either be one of the built-in variable types (`boolean`, `string`,
-> `number` or `any`). Or it can be another custom type.
+> `type` can be either one of the built-in types (`boolean`, `string`, `number`
+> or `any`) or another custom type.

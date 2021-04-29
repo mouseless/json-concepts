@@ -35,12 +35,6 @@ class SchemaShadow {
      */
     get name() { return this.#name; }
     /**
-     * Array of variable nodes under this node.
-     * 
-     * @returns {Array.<SchemaShadow>}
-     */
-    get variables() { return Object.values(this.#variables); }
-    /**
      * Data representation of this node and all of is nodes under it as an
      * object.
      * 
@@ -73,11 +67,7 @@ class SchemaShadow {
      */
     build(definition) {
         if (this.#conceptsShadow.isLeafNode()) {
-            if (definition == null) {
-                this.#data = this.#conceptsShadow.parent.defaultValue;
-            } else {
-                this.#data = definition;
-            }
+            this.#data = arrayify.make(this.#conceptsShadow.dimensions, definition);
         } else {
             this._build(this.#conceptsShadow, definition);
 
@@ -87,22 +77,31 @@ class SchemaShadow {
                 this.#data[SC.SELF] = this.#name;
             }
 
-            for (const shadow of this.variables) {
-                this.#data[shadow.#conceptsShadow.name] = shadow.#data;
+            for (const name in this.#variables) {
+                const shadow = this.#variables[name];
+
+                this.#data[name] = shadow.#data;
             }
 
             for (const concept in this.#schemasByConcept) {
                 const schemas = this.#schemasByConcept[concept];
-                
-                const conceptShadow = this.#conceptsShadow.getConcept(concept)
-                this.#data[concept] = conceptShadow.defaultValue;
 
-                if (conceptShadow.allowsMultiple) {
-                    for (const shadow of schemas) {
-                        this.#data[concept].push(shadow.#data);
+                const conceptShadow = this.#conceptsShadow.getConcept(concept);
+                if (conceptShadow) {
+                    this.#data[concept] = conceptShadow.allowsMultiple ? [] : null;
+
+                    if (conceptShadow.allowsMultiple) {
+                        for (const shadow of schemas) {
+                            this.#data[concept].push(shadow.#data);
+                        }
+                    } else if (schemas.length > 0) {
+                        this.#data[concept] = schemas[0].#data;
                     }
-                } else if(schemas.length > 0) {
-                    this.#data[concept] = schemas[0].#data;
+                } else {
+                    this.#data[concept] = [];
+                    arrayify.each(schemas, (item, indices) => {
+                        arrayify.set(this.#data[concept], indices, item.#data);
+                    });
                 }
             }
         }
@@ -112,7 +111,8 @@ class SchemaShadow {
 
     /**
      * @param {ConceptsShadow} conceptsShadow 
-     * @param {Object} definition 
+     * @param {Object} definition
+     * @param {Array.<Number>} indices
      */
     _build(
         conceptsShadow = required('conceptsShadow'),
@@ -120,43 +120,56 @@ class SchemaShadow {
     ) {
         if (conceptsShadow.hasOnlyVariableLeafNode()) {
             const shadow = new SchemaShadow(conceptsShadow.variable).build(definition);
-
             this.#variables[conceptsShadow.variable.name] = shadow;
-        } else {
-            const keys = {};
-            if (definition != null) {
-                Object.keys(definition).forEach(key => keys[key] = true);
+
+            return;
+        }
+
+        if (conceptsShadow.hasOnlyVariableNode()) {
+            this.#schemasByConcept[conceptsShadow.name] = [];
+
+            definition = arrayify.make(conceptsShadow.variable.dimensions, definition);
+            arrayify.each(definition, (item, indices) => {
+                const shadow = new SchemaShadow(conceptsShadow.variable).build(item);
+                arrayify.set(this.#schemasByConcept[conceptsShadow.name], indices, shadow);
+            });
+
+            return;
+        }
+
+        const keys = {};
+        if (definition != null) {
+            Object.keys(definition).forEach(key => keys[key] = true);
+        }
+
+        for (const literal of conceptsShadow.literals) {
+            if (keys[literal.name]) {
+                this._build(literal, definition[literal.name]);
+
+                delete keys[literal.name];
+            } else {
+                this._build(literal, null);
             }
+        }
 
-            for (const literal of conceptsShadow.literals) {
-                if (keys[literal.name]) {
-                    this._build(literal, definition[literal.name]);
+        for (const concept of conceptsShadow.concepts) {
+            this.#schemasByConcept[concept.name] = [];
+            for (const key of Object.keys(keys)) {
+                try {
+                    concept.validate(definition[key]);
+                    const shadow = new SchemaShadow(concept, key).build(definition[key]);
 
-                    delete keys[literal.name];
-                } else {
-                    this._build(literal, null);
-                }
-            }
+                    this.#schemasByConcept[concept.name].push(shadow);
 
-            for (const concept of conceptsShadow.concepts) {
-                this.#schemasByConcept[concept.name] = [];
-                for (const key of Object.keys(keys)) {
-                    try {
-                        concept.validate(definition[key]);
-                        const shadow = new SchemaShadow(concept, key).build(definition[key]);
-
-                        this.#schemasByConcept[concept.name].push(shadow);
-
-                        delete keys[key];
-                    } catch (e) {
-                        if (e.name == error.Names.SCHEMA_ERROR) {
-                            // this means that this concept should not handle this key,
-                            // so it is safe to skip this one
-                            continue;
-                        }
-
-                        throw e;
+                    delete keys[key];
+                } catch (e) {
+                    if (e.name == error.Names.SCHEMA_ERROR) {
+                        // this means that this concept should not handle this key,
+                        // so it is safe to skip this one
+                        continue;
                     }
+
+                    throw e;
                 }
             }
         }

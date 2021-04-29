@@ -48,8 +48,7 @@ Below is an **INVALID** schema;
 }
 ```
 
-`ERROR: 'greeting.service.json' is not valid, '$enabled' expects a boolean,`
-`but got a string "yes".`
+`ERROR: 'greeting.service.json' is not valid, 'yes' is not valid a boolean.`
 
 ## Available Variable Types
 

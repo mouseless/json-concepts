@@ -91,14 +91,14 @@
     _build() {
         for (const concept in this.#definition) {
             if (!this.#target.has(concept)) {
-                throw error.Definition_is_not_compatible_with_its_CONCEPTS__because__REASON(
+                throw error.Definition_is_not_compatible_with_its_CONCEPTS__REASON(
                     'target', reason => reason.CONCEPT_not_found(concept)
                 );
             }
 
             this.#queriesMap[concept] = [];
 
-            const queries = arrayify.get(this.#definition, concept);
+            const queries = arrayify.pull(this.#definition, concept);
             for (const definition of queries) {
                 const query = new Query(definition);
                 query.validate(this.#target.get(concept), this.#source);

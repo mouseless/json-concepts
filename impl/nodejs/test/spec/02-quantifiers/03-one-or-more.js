@@ -31,7 +31,7 @@ describe('spec/quantifiers/one-or-more', function () {
 
             (() => concepts.validate({}))
                 .should.throw(
-                    error.Schema_definition_is_not_valid__because__REASON(
+                    error.Schema_definition_is_not_valid__REASON(
                         because => because.Minimum_allowed_number_of_CONCEPT_is_MIN__but_got_COUNT(
                             'service', 1, 0
                         )
@@ -52,7 +52,7 @@ describe('spec/quantifiers/one-or-more', function () {
                     "tags+": "$tags"
                 }
             })).should.throw(
-                error.Concepts_definition_is_not_valid__because__REASON(
+                error.Concepts_definition_is_not_valid__REASON(
                     because => because.LITERAL_cannot_have_QUANTIFIER('tags', '+')
                 ).message
             );
@@ -71,7 +71,7 @@ describe('spec/quantifiers/one-or-more', function () {
             await Concepts.load('service.concepts.json').should.be.rejectedWith(
                 error.CONCEPTS_is_not_valid__Error_is__ERROR(
                     'service.concepts.json',
-                    error.Concepts_definition_is_not_valid__because__REASON(
+                    error.Concepts_definition_is_not_valid__REASON(
                         because => because.LITERAL_cannot_have_QUANTIFIER(
                             'tags', '+'
                         )
