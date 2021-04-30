@@ -9,7 +9,7 @@
     },
     {
         "$parameter*": { },
-        "path": "/**/service",
+        "@path": "/**/service",
     }
 ]
 ```
