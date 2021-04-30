@@ -1,18 +1,25 @@
 # Inline Concepts
 
-`schema.json`
+Concepts definition can be embedded into a schema file in `@concepts` meta-data.
+
+`SCHEMA: greeting.service.json`
 
 ```json
 {
     "@concepts": {
-        "$function+": {
+        "$service+": {
             "$parameter*": "$type"
         }
     },
-    "firstFunction": {
-        "firstParameter": "string",
-        "secondParameter": "string"
-    },
-    "secondFunction": { }
+    "sayHello": {
+        "name": "string",
+        "surname": "string"
+    }
 }
+```
+
+This is a self-validating schema and can be loaded as follows;
+
+```javascript
+const schema = Schema.load("greeting.service.json");
 ```
