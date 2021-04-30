@@ -1,4 +1,4 @@
-# Reference
+# Defining A Reference
 
 A key with a `#` prefix at the root of the file means that it is a definition of
 a reusable reference. When it is encountered in value side, it means that
@@ -31,44 +31,6 @@ equivalent to below definition;
 
 References does not have an effect in concepts shadow and schema validation,
 they are exactly the same as definition in `CONCEPTS 2`.
-
-## Merge References
-
-Below `#properties` and `#methods` references are declared in an array, which
-means that they will be merged in the order they appeared.
-
-`CONCEPTS 1: class.concepts.json`
-
-```json
-{
-    "$class+": [ "#properties", "#methods" ],
-    "#properties": {
-        "$property*": "$type"
-    },
-    "#methods": {
-        "$method*": {
-            "$parameter*": "$type",
-            "returns": "$type"
-        }
-    }
-}
-```
-
-Below is an equivalent concepts definition;
-
-`CONCEPTS 2: class.concepts.json`
-
-```json
-{
-    "$class+": {
-        "$property*": "$type",
-        "$method*": {
-            "$parameter*": "$type",
-            "returns": "$type"
-        }
-    }
-}
-```
 
 ## References Can Only Be Defined at the Root
 
