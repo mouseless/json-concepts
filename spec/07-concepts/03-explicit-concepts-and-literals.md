@@ -1,27 +1,8 @@
-# Explicit Concepts and Literals
+# Explicit Concepts
 
-```json
-{
-    "$service+": {
-        "$parameter*": "$type",
-        "response?": "$responseType"
-    }
-}
-```
+Consider below concepts definition;
 
-```json
-{
-    "writeLog": {
-        "response:parameter": "object",
-        "response:literal": "string"
-    }
-}
-```
-
-> TBD when there is conflict, first one is literal, then the first concept
-> `:parameter` means it is explicitly belongs to the `parameter` concept.
-
-## Explicit Concepts
+`CONCEPTS: class.concepts.json`
 
 ```json
 {
@@ -37,17 +18,14 @@
 }
 ```
 
+In below schema definition, it is explicitly specified that `logout` is a
+`method`;
+
+`SCHEMA: user.class.json`
+
 ```json
 {
     "user": {
-        "name": {
-            "returns": "string"
-        },
-        "login": {
-            "email": "string",
-            "password": "string",
-            "returns": "string"
-        },
         "logout:method": {
             "returns": "number"
         }
@@ -55,5 +33,31 @@
 }
 ```
 
-`logout` is an instance of method concept. Without `:method` it would be a
-property.
+Without `:method`, it would be a `property`.
+
+## Resolving Literal Conflicts
+
+When a literal and a concept exists at the same level, literals are resolved
+before concepts. That puts a restriction on potential names of that concept. To
+workaround this problem, concept name can be given explicitly.
+
+`CONCEPTS: service.concepts.json`
+
+```json
+{
+    "$service+": {
+        "$parameter*": "$type",
+        "response?": "$responseType"
+    }
+}
+```
+
+Below schema defines a `parameter` named `response`;
+
+```json
+{
+    "writeLog": {
+        "response:parameter": "string"
+    }
+}
+```
