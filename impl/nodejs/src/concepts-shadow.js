@@ -205,6 +205,12 @@ class ConceptsShadow {
 
                     const node = new ConceptsShadow(expression, this).build(definition[key], types);
                     if (node.isVariable) {
+                        if (this.#concepts[node.name]) {
+                            throw error.Concepts_definition_is_not_valid__REASON(
+                                because => because.Cannot_declare_CONCEPT_more_than_once(node.name)
+                            );
+                        }
+
                         this.#concepts[node.name] = node;
                     } else if (node.isLiteral) {
                         this.#literals[node.name] = node;

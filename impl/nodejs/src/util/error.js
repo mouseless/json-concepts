@@ -48,7 +48,9 @@ const InvalidConceptsReasons = {
     KEY_is_only_allowed_an_array_with_one_item:
         (KEY) => `'${KEY}' is only allowed an array with one item`,
     Expected_a_variable__but_got_a_literal__EXPRESSION:
-        (EXPRESSION) => `Expected a variable, but got a literal: '${EXPRESSION}'`
+        (EXPRESSION) => `Expected a variable, but got a literal: '${EXPRESSION}'`,
+    Cannot_declare_CONCEPT_more_than_once:
+        (CONCEPT) => `Cannot declare ${CONCEPT} more than once`
 };
 
 /**

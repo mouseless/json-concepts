@@ -47,7 +47,7 @@ Above definition is valid and its shadow has an array under `concept`;
                 "concept": {
                     "_": "parameter",
                     "quantifier": { "min": 0 },
-                    "variable": { "_": "returnType" }
+                    "variable": { "_": "type" }
                 }
             }
         ]
@@ -126,6 +126,7 @@ it will be an instance of a `method` concept.
     "class": [
         {
             "_": "user",
+            "property": [],
             "method": [
                 {
                     "_": "login",
