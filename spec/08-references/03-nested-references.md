@@ -40,8 +40,8 @@ This is equivalent to following;
 
 ## Recursion
 
-A reference is allowed to includes itself to create a recursive definition.
-Below is an example;
+A reference is allowed to include itself to create a recursive definition. Below
+is an example;
 
 `CONCEPTS: tree.concepts.json`
 
@@ -138,7 +138,7 @@ In this case, `#a` can include `#b`, but `#b` must have a reference to `#a`;
 ## Recursion with Implicit Concept Reference
 
 Another way of creating recursive definitions is referring to a concept without
-a defining a reference. Below is an example;
+defining a reference. Below is an example;
 
 `CONCEPTS 1: tree.concepts.json`
 
