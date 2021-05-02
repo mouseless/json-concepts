@@ -33,7 +33,9 @@ const SpecialCharacters = {
     /** `}` */
     END_QUANTIFIER: "}",
     /** `,` */
-    QUANTIFIER_SEPARATOR: ","
+    QUANTIFIER_SEPARATOR: ",",
+    /** `\` */
+    ESCAPE: "\\"
 }
 
 module.exports = SpecialCharacters;

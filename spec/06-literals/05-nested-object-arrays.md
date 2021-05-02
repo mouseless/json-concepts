@@ -27,7 +27,7 @@ Concepts definition can have nested object arrays like below;
         "quantifier": { "min": 1 },
         "literal": {
             "_": "parameters",
-            "quantifier": { "min": 0 },
+            "quantifier": { "min": 0, "max": 1 },
             "variable": {
                 "dimensions": 1,
                 "literal": [

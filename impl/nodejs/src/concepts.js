@@ -64,6 +64,13 @@
         this.#shadow = new ConceptsShadow().build(definition, this.#types);
         this.#concepts = {};
 
+        if(this.#shadow.literals.length > 0) {
+            this.#concepts[SC.SELF] = {
+                name: SC.SELF,
+                variables: this.#shadow.getAllVariables()
+            };
+        }
+
         this._build(this.#shadow);
     }
 
@@ -171,4 +178,4 @@ module.exports = Concepts;
 const Schema = require('./schema');
 const ConceptsShadow = require('./concepts-shadow');
 const { createTypes } = require('./types');
-const { error, metaData, required, loadJSON } = require('./util');
+const { SpecialCharacters: SC, error, metaData, required, loadJSON } = require('./util');

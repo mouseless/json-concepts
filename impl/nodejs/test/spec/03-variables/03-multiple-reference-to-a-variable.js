@@ -13,7 +13,7 @@ describe('spec/variables/multiple-reference-to-a-variable', function () {
             }
         })).should.throw(
             error.Concepts_definition_is_not_valid__REASON(
-                because => because.CONCEPT_cannot_have_VARIABLE_more_than_once(
+                because => because.CONCEPT_cannot_declare_VARIABLE_more_than_once(
                     'concept', 'value'
                 )
             ).message

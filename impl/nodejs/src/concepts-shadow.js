@@ -380,7 +380,7 @@ class ConceptsShadow {
         if (this.hasOnlyVariableLeafNode()) {
             if (result.hasOwnProperty(this.#variable.name)) {
                 throw error.Concepts_definition_is_not_valid__REASON(
-                    because => because.CONCEPT_cannot_have_VARIABLE_more_than_once(
+                    because => because.CONCEPT_cannot_declare_VARIABLE_more_than_once(
                         name, this.#variable.name
                     )
                 )
