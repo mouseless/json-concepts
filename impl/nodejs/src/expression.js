@@ -267,8 +267,22 @@ function _scan(
 ) {
     const tokens = [];
 
+    let escape = false;
     let current = "";
     for (const c of expression) {
+        if (escape) {
+            current += c;
+            escape = false;
+
+            continue;
+        }
+
+        if (c == SC.ESCAPE) {
+            escape = true;
+
+            continue;
+        }
+
         if (scHash[c]) {
             if (current.length > 0) {
                 tokens.push(current);
@@ -276,9 +290,10 @@ function _scan(
             }
 
             tokens.push(scHash[c]);
-        } else {
-            current += c;
+            continue;
         }
+
+        current += c;
     }
 
     if (current.length > 0) {

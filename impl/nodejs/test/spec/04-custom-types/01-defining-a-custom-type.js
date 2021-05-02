@@ -83,10 +83,10 @@ describe('spec/custom-types/defining-a-custom-type', function () {
 
         it('should allow built-in types as base type', function () {
             (() => new Concepts({
-                "x-string": "$name:x-string",
-                "x-boolean": "$name:x-boolean",
-                "x-number": "$name:x-number",
-                "x-any": "$name:x-any",
+                "x-string": "$string:x-string",
+                "x-boolean": "$boolean:x-boolean",
+                "x-number": "$number:x-number",
+                "x-any": "$any:x-any",
                 "@types": {
                     "x-string": { "type": "string" },
                     "x-boolean": { "type": "boolean" },

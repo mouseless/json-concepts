@@ -16,9 +16,12 @@ const Names = {
 const InvalidConceptsReasons = {
     LITERAL_cannot_have_QUANTIFIER:
         (LITERAL, QUANTIFIER) => `'${LITERAL}' cannot have '${QUANTIFIER}' quantifier`,
-    CONCEPT_cannot_have_VARIABLE_more_than_once:
-        (CONCEPT, VARIABLE) => `'${CONCEPT}' cannot have '${SC.VARIABLE}${VARIABLE}' ` +
-            `more than once`,
+    Cannot_declare_VARIABLE_more_than_once:
+        (VARIABLE) => `Cannot declare ${VARIABLE} more than once`,
+    CONCEPT_cannot_declare_VARIABLE_more_than_once:
+        (CONCEPT, VARIABLE) => CONCEPT == null
+            ? InvalidConceptsReasons.Cannot_declare_VARIABLE_more_than_once(VARIABLE)
+            : `'${CONCEPT}' cannot declare '${SC.VARIABLE}${VARIABLE}' more than once`,
     VALIDATOR_does_not_support_TYPE:
         (VALIDATOR, TYPE) => `${VALIDATOR} does not support ${TYPE}'`,
     Unknown_type_TYPE_in_EXPRESSION:

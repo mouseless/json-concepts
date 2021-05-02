@@ -66,7 +66,7 @@ occurs directly under `service` concept;
                 },
                 {
                     "_": "status",
-                    "type": "string"
+                    "type": "number"
                 }
             ]
         }

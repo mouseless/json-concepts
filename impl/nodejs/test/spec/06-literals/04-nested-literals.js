@@ -3,12 +3,13 @@ const { should } = require('chai');
 
 should();
 
-describe('spec/literals/concept-under-a-literal', function () {
-    it('should allow concepts under literals', function () {
+describe('spec/literals/nested-literals', function () {
+    it('should allow literals under literals', function () {
         const concepts = new Concepts({
             "$service+": {
                 "response": {
-                    "$property*": "$type"
+                    "type": "$type",
+                    "status": "$status"
                 }
             }
         });
@@ -19,11 +20,16 @@ describe('spec/literals/concept-under-a-literal', function () {
                 "quantifier": { "min": 1 },
                 "literal": {
                     "_": "response",
-                    "concept": {
-                        "_": "property",
-                        "quantifier": { "min": 0 },
-                        "variable": { "_": "type" }
-                    }
+                    "literal": [
+                        {
+                            "_": "type",
+                            "variable": { "_": "type" }
+                        },
+                        {
+                            "_": "status",
+                            "variable": { "_": "status" }
+                        }
+                    ]
                 }
             }
         });
@@ -31,8 +37,8 @@ describe('spec/literals/concept-under-a-literal', function () {
         const schema = concepts.create({
             "sayHello": {
                 "response": {
-                    "message": "string",
-                    "status": "number"
+                    "type": "string",
+                    "status": 200
                 }
             }
         });
@@ -41,16 +47,8 @@ describe('spec/literals/concept-under-a-literal', function () {
             "service": [
                 {
                     "_": "sayHello",
-                    "property": [
-                        {
-                            "_": "message",
-                            "type": "string"
-                        },
-                        {
-                            "_": "status",
-                            "type": "number"
-                        }
-                    ]
+                    "type": "string",
+                    "status": 200
                 }
             ]
         });
