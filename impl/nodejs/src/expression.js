@@ -116,10 +116,10 @@ class Expression {
      * This constructor instantiate an instance of an Expression class. It also
      * ensures that this expression is a valid expression.
      * 
-     * @param {Boolean} isVariable 
-     * @param {String} name 
-     * @param {import('./types').TypeData} type 
-     * @param {QuantifierData} quantifier 
+     * @param {Boolean} isVariable `true` for variables, `false` for literals
+     * @param {String} name  Name of the expression
+     * @param {import('./types').TypeData} type Type of the expression
+     * @param {QuantifierData} quantifier Quantifier data of the expression
      */
     constructor(isVariable, name, type, quantifier) {
         this.#isVariable = isVariable;
@@ -138,7 +138,7 @@ class Expression {
         }
 
         if (this.isVariable && this.isKey &&
-            this.type !== undefined && this.type.root.name !== 'string'
+            !this.type.implicit && this.type.root.name !== 'string'
         ) {
             throw error.Concepts_definition_is_not_valid__REASON(
                 because => because.CONCEPT_cannot_be_TYPE__only_string_allowed_but_TYPE_is_ROOT(
@@ -309,7 +309,7 @@ function _scan(
  * @param {Object.<string, import('./types').TypeData>} types
  * @param {String} expression
  * 
- * @returns {TypeData}
+ * @returns {import('./types').TypeData}
  */
 function _parseType(
     tokens = required('tokens'),
@@ -320,7 +320,7 @@ function _parseType(
     if (token !== SC.TYPE) {
         tokens.unshift(token);
 
-        return undefined;
+        return types.implicit;
     }
 
     const name = tokens.shift();

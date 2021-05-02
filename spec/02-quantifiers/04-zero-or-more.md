@@ -44,8 +44,8 @@ once. Below concepts definition is invalid;
 }
 ```
 
-`ERROR: 'service.concepts.json' is not valid, 'tags' cannot have '*'`
-`quantifier.`
+`ERROR: 'service.concepts.json' is not valid, 'tags' cannot have '*'
+quantifier.`
 
 ## Concepts Shadow
 

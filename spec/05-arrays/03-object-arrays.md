@@ -269,5 +269,5 @@ But does not allow more dimensions;
 }
 ```
 
-`ERROR: 'invalid.matrix.json' is not valid, 'matrix' expects at most 2`
-`dimensions, but got 3.`
+`ERROR: 'invalid.matrix.json' is not valid, 'matrix' expects at most 2
+dimensions, but got 3.`

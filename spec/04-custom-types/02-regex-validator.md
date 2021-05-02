@@ -35,8 +35,8 @@ For above concepts definition following schema is **NOT** valid;
 
 Because `say hello` does **NOT** match `^[a-zA-Z]*$` pattern.
 
-`ERROR: 'greeting.service.json' is not valid, 'say hello' is not a valid`
-`identifier.`
+`ERROR: 'greeting.service.json' is not valid, 'say hello' is not a valid
+identifier.`
 
 ## Short-Hand Usage
 

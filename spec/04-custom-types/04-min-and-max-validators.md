@@ -118,4 +118,5 @@ Below schemas are **INVALID** because of min-max validations;
 }
 ```
 
-`ERROR: 'greeting.service.json' is not valid, '01234567890' is not a valid identifier.`
+`ERROR: 'greeting.service.json' is not valid, '01234567890' is not a valid
+identifier.`

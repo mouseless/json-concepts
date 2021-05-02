@@ -11,6 +11,8 @@
  * 
  * @typedef {Object} TypeData
  * @property {String} name Name of type
+ * @property {Boolean} implicit `true` if type is implicitly any, `false`
+ * otherwise.
  * @property {TypeData} root Self reference
  * @property {validate} validate Validate function to validate a value
  */
@@ -30,6 +32,7 @@
  * @type {Object.<string, TypeData>}
  */
 const _builtInTypes = Object.freeze({
+    implicit: _builtInType('any', _validateAny, /* implicit */ true),
     any: _builtInType('any', _validateAny),
     boolean: _builtInType('boolean', _validateType),
     number: _builtInType('number', _validateType),
@@ -95,10 +98,12 @@ function createTypes(definitions = required('definitions')) {
  */
 function _builtInType(
     name = required('name'),
-    validate = required('validate')
+    validate = required('validate'),
+    implicit = false
 ) {
     const result = {
         name: name,
+        implicit: implicit,
         validate: validate
     };
 
@@ -110,7 +115,13 @@ function _builtInType(
 /**
  * @param {Number|String|Boolean} value 
  */
-function _validateAny(value) { }
+function _validateAny(value) {
+    if (value != null && typeof value == 'object') {
+        throw error.Schema_definition_is_not_valid__REASON(
+            because => because.Object_not_expected(value)
+        );
+    }
+}
 
 /**
  * @param {Number|String|Boolean} value

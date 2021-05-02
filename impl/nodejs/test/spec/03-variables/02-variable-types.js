@@ -150,5 +150,36 @@ describe('spec/variables/variable-types', function () {
             should.not.exist(concepts.shadow.literal[0].variable.type);
             concepts.shadow.literal[1].variable.type.should.equal('any');
         });
+
+        it('should not allow objects for any type', function () {
+            const concepts = new Concepts({
+                "implicit?": "$implicit",
+                "explicit?": "$explicit:any"
+            });
+
+            (() => concepts.validate({
+                "implicit": {
+                    "is": "invalid"
+                }
+            })).should.throw(
+                error.Schema_definition_is_not_valid__REASON(
+                    because => because.Object_not_expected(
+                        { "is": "invalid" }
+                    )
+                ).message
+            );
+
+            (() => concepts.validate({
+                "explicit": {
+                    "is": "invalid"
+                }
+            })).should.throw(
+                error.Schema_definition_is_not_valid__REASON(
+                    because => because.Object_not_expected(
+                        { "is": "invalid" }
+                    )
+                ).message
+            );
+        })
     });
 });

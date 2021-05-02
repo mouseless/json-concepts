@@ -57,5 +57,4 @@ definition is not valid;
 }
 ```
 
-`ERROR: 'service.concepts.json' is not valid, 'c' cannot inherit from`
-`'a'.`
+`ERROR: 'service.concepts.json' is not valid, 'c' cannot inherit from 'a'.`

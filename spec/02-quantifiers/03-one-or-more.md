@@ -39,8 +39,8 @@ When no concept is given, schema becomes **INVALID**;
 }
 ```
 
-`ERROR: 'greeting.service.json' is not valid, at least one 'service' was`
-`expected.`
+`ERROR: 'greeting.service.json' is not valid, at least one 'service' was
+expected.`
 
 ## Key Literals
 
@@ -58,8 +58,8 @@ once. Below concepts definition is invalid;
 }
 ```
 
-`ERROR: 'service.concepts.json' is not valid, 'tags' cannot have '+'`
-`quantifier.`
+`ERROR: 'service.concepts.json' is not valid, 'tags' cannot have '+'
+quantifier.`
 
 ## Concepts Shadow
 

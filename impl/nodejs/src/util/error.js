@@ -48,7 +48,9 @@ const InvalidConceptsReasons = {
     KEY_is_only_allowed_an_array_with_one_item:
         (KEY) => `'${KEY}' is only allowed an array with one item`,
     Expected_a_variable__but_got_a_literal__EXPRESSION:
-        (EXPRESSION) => `Expected a variable, but got a literal: '${EXPRESSION}'`
+        (EXPRESSION) => `Expected a variable, but got a literal: '${EXPRESSION}'`,
+    Cannot_declare_CONCEPT_more_than_once:
+        (CONCEPT) => `Cannot declare ${CONCEPT} more than once`
 };
 
 /**
@@ -63,12 +65,19 @@ const InvalidSchemaReasons = {
         (CONCEPT, MIN, COUNT) => `Minimum allowed number of '${CONCEPT}' is ${MIN}, but got ${COUNT}`,
     Maximum_allowed_number_of_CONCEPT_is_MAX__but_got_COUNT:
         (CONCEPT, MAX, COUNT) => `Maximum allowed number of '${CONCEPT}' is ${MAX}, but got ${COUNT}`,
+    Object_not_expected: (VALUE) => `Object not expected: ${JSON.stringify(VALUE)}`,
     VALUE_is_not_a_valid_TYPE: (VALUE, TYPE) => `'${VALUE}' is not a valid ${TYPE}`,
     VARIABLE_is_not_an_array: (VARIABLE) => `'${VARIABLE}' is not an array`,
     VARIABLE_expects_at_most_EXPECTED_dimensional_array__but_got_ACTUAL:
         (VARIABLE, EXPECTED, ACTUAL) => EXPECTED == 0
             ? InvalidSchemaReasons.VARIABLE_is_not_an_array(VARIABLE)
-            : `'${VARIABLE}' expects at most ${EXPECTED} dimensional array, but got ${ACTUAL}`
+            : `'${VARIABLE}' expects at most ${EXPECTED} dimensional array, but got ${ACTUAL}`,
+    Concept_expected_in_EXPRESSION: (EXPRESSION) => `Concept expected in '${EXPRESSION}'`,
+    EXPRESSION_could_not_be_parsed: (EXPRESSION) => `'${EXPRESSION}' could not be parsed`,
+    EXPRESSION_could_not_be_parsed__CONCEPT_does_not_exist:
+        (EXPRESSION, CONCEPT) => CONCEPT
+            ? InvalidSchemaReasons.EXPRESSION_could_not_be_parsed(EXPRESSION)
+            : `'${EXPRESSION}' could not be parsed, '${CONCEPT}' does not exist`
 }
 
 /**
