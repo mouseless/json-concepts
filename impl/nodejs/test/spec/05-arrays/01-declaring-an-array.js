@@ -283,5 +283,36 @@ describe('spec/arrays/declaring-an-array', function () {
                 ).message
             );
         });
+
+        it('should not allow objects in arrays', function () {
+            const concepts = new Concepts({
+                "explicit?": ["$explicit:any"],
+                "implicit?": ["$implicit"]
+            });
+
+            (() => concepts.validate({
+                "explicit": [
+                    { "is": "invalid" }
+                ]
+            })).should.throw(
+                error.Schema_definition_is_not_valid__REASON(
+                    because => because.Object_not_expected(
+                        { "is": "invalid" }
+                    )
+                ).message
+            );
+
+            (() => concepts.validate({
+                "implicit": [
+                    { "is": "invalid" }
+                ]
+            })).should.throw(
+                error.Schema_definition_is_not_valid__REASON(
+                    because => because.Object_not_expected(
+                        { "is": "invalid" }
+                    )
+                ).message
+            );
+        });
     });
 });

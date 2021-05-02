@@ -229,7 +229,7 @@ class ConceptsShadow {
             this.#data.dimensions = this.#dimensions;
         }
 
-        if (this.type != null) {
+        if (this.type != null && !this.type.implicit) {
             this.#data.type = this.type.name;
         }
 
@@ -265,9 +265,7 @@ class ConceptsShadow {
                 );
             }
 
-            if (this.variable.type !== undefined) {
-                arrayify.each(schemaDefinition, item => this.variable.type.validate(item));
-            }
+            arrayify.each(schemaDefinition, item => this.variable.type.validate(item));
 
             return;
         }

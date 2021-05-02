@@ -63,6 +63,7 @@ const InvalidSchemaReasons = {
         (CONCEPT, MIN, COUNT) => `Minimum allowed number of '${CONCEPT}' is ${MIN}, but got ${COUNT}`,
     Maximum_allowed_number_of_CONCEPT_is_MAX__but_got_COUNT:
         (CONCEPT, MAX, COUNT) => `Maximum allowed number of '${CONCEPT}' is ${MAX}, but got ${COUNT}`,
+    Object_not_expected: (VALUE) => `Object not expected: ${JSON.stringify(VALUE)}`,
     VALUE_is_not_a_valid_TYPE: (VALUE, TYPE) => `'${VALUE}' is not a valid ${TYPE}`,
     VARIABLE_is_not_an_array: (VARIABLE) => `'${VARIABLE}' is not an array`,
     VARIABLE_expects_at_most_EXPECTED_dimensional_array__but_got_ACTUAL:
