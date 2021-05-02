@@ -65,7 +65,7 @@ concept definition is invalid.
 ```json
 {
     "$conflict*": "$value",
-    "$conflict*": {
+    "$conflict+": {
         "another": "$value"
     }
 }
@@ -74,8 +74,8 @@ concept definition is invalid.
 Above concepts definition is in valid because there are two concepts named
 `conflict` at the same level.
 
-`ERROR: 'invalid.concepts.json' is not valid, cannot declare 'conflict' more`
- `than once at the same level.`
+`ERROR: 'invalid.concepts.json' is not valid, cannot declare 'conflict' more
+than once at the same level.`
 
 ## Concepts Resolution
 
