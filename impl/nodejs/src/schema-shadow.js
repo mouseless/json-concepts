@@ -137,16 +137,13 @@ class SchemaShadow {
             return;
         }
 
-        const keys = {};
-        if (definition != null) {
-            Object.keys(definition).forEach(key => keys[key] = true);
-        }
+        const schemaKeys = SchemaKey.parseKeys(definition, conceptsShadow);
 
         for (const literal of conceptsShadow.literals) {
-            if (keys[literal.name]) {
+            if (schemaKeys[literal.name]) {
                 this._build(literal, definition[literal.name]);
 
-                delete keys[literal.name];
+                delete schemaKeys[literal.name];
             } else {
                 this._build(literal, null);
             }
@@ -154,14 +151,21 @@ class SchemaShadow {
 
         for (const concept of conceptsShadow.concepts) {
             this.#schemasByConcept[concept.name] = [];
-            for (const key of Object.keys(keys)) {
+            for (const key in schemaKeys) {
+                /** @type {import('./schema-key').SchemaKeyObject} */
+                const schemaKey = schemaKeys[key];
+
+                if (!schemaKey.mightBelongTo(concept)) {
+                    continue;
+                }
+
                 try {
                     concept.validate(definition[key]);
-                    const shadow = new SchemaShadow(concept, key).build(definition[key]);
+                    const shadow = new SchemaShadow(concept, schemaKey.name).build(definition[key]);
 
                     this.#schemasByConcept[concept.name].push(shadow);
 
-                    delete keys[key];
+                    delete schemaKeys[key];
                 } catch (e) {
                     if (e.name == error.Names.SCHEMA_ERROR) {
                         // this means that this concept should not handle this key,
@@ -179,4 +183,5 @@ class SchemaShadow {
 module.exports = SchemaShadow;
 
 const ConceptsShadow = require('./concepts-shadow');
+const SchemaKey = require('./schema-key');
 const { SpecialCharacters: SC, error, arrayify, required } = require('./util');

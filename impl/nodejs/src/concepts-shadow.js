@@ -303,14 +303,13 @@ class ConceptsShadow {
             return;
         }
 
-        const schemaKeys = {};
         if (Array.isArray(schemaDefinition)) {
             throw error.Schema_definition_is_not_valid__REASON(
                 because => because.VARIABLE_is_not_an_array(this.name)
             );
-        } else if (schemaDefinition != null) {
-            Object.keys(schemaDefinition).forEach(key => schemaKeys[key] = true);
         }
+
+        const schemaKeys = SchemaKey.parseKeys(schemaDefinition, this);
 
         for (const literal of this.literals) {
             if (schemaKeys[literal.name]) {
@@ -330,25 +329,32 @@ class ConceptsShadow {
         for (const concept of this.concepts) {
             quantities[concept.name] = 0;
 
-            for (const schemaKey of Object.keys(schemaKeys)) {
+            for (const key in schemaKeys) {
+                /** @type {import('./schema-key').SchemaKeyObject} */
+                const schemaKey = schemaKeys[key];
+
+                if (!schemaKey.mightBelongTo(concept)) {
+                    continue;
+                }
+
                 try {
                     if (concept.type) {
-                        concept.type.validate(schemaKey);
+                        concept.type.validate(schemaKey.name);
                     }
 
-                    concept.validate(schemaDefinition[schemaKey]);
+                    concept.validate(schemaDefinition[key]);
 
                     quantities[concept.name]++;
-                    delete schemaKeys[schemaKey];
-                    if (errors.hasOwnProperty(schemaKey)) {
-                        delete errors[schemaKey];
+                    delete schemaKeys[key];
+                    if (errors.hasOwnProperty(key)) {
+                        delete errors[key];
                     }
                 } catch (e) {
                     if (e.name != error.Names.SCHEMA_ERROR) {
                         throw e;
                     }
 
-                    arrayify.push(errors, schemaKey, e);
+                    arrayify.push(errors, key, e);
                 }
             }
         }
@@ -404,4 +410,5 @@ class ConceptsShadow {
 module.exports = ConceptsShadow;
 
 const Expression = require('./expression');
+const SchemaKey = require('./schema-key');
 const { SpecialCharacters: SC, error, arrayify, required } = require('./util');

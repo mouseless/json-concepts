@@ -71,7 +71,13 @@ const InvalidSchemaReasons = {
     VARIABLE_expects_at_most_EXPECTED_dimensional_array__but_got_ACTUAL:
         (VARIABLE, EXPECTED, ACTUAL) => EXPECTED == 0
             ? InvalidSchemaReasons.VARIABLE_is_not_an_array(VARIABLE)
-            : `'${VARIABLE}' expects at most ${EXPECTED} dimensional array, but got ${ACTUAL}`
+            : `'${VARIABLE}' expects at most ${EXPECTED} dimensional array, but got ${ACTUAL}`,
+    Concept_expected_in_EXPRESSION: (EXPRESSION) => `Concept expected in '${EXPRESSION}'`,
+    EXPRESSION_could_not_be_parsed: (EXPRESSION) => `'${EXPRESSION}' could not be parsed`,
+    EXPRESSION_could_not_be_parsed__CONCEPT_does_not_exist:
+        (EXPRESSION, CONCEPT) => CONCEPT
+            ? InvalidSchemaReasons.EXPRESSION_could_not_be_parsed(EXPRESSION)
+            : `'${EXPRESSION}' could not be parsed, '${CONCEPT}' does not exist`
 }
 
 /**
