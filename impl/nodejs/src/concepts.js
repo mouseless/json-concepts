@@ -182,6 +182,6 @@ module.exports = Concepts;
 
 const Schema = require('./schema');
 const ConceptsShadow = require('./concepts-shadow');
-const { createTypes } = require('./types');
 const Macro = require('./macro');
+const { createTypes } = require('./types');
 const { SpecialCharacters: SC, error, metaData, required, loadJSON } = require('./util');
