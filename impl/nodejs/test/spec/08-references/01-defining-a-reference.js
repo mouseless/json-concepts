@@ -101,6 +101,16 @@ describe('spec/references/defining-a-reference', function () {
         );
     });
 
+    it('should escape macro character when it starts with an escape sequence', function () {
+        const concepts = new Concepts({
+            "\\#literal": "\\#value"
+        });
+
+        (() => concepts.validate({
+            "#literal": "#value"
+        })).should.not.throw();
+    });
+
     describe('references can only be defined at the root', function () {
         it('should give error when a referenced defined in a child node', function () {
             (() => {
