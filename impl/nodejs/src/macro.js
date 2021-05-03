@@ -46,6 +46,10 @@ class Macro {
      * @returns Processed object
      */
     process() {
+        for (const key in this.#macros) {
+            this.#macros[key] = this._process(this.#macros[key], key);
+        }
+
         return this._process(this.#definition);
     }
 

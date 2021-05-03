@@ -49,8 +49,7 @@ is an example;
 {
     "$root": "#node",
     "#node": {
-        "$node*": "#node",
-        "$method*": "$type"
+        "$node*": "#node"
     }
 }
 ```
@@ -63,7 +62,9 @@ Below is a valid schema for above concepts definition;
 {
     "ceo": {
         "cfo": {
-            "accountant": null
+            "accountant": {
+                "intern": null
+            }
         },
         "cto": {
             "dba": null,
@@ -131,35 +132,6 @@ In this case, `#a` can include `#b`, but `#b` must have a reference to `#a`;
                 "concept": { "reference": "a" }
             }
         }
-    }
-}
-```
-
-## Recursion with Implicit Concept Reference
-
-Another way of creating recursive definitions is referring to a concept without
-defining a reference. Below is an example;
-
-`CONCEPTS 1: tree.concepts.json`
-
-```json
-{
-    "$root": {
-        "$node*": "#node"
-    }
-}
-```
-
-Here `#node` refers to a concept named `node` because there is no explicit
-reference definition. This definition is exactly the same as below definition;
-
-`CONCEPTS 2: tree.concepts.json`
-
-```json
-{
-    "$root": "#node",
-    "#node": {
-        "$node*": "#node"
     }
 }
 ```

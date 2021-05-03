@@ -159,15 +159,21 @@
     }
 
     /**
-     * @param {ConceptsShadow} shadow 
+     * @param {ConceptsShadow} shadow
      */
-    _build(shadow) {
+    _build(shadow, _trace = new Set()) {
+        if (_trace.has(shadow)) {
+            return;
+        }
+
+        _trace.add(shadow);
+
         for (const concept of shadow.concepts) {
             this.#concepts[concept.name] = {
                 name: concept.name,
                 variables: concept.getAllVariables()
             };
-            this._build(concept);
+            this._build(concept, _trace);
         }
     }
 }

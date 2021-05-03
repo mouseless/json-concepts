@@ -38,6 +38,7 @@
         "stjs",
         "twitr",
         "typeof",
-        "undecorate"
+        "undecorate",
+        "unvisit"
     ]
 }
