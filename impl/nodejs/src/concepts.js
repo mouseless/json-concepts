@@ -41,10 +41,10 @@
         }
     }
 
+    /* const */ #types;
     /* const */ #definition;
     /* const */ #shadow;
     /* const */ #concepts;
-    /* const */ #types;
 
     /**
      * Concepts represents a schema for a schema. It contains a set of concept
@@ -55,16 +55,15 @@
      * @param {Object} definition (Required) Concepts definition
      */
     constructor(definition = required('definition')) {
-        this.#definition = definition;
-
         this.#types = createTypes(
             metaData.read(definition, 'types', /* burnAfterReading */ true)
         );
 
+        this.#definition = _processMacros(definition);
         this.#shadow = new ConceptsShadow().build(definition, this.#types);
         this.#concepts = {};
 
-        if(this.#shadow.literals.length > 0) {
+        if (this.#shadow.literals.length > 0) {
             this.#concepts[SC.SELF] = {
                 name: SC.SELF,
                 variables: this.#shadow.getAllVariables()
@@ -171,6 +170,57 @@
             this._build(concept);
         }
     }
+}
+
+/**
+ * @param {Object} definition 
+ * @param {Number} level 
+ * @param {Object.<String, Object>} refs 
+ * 
+ * @returns {Object}
+ */
+function _processMacros(
+    definition,
+    level = 0,
+    refs = {}
+) {
+    for (const key in definition) {
+        if (key.startsWith(SC.MACRO)) {
+            if (level > 0) {
+                throw error.Concepts_definition_is_not_valid__REASON(
+                    because => because.REFERENCE_should_be_defined_at_the_root(key)
+                );
+            }
+
+            if (key.length === SC.MACRO.length) {
+                throw error.Concepts_definition_is_not_valid__REASON(
+                    because => because.Reference_EXPRESSION_must_have_a_name(definition[key])
+                );
+            }
+
+            refs[key] = definition[key];
+            delete definition[key];
+        }
+    }
+
+    for (const key in definition) {
+        const value = definition[key];
+        if (typeof value === 'string') {
+            if (value.startsWith(SC.MACRO)) {
+                if (!refs[value]) {
+                    throw error.Concepts_definition_is_not_valid__REASON(
+                        because => because.REFERENCE_cannot_be_found(value)
+                    );
+                }
+
+                definition[key] = refs[value];
+            }
+        } else {
+            _processMacros(value, level + 1, refs);
+        }
+    }
+
+    return definition;
 }
 
 module.exports = Concepts;

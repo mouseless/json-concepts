@@ -50,7 +50,13 @@ const InvalidConceptsReasons = {
     Expected_a_variable__but_got_a_literal__EXPRESSION:
         (EXPRESSION) => `Expected a variable, but got a literal: '${EXPRESSION}'`,
     Cannot_declare_CONCEPT_more_than_once:
-        (CONCEPT) => `Cannot declare ${CONCEPT} more than once`
+        (CONCEPT) => `Cannot declare ${CONCEPT} more than once`,
+    REFERENCE_cannot_be_found: (REFERENCE) => `${REFERENCE} cannot be found`,
+    Reference_EXPRESSION_must_have_a_name:
+        (EXPRESSION) => `Reference '"#": ${JSON.stringify(EXPRESSION)}' must have a name`,
+    REFERENCE_should_be_defined_at_the_root:
+        (REFERENCE) => `${REFERENCE} should be defined at the root`
+
 };
 
 /**
