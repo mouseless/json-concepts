@@ -28,7 +28,7 @@
      * @returns {Promise<Concepts>} Concepts at given path
      */
     static async load(path = required('path')) {
-        const definition = await loadJSON(path);
+        const definition = await Macro.include(await loadJSON(path));
 
         try {
             return new Concepts(definition);

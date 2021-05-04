@@ -1,6 +1,10 @@
 const { Schema } = require('../../..');
 const fs = require('mock-fs');
-const { should } = require('chai');
+const { use, should } = require('chai');
+const chaiAsPromised = require('chai-as-promised');
+
+use(chaiAsPromised);
+should();
 
 should();
 

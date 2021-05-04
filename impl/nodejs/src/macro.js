@@ -1,5 +1,30 @@
 class Macro {
     /**
+     * Recursively loads all included files and places them next to #include
+     * keys. This does not process `#include`s, only loads them from file or
+     * URL.
+     * 
+     * @param {Object} definition Definition object
+     * 
+     * @returns {Object} Definition object with includes loaded
+     */
+    static async include(definition = required('definition')) {
+        if (typeof definition !== 'object') {
+            return definition;
+        }
+
+        for (const key in definition) {
+            if (key == `${SC.MACRO}include` && typeof definition[key] === 'string') {
+                definition[key] = await loadJSON(definition[key]);
+            }
+
+            definition[key] = await Macro.include(definition[key]);
+        }
+
+        return definition;
+    }
+
+    /**
      * Processes macros within given definition object and returns processed object.
      * 
      * @param {Object} definition (Required) Definition to be processed
@@ -15,28 +40,31 @@ class Macro {
 
     /**
      * Macro represents the processing of macros of a definition object. After
-     * this process ended, this class manipulates given definition object.
+     * this process, given definition object will be manipulated.
      * 
-     * This constructor builds macros from given definition and makes definition
-     * object ready to be processed.
+     * This constructor processes `#include`s and builds macros from given
+     * definition and makes definition object ready to be processed.
      * 
      * @param {Object} definition Definition object including macros
      */
     constructor(definition) {
-        this.#definition = definition;
+        this.#definition = _include(definition);
 
         this.#macros = {};
-        for (const key in this.#definition) {
-            if (!_expressionIsMacro(key)) { continue; }
 
-            if (key.substring(SC.MACRO.length) == "") {
-                throw error.Concepts_definition_is_not_valid__REASON(
-                    because => because.Reference_EXPRESSION_must_have_a_name(this.#definition[key])
-                );
+        if (typeof this.#definition === 'object') {
+            for (const key in this.#definition) {
+                if (!_expressionIsMacro(key)) { continue; }
+
+                if (key.substring(SC.MACRO.length) == "") {
+                    throw error.Concepts_definition_is_not_valid__REASON(
+                        because => because.Reference_EXPRESSION_must_have_a_name(this.#definition[key])
+                    );
+                }
+
+                this.#macros[key] = this.#definition[key];
+                delete this.#definition[key];
             }
-
-            this.#macros[key] = this.#definition[key];
-            delete this.#definition[key];
         }
     }
 
@@ -137,10 +165,55 @@ class Macro {
     }
 }
 
+/**
+ * @param {*} definition 
+ * 
+ * @returns {*}
+ */
+function _include(definition) {
+    if (typeof definition !== 'object') {
+        return definition;
+    }
+
+    for (const key in definition) {
+        if (key == `${SC.MACRO}include`) {
+            const include = Macro.process(definition[key]);
+
+            delete definition[key];
+            _assign(definition, include)
+        } else {
+            _include(definition[key]);
+        }
+    }
+
+    return definition;
+}
+
+/**
+ * @param {*} expression 
+ * 
+ * @returns {Boolean}
+ */
 function _expressionIsMacro(expression) {
     return typeof expression === 'string' && expression.startsWith(SC.MACRO);
 }
 
+/**
+ * @param {Object} target
+ * @param {Object} source 
+ */
+function _assign(target, source) {
+    for (const key in source) {
+        if (target[key]) {
+            throw error.Concepts_definition_is_not_valid__REASON(
+                because => because.Cannot_include__conflict_occurs_on_KEY(key)
+            );
+        }
+
+        target[key] = source[key];
+    }
+}
+
 module.exports = Macro;
 
-const { SpecialCharacters: SC, error, required } = require('./util');
+const { SpecialCharacters: SC, error, required, loadJSON } = require('./util');

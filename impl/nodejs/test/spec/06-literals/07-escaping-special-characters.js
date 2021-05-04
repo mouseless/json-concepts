@@ -1,6 +1,7 @@
 const { Concepts } = require('../../..');
-const { error } = require('../../../src/util');
 const { should } = require('chai');
+
+should();
 
 describe('spec/literals/escaping-special-characters', function () {
     it('it should escape special characters', function () {

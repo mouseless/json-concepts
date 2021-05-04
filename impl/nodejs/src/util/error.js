@@ -62,8 +62,9 @@ const InvalidConceptsReasons = {
         (REFERENCE) => `Cannot merge a non-object reference: '${REFERENCE}'`,
     Cannot_merge_REFERENCES__conflict_occurs_on_KEY:
         (REFERENCES, KEY) => `Cannot merge '${JSON.stringify(REFERENCES)}', ` +
-            `conflict occurs on '${KEY}'`
-
+            `conflict occurs on '${KEY}'`,
+    Cannot_include__conflict_occurs_on_KEY:
+        (KEY) => `Cannot include, conflict occurs on ${KEY}`
 };
 
 /**
