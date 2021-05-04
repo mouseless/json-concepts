@@ -35,8 +35,9 @@ class Macro {
         return new Macro(definition).process();
     }
 
-    /* const */ #macros;
     /* const */ #definition;
+    /* const */ #injections;
+    /* const */ #macros;
 
     /**
      * Macro represents the processing of macros of a definition object. After
@@ -49,6 +50,9 @@ class Macro {
      */
     constructor(definition) {
         this.#definition = _include(definition);
+
+        this.#injections = arrayify.pull(this.#definition, `${SC.MACRO}inject`);
+        delete this.#definition[`${SC.MACRO}inject`];
 
         this.#macros = {};
 
@@ -78,7 +82,17 @@ class Macro {
             this.#macros[key] = this._process(this.#macros[key], key);
         }
 
-        return this._process(this.#definition);
+        const result = this._process(this.#definition);
+
+        for (const injection of this.#injections) {
+            const path = metaData.read(injection, 'path', /* burnAfterReading */ true) || SC.PATH;
+
+            Macro.process(injection);
+
+            OP.find(result, path).forEach(item => _assign(item, injection));
+        }
+
+        return result;
     }
 
     /**
@@ -206,7 +220,7 @@ function _assign(target, source) {
     for (const key in source) {
         if (target[key]) {
             throw error.Concepts_definition_is_not_valid__REASON(
-                because => because.Cannot_include__conflict_occurs_on_KEY(key)
+                because => because.Cannot_assign__conflict_occurs_on_KEY(key)
             );
         }
 
@@ -216,4 +230,5 @@ function _assign(target, source) {
 
 module.exports = Macro;
 
-const { SpecialCharacters: SC, error, required, loadJSON } = require('./util');
+const OP = require('./object-path');
+const { SpecialCharacters: SC, error, arrayify, metaData, required, loadJSON } = require('./util');

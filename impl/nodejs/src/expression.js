@@ -15,6 +15,25 @@ class Expression {
      */
 
     /**
+     * Parses only name part of an expression. `$concept:type*` returns
+     * `$concept`, `literal?` returns `literal`.
+     * 
+     * @param {String} expression (Required) Value or key expression to parse
+     * 
+     * @returns {String} Parsed name
+     */
+    static parseName(expression = required('expression')) {
+        const tokens = _scan(expression, _keySC);
+
+        let result = tokens.shift();
+        if (result == SC.VARIABLE) {
+            result += tokens.shift();
+        }
+
+        return result;
+    }
+
+    /**
      * Parses key expression. Quantifier is null when it does not exist in the
      * expression.
      * 

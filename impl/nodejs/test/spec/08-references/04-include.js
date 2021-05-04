@@ -84,7 +84,7 @@ describe('spec/references/include', function () {
             "conflict": "value"
         })).should.throw(
             error.Concepts_definition_is_not_valid__REASON(
-                because => because.Cannot_include__conflict_occurs_on_KEY(
+                because => because.Cannot_assign__conflict_occurs_on_KEY(
                     'conflict'
                 )
             ).message
@@ -132,7 +132,7 @@ describe('spec/references/include', function () {
         after(async function () {
             nock.cleanAll();
         });
-        
+
         it('should include from a url', async function () {
             nock('https://json-concepts.github.io')
                 .get('/samples/parameter.concepts.json')

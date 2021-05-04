@@ -28,7 +28,7 @@ This is equivalent to below definition;
         "$property*": {
             "return": "$returnType"
         }
-    },
+    }
 }
 ```
 
@@ -65,7 +65,7 @@ This is equivalent to below definition;
         "$method*": {
             "return": "$returnType"
         }
-    },
+    }
 }
 ```
 
@@ -206,3 +206,12 @@ This is equivalent to the following;
     "$class+": { }
 }
 ```
+
+## Injections, References and Include
+
+- Process include
+  - Process macros of include
+- Process references for root
+- For every injection
+  - Process references
+  - Inject to paths

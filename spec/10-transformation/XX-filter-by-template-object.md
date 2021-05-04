@@ -33,7 +33,7 @@
     "argument": {
         "from": "parameter",
         "select": {
-            "type": "type.capitalize()"
+            "type": "type | capitalize"
         }
     }
 }
