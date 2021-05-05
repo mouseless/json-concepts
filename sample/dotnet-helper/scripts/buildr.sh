@@ -1,1 +1,0 @@
-dotnet /Users/cdeniz/Projects/gazel/open-schema/buildrnet/src/Buildr/bin/Debug/netcoreapp2.1/Buildr.dll "$@"
