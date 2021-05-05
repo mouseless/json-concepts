@@ -244,7 +244,7 @@ its own references.
 }
 ```
 
-For this example process order of `behavior.concepts.json` is as follows;
+For this example, process order of `behavior.concepts.json` is as follows;
 
 1. Process `#include`s of `behavior.concepts.json`;
    1. Process `#include`s of `dto.concepts.json`
