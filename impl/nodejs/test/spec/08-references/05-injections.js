@@ -1,5 +1,6 @@
 const { Concepts } = require('../../..');
 const { error } = require('../../../src/util');
+const fs = require('mock-fs');
 const { should } = require('chai');
 
 should();
@@ -36,8 +37,8 @@ describe('spec/references/injections', function () {
             }
         })).should.throw(
             error.Concepts_definition_is_not_valid__REASON(
-                because => because.Cannot_assign__conflict_occurs_on_KEY(
-                    '$property*'
+                because => because.Cannot_assign_SOURCE_to_KEY__there_is_already_a_value__TARGET(
+                    '$returnType', '$property*', {}
                 )
             ).message
         )
@@ -112,49 +113,183 @@ describe('spec/references/injections', function () {
             });
         });
 
-        it('should insert definition to all matching paths', function () {
+        it('should not give error when injecting same definition multiple times', function () {
             const concepts = new Concepts({
-                "$level1": {
-                    "$level2": {
-                        "$level3": {}
-                    }
+                "$class+": {
+                    "$property*": {},
+                    "$method*": {}
                 },
                 "#inject": {
-                    "$inject": "$value",
-                    "@path": "/**"
+                    "return": "$returnType",
+                    "@path": ["/*/$property", "/**/$method", "/*/$*"]
                 }
             });
 
             concepts.definition.should.deep.equal({
-                "$level1": {
-                    "$level2": {
-                        "$level3": {
-                            "$inject": "$value"
-                        },
-                        "$inject": "$value"
+                "$class+": {
+                    "$property*": {
+                        "return": "$returnType"
                     },
-                    "$inject": "$value"
+                    "$method*": {
+                        "return": "$returnType"
+                    }
+                }
+            });
+        });
+    });
+
+    describe('no path', function () {
+        it('should inject to root when no path specified', function () {
+            const concepts = new Concepts({
+                "#inject": {
+                    "$class+": {}
+                }
+            });
+
+            concepts.definition.should.deep.equal({
+                "$class+": {}
+            });
+        });
+    });
+
+    describe('multiple injections', function () {
+        it('should process all of the injections', function () {
+            const concepts = new Concepts({
+                "#inject": [
+                    {
+                        "$class+": {}
+                    },
+                    {
+                        "$property+": {},
+                        "@path": "/**/$class",
+                    },
+                    {
+                        "$method+": {},
+                        "@path": "/**/$class",
+                    },
+                    {
+                        "returns": "$returnType",
+                        "@path": ["/**/$method", "/**/$property"],
+                    },
+                    {
+                        "$parameter*": "$type",
+                        "@path": "/**/$method"
+                    }
+                ]
+            });
+
+            concepts.definition.should.deep.equal({
+                "$class+": {
+                    "$property+": {
+                        "returns": "$returnType"
+                    },
+                    "$method+": {
+                        "$parameter*": "$type",
+                        "returns": "$returnType"
+                    }
                 }
             });
         });
 
-        it('should not give error when injecting same definition multiple times');
-    });
+        it('should only allow objects under injection array', function () {
+            (() => new Concepts({
+                "#inject": "test"
+            })).should.throw(
+                error.Concepts_definition_is_not_valid__REASON(
+                    because => because.Inject_expects_an_object_or_an_array_of_objects__but_got_VALUE(
+                        "test"
+                    )
+                ).message
+            );
 
-    describe('no path', function () {
-        it('should inject to root when no path specified');
-    });
-
-    describe('multiple injections', function () {
-        it('should process all of the injections');
-        it('should only allow objects under injection array');
+            (() => new Concepts({
+                "#inject": ["test"]
+            })).should.throw(
+                error.Concepts_definition_is_not_valid__REASON(
+                    because => because.Inject_expects_an_object_or_an_array_of_objects__but_got_VALUE(
+                        "test"
+                    )
+                ).message
+            );
+        });
     });
 
     describe('order of injections', function () {
-        it('should process injections in the order they appear');
+        it('should process injections in the order they appear', function () {
+            const concepts = new Concepts({
+                "#inject": [
+                    {
+                        "$parameter*": "$type",
+                        "@path": "/**/$method"
+                    },
+                    {
+                        "returns": "$returnType",
+                        "@path": ["/**/$method", "/**/$property"],
+                    },
+                    {
+                        "$method+": {},
+                        "@path": "/**/$class",
+                    },
+                    {
+                        "$property+": {},
+                        "@path": "/**/$class",
+                    },
+                    {
+                        "$class+": {}
+                    }
+                ]
+            });
+
+            concepts.definition.should.deep.equal({
+                "$class+": {}
+            });
+        });
     });
 
     describe('processing order', function () {
-        it('waiting for specs');
+        after(function () {
+            fs.restore();
+        })
+
+        it('should process in the expected order', async function () {
+            fs({
+                'dto.concepts.json': JSON.stringify({
+                    "$class+": "#properties",
+                    "#properties": {
+                        "$property+": {}
+                    }
+                }),
+                'behavior.concepts.json': JSON.stringify({
+                    "#include": "dto.concepts.json",
+                    "#inject": [
+                        {
+                            "$method+": "#parameters",
+                            "#parameters": {
+                                "$parameter*": "$type"
+                            },
+                            "@path": "/**/$class",
+                        },
+                        {
+                            "returns": "$returnType",
+                            "@path": ["/**/$method", "/**/$property"],
+                        }
+                    ]
+                })
+            });
+
+            const concepts = await Concepts.load('behavior.concepts.json');
+
+            concepts.definition.should.deep.equal({
+                "$class+": {
+                    "$property+": {
+                        "returns": "$returnType"
+                    },
+                    "$method+": {
+                        "$parameter*": "$type",
+                        "returns": "$returnType"
+                    }
+                }
+            });
+        });
     });
 });

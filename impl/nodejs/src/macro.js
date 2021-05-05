@@ -85,6 +85,14 @@ class Macro {
         const result = this._process(this.#definition);
 
         for (const injection of this.#injections) {
+            if (typeof injection !== 'object') {
+                throw error.Concepts_definition_is_not_valid__REASON(
+                    because => because.Inject_expects_an_object_or_an_array_of_objects__but_got_VALUE(
+                        injection
+                    )
+                );
+            }
+
             const path = metaData.read(injection, 'path', /* burnAfterReading */ true) || SC.PATH;
 
             Macro.process(injection);
@@ -218,9 +226,11 @@ function _expressionIsMacro(expression) {
  */
 function _assign(target, source) {
     for (const key in source) {
-        if (target[key]) {
+        if (target[key] && target[key] !== source[key]) {
             throw error.Concepts_definition_is_not_valid__REASON(
-                because => because.Cannot_assign__conflict_occurs_on_KEY(key)
+                because => because.Cannot_assign_SOURCE_to_KEY__there_is_already_a_value__TARGET(
+                    source[key], key, target[key]
+                )
             );
         }
 

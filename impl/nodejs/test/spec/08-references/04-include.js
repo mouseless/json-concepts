@@ -79,13 +79,13 @@ describe('spec/references/include', function () {
     it('should give error when a conflict occurs', function () {
         (() => new Concepts({
             "#include": {
-                "conflict": "value"
+                "conflict": "value a"
             },
-            "conflict": "value"
+            "conflict": "value b"
         })).should.throw(
             error.Concepts_definition_is_not_valid__REASON(
-                because => because.Cannot_assign__conflict_occurs_on_KEY(
-                    'conflict'
+                because => because.Cannot_assign_SOURCE_to_KEY__there_is_already_a_value__TARGET(
+                    'value a', 'conflict', 'value b'
                 )
             ).message
         );

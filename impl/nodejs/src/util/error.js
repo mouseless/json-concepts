@@ -63,8 +63,11 @@ const InvalidConceptsReasons = {
     Cannot_merge_REFERENCES__conflict_occurs_on_KEY:
         (REFERENCES, KEY) => `Cannot merge '${JSON.stringify(REFERENCES)}', ` +
             `conflict occurs on '${KEY}'`,
-    Cannot_assign__conflict_occurs_on_KEY:
-        (KEY) => `Cannot assign, conflict occurs on '${KEY}'`
+    Cannot_assign_SOURCE_to_KEY__there_is_already_a_value__TARGET:
+        (SOURCE, KEY, TARGET) => `Cannot assign '${JSON.stringify(SOURCE)}' to '${KEY}', ` +
+            `there is already a value: '${JSON.stringify(TARGET)}'`,
+    Inject_expects_an_object_or_an_array_of_objects__but_got_VALUE:
+        (VALUE) => `Inject expects an object or an array of objects, but got '${JSON.stringify(VALUE)}'`
 };
 
 /**

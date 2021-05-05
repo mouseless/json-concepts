@@ -1,5 +1,5 @@
 /**
- * Finds returns all objects that matches given path or paths.
+ * Finds and returns all objects that matches given path or paths.
  * 
  * @param {Object} target Object to search
  * @param {String|Array.<String>} pathOrPaths Path(s) to find
@@ -40,9 +40,10 @@ function _index(
         return _result;
     }
 
+    _result[_base] = object;
+
     for (const key in object) {
         const name = Expression.parseName(key);
-        _result[_base + '/' + name] = object[key];
 
         _index(object[key], _result, _base + '/' + name);
     }
@@ -56,14 +57,19 @@ function _index(
  * @returns {RegExp}
  */
 function _regex(wildcard) {
-    const pattern = wildcard
-        .replace(/\*\*\//g, '[a-zA-Z0-9$_\\-\\/]{0,}')
-        .replace(/\*\*/g, '[a-zA-Z0-9$_\\-\\/]{0,}')
-        .replace(/\*/g, '[a-zA-Z0-9$_\\-]{0,}')
-        .replace(/\$/g, '\\$')
-        .replace(/\//g, '\\/');
+    if (wildcard == '/') {
+        wildcard = '';
+    }
 
-    return new RegExp(`^${pattern}$`, 'g');
+    const pattern = wildcard
+        .replace(/\$/g, '\\$')
+        .replace(/\/\*\*/g, '.{0,}')
+        .replace(/\*\*/g, '.{0,}')
+        .replace(/\//g, '\\/')
+        .replace(/\*/g, '[^\\/]{0,}');
+
+
+    return new RegExp(`^${pattern}$`);
 }
 
 module.exports = {
