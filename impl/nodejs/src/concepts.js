@@ -28,7 +28,7 @@
      * @returns {Promise<Concepts>} Concepts at given path
      */
     static async load(path = required('path')) {
-        const definition = await loadJSON(path);
+        const definition = await Macro.include(await loadJSON(path));
 
         try {
             return new Concepts(definition);
@@ -41,10 +41,10 @@
         }
     }
 
+    /* const */ #types;
     /* const */ #definition;
     /* const */ #shadow;
     /* const */ #concepts;
-    /* const */ #types;
 
     /**
      * Concepts represents a schema for a schema. It contains a set of concept
@@ -55,16 +55,15 @@
      * @param {Object} definition (Required) Concepts definition
      */
     constructor(definition = required('definition')) {
-        this.#definition = definition;
-
         this.#types = createTypes(
             metaData.read(definition, 'types', /* burnAfterReading */ true)
         );
 
+        this.#definition = Macro.process(definition);
         this.#shadow = new ConceptsShadow().build(definition, this.#types);
         this.#concepts = {};
 
-        if(this.#shadow.literals.length > 0) {
+        if (this.#shadow.literals.length > 0) {
             this.#concepts[SC.SELF] = {
                 name: SC.SELF,
                 variables: this.#shadow.getAllVariables()
@@ -160,15 +159,21 @@
     }
 
     /**
-     * @param {ConceptsShadow} shadow 
+     * @param {ConceptsShadow} shadow
      */
-    _build(shadow) {
+    _build(shadow, _trace = new Set()) {
+        if (_trace.has(shadow)) {
+            return;
+        }
+
+        _trace.add(shadow);
+
         for (const concept of shadow.concepts) {
             this.#concepts[concept.name] = {
                 name: concept.name,
                 variables: concept.getAllVariables()
             };
-            this._build(concept);
+            this._build(concept, _trace);
         }
     }
 }
@@ -177,5 +182,6 @@ module.exports = Concepts;
 
 const Schema = require('./schema');
 const ConceptsShadow = require('./concepts-shadow');
+const Macro = require('./macro');
 const { createTypes } = require('./types');
 const { SpecialCharacters: SC, error, metaData, required, loadJSON } = require('./util');

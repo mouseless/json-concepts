@@ -50,7 +50,24 @@ const InvalidConceptsReasons = {
     Expected_a_variable__but_got_a_literal__EXPRESSION:
         (EXPRESSION) => `Expected a variable, but got a literal: '${EXPRESSION}'`,
     Cannot_declare_CONCEPT_more_than_once:
-        (CONCEPT) => `Cannot declare ${CONCEPT} more than once`
+        (CONCEPT) => `Cannot declare ${CONCEPT} more than once`,
+    REFERENCE_cannot_be_found: (REFERENCE) => `${REFERENCE} cannot be found`,
+    Reference_EXPRESSION_must_have_a_name:
+        (EXPRESSION) => `Reference '"#": ${JSON.stringify(EXPRESSION)}' must have a name`,
+    REFERENCE_should_be_defined_at_the_root:
+        (REFERENCE) => `${REFERENCE} should be defined at the root`,
+    All_items_in_ARRAY_should_be_a_reference:
+        (ARRAY) => `All items in '${JSON.stringify(ARRAY)}' should be a reference`,
+    Cannot_merge_a_non_object_reference__REFERENCE:
+        (REFERENCE) => `Cannot merge a non-object reference: '${REFERENCE}'`,
+    Cannot_merge_REFERENCES__conflict_occurs_on_KEY:
+        (REFERENCES, KEY) => `Cannot merge '${JSON.stringify(REFERENCES)}', ` +
+            `conflict occurs on '${KEY}'`,
+    Cannot_assign_SOURCE_to_KEY__there_is_already_a_value__TARGET:
+        (SOURCE, KEY, TARGET) => `Cannot assign '${JSON.stringify(SOURCE)}' to '${KEY}', ` +
+            `there is already a value: '${JSON.stringify(TARGET)}'`,
+    Inject_expects_an_object_or_an_array_of_objects__but_got_VALUE:
+        (VALUE) => `Inject expects an object or an array of objects, but got '${JSON.stringify(VALUE)}'`
 };
 
 /**

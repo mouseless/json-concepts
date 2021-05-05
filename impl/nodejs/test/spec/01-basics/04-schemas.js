@@ -121,6 +121,10 @@ describe('spec/basics/schemas', function () {
     });
 
     describe('referring-to-a-remote-concepts-file', function () {
+        after(async function () {
+            nock.cleanAll();
+        });
+        
         it('should validate', async function () {
             nock("http://test.com")
                 .get("/service.concepts.json")

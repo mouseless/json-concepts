@@ -28,7 +28,7 @@ This is equivalent to below definition;
         "$property*": {
             "return": "$returnType"
         }
-    },
+    }
 }
 ```
 
@@ -65,7 +65,7 @@ This is equivalent to below definition;
         "$method*": {
             "return": "$returnType"
         }
-    },
+    }
 }
 ```
 
@@ -204,5 +204,75 @@ This is equivalent to the following;
 ```json
 {
     "$class+": { }
+}
+```
+
+## Process Order of Injections, References and Include
+
+Just like included concepts definitions, an injected definition can also have
+its own references.
+
+`CONCEPTS 1: dto.concepts.json`
+
+```json
+{
+    "$class+": "#properties",
+    "#properties": {
+        "$property+": { }
+    }
+}
+```
+
+`CONCEPTS 2: behavior.concepts.json`
+
+```json
+{
+    "#include": "dto.concepts.json",
+    "#inject": [
+        {
+            "$method+": "#parameters",
+            "#parameters": {
+                "$parameter*": "$type"
+            },
+            "@path": "/**/$class",
+        },
+        {
+            "returns": "$returnType",
+            "@path": [ "/**/$method", "/**/$property" ],
+        }
+    ]
+}
+```
+
+For this example, process order of `behavior.concepts.json` is as follows;
+
+1. Process `#include`s of `behavior.concepts.json`;
+   1. Process `#include`s of `dto.concepts.json`
+   2. Process `#` references at the root of `dto.concepts.json`
+      1. Process `#properties` reference
+   3. Process `#inject`s of `dto.concepts.json`
+2. Process `#` references at the root of `behavior.concepts.json`
+3. Process `#inject`s of `behavior.concepts.json`
+   1. Process `#` references of first `#inject`
+      1. Process `#parameters` reference
+   2. Place first `#inject` to paths matching `/**/$class`
+   3. Process `#` references of second `#inject`
+   4. Place second `#inject` to paths matching `/**/$method` or `/**/$property`
+
+Therefore `behavior.concepts.json` is equivalent to below definition;
+
+`CONCEPTS 3: class.concepts.json`
+
+```json
+{
+    "$class+": {
+        "$property+": { 
+            "returns": "$returnType"
+        },
+        "$method+": { 
+            "$parameter*": "$type",
+            "returns": "$returnType"
+        }
+    }
 }
 ```

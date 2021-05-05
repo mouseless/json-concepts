@@ -1,4 +1,5 @@
 const SpecialCharacters = require('./special-characters');
+const Trace = require('./trace');
 const error = require('./error');
 const arrayify = require('./arrayify');
 const metaData = require('./meta-data');
@@ -7,6 +8,7 @@ const { loadJSON } = require('./load-json');
 
 module.exports = {
     SpecialCharacters,
+    Trace,
     error,
     arrayify,
     metaData,

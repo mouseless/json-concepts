@@ -1,11 +1,12 @@
 class ConceptsShadow {
     /* const */ #expression;
-    /* const */ #parent;
     /* const */ #dimensions;
     /* const */ #variable;
     /* const */ #literals;
     /* const */ #concepts;
     /* const */ #data;
+
+    /* let */ #referring;
 
     /**
      * ConceptsShadow is a traversable tree version of a concepts definition.
@@ -16,20 +17,18 @@ class ConceptsShadow {
      * 
      * @param {Expression} expression Expression of this node. It should be
      * `undefined` for root node and object array nodes.
-     * @param {ConceptsShadow} parent Parent of this node. It should be
-     * `undefined` for root node.
      * @param {Number} dimensions (Default: 0) Allowed number of dimensions for
      * this node.
      */
-    constructor(expression, parent, dimensions = 0) {
+    constructor(expression, dimensions = 0) {
         this.#expression = expression;
-        this.#parent = parent;
         this.#dimensions = dimensions;
 
         this.#variable = null;
         this.#literals = {};
         this.#concepts = {};
         this.#data = {};
+        this.#referring = false;
     }
 
     /**
@@ -93,13 +92,22 @@ class ConceptsShadow {
      * @returns {Array.<ConceptsShadow>}
      */
     get concepts() { return Object.values(this.#concepts); }
+
     /**
      * Data representation of this node and all of is nodes under it as an
      * object.
      * 
      * @returns {Object}
      */
-    get data() { return this.#data; }
+    get data() {
+        if (this.#referring) {
+            this.#referring = false;
+
+            return { reference: this.name };
+        }
+
+        return this.#data;
+    }
 
     /**
      * Makes a deep search and returns all variables in the tree.
@@ -171,7 +179,15 @@ class ConceptsShadow {
      * 
      * @return {ConceptsShadow} Itself after build
      */
-    build(definition, types) {
+    build(definition, types, _trace = new Trace()) {
+        const traceKey = definition;
+
+        /** @type {ConceptsShadow} */
+        const shadow = _trace.get(traceKey, this.name);
+        if (shadow) {
+            return shadow._asReference();
+        }
+
         const dimensions = arrayify.dimensions(definition);
         while (Array.isArray(definition)) {
             if (definition.length != 1) {
@@ -192,18 +208,20 @@ class ConceptsShadow {
                 );
             }
 
-            const leaf = new ConceptsShadow(expression, this, dimensions).build();
+            const leaf = new ConceptsShadow(expression, dimensions).build();
             if (leaf.isVariable) {
                 this.#variable = leaf;
             } else if (leaf.isLiteral) {
                 this.#literals[leaf.name] = leaf;
             }
         } else if (typeof definition === 'object') {
+            _trace.visit(traceKey, this);
+
             if (dimensions == 0) {
                 for (const key in definition) {
                     const expression = Expression.parseKey(key, types);
 
-                    const node = new ConceptsShadow(expression, this).build(definition[key], types);
+                    const node = new ConceptsShadow(expression).build(definition[key], types, _trace);
                     if (node.isVariable) {
                         if (this.#concepts[node.name]) {
                             throw error.Concepts_definition_is_not_valid__REASON(
@@ -217,10 +235,12 @@ class ConceptsShadow {
                     }
                 }
             } else {
-                const node = new ConceptsShadow(undefined, this, dimensions).build(definition, types);
+                const node = new ConceptsShadow(undefined, dimensions).build(definition, types, _trace);
 
                 this.#variable = node;
             }
+
+            _trace.unvisit(traceKey, this);
         }
 
         if (this.name != null) {
@@ -240,15 +260,15 @@ class ConceptsShadow {
         }
 
         if (this.variable != null) {
-            this.#data.variable = this.variable.#data;
+            this.#data.variable = this.variable.data;
         }
 
         for (const literal of this.literals) {
-            arrayify.push(this.#data, 'literal', literal.#data);
+            arrayify.push(this.#data, 'literal', literal.data);
         }
 
         for (const concept of this.concepts) {
-            arrayify.push(this.#data, 'concept', concept.#data);
+            arrayify.push(this.#data, 'concept', concept.data);
         }
 
         return this;
@@ -378,6 +398,15 @@ class ConceptsShadow {
     }
 
     /**
+     * @returns {ConceptsShadow}
+     */
+    _asReference() {
+        this.#referring = true;
+
+        return this;
+    }
+
+    /**
      * @param {String} name
      * @param {import('./concepts').VariablesData} result
      * 
@@ -411,4 +440,4 @@ module.exports = ConceptsShadow;
 
 const Expression = require('./expression');
 const SchemaKey = require('./schema-key');
-const { SpecialCharacters: SC, error, arrayify, required } = require('./util');
+const { SpecialCharacters: SC, Trace, error, arrayify, required } = require('./util');

@@ -139,29 +139,17 @@ function set(
  */
 function each(
     value,
-    action = required('action')
-) {
-    _each(value, action);
-}
-
-/**
- * @param {*} value 
- * @param {eachAction} action 
- * @param {Array.<Number>} indices 
- */
-function _each(
-    value,
     action = required('action'),
-    indices = []
+    _indices = []
 ) {
     if (Array.isArray(value)) {
         for (let i = 0; i < value.length; i++) {
             const item = value[i];
 
-            _each(item, action, indices.concat([i]));
+            each(item, action, _indices.concat([i]));
         }
     } else {
-        action(value, indices);
+        action(value, _indices);
     }
 }
 

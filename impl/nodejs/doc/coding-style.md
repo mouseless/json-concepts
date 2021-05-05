@@ -183,6 +183,13 @@ function(
 ) {
 
 }
+
+function(
+    publicParameter,
+    _privateParameter = 0
+) {
+
+}
 ```
 
 ## JSDoc
@@ -214,7 +221,8 @@ function public(parameter, parameter2, parameter3) {
 function parameters(
     required, 
     optional,
-    hasDefault = false
+    hasDefault = false,
+    _private = 0 // not documented
 ) {
 }
 

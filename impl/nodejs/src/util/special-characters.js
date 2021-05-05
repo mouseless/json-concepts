@@ -6,8 +6,8 @@
 const SpecialCharacters = {
     /** `$variable` */
     VARIABLE: "$",
-    /** `#preprocessor` */
-    PREPROCESSOR: "#",
+    /** `#macro` */
+    MACRO: "#",
     /** `:type` */
     TYPE: ":",
     /** `@metaData` */

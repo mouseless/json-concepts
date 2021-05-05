@@ -60,7 +60,7 @@ reconsideration.
 | Character | Meaning | Familiarity |
 | - | - | - |
 | $ | variable | variables in php, bash, powershell |
-| # | preprocessor | c macros |
+| # | macro | c macros, c# preprocessors |
 | : | type | uml, swift, scala |
 | @ | meta-data | java annotations |
 | ? | zero or one | regex, if-else, null propagation |
