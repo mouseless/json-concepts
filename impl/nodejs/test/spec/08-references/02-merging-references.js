@@ -101,4 +101,12 @@ describe('spec/references/merging-references', function () {
             ).message
         );
     });
+
+    it('should allow references in object arrays', function () {
+        throw new Error("not implemented");
+    });
+
+    it('should allow merging a reference with existing definition', function () {
+        throw new Error("not implemented");
+    });
 });

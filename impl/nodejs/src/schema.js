@@ -27,6 +27,7 @@
             if (typeof concepts === 'object') {
                 concepts = new Concepts(concepts);
             } else {
+                
                 concepts = await Concepts.load(concepts);
             }
         }

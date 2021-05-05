@@ -91,6 +91,10 @@ describe('spec/references/include', function () {
         );
     });
 
+    it('should use base path of concepts file when including from file', function () {
+        throw new Error('not implemented');
+    });
+
     describe('processing order', function () {
         it('should process include before references', async function () {
             fs({

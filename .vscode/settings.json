@@ -27,6 +27,7 @@
         "jsonpath",
         "noopener",
         "noreferrer",
+        "openapi",
         "plantuml",
         "prego",
         "prepend",

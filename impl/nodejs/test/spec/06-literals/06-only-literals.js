@@ -75,6 +75,16 @@ describe('spec/literals/only-literals', function () {
         );
     });
 
+    it('should allow enabling literal concepts', function () {
+        const concepts = new Concepts({
+            "$externalDocs:literal?": {
+
+            }
+        });
+
+        throw new Error('write spec');
+    });
+
     describe('literals with object arrays instead of concepts', function () {
         it('should create schemas whose shadow is identical to their definitions', function () {
             const concepts = new Concepts({

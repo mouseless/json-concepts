@@ -1,0 +1,164 @@
+{
+    "openapi": "$openapiVersion:version",
+    "info": {
+        "title": "$title",
+        "termsOfService?": "$termsOfService:url",
+        "$contact:contact?": {
+            "name?": "$name:string",
+            "url?": "$url:url",
+            "email?": "$email:email"
+        },
+        "$license:license?": {
+            "name": "$name:string",
+            "url?": "$url:url"
+        },
+        "version": "$version:version"
+    },
+    "servers?": [
+        {
+            "url": "$url:url",
+            "description?": "$description:string",
+            "variables?": {
+                "$variable+": {
+                    "default": "$default",
+                    "enum?": [
+                        "$enum:string"
+                    ],
+                    "description?": "$description:string"
+                }
+            }
+        }
+    ],
+    "paths": {
+        "$path:path*": {
+            "summary?": "$summary:string",
+            "$operation:operation*": {
+                "tags?": [
+                    "$tags:string"
+                ],
+                "summary?": "$summary:string",
+                "$externalDocs:externalDocs?": {
+                    "url": "$url:url"
+                },
+                "operationId?": "$operationId:string",
+                "parameters?": [
+                    {
+                        "name": "$name:string",
+                        "in": "$in:parameterPosition",
+                        "description?": "$description:string",
+                        "required?": "$required:boolean",
+                        "deprecated?": "$deprecated:boolean",
+                        "allowEmptyValue?": "$allowEmptyValue:boolean",
+                        "style?": "$style:string",
+                        "$schema:schema?": "#schema"
+                    }
+                ],
+                "$requestBody:requestBody?": {
+                    "content": {
+                        "$content:mediaType*": {
+                            "$schema:schema?": "#schema"
+                        }
+                    },
+                    "required?": "$required:boolean"
+                },
+                "responses": {
+                    "$response:response+": {
+                        "description": "$description",
+                        "headers?": {
+                            "$header+": "#parameterLike"
+                        },
+                        "content?": {
+                            "$content:mediaType*": {
+                                "$schema:schema?": "#schema"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components?": {
+        "schemas?": {
+            "$schema*": "#schema"
+        }
+    },
+    "#parameterLike": {
+        "required?": "$required:boolean",
+        "deprecated?": "$deprecated:boolean",
+        "allowEmptyValue?": "$allowEmptyValue:boolean",
+        "style?": "$style:string",
+        "$schema:schema?": "#schema"
+    },
+    "#schema": {
+        "type?": "$type:string",
+        "format?": "$format:string",
+        "required?": [
+            "$requiredFields"
+        ],
+        "properties?": {
+            "$property*": {
+                "type": "$type:string",
+                "format?": "$format:string"
+            }
+        },
+        "items?": {
+            "type?": "$type:string"
+        }
+    },
+    "#inject": [
+        {
+            "\\$ref?": "$ref:string",
+            "@path": [
+                "/**/$schema",
+                "/**/$path",
+                "/**/items"
+            ]
+        },
+        {
+            "description?": "$description:string",
+            "@path": [
+                "/**/info",
+                "/**/$path",
+                "/**/$externalDocs",
+                "/**/$operation",
+                "/**/$requestBody",
+                "/**/$header"
+            ]
+        }
+    ],
+    "@types": {
+        "version": "^[0-9]+\\.[0-9]+(\\.[0-9]){0,1}$",
+        "url": "^http[s]?:\\/\\/.*$",
+        "email": "^.*\\@.*$",
+        "path": "^\\/.*$",
+        "mediaType": "^.*\\/.*$",
+        "externalDocs": "^externalDocs$",
+        "contact": "^contact$",
+        "license": "^license$",
+        "schema": "^schema$",
+        "requestBody": "^requestBody$",
+        "operation": [
+            "get",
+            "put",
+            "post",
+            "delete",
+            "options",
+            "head",
+            "patch",
+            "trace"
+        ],
+        "parameterPosition": [
+            "query",
+            "header",
+            "path",
+            "cookie"
+        ],
+        "response": [
+            "default",
+            "200",
+            "201",
+            "204",
+            "400"
+        ]
+    }
+}

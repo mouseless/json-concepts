@@ -82,6 +82,10 @@ describe('spec/basics/schemas', function () {
             );
     });
 
+    it('should use base path of schema file when loading concepts from file', function () {
+        throw new Error('not implemented');
+    });
+
     describe('self-validating schema', function () {
         it('should validate', async function () {
             fs({
@@ -124,7 +128,7 @@ describe('spec/basics/schemas', function () {
         after(async function () {
             nock.cleanAll();
         });
-        
+
         it('should validate', async function () {
             nock("http://test.com")
                 .get("/service.concepts.json")

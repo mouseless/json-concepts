@@ -62,6 +62,10 @@ describe('spec/references/injections', function () {
         });
     });
 
+    it('should inject to object arrays', function () {
+        throw new Error('not implemented');
+    });
+
     describe('multiple paths', function () {
         it('should inject to all paths', function () {
             const concepts = new Concepts({
