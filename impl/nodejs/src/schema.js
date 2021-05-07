@@ -3,7 +3,7 @@
      * Loads schema from given path.
      * 
      * @async
-     * @param {String} path (Required) File path or URL to load schema from
+     * @param {String} path (Required) Path or URL to load schema from
      * @param {String|Object|Concepts} concepts Concepts of schema to be
      * loaded. This is not required when loaded schema contains concepts
      * meta-data. Otherwise it is required.
@@ -14,10 +14,15 @@
         path = required('path'),
         concepts = null
     ) {
-        const definition = await loadJSON(path);
+        const definition = await loadJSONData(path);
 
-        concepts = concepts ||
-            metaData.read(definition, 'concepts', /* burnAfterReading */ true);
+        let relativeTo;
+        if (!concepts) {
+            concepts = metaData.read(definition, 'concepts', /* burnAfterReading */ true);
+            relativeTo = path;
+        } else {
+            metaData.burn(definition, 'concepts')
+        }
 
         if (concepts === null) {
             throw error.Concepts_required_to_load_SCHEMA(path);
@@ -27,7 +32,7 @@
             if (typeof concepts === 'object') {
                 concepts = new Concepts(concepts);
             } else {
-                concepts = await Concepts.load(concepts);
+                concepts = await Concepts.load(concepts, relativeTo);
             }
         }
 
@@ -92,4 +97,4 @@ module.exports = Schema;
 
 const Concepts = require('./concepts');
 const SchemaShadow = require('./schema-shadow');
-const { error, metaData, required, loadJSON } = require('./util');
+const { error, metaData, required, loadJSONData } = require('./util');

@@ -115,7 +115,7 @@ class ConceptsShadow {
      * @returns {import('./concepts').VariablesData} Variables as key value
      * pairs.
      */
-    getAllVariables() { return this._variables(this.name, {}); }
+    getAllVariables() { return this._variables(this.name); }
     /**
      * Gets child concept node with given name. It returns `undefined` when no
      * child concept with given name exists.
@@ -192,7 +192,7 @@ class ConceptsShadow {
         while (Array.isArray(definition)) {
             if (definition.length != 1) {
                 throw error.Concepts_definition_is_not_valid__REASON(
-                    because => because.KEY_is_only_allowed_an_array_with_one_item(this.name)
+                    because => because.KEY_array_should_have_1_item__but_got_COUNT(this.name, definition.length)
                 );
             }
 
@@ -408,16 +408,22 @@ class ConceptsShadow {
 
     /**
      * @param {String} name
-     * @param {import('./concepts').VariablesData} result
      * 
      * @returns {import('./concepts').VariablesData}
      */
     _variables(
         name = required('name'),
-        result = required('result')
+        _result = {},
+        _trace = new Set()
     ) {
+        if (_trace.has(this)) {
+            return _result;
+        }
+
+        _trace.add(this);
+
         if (this.hasOnlyVariableLeafNode()) {
-            if (result.hasOwnProperty(this.#variable.name)) {
+            if (_result.hasOwnProperty(this.#variable.name)) {
                 throw error.Concepts_definition_is_not_valid__REASON(
                     because => because.CONCEPT_cannot_declare_VARIABLE_more_than_once(
                         name, this.#variable.name
@@ -425,14 +431,14 @@ class ConceptsShadow {
                 )
             }
 
-            result[this.#variable.name] = { name: this.#variable.name };
+            _result[this.#variable.name] = { name: this.#variable.name };
         } else {
             for (const literal of this.literals) {
-                literal._variables(name, result);
+                literal._variables(name, _result, _trace);
             }
         }
 
-        return result;
+        return _result;
     }
 }
 

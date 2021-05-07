@@ -4,7 +4,7 @@ const error = require('./error');
 const arrayify = require('./arrayify');
 const metaData = require('./meta-data');
 const { required, checkType } = require('./validation');
-const { loadJSON } = require('./load-json');
+const { loadJSON, loadJSONData } = require('./load-json');
 
 module.exports = {
     SpecialCharacters,
@@ -14,5 +14,6 @@ module.exports = {
     metaData,
     required,
     checkType,
-    loadJSON
+    loadJSON,
+    loadJSONData
 };

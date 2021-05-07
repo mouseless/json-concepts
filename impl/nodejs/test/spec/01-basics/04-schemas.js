@@ -118,13 +118,58 @@ describe('spec/basics/schemas', function () {
             await Schema.load('greeting.service.json')
                 .should.be.rejectedWith(error.Concepts_required_to_load_SCHEMA('greeting.service.json').message);
         });
+
+        it('should use base path of schema file when loading concepts from file', async function () {
+            fs({
+                'folder': {
+                    'service.concepts.json': JSON.stringify({
+                        "$service": {
+                            "$parameter": "$type",
+                            "response": "$responseType"
+                        }
+                    }),
+                    'greeting.service.json': JSON.stringify({
+                        "@concepts": "service.concepts.json",
+                        "sayHello": {
+                            "name": "string",
+                            "response": "string"
+                        }
+                    })
+                }
+            });
+
+            await Schema.load('folder/greeting.service.json').should.not.be.rejected;
+            await Concepts.load('service.concepts.json', 'folder/greeting.service.json').should.not.be.rejected;
+        });
+
+        it('should override concepts meta data when concepts path is given explicitly', async function () {
+            fs({
+                'folder': {
+                    'service.concepts.json': JSON.stringify({
+                        "$service": {
+                            "$parameter": "$type",
+                            "response": "$responseType"
+                        }
+                    }),
+                    'greeting.service.json': JSON.stringify({
+                        "@concepts": "wrong.concepts.json",
+                        "sayHello": {
+                            "name": "string",
+                            "response": "string"
+                        }
+                    })
+                }
+            });
+
+            await Schema.load('folder/greeting.service.json', 'folder/service.concepts.json').should.not.be.rejected;
+        });
     });
 
     describe('referring-to-a-remote-concepts-file', function () {
         after(async function () {
             nock.cleanAll();
         });
-        
+
         it('should validate', async function () {
             nock("http://test.com")
                 .get("/service.concepts.json")

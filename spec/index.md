@@ -72,3 +72,5 @@ reconsideration.
 | ** | any child | file path wildcard |
 | \ | escape | regular escape character |
 | _ | self or current | ?? |
+| & | and | bitwise and |
+| \| | or | bitwise or |

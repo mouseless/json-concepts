@@ -1,27 +1,19 @@
 class Macro {
     /**
-     * Recursively loads all included files and places them next to #include
-     * keys. This does not process `#include`s, only loads them from file or
-     * URL.
+     * Recursively loads definition file at path with all included files loaded
+     * and placed next to #include keys. This does not process `#include`s, only
+     * loads them from the specified file or URL.
      * 
-     * @param {Object} definition Definition object
+     * @param {String} definitionPath (Required) Path or URL to load definition from
+     * @param {String} relativeTo Path or URL to load definition relatively to
      * 
-     * @returns {Object} Definition object with includes loaded
+     * @returns {*} Definition object with `#include`s loaded
      */
-    static async include(definition = required('definition')) {
-        if (typeof definition !== 'object') {
-            return definition;
-        }
-
-        for (const key in definition) {
-            if (key == `${SC.MACRO}include` && typeof definition[key] === 'string') {
-                definition[key] = await loadJSON(definition[key]);
-            }
-
-            definition[key] = await Macro.include(definition[key]);
-        }
-
-        return definition;
+    static async load(
+        definitionPath = required('definitionPath'),
+        relativeTo
+    ) {
+        return _load(undefined, definitionPath, relativeTo);
     }
 
     /**
@@ -125,13 +117,12 @@ class Macro {
             const value = definition[key];
 
             if (_expressionIsMacro(value)) {
-                definition[key] = this._get(value);
-            } else if (Array.isArray(value) && value.every(item => _expressionIsMacro(item))) {
-                definition[key] = this._merge(value);
-            } else if (Array.isArray(value) && value.some(item => _expressionIsMacro(item))) {
-                throw error.Concepts_definition_is_not_valid__REASON(
-                    because => because.All_items_in_ARRAY_should_be_a_reference(value)
-                );
+                const references = _parse(value);
+                if (references.length == 1) {
+                    definition[key] = this._get(references[0]);
+                } else {
+                    definition[key] = this._merge(references);
+                }
             } else {
                 definition[key] = this._process(value);
             }
@@ -188,6 +179,35 @@ class Macro {
 }
 
 /**
+ * @param {String} path 
+ * @param {String} relativeTo 
+ * @param {*} definition 
+ * 
+ * @returns {*}
+ */
+async function _load(definition, path, relativeTo) {
+    if (!definition) {
+        const json = await loadJSON(path, relativeTo);
+        definition = json.data;
+        relativeTo = json.path;
+    }
+
+    if (typeof definition !== 'object') {
+        return definition;
+    }
+
+    for (const key in definition) {
+        if (key == `${SC.MACRO}include` && typeof definition[key] === 'string') {
+            definition[key] = await _load(undefined, definition[key], relativeTo);
+        } else {
+            definition[key] = await _load(definition[key], undefined, relativeTo);
+        }
+    }
+
+    return definition;
+}
+
+/**
  * @param {*} definition 
  * 
  * @returns {*}
@@ -218,6 +238,23 @@ function _include(definition) {
  */
 function _expressionIsMacro(expression) {
     return typeof expression === 'string' && expression.startsWith(SC.MACRO);
+}
+
+/**
+ * @param {String} expression 
+ * 
+ * @returns {Array.<String>}
+ */
+function _parse(expression) {
+    const result = expression.split(SC.AND).map(item => item.trim());
+
+    if (result.length > 0 && !result.every(item => _expressionIsMacro(item))) {
+        throw error.Concepts_definition_is_not_valid__REASON(
+            because => because.All_items_in_EXPRESSION_should_be_a_reference(expression)
+        );
+    }
+
+    return result;
 }
 
 /**

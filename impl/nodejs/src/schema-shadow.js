@@ -116,8 +116,15 @@ class SchemaShadow {
      */
     _build(
         conceptsShadow = required('conceptsShadow'),
-        definition
+        definition,
+        _trace = new Set()
     ) {
+        if (_trace.has(conceptsShadow)) {
+            return;
+        }
+
+        _trace.add(conceptsShadow);
+
         if (conceptsShadow.hasOnlyVariableLeafNode()) {
             const shadow = new SchemaShadow(conceptsShadow.variable).build(definition);
             this.#variables[conceptsShadow.variable.name] = shadow;
@@ -141,11 +148,11 @@ class SchemaShadow {
 
         for (const literal of conceptsShadow.literals) {
             if (schemaKeys[literal.name]) {
-                this._build(literal, definition[literal.name]);
+                this._build(literal, definition[literal.name], _trace);
 
                 delete schemaKeys[literal.name];
             } else {
-                this._build(literal, null);
+                this._build(literal, null, _trace);
             }
         }
 

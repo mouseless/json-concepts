@@ -77,6 +77,30 @@ describe('spec/references/defining-a-reference', function () {
         });
     });
 
+    it('should allow macros in object arrays', function () {
+        const concepts = new Concepts({
+            "classes": [{
+                "name": "$name",
+                "properties": "#properties"
+            }],
+            "#properties": [{
+                "name": "$name",
+                "type": "$type"
+            }]
+        });
+
+        concepts.definition.should.deep.equal({
+            "classes": [{
+                "name": "$name",
+                "properties": [{
+                    "name": "$name",
+                    "type": "$type"
+                }]
+            }]
+        });
+    });
+
+
     it('should give error when a reference does not exist', function () {
         (() => new Concepts({
             "$concept": "#wrong"

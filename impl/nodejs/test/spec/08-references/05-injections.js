@@ -62,6 +62,38 @@ describe('spec/references/injections', function () {
         });
     });
 
+    it('include should stop when it hits a recursion', function () {
+        (() => new Concepts({
+            "root": "#recursion",
+            "#recursion": {
+                "recursion": "#recursion"
+            },
+            "#inject": {
+                "@path": "/"
+            }
+        })).should.not.throw();
+    });
+
+    it('should inject to object arrays', function () {
+        const concepts = new Concepts({
+            "$class+": {
+                "properties": [{}]
+            },
+            "#inject": {
+                "return": "$returnType",
+                "@path": "/**/properties"
+            }
+        });
+
+        concepts.definition.should.deep.equal({
+            "$class+": {
+                "properties": [{
+                    "return": "$returnType"
+                }]
+            }
+        });
+    });
+
     describe('multiple paths', function () {
         it('should inject to all paths', function () {
             const concepts = new Concepts({

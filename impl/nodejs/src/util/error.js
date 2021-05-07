@@ -45,8 +45,8 @@ const InvalidConceptsReasons = {
         (CONCEPT, TYPE, ROOT) => TYPE === ROOT
             ? InvalidConceptsReasons.CONCEPT_cannot_be_TYPE__only_string_allowed(CONCEPT, TYPE)
             : `'${CONCEPT}' cannot be '${TYPE}', only string is allowed but '${TYPE}' is '${ROOT}'`,
-    KEY_is_only_allowed_an_array_with_one_item:
-        (KEY) => `'${KEY}' is only allowed an array with one item`,
+    KEY_array_should_have_1_item__but_got_COUNT:
+        (KEY, COUNT) => `'${KEY}' array should have 1 item, but got ${COUNT}`,
     Expected_a_variable__but_got_a_literal__EXPRESSION:
         (EXPRESSION) => `Expected a variable, but got a literal: '${EXPRESSION}'`,
     Cannot_declare_CONCEPT_more_than_once:
@@ -56,8 +56,8 @@ const InvalidConceptsReasons = {
         (EXPRESSION) => `Reference '"#": ${JSON.stringify(EXPRESSION)}' must have a name`,
     REFERENCE_should_be_defined_at_the_root:
         (REFERENCE) => `${REFERENCE} should be defined at the root`,
-    All_items_in_ARRAY_should_be_a_reference:
-        (ARRAY) => `All items in '${JSON.stringify(ARRAY)}' should be a reference`,
+    All_items_in_EXPRESSION_should_be_a_reference:
+        (EXPRESSION) => `All items in '${EXPRESSION}' should be a reference`,
     Cannot_merge_a_non_object_reference__REFERENCE:
         (REFERENCE) => `Cannot merge a non-object reference: '${REFERENCE}'`,
     Cannot_merge_REFERENCES__conflict_occurs_on_KEY:

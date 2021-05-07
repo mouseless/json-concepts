@@ -34,10 +34,21 @@ function find(target, pathOrPaths) {
 function _index(
     object = required('object'),
     _result = {},
-    _base = ''
+    _base = '',
+    _trace = new Set()
 ) {
+    if (_trace.has(object)) {
+        return _result;
+    }
+
+    _trace.add(object);
+
     if (typeof object !== 'object') {
         return _result;
+    }
+
+    if (Array.isArray(object) && object.length > 0) {
+        object = object[0];
     }
 
     _result[_base] = object;
@@ -45,7 +56,7 @@ function _index(
     for (const key in object) {
         const name = Expression.parseName(key);
 
-        _index(object[key], _result, _base + '/' + name);
+        _index(object[key], _result, _base + '/' + name, _trace);
     }
 
     return _result;

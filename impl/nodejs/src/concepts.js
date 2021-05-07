@@ -23,12 +23,16 @@
      * Loads concepts from given path.
      * 
      * @async
-     * @param {String} path (Required) File path or URL to load concepts from
+     * @param {String} path (Required) Path or URL to load concepts from
+     * @param {String} relativeTo Path or URL to load concepts relatively to
      * 
      * @returns {Promise<Concepts>} Concepts at given path
      */
-    static async load(path = required('path')) {
-        const definition = await Macro.include(await loadJSON(path));
+    static async load(
+        path = required('path'),
+        relativeTo
+    ) {
+        const definition = await Macro.load(path, relativeTo);
 
         try {
             return new Concepts(definition);
@@ -127,9 +131,7 @@
      * @returns {Promise<Schema>} Schema at path
      */
     async load(path = required('path')) {
-        const definition = await loadJSON(path);
-
-        return this.create(definition);
+        return Schema.load(path, this);
     }
 
     /**
@@ -161,7 +163,10 @@
     /**
      * @param {ConceptsShadow} shadow
      */
-    _build(shadow, _trace = new Set()) {
+    _build(
+        shadow,
+        _trace = new Set()
+    ) {
         if (_trace.has(shadow)) {
             return;
         }
@@ -184,4 +189,4 @@ const Schema = require('./schema');
 const ConceptsShadow = require('./concepts-shadow');
 const Macro = require('./macro');
 const { createTypes } = require('./types');
-const { SpecialCharacters: SC, error, metaData, required, loadJSON } = require('./util');
+const { SpecialCharacters: SC, error, metaData, required } = require('./util');

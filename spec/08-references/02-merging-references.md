@@ -1,13 +1,13 @@
 # Merge References
 
-Below `#properties` and `#methods` references are declared in an array, which
-means that they will be merged in the order they appeared.
+References can be merged using `&`. Below example merges `#properties` and
+`#methods` under `$class` concept;
 
 `CONCEPTS 1: class.concepts.json`
 
 ```json
 {
-    "$class+": [ "#properties", "#methods" ],
+    "$class+": "#properties & #methods",
     "#properties": {
         "$property*": "$type"
     },
@@ -20,7 +20,8 @@ means that they will be merged in the order they appeared.
 }
 ```
 
-Below is an equivalent concepts definition;
+Merge operation is done in the order references appear in definition. Below is
+an equivalent concepts definition;
 
 `CONCEPTS 2: class.concepts.json`
 
@@ -35,3 +36,5 @@ Below is an equivalent concepts definition;
     }
 }
 ```
+
+> Any number of references can be merged, e.g. `#a & #b & #c`

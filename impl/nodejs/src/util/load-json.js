@@ -1,18 +1,53 @@
 /**
- * Loads json file in given path
+ * @typedef {Object} JSONData
+ * @property {String} path
+ * @property {*} data
+ */
+
+/**
+ * Loads json file at given path. If `relativeTo` is given and if `path` is a
+ * relative path, then file is loaded from a path relative to the value of
+ * `relativeTo`.
  * 
  * @async
- * @param {String} path Path or URL to load json from
+ * @param {String} path (Required) Path or URL to load json from
+ * @param {String} relativeTo Path or URL to load file relatively to
  * 
- * @returns {Promise<Object>} Loaded object
+ * @returns {Promise.<JSONData>} Path or URL of file and its data
  */
-async function loadJSON(path = required('path')) {
+async function loadJSON(
+    path = required('path'),
+    relativeTo
+) {
     checkType(path, 'string');
 
-    let json = '';
+    if (relativeTo && !_isURL(path) && !p.isAbsolute(path)) {
+        if (_isURL(relativeTo)) {
+            path = new URL(path, relativeTo).toString();
+        } else {
+            path = p.resolve(p.dirname(relativeTo), path);
+        }
+    }
 
-    if (path.startsWith('http://') ||
-        path.startsWith('https://')) {
+    return {
+        path: path,
+        data: await loadJSONData(path)
+    };
+};
+
+/**
+ * Loads json file at given path.
+ * 
+ * @async
+ * @param {String} path (Required) Path or URL to load json from
+ * 
+ * @returns {Promise.<Object>} Loaded object
+ */
+async function loadJSONData(path = required('path')) {
+    checkType(path, 'string');
+
+    let json;
+    if (_isURL(path)) {
         try {
             json = await _get(path);
         } catch {
@@ -31,8 +66,23 @@ async function loadJSON(path = required('path')) {
     } catch {
         throw error.FILE_is_not_a_valid_json(path);
     }
-};
+}
 
+/**
+ * @param {*} url 
+ * 
+ * @returns 
+ */
+function _isURL(path) {
+    return path.startsWith('http://') || path.startsWith('https://');
+}
+
+/**
+ * 
+ * @param {String} url 
+ * 
+ * @returns  {Promise.<Object>}
+ */
 async function _get(url) {
     return new Promise((resolve, reject) => {
         const make = url.startsWith("https") ? https : http;
@@ -57,9 +107,11 @@ function _is2xx(statusCode) {
 }
 
 module.exports = {
-    loadJSON
+    loadJSON,
+    loadJSONData
 };
 
+const p = require('path');
 const fs = require('fs');
 const http = require('http');
 const https = require('https');

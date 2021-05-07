@@ -6,12 +6,12 @@ should();
 describe('spec/references/nested-references', function () {
     it('should process references within references', function () {
         const concepts = new Concepts({
-            "$class+": ["#properties", "#methods"],
+            "$class+": "#properties & #methods",
             "#properties": {
                 "$property*": "$type"
             },
             "#methods": {
-                "$method*": ["#parameters", "#return"]
+                "$method*": "#parameters & #return"
             },
             "#parameters": {
                 "$parameter*": "$type"
@@ -103,12 +103,30 @@ describe('spec/references/nested-references', function () {
         });
 
         it('should handle double self-reference', function () {
-            (() => new Concepts({
+            let concepts;
+
+            (() => concepts = new Concepts({
                 "$root": "#node",
                 "#node": {
                     "$node1*": "#node",
                     "$node2*": "#node"
                 }
+            })).should.not.throw();
+
+            (() => concepts.create({
+                "root": {}
+            })).should.not.throw();
+
+            (() => concepts = new Concepts({
+                "root": "#node",
+                "#node": {
+                    "a?": "#node",
+                    "b?": "#node"
+                }
+            })).should.not.throw();
+
+            (() => concepts.create({
+                "root": {}
             })).should.not.throw();
         });
     });
