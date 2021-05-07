@@ -1,4 +1,4 @@
-const { Concepts } = require('../../..');
+const { Concepts, Schema } = require('../../..');
 const { error } = require('../../../src/util');
 const { should } = require('chai');
 
@@ -40,7 +40,7 @@ describe('spec/arrays/object-arrays', function () {
         });
     });
 
-    it('should give error when array definition does not exist', function () {
+    it('should give error when array does not have a definition', function () {
         (() => new Concepts({
             "array": []
         })).should.throw(
@@ -53,13 +53,7 @@ describe('spec/arrays/object-arrays', function () {
 
         (() => new Concepts({
             "array": [{}]
-        })).should.throw(
-            error.Concepts_definition_is_not_valid__REASON(
-                because => because.ARRAY_should_have_a_definition(
-                    'array'
-                )
-            ).message
-        );
+        })).should.not.throw();
     });
 
     describe('schema', function () {

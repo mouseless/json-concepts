@@ -75,7 +75,23 @@ describe('spec/references/injections', function () {
     });
 
     it('should inject to object arrays', function () {
-        throw new Error('not implemented');
+        const concepts = new Concepts({
+            "$class+": {
+                "properties": [{}]
+            },
+            "#inject": {
+                "return": "$returnType",
+                "@path": "/**/properties"
+            }
+        });
+
+        concepts.definition.should.deep.equal({
+            "$class+": {
+                "properties": [{
+                    "return": "$returnType"
+                }]
+            }
+        });
     });
 
     describe('multiple paths', function () {

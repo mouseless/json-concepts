@@ -47,6 +47,10 @@ function _index(
         return _result;
     }
 
+    if (Array.isArray(object) && object.length > 0) {
+        object = object[0];
+    }
+
     _result[_base] = object;
 
     for (const key in object) {

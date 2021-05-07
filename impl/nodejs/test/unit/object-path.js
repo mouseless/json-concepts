@@ -1,4 +1,7 @@
 const OP = require('../../src/object-path');
+const { should } = require('chai');
+
+should();
 
 describe('object-path#find', function () {
     it('should accept empty path', function () {
@@ -76,5 +79,15 @@ describe('object-path#find', function () {
         root.root = root;
 
         (() => OP.find(root, "/root")).should.not.throw();
-    })
+    });
+
+    it('should include arrays', function () {
+        OP.find({ "level1": [{ "level2": { "level3": {} } }] }, "/**")
+            .should.deep.equal([
+                { "level1": [{ "level2": { "level3": {} } }] },
+                { "level2": { "level3": {} } },
+                { "level3": {} },
+                {},
+            ]);
+    });
 });

@@ -196,12 +196,6 @@ class ConceptsShadow {
                 );
             }
 
-            if (!Object.keys(definition[0]).length) {
-                throw error.Concepts_definition_is_not_valid__REASON(
-                    because => because.ARRAY_should_have_a_definition(this.name)
-                );
-            }
-
             definition = definition[0];
         }
 
