@@ -65,7 +65,7 @@ describe('#loadJSON', async function () {
             .should.be.rejectedWith(error.Cannot_load_URL('http://test.com/expected.json').message);
     });
 
-    it('should give error when local file does not exists', async function () {
+    it('should give error when local file does not exist', async function () {
         fs({
             //empty directory
         });
@@ -77,5 +77,91 @@ describe('#loadJSON', async function () {
     it('should give error when given path is not a string', async function () {
         await loadJSON({ test: 'expected' })
             .should.be.rejectedWith(error.Expected_type_was_EXPECTED_got_ACTUAL('string', 'object').message);
+    });
+
+    describe('absolute paths', function () {
+        before(function () {
+            fs({
+                '/absolute/test.json': "{}"
+            });
+        });
+
+        [
+            { path: '/absolute/test.json', relativeTo: 'other.json' },
+            { path: '/absolute/test.json', relativeTo: '/other/absolute/other.json' },
+            { path: '/absolute/test.json', relativeTo: 'http://test.com/path/other.json' },
+        ].forEach(item =>
+            it(`should load '${item.path}' relative to '${item.relativeTo}'`, async function () {
+                await loadJSON(item.path, item.relativeTo).should.not.be.rejected;
+            })
+        );
+    });
+
+    describe('relative paths', function () {
+        before(function () {
+            fs({
+                '/absolute/test.json': "{}",
+                'relative/test.json': "{}"
+            });
+        });
+
+        [
+            // /absolute/test.json
+            { path: 'test.json', relativeTo: '/absolute/other.json' },
+            { path: 'absolute/test.json', relativeTo: '/other.json' },
+            { path: '../test.json', relativeTo: '/absolute/subfolder/other.json' },
+            
+            // relative/test.json
+            { path: 'test.json', relativeTo: 'relative/other.json' },
+            { path: 'relative/test.json', relativeTo: 'other.json' },
+            { path: '../test.json', relativeTo: 'relative/sub/other.json' },
+            { path: '../../relative/test.json', relativeTo: 'other/relative/other.json' }
+        ].forEach(item =>
+            it(`should load '${item.path}' relative to '${item.relativeTo}'`, async function () {
+                await loadJSON(item.path, item.relativeTo).should.not.be.rejected;
+            })
+        );
+    });
+
+    describe('absolute urls', function () {
+        beforeEach(function () {
+            nock('http://test.com')
+                .get('/path/test.json')
+                .reply(200, {
+                    'test': 'expected'
+                });
+        });
+
+        [
+            { path: 'http://test.com/path/test.json', relativeTo: 'other.json' },
+            { path: 'http://test.com/path/test.json', relativeTo: '/other/absolute/other.json' },
+            { path: 'http://test.com/path/test.json', relativeTo: 'http://test.com/path/other.json' }
+        ].forEach(item =>
+            it(`should load '${item.path}' relative to '${item.relativeTo}'`, async function () {
+                await loadJSON(item.path, item.relativeTo).should.not.be.rejected;
+            })
+        );
+    });
+
+    describe('relative urls', function () {
+        beforeEach(function () {
+            nock('http://test.com')
+                .get('/path/test.json')
+                .reply(200, {
+                    'test': 'expected'
+                });
+        });
+
+        [
+            // http://test.com/path/test.json
+            { path: 'test.json', relativeTo: 'http://test.com/path/other.json' },
+            { path: 'path/test.json', relativeTo: 'http://test.com/other.json' },
+            { path: '../test.json', relativeTo: 'http://test.com/path/sub/other.json' },
+            { path: '../../path/test.json', relativeTo: 'http://test.com/other/path/other.json' }
+        ].forEach(item =>
+            it(`should load '${item.path}' relative to '${item.relativeTo}'`, async function () {
+                await loadJSON(item.path, item.relativeTo).should.not.be.rejected;
+            })
+        );
     });
 });

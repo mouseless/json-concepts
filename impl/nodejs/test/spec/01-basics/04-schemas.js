@@ -82,10 +82,6 @@ describe('spec/basics/schemas', function () {
             );
     });
 
-    it('should use base path of schema file when loading concepts from file', function () {
-        throw new Error('not implemented');
-    });
-
     describe('self-validating schema', function () {
         it('should validate', async function () {
             fs({
@@ -121,6 +117,29 @@ describe('spec/basics/schemas', function () {
 
             await Schema.load('greeting.service.json')
                 .should.be.rejectedWith(error.Concepts_required_to_load_SCHEMA('greeting.service.json').message);
+        });
+
+        it('should use base path of schema file when loading concepts from file', async function () {
+            fs({
+                'folder': {
+                    'service.concepts.json': JSON.stringify({
+                        "$service": {
+                            "$parameter": "$type",
+                            "response": "$responseType"
+                        }
+                    }),
+                    'greeting.service.json': JSON.stringify({
+                        "@concepts": "service.concepts.json",
+                        "sayHello": {
+                            "name": "string",
+                            "response": "string"
+                        }
+                    })
+                }
+            });
+
+            await Schema.load('folder/greeting.service.json').should.not.be.rejected;
+            await Concepts.load('service.concepts.json', 'folder/greeting.service.json').should.not.be.rejected;
         });
     });
 

@@ -23,12 +23,16 @@
      * Loads concepts from given path.
      * 
      * @async
-     * @param {String} path (Required) File path or URL to load concepts from
+     * @param {String} path (Required) Path or URL to load concepts from
+     * @param {String} relativeTo Path or URL to load concepts relatively to
      * 
      * @returns {Promise<Concepts>} Concepts at given path
      */
-    static async load(path = required('path')) {
-        const definition = await Macro.include(await loadJSON(path));
+    static async load(
+        path = required('path'),
+        relativeTo
+    ) {
+        const definition = await Macro.include(await loadJSON(path, relativeTo));
 
         try {
             return new Concepts(definition);

@@ -3,7 +3,7 @@
      * Loads schema from given path.
      * 
      * @async
-     * @param {String} path (Required) File path or URL to load schema from
+     * @param {String} path (Required) Path or URL to load schema from
      * @param {String|Object|Concepts} concepts Concepts of schema to be
      * loaded. This is not required when loaded schema contains concepts
      * meta-data. Otherwise it is required.
@@ -27,7 +27,7 @@
             if (typeof concepts === 'object') {
                 concepts = new Concepts(concepts);
             } else {
-                concepts = await Concepts.load(concepts);
+                concepts = await Concepts.load(concepts, path);
             }
         }
 
