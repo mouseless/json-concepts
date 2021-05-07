@@ -54,7 +54,6 @@
                 },
                 "responses": {
                     "$response:response+": {
-                        "description": "$description",
                         "headers?": {
                             "$header+": "#parameterLike"
                         },
@@ -92,14 +91,9 @@
             "$requiredFields"
         ],
         "properties?": {
-            "$property*": {
-                "type": "$type:string",
-                "format?": "$format:string"
-            }
+            "$property*": "#schema"
         },
-        "items?": {
-            "type?": "$type:string"
-        }
+        "items?": "#schema"
     },
     "#inject": [
         {
@@ -117,7 +111,8 @@
                 "/**/$path",
                 "/**/$externalDocs",
                 "/**/$operation",
-                "/**/$requestBody"
+                "/**/$requestBody",
+                "/**/$response"
             ]
         }
     ],

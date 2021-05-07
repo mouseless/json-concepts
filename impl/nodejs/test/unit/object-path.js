@@ -70,4 +70,11 @@ describe('object-path#find', function () {
                 {}
             ]);
     });
+
+    it('should avoid circular objects', function () {
+        const root = { "root": {} };
+        root.root = root;
+
+        (() => OP.find(root, "/root")).should.not.throw();
+    })
 });

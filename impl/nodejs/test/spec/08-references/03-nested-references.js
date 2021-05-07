@@ -103,31 +103,31 @@ describe('spec/references/nested-references', function () {
         });
 
         it('should handle double self-reference', function () {
-            (() => new Concepts({
+            let concepts;
+
+            (() => concepts = new Concepts({
                 "$root": "#node",
                 "#node": {
                     "$node1*": "#node",
                     "$node2*": "#node"
                 }
             })).should.not.throw();
-        });
 
-        it('open-api challenge bug', function () {
-            const definition = {
-                "#schema": {
-                    "type?": "$schemaType:string",
-                    "format?": "$schemaFormat:string",
-                    "required?": [
-                        "$requiredFields"
-                    ],
-                    "properties?": {
-                        "$property*": "#schema"
-                    },
-                    "items?": {}
+            (() => concepts.create({
+                "root": {}
+            })).should.not.throw();
+
+            (() => concepts = new Concepts({
+                "root": "#node",
+                "#node": {
+                    "a?": "#node",
+                    "b?": "#node"
                 }
-            };
+            })).should.not.throw();
 
-            throw new Error('not implemented');
+            (() => concepts.create({
+                "root": {}
+            })).should.not.throw();
         });
     });
 

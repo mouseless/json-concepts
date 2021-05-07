@@ -62,6 +62,18 @@ describe('spec/references/injections', function () {
         });
     });
 
+    it('include should stop when it hits a recursion', function () {
+        (() => new Concepts({
+            "root": "#recursion",
+            "#recursion": {
+                "recursion": "#recursion"
+            },
+            "#inject": {
+                "@path": "/"
+            }
+        })).should.not.throw();
+    });
+
     it('should inject to object arrays', function () {
         throw new Error('not implemented');
     });

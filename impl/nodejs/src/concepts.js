@@ -163,7 +163,10 @@
     /**
      * @param {ConceptsShadow} shadow
      */
-    _build(shadow, _trace = new Set()) {
+    _build(
+        shadow,
+        _trace = new Set()
+    ) {
         if (_trace.has(shadow)) {
             return;
         }
