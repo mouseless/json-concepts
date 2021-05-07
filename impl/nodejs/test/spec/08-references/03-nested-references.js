@@ -111,6 +111,24 @@ describe('spec/references/nested-references', function () {
                 }
             })).should.not.throw();
         });
+
+        it('open-api challenge bug', function () {
+            const definition = {
+                "#schema": {
+                    "type?": "$schemaType:string",
+                    "format?": "$schemaFormat:string",
+                    "required?": [
+                        "$requiredFields"
+                    ],
+                    "properties?": {
+                        "$property*": "#schema"
+                    },
+                    "items?": {}
+                }
+            };
+
+            throw new Error('not implemented');
+        });
     });
 
     describe('indirect recursion', function () {

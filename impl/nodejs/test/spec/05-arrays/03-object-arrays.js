@@ -40,6 +40,30 @@ describe('spec/arrays/object-arrays', function () {
         });
     });
 
+    it('should give error when array definition does not exist', function () {
+        const definition =
+        {
+            "openapi": "$spec-version:version",
+            "info": {
+                "version": "$version:version",
+                "title": "$title",
+                "license?": {
+                    "name": "$license-name",
+                    "url?": "$license-url:url"
+                }
+            },
+            "servers?": [
+                {}
+            ],
+            "@types": {
+                "version": "^[0-9]+\\.[0-9]+(\\.[0-9]){0,1}$",
+                "url": "http[s]?:\\/\\/.*"
+            }
+        };
+
+        throw new Error('not implemented');
+    });
+
     describe('schema', function () {
         it('should validate object arrays', function () {
             const concepts = new Concepts({
