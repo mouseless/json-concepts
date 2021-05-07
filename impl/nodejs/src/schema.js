@@ -16,8 +16,13 @@
     ) {
         const definition = await loadJSONData(path);
 
-        concepts = concepts ||
-            metaData.read(definition, 'concepts', /* burnAfterReading */ true);
+        let relativeTo;
+        if (!concepts) {
+            concepts = metaData.read(definition, 'concepts', /* burnAfterReading */ true);
+            relativeTo = path;
+        } else {
+            metaData.burn(definition, 'concepts')
+        }
 
         if (concepts === null) {
             throw error.Concepts_required_to_load_SCHEMA(path);
@@ -27,7 +32,7 @@
             if (typeof concepts === 'object') {
                 concepts = new Concepts(concepts);
             } else {
-                concepts = await Concepts.load(concepts, path);
+                concepts = await Concepts.load(concepts, relativeTo);
             }
         }
 

@@ -192,7 +192,13 @@ class ConceptsShadow {
         while (Array.isArray(definition)) {
             if (definition.length != 1) {
                 throw error.Concepts_definition_is_not_valid__REASON(
-                    because => because.KEY_is_only_allowed_an_array_with_one_item(this.name)
+                    because => because.KEY_array_should_have_1_item__but_got_COUNT(this.name, definition.length)
+                );
+            }
+
+            if (!Object.keys(definition[0]).length) {
+                throw error.Concepts_definition_is_not_valid__REASON(
+                    because => because.ARRAY_should_have_a_definition(this.name)
                 );
             }
 

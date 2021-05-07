@@ -35,8 +35,8 @@ describe('spec/arrays/declaring-an-array', function () {
             }
         })).should.throw(
             error.Concepts_definition_is_not_valid__REASON(
-                because => because.KEY_is_only_allowed_an_array_with_one_item(
-                    'tags'
+                because => because.KEY_array_should_have_1_item__but_got_COUNT(
+                    'tags', 2
                 )
             ).message
         );
@@ -251,8 +251,8 @@ describe('spec/arrays/declaring-an-array', function () {
                 "$matrix*": [["$value", "not allowed"]]
             })).should.throw(
                 error.Concepts_definition_is_not_valid__REASON(
-                    because => because.KEY_is_only_allowed_an_array_with_one_item(
-                        'matrix'
+                    because => because.KEY_array_should_have_1_item__but_got_COUNT(
+                        'matrix', 2
                     )
                 ).message
             );
@@ -261,8 +261,8 @@ describe('spec/arrays/declaring-an-array', function () {
                 "$matrix*": [["$value"], ["not allowed"]]
             })).should.throw(
                 error.Concepts_definition_is_not_valid__REASON(
-                    because => because.KEY_is_only_allowed_an_array_with_one_item(
-                        'matrix'
+                    because => because.KEY_array_should_have_1_item__but_got_COUNT(
+                        'matrix', 2
                     )
                 ).message
             );

@@ -141,6 +141,28 @@ describe('spec/basics/schemas', function () {
             await Schema.load('folder/greeting.service.json').should.not.be.rejected;
             await Concepts.load('service.concepts.json', 'folder/greeting.service.json').should.not.be.rejected;
         });
+
+        it('should override concepts meta data when concepts path is given explicitly', async function () {
+            fs({
+                'folder': {
+                    'service.concepts.json': JSON.stringify({
+                        "$service": {
+                            "$parameter": "$type",
+                            "response": "$responseType"
+                        }
+                    }),
+                    'greeting.service.json': JSON.stringify({
+                        "@concepts": "wrong.concepts.json",
+                        "sayHello": {
+                            "name": "string",
+                            "response": "string"
+                        }
+                    })
+                }
+            });
+
+            await Schema.load('folder/greeting.service.json', 'folder/service.concepts.json').should.not.be.rejected;
+        });
     });
 
     describe('referring-to-a-remote-concepts-file', function () {

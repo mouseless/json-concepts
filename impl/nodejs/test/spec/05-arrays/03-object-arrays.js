@@ -41,27 +41,25 @@ describe('spec/arrays/object-arrays', function () {
     });
 
     it('should give error when array definition does not exist', function () {
-        const definition =
-        {
-            "openapi": "$spec-version:version",
-            "info": {
-                "version": "$version:version",
-                "title": "$title",
-                "license?": {
-                    "name": "$license-name",
-                    "url?": "$license-url:url"
-                }
-            },
-            "servers?": [
-                {}
-            ],
-            "@types": {
-                "version": "^[0-9]+\\.[0-9]+(\\.[0-9]){0,1}$",
-                "url": "http[s]?:\\/\\/.*"
-            }
-        };
+        (() => new Concepts({
+            "array": []
+        })).should.throw(
+            error.Concepts_definition_is_not_valid__REASON(
+                because => because.KEY_array_should_have_1_item__but_got_COUNT(
+                    'array', 0
+                )
+            ).message
+        );
 
-        throw new Error('not implemented');
+        (() => new Concepts({
+            "array": [{}]
+        })).should.throw(
+            error.Concepts_definition_is_not_valid__REASON(
+                because => because.ARRAY_should_have_a_definition(
+                    'array'
+                )
+            ).message
+        );
     });
 
     describe('schema', function () {

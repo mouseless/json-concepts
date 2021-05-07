@@ -45,8 +45,9 @@ const InvalidConceptsReasons = {
         (CONCEPT, TYPE, ROOT) => TYPE === ROOT
             ? InvalidConceptsReasons.CONCEPT_cannot_be_TYPE__only_string_allowed(CONCEPT, TYPE)
             : `'${CONCEPT}' cannot be '${TYPE}', only string is allowed but '${TYPE}' is '${ROOT}'`,
-    KEY_is_only_allowed_an_array_with_one_item:
-        (KEY) => `'${KEY}' is only allowed an array with one item`,
+    KEY_array_should_have_1_item__but_got_COUNT:
+        (KEY, COUNT) => `'${KEY}' array should have 1 item, but got ${COUNT}`,
+    ARRAY_should_have_a_definition: (ARRAY) => `'${ARRAY}' should have a definition`,
     Expected_a_variable__but_got_a_literal__EXPRESSION:
         (EXPRESSION) => `Expected a variable, but got a literal: '${EXPRESSION}'`,
     Cannot_declare_CONCEPT_more_than_once:

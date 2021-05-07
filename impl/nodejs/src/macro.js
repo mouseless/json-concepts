@@ -118,7 +118,7 @@ class Macro {
 
             if (_expressionIsMacro(value)) {
                 definition[key] = this._get(value);
-            } else if (Array.isArray(value) && value.every(item => _expressionIsMacro(item))) {
+            } else if (Array.isArray(value) && value.every(item => _expressionIsMacro(item)) && value.length > 0) {
                 definition[key] = this._merge(value);
             } else if (Array.isArray(value) && value.some(item => _expressionIsMacro(item))) {
                 throw error.Concepts_definition_is_not_valid__REASON(

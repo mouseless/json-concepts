@@ -10,7 +10,7 @@ function exists(
     obj = required('obj'),
     name = required('name')
 ) {
-    return obj.hasOwnProperty(`${SC.META_DATA}${name}`);
+    return obj[_key(name)];
 }
 
 /**
@@ -32,19 +32,36 @@ function read(
         return null;
     }
 
-    const metaDataKey = `${SC.META_DATA}${name}`;
-    const result = obj[metaDataKey];
+    const result = obj[_key(name)];
 
     if (burnAfterReading) {
-        delete obj[metaDataKey];
+        burn(obj, name);
     }
 
     return result;
 };
 
+/**
+ * Deletes meta-data from object.
+ * 
+ * @param {Object} obj (Required) Object to delete meta-data from
+ * @param {String} name (Required) Name of the meta-data to delete
+ */
+function burn(
+    obj = required('obj'),
+    name = required('name')
+) {
+    delete obj[_key(name)];
+}
+
+function _key(name = required('name')) {
+    return `${SC.META_DATA}${name}`;
+}
+
 module.exports = {
     exists,
-    read
+    read,
+    burn
 };
 
 const SC = require('./special-characters');
