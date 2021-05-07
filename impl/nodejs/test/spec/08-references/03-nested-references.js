@@ -6,12 +6,12 @@ should();
 describe('spec/references/nested-references', function () {
     it('should process references within references', function () {
         const concepts = new Concepts({
-            "$class+": ["#properties", "#methods"],
+            "$class+": "#properties & #methods",
             "#properties": {
                 "$property*": "$type"
             },
             "#methods": {
-                "$method*": ["#parameters", "#return"]
+                "$method*": "#parameters & #return"
             },
             "#parameters": {
                 "$parameter*": "$type"

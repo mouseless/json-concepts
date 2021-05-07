@@ -57,8 +57,8 @@ const InvalidConceptsReasons = {
         (EXPRESSION) => `Reference '"#": ${JSON.stringify(EXPRESSION)}' must have a name`,
     REFERENCE_should_be_defined_at_the_root:
         (REFERENCE) => `${REFERENCE} should be defined at the root`,
-    All_items_in_ARRAY_should_be_a_reference:
-        (ARRAY) => `All items in '${JSON.stringify(ARRAY)}' should be a reference`,
+    All_items_in_EXPRESSION_should_be_a_reference:
+        (EXPRESSION) => `All items in '${EXPRESSION}' should be a reference`,
     Cannot_merge_a_non_object_reference__REFERENCE:
         (REFERENCE) => `Cannot merge a non-object reference: '${REFERENCE}'`,
     Cannot_merge_REFERENCES__conflict_occurs_on_KEY:

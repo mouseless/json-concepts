@@ -7,7 +7,7 @@ should();
 describe('spec/references/merging-references', function () {
     it('should merge multiple references', function () {
         const concepts = new Concepts({
-            "$class+": ["#properties", "#methods"],
+            "$class+": "#properties & #methods",
             "#properties": {
                 "$property*": "$type"
             },
@@ -30,16 +30,16 @@ describe('spec/references/merging-references', function () {
         });
     });
 
-    it('should give error when an array does not have a non-macro item', function () {
+    it('should give error when not all items in expression is a reference', function () {
         (() => new Concepts({
-            "$class+": ["#properties", "$methods"],
+            "$class+": "#properties & $methods",
             "#properties": {
                 "$property*": "$type"
             }
         })).should.throw(
             error.Concepts_definition_is_not_valid__REASON(
-                because => because.All_items_in_ARRAY_should_be_a_reference(
-                    ["#properties", "$methods"]
+                because => because.All_items_in_EXPRESSION_should_be_a_reference(
+                    "#properties & $methods"
                 )
             ).message
         );
@@ -47,7 +47,7 @@ describe('spec/references/merging-references', function () {
 
     it('should give error when one of the references not refer to an object', function () {
         (() => new Concepts({
-            "$class+": ["#properties", "#methods"],
+            "$class+": "#properties & #methods",
             "#properties": {
                 "$property*": "$type"
             },
@@ -61,32 +61,9 @@ describe('spec/references/merging-references', function () {
         );
     });
 
-    it('should allow macros in object arrays', function () {
-        const concepts = new Concepts({
-            "classes": [{
-                "name": "$name",
-                "properties": "#properties"
-            }],
-            "#properties": [{
-                "name": "$name",
-                "type": "$type"
-            }]
-        });
-
-        concepts.definition.should.deep.equal({
-            "classes": [{
-                "name": "$name",
-                "properties": [{
-                    "name": "$name",
-                    "type": "$type"
-                }]
-            }]
-        });
-    });
-
     it('should give error when conflict occurs during merge', function () {
         (() => new Concepts({
-            "$class+": ["#properties", "#methods"],
+            "$class+": "#properties & #methods",
             "#properties": {
                 "$property*": "$type"
             },
@@ -101,8 +78,29 @@ describe('spec/references/merging-references', function () {
             ).message
         );
     });
+    
+    it('should merge references in object arrays', function () {
+        const concepts = new Concepts({
+            "classes": [ "#properties & #methods" ],
+            "#properties": {
+                "$property*": "$type"
+            },
+            "#methods": {
+                "$method*": {
+                    "$parameter*": "$type",
+                    "returns": "$type"
+                }
+            }
+        });
 
-    it('should allow references in object arrays', function () {
-        throw new Error("not implemented");
+        concepts.definition.should.deep.equal({
+            "classes": [{
+                "$property*": "$type",
+                "$method*": {
+                    "$parameter*": "$type",
+                    "returns": "$type"
+                }
+            }]
+        });
     });
 });

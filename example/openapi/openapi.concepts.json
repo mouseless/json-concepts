@@ -42,16 +42,7 @@
                 },
                 "operationId?": "$operationId:string",
                 "parameters?": [
-                    {
-                        "name": "$name:string",
-                        "in": "$in:parameterPosition",
-                        "description?": "$description:string",
-                        "required?": "$required:boolean",
-                        "deprecated?": "$deprecated:boolean",
-                        "allowEmptyValue?": "$allowEmptyValue:boolean",
-                        "style?": "$style:string",
-                        "$schema:schema?": "#schema"
-                    }
+                    "#parameter & #parameterLike"
                 ],
                 "$requestBody:requestBody?": {
                     "content": {
@@ -82,7 +73,12 @@
             "$schema*": "#schema"
         }
     },
+    "#parameter": {
+        "name": "$name:string",
+        "in": "$in:parameterPosition"
+    },
     "#parameterLike": {
+        "description?": "$description:string",
         "required?": "$required:boolean",
         "deprecated?": "$deprecated:boolean",
         "allowEmptyValue?": "$allowEmptyValue:boolean",
@@ -121,8 +117,7 @@
                 "/**/$path",
                 "/**/$externalDocs",
                 "/**/$operation",
-                "/**/$requestBody",
-                "/**/$header"
+                "/**/$requestBody"
             ]
         }
     ],

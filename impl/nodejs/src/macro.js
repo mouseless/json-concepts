@@ -117,13 +117,12 @@ class Macro {
             const value = definition[key];
 
             if (_expressionIsMacro(value)) {
-                definition[key] = this._get(value);
-            } else if (Array.isArray(value) && value.every(item => _expressionIsMacro(item)) && value.length > 0) {
-                definition[key] = this._merge(value);
-            } else if (Array.isArray(value) && value.some(item => _expressionIsMacro(item))) {
-                throw error.Concepts_definition_is_not_valid__REASON(
-                    because => because.All_items_in_ARRAY_should_be_a_reference(value)
-                );
+                const references = _parse(value);
+                if (references.length == 1) {
+                    definition[key] = this._get(references[0]);
+                } else {
+                    definition[key] = this._merge(references);
+                }
             } else {
                 definition[key] = this._process(value);
             }
@@ -239,6 +238,23 @@ function _include(definition) {
  */
 function _expressionIsMacro(expression) {
     return typeof expression === 'string' && expression.startsWith(SC.MACRO);
+}
+
+/**
+ * @param {String} expression 
+ * 
+ * @returns {Array.<String>}
+ */
+function _parse(expression) {
+    const result = expression.split(SC.AND).map(item => item.trim());
+
+    if (result.length > 0 && !result.every(item => _expressionIsMacro(item))) {
+        throw error.Concepts_definition_is_not_valid__REASON(
+            because => because.All_items_in_EXPRESSION_should_be_a_reference(expression)
+        );
+    }
+
+    return result;
 }
 
 /**

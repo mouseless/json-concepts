@@ -149,7 +149,7 @@ describe('spec/references/include', function () {
         it('should process include before references', async function () {
             fs({
                 'method.concepts.json': JSON.stringify({
-                    "$method*": ["#parameters", "#return"],
+                    "$method*": "#parameters & #return",
                     "#parameters": {
                         "$parameter*": "$type"
                     },
@@ -158,7 +158,7 @@ describe('spec/references/include', function () {
                     }
                 }),
                 'class.concepts.json': JSON.stringify({
-                    "$class+": ["#properties", "#methods"],
+                    "$class+": "#properties & #methods",
                     "#properties": {
                         "$property*": "$type"
                     },
