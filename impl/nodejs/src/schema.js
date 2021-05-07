@@ -14,7 +14,7 @@
         path = required('path'),
         concepts = null
     ) {
-        const definition = await loadJSON(path);
+        const definition = await loadJSONData(path);
 
         concepts = concepts ||
             metaData.read(definition, 'concepts', /* burnAfterReading */ true);
@@ -92,4 +92,4 @@ module.exports = Schema;
 
 const Concepts = require('./concepts');
 const SchemaShadow = require('./schema-shadow');
-const { error, metaData, required, loadJSON } = require('./util');
+const { error, metaData, required, loadJSONData } = require('./util');

@@ -1,9 +1,11 @@
-const { Concepts } = require('../../..');
+const { Concepts, Schema } = require('../../..');
 const { error } = require('../../../src/util');
 const fs = require('mock-fs');
 const nock = require('nock');
-const { should } = require('chai');
+const { use, should } = require('chai');
+const chaiAsPromised = require('chai-as-promised');
 
+use(chaiAsPromised);
 should();
 
 describe('spec/references/include', function () {
@@ -30,6 +32,28 @@ describe('spec/references/include', function () {
                 "$parameter*": "$type"
             }
         });
+    });
+
+    it('should load includes relative to concepts file', async function () {
+        fs({
+            'concepts/include/parameter.concepts.json': JSON.stringify({
+                "$parameter*": "$type"
+            }),
+            'concepts/service.concepts.json': JSON.stringify({
+                "$service+": {
+                    "#include": "include/parameter.concepts.json"
+                }
+            }),
+            'schema/greeting.service.json': JSON.stringify({
+                "@concepts": "../concepts/service.concepts.json",
+                "sayHello": {
+                    "name": "string"
+                }
+            })
+        });
+
+        await Concepts.load('concepts/service.concepts.json').should.not.be.rejected
+        await Schema.load('schema/greeting.service.json').should.not.be.rejected
     });
 
     it('should allow include local object', function () {
@@ -76,6 +100,36 @@ describe('spec/references/include', function () {
         });
     });
 
+    it('should load includes relative to included file', async function () {
+        fs({
+            'concepts/include/parameter.concepts.json': JSON.stringify({
+                "$parameter*": "$type"
+            }),
+            'concepts/include/method.concepts.json': JSON.stringify({
+                "$method*": {
+                    "#include": "parameter.concepts.json"
+                }
+            }),
+            'concepts/class.concepts.json': JSON.stringify({
+                "$class+": {
+                    "#include": "include/method.concepts.json"
+                }
+            }),
+            'schema/user.class.json': JSON.stringify({
+                "@concepts": "../concepts/class.concepts.json",
+                "user": {
+                    "login": {
+                        "email": "string",
+                        "password": "string"
+                    }
+                }
+            })
+        });
+
+        await Concepts.load('concepts/class.concepts.json').should.not.be.rejected
+        await Schema.load('schema/user.class.json').should.not.be.rejected
+    });
+
     it('should give error when a conflict occurs', function () {
         (() => new Concepts({
             "#include": {
@@ -89,10 +143,6 @@ describe('spec/references/include', function () {
                 )
             ).message
         );
-    });
-
-    it('should use base path of concepts file when including from file', function () {
-        throw new Error('not implemented');
     });
 
     describe('processing order', function () {

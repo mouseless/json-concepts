@@ -1,4 +1,4 @@
-const { error, loadJSON } = require('../../src/util');
+const { error, loadJSON, loadJSONData } = require('../../src/util');
 const fs = require('mock-fs');
 const nock = require('nock');
 const { use, should } = require('chai');
@@ -7,14 +7,14 @@ const chaiAsPromised = require('chai-as-promised');
 use(chaiAsPromised);
 should();
 
-describe('#loadJSON', async function () {
+describe('#loadJSONData', async function () {
     after(async function () {
         fs.restore();
     });
 
     afterEach(async function () {
         nock.cleanAll();
-    })
+    });
 
     it('should load if file exists and a valid json', async function () {
         fs({
@@ -23,14 +23,14 @@ describe('#loadJSON', async function () {
             })
         });
 
-        const actual = await loadJSON('test.json');
+        const actual = await loadJSONData('test.json');
 
         actual.should.be.an('object');
         actual.test.should.equal("expected");
     });
 
     it('should give error if pathOrObject is not given', async function () {
-        await loadJSON()
+        await loadJSONData()
             .should.be.rejectedWith(error.PARAMETER_is_required('path').message);
     });
 
@@ -39,7 +39,7 @@ describe('#loadJSON', async function () {
             'test.json': ''
         });
 
-        await loadJSON('test.json')
+        await loadJSONData('test.json')
             .should.be.rejectedWith(error.FILE_is_not_a_valid_json('test.json').message);
     });
 
@@ -50,7 +50,7 @@ describe('#loadJSON', async function () {
                 'test': 'expected'
             });
 
-        const actual = await loadJSON('http://test.com/expected.json');
+        const actual = await loadJSONData('http://test.com/expected.json');
 
         actual.should.be.an('object');
         actual.test.should.equal('expected');
@@ -61,7 +61,7 @@ describe('#loadJSON', async function () {
             .get('/expected.json')
             .reply(400);
 
-        await loadJSON('http://test.com/expected.json')
+        await loadJSONData('http://test.com/expected.json')
             .should.be.rejectedWith(error.Cannot_load_URL('http://test.com/expected.json').message);
     });
 
@@ -70,13 +70,37 @@ describe('#loadJSON', async function () {
             //empty directory
         });
 
-        await loadJSON('test.json')
+        await loadJSONData('test.json')
             .should.be.rejectedWith(error.Cannot_load_FILE('test.json').message);
     });
 
     it('should give error when given path is not a string', async function () {
-        await loadJSON({ test: 'expected' })
+        await loadJSONData({ test: 'expected' })
             .should.be.rejectedWith(error.Expected_type_was_EXPECTED_got_ACTUAL('string', 'object').message);
+    });
+});
+
+describe('#loadJSON', async function () {
+    after(async function () {
+        fs.restore();
+    });
+
+    afterEach(async function () {
+        nock.cleanAll();
+    });
+
+    it('should return loaded json object and resolved path', async function () {
+        fs({
+            '/path/test.json': JSON.stringify({
+                "test": "expected"
+            })
+        });
+
+        const actual = await loadJSON('test.json', '/path/other.json');
+
+        actual.path.should.be.equal('/path/test.json');
+        actual.data.should.be.an('object');
+        actual.data.test.should.equal("expected");
     });
 
     describe('absolute paths', function () {
@@ -110,7 +134,7 @@ describe('#loadJSON', async function () {
             { path: 'test.json', relativeTo: '/absolute/other.json' },
             { path: 'absolute/test.json', relativeTo: '/other.json' },
             { path: '../test.json', relativeTo: '/absolute/subfolder/other.json' },
-            
+
             // relative/test.json
             { path: 'test.json', relativeTo: 'relative/other.json' },
             { path: 'relative/test.json', relativeTo: 'other.json' },

@@ -1,13 +1,19 @@
 /**
- * Loads json file in given path. If `relativeTo` is given and if `path` is a
- * relative path, then file is loaded from path relative to the value of
+ * @typedef {Object} JSONData
+ * @property {String} path
+ * @property {*} data
+ */
+
+/**
+ * Loads json file at given path. If `relativeTo` is given and if `path` is a
+ * relative path, then file is loaded from a path relative to the value of
  * `relativeTo`.
  * 
  * @async
  * @param {String} path (Required) Path or URL to load json from
  * @param {String} relativeTo Path or URL to load file relatively to
  * 
- * @returns {Promise<Object>} Loaded object
+ * @returns {Promise.<JSONData>} Path or URL of file and its data
  */
 async function loadJSON(
     path = required('path'),
@@ -23,7 +29,24 @@ async function loadJSON(
         }
     }
 
-    let json = '';
+    return {
+        path: path,
+        data: await loadJSONData(path)
+    };
+};
+
+/**
+ * Loads json file at given path.
+ * 
+ * @async
+ * @param {String} path (Required) Path or URL to load json from
+ * 
+ * @returns {Promise.<Object>} Loaded object
+ */
+async function loadJSONData(path = required('path')) {
+    checkType(path, 'string');
+
+    let json;
     if (_isURL(path)) {
         try {
             json = await _get(path);
@@ -43,7 +66,7 @@ async function loadJSON(
     } catch {
         throw error.FILE_is_not_a_valid_json(path);
     }
-};
+}
 
 /**
  * @param {*} url 
@@ -84,7 +107,8 @@ function _is2xx(statusCode) {
 }
 
 module.exports = {
-    loadJSON
+    loadJSON,
+    loadJSONData
 };
 
 const p = require('path');
@@ -93,4 +117,3 @@ const http = require('http');
 const https = require('https');
 const { required, checkType } = require('./validation');
 const error = require('./error');
-const { url } = require('inspector');

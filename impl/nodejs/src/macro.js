@@ -1,27 +1,19 @@
 class Macro {
     /**
-     * Recursively loads all included files and places them next to #include
-     * keys. This does not process `#include`s, only loads them from file or
-     * URL.
+     * Recursively loads definition file at path with all included files loaded
+     * and placed next to #include keys. This does not process `#include`s, only
+     * loads them from the specified file or URL.
      * 
-     * @param {Object} definition Definition object
+     * @param {String} definitionPath (Required) Path or URL to load definition from
+     * @param {String} relativeTo Path or URL to load definition relatively to
      * 
-     * @returns {Object} Definition object with includes loaded
+     * @returns {*} Definition object with `#include`s loaded
      */
-    static async include(definition = required('definition')) {
-        if (typeof definition !== 'object') {
-            return definition;
-        }
-
-        for (const key in definition) {
-            if (key == `${SC.MACRO}include` && typeof definition[key] === 'string') {
-                definition[key] = await loadJSON(definition[key]);
-            }
-
-            definition[key] = await Macro.include(definition[key]);
-        }
-
-        return definition;
+    static async load(
+        definitionPath = required('definitionPath'),
+        relativeTo
+    ) {
+        return _load(undefined, definitionPath, relativeTo);
     }
 
     /**
@@ -185,6 +177,35 @@ class Macro {
 
         return merged;
     }
+}
+
+/**
+ * @param {String} path 
+ * @param {String} relativeTo 
+ * @param {*} definition 
+ * 
+ * @returns {*}
+ */
+async function _load(definition, path, relativeTo) {
+    if (!definition) {
+        const json = await loadJSON(path, relativeTo);
+        definition = json.data;
+        relativeTo = json.path;
+    }
+
+    if (typeof definition !== 'object') {
+        return definition;
+    }
+
+    for (const key in definition) {
+        if (key == `${SC.MACRO}include` && typeof definition[key] === 'string') {
+            definition[key] = await _load(undefined, definition[key], relativeTo);
+        } else {
+            definition[key] = await _load(definition[key], undefined, relativeTo);
+        }
+    }
+
+    return definition;
 }
 
 /**

@@ -15,7 +15,7 @@
         source = null,
         target = null
     ) {
-        const definition = await loadJSON(path);
+        const definition = await loadJSONData(path);
 
         try {
             return new Transformation(definition, source, target);
@@ -120,7 +120,7 @@
             if (!context.hasOwnProperty(target.variable.name)) {
                 return null;
             }
-            
+
             return context[target.variable.name];
         }
 
@@ -149,4 +149,4 @@ const Schema = require('./schema');
 const Query = require('./query');
 const SchemaShadow = require('./schema-shadow');
 const ConceptsShadow = require('./concepts-shadow');
-const { error, arrayify, required, loadJSON } = require('./util');
+const { error, arrayify, required, loadJSONData } = require('./util');
