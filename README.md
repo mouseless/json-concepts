@@ -1,6 +1,22 @@
-# JSON Concepts
+---
+title: .concepts.json
+home: true
+heroImage: ./assets/logo/logo.png
+heroText: a meta-schema specification
+tagline: to create and validate custom schemas in JSON
+actionText: Read the Spec
+actionLink: /spec/
+features:
+- title: Validate
+  details: Define concepts and validate any .json file
+- title: Browse
+  details: Convert easy-to-read .json files to easy-to-code .json data
+- title: Transform
+  details: Transform between .json files with ease
+footer: Made by Cihan Deniz with ❤️
+---
 
-"JSON Concepts" is a schema specification in JSON format which allows you to
+**.concepts.json** is a schema specification in JSON format which allows you to
 create a conceptual design for any type of data structure, especially those
 that represent a schema.
 

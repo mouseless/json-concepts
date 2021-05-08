@@ -12,7 +12,9 @@
     },
     "cSpell.words": [
         "AVLN",
+        "Cihan",
         "Codestache",
+        "Deniz",
         "Grpc",
         "Nata",
         "Protos",
@@ -41,6 +43,10 @@
         "twitr",
         "typeof",
         "undecorate",
-        "unvisit"
-    ]
+        "unvisit",
+        "usecase",
+        "usecases",
+        "vuepress"
+    ],
+    "git.ignoreLimitWarning": true
 }

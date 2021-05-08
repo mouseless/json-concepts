@@ -1,0 +1,23 @@
+{
+  "name": "json-concepts",
+  "version": "0.0.1",
+  "description": "JSON Concepts is a schema specification in JSON format.",
+  "main": "index.js",
+  "authors": {
+    "name": "Cihan Deniz",
+    "email": "cihan@ikinoktabir.com"
+  },
+  "repository": "https://github.com/codingatwill/json-concepts/json-concepts",
+  "scripts": {
+    "dev": "vuepress dev .",
+    "build": "vuepress build ."
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "capitalize": "^2.0.3",
+    "vuepress": "^1.8.2"
+  },
+  "dependencies": {
+    "vuepress-auto-sidebar": "^1.1.1"
+  }
+}

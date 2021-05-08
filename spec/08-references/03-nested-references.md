@@ -6,12 +6,12 @@ References can be used within other references. Below is an example;
 
 ```json
 {
-    "$class+": [ "#properties", "#methods" ],
+    "$class+": "#properties & #methods",
     "#properties": {
         "$property*": "$type"
     },
     "#methods": {
-        "$method*": [ "#parameters", "#return" ]
+        "$method*": "#parameters & #return"
     },
     "#parameters": {
         "$parameter*": "$type"
