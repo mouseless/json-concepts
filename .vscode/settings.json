@@ -7,7 +7,8 @@
         "**/.DS_Store": true,
         "**/node_modules": true,
         "**/bin": true,
-        "**/obj": true
+        "**/obj": true,
+        "docs/_site": true
     },
     "cSpell.words": [
         "AVLN",
