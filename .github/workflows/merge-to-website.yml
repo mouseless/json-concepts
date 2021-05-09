@@ -1,4 +1,4 @@
-name: DEPLOY WEBSITE
+name: merge to website
 on:
   push:
     branches: [ main ]
