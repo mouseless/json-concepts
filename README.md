@@ -49,7 +49,7 @@ Below is a sample concepts file;
 }
 ```
 
-Below is a sample schema;
+Below is an example schema;
 
 `SCHEMA: users.endpoint.json`
 
