@@ -5,7 +5,7 @@ on:
       - main
   workflow_dispatch:
 jobs:
-  merge:
+  deploy-website:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout main
@@ -38,5 +38,3 @@ jobs:
           git add -A
           git commit -m 'deploy website'
           git push -f
-          cd ..
-          rm -rdvf ./_website
