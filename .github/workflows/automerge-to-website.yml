@@ -1,4 +1,4 @@
-name: CI
+name: DEPLOY WEBSITE
 on:
   push:
     branches: [ main ]
