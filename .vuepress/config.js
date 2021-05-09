@@ -17,12 +17,12 @@ const specs = fs.readdirSync('spec')
     }
   });
 
-const usecases = fs.readdirSync('usecase')
+const usecases = fs.readdirSync('usecases')
   .filter(item => /.*[.]md/.test(item) && item !== 'README.md')
-  .map(item => `/usecase/${item}`);
+  .map(item => `/usecases/${item}`);
 
 module.exports = {
-  title: '.concepts.json',
+  title: 'json concepts',
   description: description,
   base: '/json-concepts/',
   head: [
@@ -30,7 +30,7 @@ module.exports = {
     ['meta', { name: 'apple-mobile-web-app-capable', content: 'yes' }],
     ['meta', { name: 'apple-mobile-web-app-status-bar-style', content: 'black' }]
   ],
-  patterns: ['spec/**/*.md', 'usecase/**/*.md', '*.md'],
+  patterns: ['spec/**/*.md', 'usecases/**/*.md', '*.md'],
   themeConfig: {
     repo: '',
     editLinks: false,
@@ -40,7 +40,7 @@ module.exports = {
     nav: [
       {
         text: 'Use Cases',
-        link: '/usecase/'
+        link: '/usecases/'
       },
       {
         text: 'Specification',
@@ -58,7 +58,7 @@ module.exports = {
           ]
         }
       ],
-      '/usecase/': [
+      '/usecases/': [
         {
           title: 'Use Cases',
           collapsable: false,

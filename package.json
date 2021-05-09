@@ -1,7 +1,7 @@
 {
   "name": "json-concepts",
   "version": "0.0.1",
-  "description": "JSON Concepts is a schema specification in JSON format.",
+  "description": "a meta-schema specification in JSON format",
   "main": "index.js",
   "authors": {
     "name": "Cihan Deniz",
@@ -16,5 +16,8 @@
   "devDependencies": {
     "capitalize": "^2.0.3",
     "vuepress": "^1.8.2"
+  },
+  "dependencies": {
+    "vue-typer": "^1.2.0"
   }
 }
