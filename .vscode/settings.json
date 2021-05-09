@@ -47,5 +47,8 @@
         "usecase",
         "usecases",
         "vuepress"
-    ]
+    ],
+    "markdownlint.config": {
+        "MD033": false
+    }
 }

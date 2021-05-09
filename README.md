@@ -1,10 +1,7 @@
 ---
 title: json concepts
 home: true
-footer: made by someone with 🍅
 ---
-
-## <x-concepts-json />
 
 **json concepts** is a meta-schema specification in JSON format which allows you
 to create a conceptual design for any type of data structure, especially those
