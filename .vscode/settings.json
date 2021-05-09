@@ -8,7 +8,7 @@
         "**/node_modules": true,
         "**/bin": true,
         "**/obj": true,
-        "docs/_site": true
+        ".vuepress/dist": true
     },
     "cSpell.words": [
         "AVLN",
@@ -47,6 +47,5 @@
         "usecase",
         "usecases",
         "vuepress"
-    ],
-    "git.ignoreLimitWarning": true
+    ]
 }

@@ -44,7 +44,7 @@ definition into where it was included. Below is an example;
 
 ```json
 {
-   "$method*": [ "#parameters", "#return" ],
+   "$method*": "#parameters & #return",
     "#parameters": {
         "$parameter*": "$type"
     },
@@ -58,7 +58,7 @@ definition into where it was included. Below is an example;
 
 ```json
 {
-    "$class+": [ "#properties", "#methods" ],
+    "$class+": "#properties & #methods",
     "#properties": {
         "$property*": "$type"
     },

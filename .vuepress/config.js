@@ -24,6 +24,7 @@ const usecases = fs.readdirSync('usecase')
 module.exports = {
   title: '.concepts.json',
   description: description,
+  base: '/json-concepts/',
   head: [
     ['meta', { name: 'theme-color', content: '#3eaf7c' }],
     ['meta', { name: 'apple-mobile-web-app-capable', content: 'yes' }],
@@ -66,8 +67,5 @@ module.exports = {
       ]
     }
   },
-  plugins: [
-    '@vuepress/plugin-back-to-top',
-    '@vuepress/plugin-medium-zoom',
-  ]
+  plugins: []
 };

@@ -12,9 +12,9 @@
     },
     "@types": {
         "definition": {
-            "list": {
-                "#path": "/**/$model",
-                "template": "'#/definitions/' & #path"
+            "#each": {
+                "path": "/**/$model",
+                "apply": "\\#/definitions/#path"
             }
         }
     }
