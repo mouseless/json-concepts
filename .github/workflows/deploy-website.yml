@@ -1,0 +1,30 @@
+name: deploy website
+on:
+  push:
+    branches: [ website ]
+  workflow_dispatch:
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v2.1.5
+        with:
+          node-version: 12.x
+      - name: Install dependencies
+        run: npm install
+      - name: Build website
+        run: npm run build
+      - name: Copy dist to docs
+        run: |
+          rm -rdvf ./docs
+          mv ./.vuepress/dist ./docs
+      - name: Commit and push docs
+        run: |
+          git config user.name "GitHub Actions Bot"
+          git config user.email "<>"
+          git add -A
+          git commit -m 'deploy website to docs'
+          git push -f
