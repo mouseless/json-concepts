@@ -1,8 +1,11 @@
 name: deploy website
-on: push
+on:
+  push:
+    branches: 
+      - website
+  workflow_dispatch:
 jobs:
   deploy:
-    if: github.ref == 'refs/heads/website'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
