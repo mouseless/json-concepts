@@ -13,4 +13,3 @@ jobs:
         uses: devmasx/merge-branch@v1.3.1
         with:
           target_branch: website
-      
