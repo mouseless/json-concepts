@@ -1,6 +1,7 @@
 ---
 title: json concepts
 home: true
+footer: MIT License - Copyright (C) 2021, Cihan Deniz
 ---
 
 **json concepts** is a meta-schema specification in JSON format which allows you
