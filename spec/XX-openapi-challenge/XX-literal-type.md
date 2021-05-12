@@ -4,7 +4,7 @@
 {
     "$company*": {
         "url": "$url",
-        "$contact:literal?": {
+        "!contact?": {
             "url": "$url"
         }
     }

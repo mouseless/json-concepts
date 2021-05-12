@@ -32,6 +32,7 @@
         "noreferrer",
         "openapi",
         "plantuml",
+        "postgresql",
         "prego",
         "prepend",
         "preprocessors",

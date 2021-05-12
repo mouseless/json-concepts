@@ -6,7 +6,7 @@ const specs = fs.readdirSync('spec')
   .filter(item => /\d\d\-.*/.test(item))
   .map(item => {
     const children = fs.readdirSync(`spec/${item}`)
-      .filter(child => child.endsWith('.md'))
+      .filter(child => /\d\d\-.*[.]md/.test(child))
       .map(child => `/spec/${item}/${child.substring(0, child.length - 3)}`);
 
     return {
@@ -18,7 +18,7 @@ const specs = fs.readdirSync('spec')
   });
 
 const usecases = fs.readdirSync('usecases')
-  .filter(item => /.*[.]md/.test(item) && item !== 'README.md')
+  .filter(item => /\d\d\-.*[.]md/.test(item) && item !== 'README.md')
   .map(item => `/usecases/${item}`);
 
 module.exports = {
