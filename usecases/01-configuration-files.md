@@ -52,3 +52,41 @@ connectDB(config.environment[process.env.NODE_ENV].database.connection);
 
 config.period.forEach(p => process(p.period, p.urls));
 ```
+
+Without a concepts definition, config file would include all concept names.
+Below you can see that the same information requires a more complex json file
+without **json concepts**;
+
+```json
+{
+    "environment": {
+        "development": {
+            "database": {
+                "name": "mysql",
+                "connection": "Server=dev.db;Database=my-app;Uid=...;Pwd=...;"
+            }
+        },
+        "production": {
+            "database": {
+                "name": "postgresql",
+                "connection": "Driver={PostgreSQL};Server=dev.db;Port=5432;Database=my-app;Uid=...;Pwd=...;"
+            }
+        }
+    },
+    "period": [
+        {
+            "period": "0 0 12 1/1 * ? *",
+            "urls": [ "https://a.com", "https://b.com" ]
+        },
+        {
+            "period": "0 0 0/1 1/1 * ? *",
+            "urls": [ "https://x.com", "https://y.com" ]
+        }
+    ]
+}
+```
+
+On top of having a larger json file, validation of this file would be still
+required, whereas **json concepts** always validates a json file before loading.
+So it improves readability of your configuration file, and provides validation
+out of the box.
