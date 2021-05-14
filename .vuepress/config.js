@@ -2,12 +2,12 @@ const { description } = require('../package');
 const fs = require('fs');
 const capitalize = require('capitalize');
 
-const specs = fs.readdirSync('spec')
+const specifications = fs.readdirSync('specification')
   .filter(item => /\d\d\-.*/.test(item))
   .map(item => {
-    const children = fs.readdirSync(`spec/${item}`)
+    const children = fs.readdirSync(`specification/${item}`)
       .filter(child => /\d\d\-.*[.]md/.test(child))
-      .map(child => `/spec/${item}/${child.substring(0, child.length - 3)}`);
+      .map(child => `/specification/${item}/${child.substring(0, child.length - 3)}`);
 
     return {
       title: capitalize.words(item.substring(3).replace(/\-/g, ' ')),
@@ -17,9 +17,9 @@ const specs = fs.readdirSync('spec')
     }
   });
 
-const usecases = fs.readdirSync('usecases')
-  .filter(item => /\d\d\-.*[.]md/.test(item) && item !== 'README.md')
-  .map(item => `/usecases/${item}`);
+const useCases = fs.readdirSync('use-cases')
+  .filter(item => /\d\d\-.*[.]md/.test(item))
+  .map(item => `/use-cases/${item}`);
 
 module.exports = {
   title: 'json concepts',
@@ -30,7 +30,7 @@ module.exports = {
     ['meta', { name: 'apple-mobile-web-app-capable', content: 'yes' }],
     ['meta', { name: 'apple-mobile-web-app-status-bar-style', content: 'black' }]
   ],
-  patterns: ['spec/**/*.md', 'usecases/**/*.md', '*.md'],
+  patterns: ['use-cases/**/*.md', 'specification/**/*.md', '*.md'],
   themeConfig: {
     repo: '',
     editLinks: false,
@@ -40,29 +40,32 @@ module.exports = {
     nav: [
       {
         text: 'Use Cases',
-        link: '/usecases/'
+        link: '/use-cases/'
       },
       {
         text: 'Specification',
-        link: '/spec/',
+        link: '/specification/',
       }
     ],
     sidebar: {
-      '/spec/': [
+      '/use-cases/': [
+        {
+          title: 'Use Cases',
+          collapsable: false,
+          children: [
+            '/use-cases/',
+            ...useCases
+          ]
+        }
+      ],
+      '/specification/': [
         {
           title: 'Specification',
           collapsable: false,
           children: [
-            '/spec/',
-            ...specs
+            '/specification/',
+            ...specifications
           ]
-        }
-      ],
-      '/usecases/': [
-        {
-          title: 'Use Cases',
-          collapsable: false,
-          children: usecases
         }
       ]
     }

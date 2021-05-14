@@ -1,11 +1,18 @@
 # Configuration Files
 
-You can define your configuration concepts using **json concepts**, and then you
-can validate and load a configuration file using that definition.
+Assume you have an application that requires a configuration file to run. You
+need to create a schema for this file and write a code to read, validate and
+parse this file according to the schema.
+
+## Example Case
 
 Let's say your application is a web crawler that visits certain urls
-periodically and log their contents to a database. An example concepts
-definition for this application would be;
+periodically and log their contents to a database.
+
+## With Concepts
+
+You can define configuration concepts and then you can validate and load a
+configuration file using that definition. Below is the concepts definition;
 
 `CONCEPTS: config.concepts.json`
 
@@ -14,7 +21,7 @@ definition for this application would be;
     "!$environment*": {
         "$database:db": "$connection"
     },
-    "$period*": [ "$urls" ],
+    "$period(s)[cron]*": [ "$urls" ],
 
     "@types": {
         "db": [ "postgresql", "mysql" ]
@@ -22,8 +29,7 @@ definition for this application would be;
 }
 ```
 
-This definition helps you to load a json file and validate it to have
-environments with a database connection, and periods with list of urls.
+Below is an example configuration file;
 
 `SCHEMA: my-app.config.json`
 
@@ -36,22 +42,21 @@ environments with a database connection, and periods with list of urls.
         "postgresql": "Driver={PostgreSQL};Server=dev.db;Port=5432;Database=my-app;Uid=...;Pwd=...;"
     },
     "0 0 12 1/1 * ? *": [ "https://a.com", "https://b.com" ],
-    "0 0 0/1 1/1 * ? *": [ "https://x.com", "https://y.com" ],
-
-    "@concepts": "config.concepts.json"
+    "0 0 0/1 1/1 * ? *": [ "https://x.com", "https://y.com" ]
 }
 ```
 
-This file is loaded along with its concepts definition. So its values can be
-accessed through the concepts they belong;
+Let's load this `config` file using its concepts definition;
 
 ```javascript
-const config = jc.Schema.load("my-app.config.json").shadow;
+const config = jc.Schema.load("my-app.config.json", "config.concepts.json").shadow;
 
 connectDB(config.environment[process.env.NODE_ENV].database.connection);
 
-config.period.forEach(p => process(p.period, p.urls));
+config.periods.forEach(period => process(period.cron, period.urls));
 ```
+
+## Without Concepts
 
 Without a concepts definition, config file would include all concept names.
 Below you can see that the same information requires a more complex json file
@@ -73,20 +78,20 @@ without **json concepts**;
             }
         }
     },
-    "period": [
+    "periods": [
         {
-            "period": "0 0 12 1/1 * ? *",
+            "cron": "0 0 12 1/1 * ? *",
             "urls": [ "https://a.com", "https://b.com" ]
         },
         {
-            "period": "0 0 0/1 1/1 * ? *",
+            "cron": "0 0 0/1 1/1 * ? *",
             "urls": [ "https://x.com", "https://y.com" ]
         }
     ]
 }
 ```
 
-On top of having a larger json file, validation of this file would be still
+On top of having a larger json file, validation of this file would still be
 required, whereas **json concepts** always validates a json file before loading.
 So it improves readability of your configuration file, and provides validation
 out of the box.
