@@ -1,25 +1,56 @@
-# Transformations
+# Extract A Schema From Existing
 
-Schema transformation is another main feature that JSON Concepts makes possible
-along with schema validation. Transformations are of crucial importance
-especially when dealing with source code generation.
+Assume you are developing a web app, the back-end team publishes an api and
+shares a json file for their api specification.
 
-> On top of a transformation example, this specification also includes a code
-> generation example to emphasize the value of schema transformations more.
+> Open API is a standard for rest api specification, but for the sake of
+> simplicity let's have a very basic api specification file.
 
-Assume you have implemented a back-end service and created the below schema to
-represent that service;
+## Example Case
 
-`SCHEMA: greeting.service.json`
+Let's say api specification that back-end teams shared is the following;
+
+`SCHEMA: photos.service.json`
 
 ```json
 {
-    "sayHello": {
-        "name": "string",
-        "response": "string"
+    "/photos": {
+        "post": {
+            "fileUid": "string",
+            "response": {
+                "uid": "string"
+            }
+        },
+        "get": [
+            {
+                "uid": "string",
+                "response": {
+                    "type": "#/photo"
+                }
+            },
+            {
+                "startDate": "date",
+                "endDate": "date",
+                "response": { 
+                    "type": "array",
+                    "item": "#/photo"
+                }
+            }
+        ]
+    },
+    "definitions": {
+        "photo": {
+            "uid": "string",
+            "url": "url",
+            "date": "date"
+        }
     }
 }
 ```
+
+---
+
+## !!! CONTINUE FROM HERE
 
 Now to consume this service from client-side, assume you need to write below
 code;
@@ -34,10 +65,7 @@ code;
 function hello(name) {
     return axios
         .get(`/sayHello/${name}`)
-        .then(response => {
-            return response;
-        })
-    ;
+        .then(response => response);
 }
 ```
 

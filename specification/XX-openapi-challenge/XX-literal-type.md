@@ -26,7 +26,7 @@
 {
     "company": [
         {
-            "_": "amazon",
+            "company": "amazon",
             "url": "amazon.com",
             "contact": {
                 "url": "jeff.com"

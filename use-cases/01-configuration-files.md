@@ -91,7 +91,7 @@ without **json concepts**;
 }
 ```
 
-On top of having a larger json file, validation of this file would still be
-required, whereas **json concepts** always validates a json file before loading.
-So it improves readability of your configuration file, and provides validation
-out of the box.
+On top of having a more complex json file, validation of this file would still
+be required, whereas **json concepts** always validates a json file before
+loading. So it improves readability of your configuration file, and provides
+validation out of the box.

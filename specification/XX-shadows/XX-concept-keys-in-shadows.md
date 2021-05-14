@@ -1,10 +1,14 @@
 # Concept Keys in Shadows
 
-> TBD -> change default from `_` to `name`
-> shadow should both have `name` and concept name for the key of its identifier.
-> any child literal or variable with those keys will override its value.
-> `name` key can be altered using index syntax `[]`;
+> TBD -> change default from `_` to name of the concept
+> shadow should have name of the concept for the key of its identifier.
+> if there is a child literal or variable with the name of the concept, this
+> means it will override that value.
+> default key can be altered using indexer syntax `[]`;
 > e.g. for `$database[type]`, key is `type`
+> e.g. for `$database[database,type]`, same value will be both at `type` and at
+> `database`
+>
 > concept name can be pluralized using pluralization syntax `()`;
 > e.g. for `$period(s)*`, concept parent key becomes `periods`
 > e.g. for `$child(ren)*`, concept parent key becomes `children`
@@ -18,7 +22,8 @@
     "!$environment*": {
         "$database[type]:db": "$connection"
     },
-    "$period(s)*": [ "$urls" ],
+    "$period(s)[cron]*": [ "$urls" ],
+    
     "@types": {
         "db": [ "mysql", "postgresql" ]
     }
@@ -30,9 +35,7 @@
     "environment": {
         "development": {
             "environment": "development",
-            "name": "development",
             "database": {
-                "database": "mysql",
                 "type": "mysql",
                 "connection": "..."
             }
@@ -40,8 +43,7 @@
     },
     "periods": [
         {
-            "period": "0 0 * * *",
-            "name": "0 0 * * *",
+            "cron": "0 0 * * *",
             "urls": [ "http://a.com", "http://b.com" ]
         }
     ]

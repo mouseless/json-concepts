@@ -12,6 +12,11 @@
             "type": "string",
             "when": [
                 {
+                    "$schema": "user",
+                    "$type": "id",
+                    "enum": [ "int32" ]
+                },
+                {
                     "$type": [ "integer" ],
                     "enum": [ "int32", "int64" ]
                 },
