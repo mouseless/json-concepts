@@ -40,7 +40,7 @@ Let's say the back-end team shared the following schema;
 }
 ```
 
-> This schema is not fully OpenAPI, because of demonstration purposes.
+> This schema is **not** OpenAPI, because of demonstration purposes.
 
 Now to consume this api from your web app, assume you need to write below code;
 
@@ -50,23 +50,23 @@ Now to consume this api from your web app, assume you need to write below code;
 function photos(url) {
     function post(content) {
         return axios(
-            method: "post",
-            url: `${url}/photos`,
-            ...parameters({
-                content: content
-            })
-        ).then(response => response);
+                method: "post",
+                url: `${url}/photos`,
+                ...parameters({
+                    content: content
+                })
+            ).then(response => response);
     }
 
     function get(start, end) {
         return axios(
-            method: "get",
-            url: `${url}/photos`,
-            ...parameters({
-                start: start,
-                end: end
-            })
-        ).then(response => response);
+                method: "get",
+                url: `${url}/photos`,
+                ...parameters({
+                    start: start,
+                    end: end
+                })
+            ).then(response => response);
     }
 
     function parameters(method, parameters) {
@@ -121,12 +121,12 @@ function $resource$(url) {
     /* #method */
     function $method$(/* #, */$parameter$) {
         return axios(
-            method: "$method$",
-            url: `${url}/$resource$`,
-            ...parameters("$method$", {
-                $parameter$: $parameter$ // #parameter,
-            })
-        ).then(response => response);
+                method: "$method$",
+                url: `${url}/$resource$`,
+                ...parameters("$method$", {
+                    $parameter$: $parameter$ // #parameter,
+                })
+            ).then(response => response);
     }
     /* / */
 
@@ -143,26 +143,26 @@ function $resource$(url) {
 /* / */
 ```
 
-> We used a **codestache** template syntax because of its improved readability.
-> Below you can find a mustache version of the same code template.
+> We used a **codestache** template syntax because of its readability. Below you
+> can find a mustache version of the same code template.
 >
 > ::: details Mustache version
 >
-> ```javascript
+> ```js
 > 
 > {{#resource}}
 > function {{resource}}(url) {
 >     {{#method}}
 >     function {{method}}({{#parameter}}{{parameter}}{{^last}},{{/last}}{{/parameter}}) {
 >         return axios(
->             method: "{{method}}",
->             url: `${url}/{{resource}}`,
->             ...parameters("{{method}}", {
->                 {{#parameter}}
->                 {{parameter}}: {{parameter}}{{^last}},{{/last}}
->                 {{/parameter}}
->             })
->         ).then(response => response);
+>               method: "{{method}}",
+>               url: `${url}/{{resource}}`,
+>               ...parameters("{{method}}", {
+>                   {{#parameter}}
+>                   {{parameter}}: {{parameter}}{{^last}},{{/last}}
+>                   {{/parameter}}
+>               })
+>           ).then(response => response);
 >     }
 >     {{/method}}
 > 
@@ -181,6 +181,10 @@ function $resource$(url) {
 > {{/resource}}
 > ```
 >
+> Note that mustache does not support `last` and it does not exist in the shadow
+> of above schema. So `last` needs to be added to schema shadow for this
+> template to work correctly.
+>
 > :::
 
 Now that its concepts and template are ready, client code can be generated
@@ -196,4 +200,31 @@ fs.writeFile('photos.client.js', photosClient);
 
 ## Without Concepts
 
-> TBD
+Without using code generation, you would simply write the above code and
+maintain it for future updates of the back-end api. There are a couple of
+drawbacks worth mentioning here.
+
+### Syncing With New Services
+
+You will maintain your client code manually with every back-end update. With
+code generation you will have the implementation right away, without any errors.
+
+### Lower Cost of Change
+
+Since it is generated, you can change your design decisions to make it better
+at any time. For example, if you want to change `axios` and switch to `fetch`,
+it would require a rewrite for the client layer without code generation. Another
+example, you may want to change the way you handle errors. If you use code
+generation, it won't cost you an extra.
+
+### More Readable
+
+Things like error handling, logging and authentication are not necessarily have
+to be done through runtime mechanisms like interceptors. This is because it is
+not considered as code duplication when you generate the code.
+
+### More Things To Generate
+
+You can make use of this schema to generate mock implementations and test data
+as well. This way you don't have to wait for the back-end team to develop these
+apis.
