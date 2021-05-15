@@ -1,4 +1,4 @@
-# Extract A Schema From Existing
+# Client Code Generation
 
 Assume you are developing a web app, the back-end team publishes an api and
 shares a json file for their api specification.
@@ -84,7 +84,7 @@ function photos(url) {
 
 ## With Concepts
 
-Here json concepts can help you parse and structure given service schema, so
+Here, json concepts can help you parse and structure given service schema, so
 that you can use a template engine to generate necessary client code.
 
 Below concepts definition will cover given api schema;
@@ -143,7 +143,7 @@ function $resource$(url) {
 /* / */
 ```
 
-> We used a **codestache** template syntax because of its readability. Below you
+> We used **codestache** template syntax because of its readability. Below you
 > can find a mustache version of the same code template.
 >
 > ::: details Mustache version
@@ -200,8 +200,8 @@ fs.writeFile('photos.client.js', photosClient);
 
 ## Without Concepts
 
-Without using code generation, you would simply write the above code and
-maintain it for future updates of the back-end api. There are a couple of
+Without using code generation, you would simply write the above code manually
+and maintain it for future updates of the back-end api. There are a couple of
 drawbacks worth mentioning here.
 
 ### Syncing With New Services
@@ -212,10 +212,10 @@ code generation you will have the implementation right away, without any errors.
 ### Lower Cost of Change
 
 Since it is generated, you can change your design decisions to make it better
-at any time. For example, if you want to change `axios` and switch to `fetch`,
-it would require a rewrite for the client layer without code generation. Another
-example, you may want to change the way you handle errors. If you use code
-generation, it won't cost you an extra.
+at any time. For example, if you want to change `axios` to `fetch`, it would
+require a rewrite for the client layer without code generation. Another example,
+you may want to change the way you handle errors. If you use code generation, it
+won't cost you an extra.
 
 ### More Readable
 
