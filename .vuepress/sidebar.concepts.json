@@ -1,0 +1,13 @@
+{
+    "$sidebar+": [
+        "#group | #path"
+    ],
+    "#group": {
+        "title": "$title",
+        "collapsable": "$collapsable",
+        "children": [
+            "#group | #path"
+        ]
+    },
+    "#path": "$path"
+}

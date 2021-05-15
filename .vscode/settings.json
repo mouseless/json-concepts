@@ -26,6 +26,7 @@
         "buildrjs",
         "businesslogic",
         "camelcase",
+        "collapsable",
         "jsonata",
         "jsonpath",
         "noopener",

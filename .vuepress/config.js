@@ -1,6 +1,51 @@
 const { description } = require('../package');
 const fs = require('fs');
 const capitalize = require('capitalize');
+const jc = require('../impl/nodejs');
+const pj = require('prettyjson');
+
+function files(root, filter) {
+  const entries = fs
+    .readdirSync(root, { withFileTypes: true })
+    .filter(file => filter(file));
+
+  if (entries.length == 0) {
+    return {};
+  }
+  const result = {};
+  for (const file of entries) {
+    if (file.isDirectory()) {
+      result[file.name] = {
+        type: 'directory',
+        children: files(`${root}/${file.name}`, filter)
+      };
+    } else {
+      result[file.name] = {
+        type: 'file'
+      };
+    }
+  }
+
+  return result;
+}
+
+async function load() {
+  const fsConcepts = await jc.Concepts.load('./.vuepress/fs.concepts.json');
+  const schema = fsConcepts.create(
+    files('.', f => f.name != "node_modules" && /^[^.].*$/.test(f.name)),
+    fsConcepts
+  );
+
+  console.log(pj.render(schema.shadow));
+
+  const sidebarConcepts = await jc.Concepts.load('./.vuepress/sidebar.concepts.json');
+
+  process.exit(1);
+
+  const transformation = await jc.Transformation.load('./.vuepress/sidebar.from.fs.json', fsConcepts, sidebarConcepts);
+}
+
+load();
 
 const specifications = fs.readdirSync('specification')
   .filter(item => /\d\d\-.*/.test(item))
@@ -12,7 +57,7 @@ const specifications = fs.readdirSync('specification')
     return {
       title: capitalize.words(item.substring(3).replace(/\-/g, ' ')),
       path: children[0],
-      collapsable: true,
+      collapsable: false,
       children: children
     }
   });
@@ -49,24 +94,12 @@ module.exports = {
     ],
     sidebar: {
       '/use-cases/': [
-        {
-          title: 'Use Cases',
-          collapsable: false,
-          children: [
-            '/use-cases/',
-            ...useCases
-          ]
-        }
+        '/use-cases/',
+        ...useCases
       ],
       '/specification/': [
-        {
-          title: 'Specification',
-          collapsable: false,
-          children: [
-            '/specification/',
-            ...specifications
-          ]
-        }
+        '/specification/',
+        ...specifications
       ]
     }
   },
