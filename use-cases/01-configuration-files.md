@@ -62,6 +62,8 @@ Without a concepts definition, config file would include all concept names.
 Below you can see that the same information requires a more complex json file
 without **json concepts**;
 
+`SCHEMA: my-app.config.json`
+
 ```json
 {
     "environment": {

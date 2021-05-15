@@ -3,12 +3,9 @@
 Assume you are developing a web app, the back-end team publishes an api and
 shares a json file for their api specification.
 
-> Open API is a standard for rest api specification, but for the sake of
-> simplicity let's have a very basic api specification file.
-
 ## Example Case
 
-Let's say api specification that back-end teams shared is the following;
+Let's say the back-end team shared the following schema;
 
 `SCHEMA: photos.service.json`
 
@@ -16,29 +13,24 @@ Let's say api specification that back-end teams shared is the following;
 {
     "/photos": {
         "post": {
-            "fileUid": "string",
+            "content": "base64",
             "response": {
-                "uid": "string"
+                "model": "#/ref"
             }
         },
-        "get": [
-            {
-                "uid": "string",
-                "response": {
-                    "type": "#/photo"
-                }
-            },
-            {
-                "startDate": "date",
-                "endDate": "date",
-                "response": { 
-                    "type": "array",
-                    "item": "#/photo"
-                }
+        "get": {
+            "start": "date",
+            "end": "date",
+            "response": { 
+                "model": "#/photo",
+                "type": "array"
             }
-        ]
+        }
     },
     "definitions": {
+        "ref": {
+            "uid": "string"
+        },
         "photo": {
             "uid": "string",
             "url": "url",
@@ -48,227 +40,160 @@ Let's say api specification that back-end teams shared is the following;
 }
 ```
 
----
+> This schema is not fully OpenAPI, because of demonstration purposes.
 
-## !!! CONTINUE FROM HERE
+Now to consume this api from your web app, assume you need to write below code;
 
-Now to consume this service from client-side, assume you need to write below
-code;
-
-`CODE: greeting.client.js`
+`CODE: photos.client.js`
 
 ```javascript
-/**
- * @param {String} name
- * @return {String}
- */
-function hello(name) {
-    return axios
-        .get(`/sayHello/${name}`)
-        .then(response => response);
-}
-```
-
-This client-side code is trivial and can be generated directly from a schema
-and a template. However, there are certain differences that makes the service
-schema not suitable to generate above code.
-
-Most obvious differences are;
-
-- Name of the function is `hello` instead of `sayHello`
-- Type of the argument is `String` instead of `string`
-- Return type is `String` instead of `string`
-
-So below schema is more suitable to generate above code.
-
-`SCHEMA: greeting.client.json`
-
-```json
-{
-    "hello": {
-        "name": "String",
-        "return": "String",
-        "rootPath": "sayHello"
+function photos(url) {
+    function post(content) {
+        return axios(
+            method: "post",
+            url: `${url}/photos`,
+            ...parameters({
+                content: content
+            })
+        ).then(response => response);
     }
-}
-```
 
-Other than literal differences, there are also conceptual differences. For
-example in above schema, there is a `rootPath` to make a request to. This is a
-conceptual difference rather than a literal one. So the conceptual differences
-are;
-
-- Code has a `function` instead of a `service`
-- This function has an `argument`, not a `parameter`
-- It does not have a `response` type, it has a `return` type
-- It makes a request to a `rootPath`, not to the name of the `service`
-
-Below is a concepts file to define concepts of this client code;
-
-`CONCEPTS: client.concepts.json`
-
-```json
-{
-    "$function": {
-        "$argument": "$type",
-        "rootPath": "$rootPath",
-        "return": "$returnType"
+    function get(start, end) {
+        return axios(
+            method: "get",
+            url: `${url}/photos`,
+            ...parameters({
+                start: start,
+                end: end
+            })
+        ).then(response => response);
     }
-}
-```
 
-And below is a Codestache template for this client-side code to be generated;
-
-`TEMPLATE: client.js`
-
-```javascript
-/**
- * @param {$function.argument.type$} $function.argument$
- * 
- * @return {$function.returnType$}
- */
-function $function$($function.argument$) {
-    return axios
-        .get(`/$function.rootPath$/${$function.argument$}`)
-        .then(response => response)
-    ;
-}
-```
-
-Every template requires its own concepts just like a view requiring its own
-model in MVC, but what we have is two different definitions of concepts;
-
-Client concepts are;
-
-`CONCEPTS: client.concepts.json`
-
-```json
-{
-    "$function": {
-        "$argument": "$type",
-        "rootPath": "$rootPath",
-        "return": "$returnType"
+    function parameters(method, parameters) {
+        return method === "get"
+            ? { params: parameters }
+            : { data: parameters };
     }
+
+    return Object.freeze({
+        post: post,
+        get: get
+    });
 }
 ```
 
-Service concepts are;
+## With Concepts
+
+Here json concepts can help you parse and structure given service schema, so
+that you can use a template engine to generate necessary client code.
+
+Below concepts definition will cover given api schema;
 
 `CONCEPTS: service.concepts.json`
 
 ```json
 {
-    "$service": {
-        "$parameter": "$type",
-        "response": "$responseType"
-    }
-}
-```
-
-Now what we can do is to create a transformation file to define how a `service`
-schema should be transformed into a `client` schema;
-
-`TRANSFORMATION: client.from.service.json`
-
-```json
-{
-    "function": {
-        "from": "service",
-        "map": {
-            "_": "_.after('say').camelCase()",
-            "rootPath": "_",
-            "returnType": "responseType.capitalize()"
+    "$resource*": {
+        "$method*": {
+            "$parameter*": "$type",
+            "!response": {
+                "model": "$model",
+                "type?": "$type"
+            }
         }
     },
-    "argument": {
-        "from": "parameter",
-        "map": {
-            "_": "_",
-            "type": "type.capitalize()"
+    "definitions": {
+        "$definition*": {
+            "$property*": "$type"
         }
     }
 }
 ```
 
-What above transformation defines is this;
+Now that you have defined every concept for the given api schema, we can make
+use of them to generate code with the following template;
 
-- `"from": "service"`
-  - For a `service`, there is a `function`
-- `"_": "_.after('say').camelCase()"`
-  - Name of a function should not have prefix `say`, and it should be in
-  `camelCase`
-- `"rootPath": "_"`
-  - Root path for a function is the name of its service
-- `"returnType": "responseType.capitalize()"`
-  - Return type of a function is capitalized version of response type of its
-    service
-- `"from": "parameter"`
-  - For a `parameter`, there is an `argument`
-- `"_": "_"`
-  - Name of an argument is the same as the name of its parameter
-- `"type": "type.capitalize()"`
-  - Type of an argument is capitalized
-
-Now we can transform following schema;
-
-`SCHEMA: greeting.service.json`
-
-```json
-{
-    "sayHello": {
-        "name": "string",
-        "response": "string"
-    }
-}
-```
-
-into this one;
-
-`SCHEMA: greeting.client.json`
-
-```json
-{
-    "hello": {
-        "name": "String",
-        "rootPath": "sayHello",
-        "return": "String"
-    }
-}
-```
-
-And with this template;
-
-`TEMPLATE: client.js`
+`TEMPLATE: client.template.js`
 
 ```javascript
-/**
- * @param {$function.argument.type$} $function.argument$
- * 
- * @return {$function.returnType$}
- */
-function $function$($function.argument$) {
-    return axios
-        .get(`/$function.rootPath$/${$function.argument$}`)
-        .then(response => response)
-    ;
+/* #resource */
+function $resource$(url) {
+    /* #method */
+    function $method$(/* #, */$parameter$) {
+        return axios(
+            method: "$method$",
+            url: `${url}/$resource$`,
+            ...parameters("$method$", {
+                $parameter$: $parameter$ // #parameter,
+            })
+        ).then(response => response);
+    }
+    /* / */
+
+    function parameters(method, parameters) {
+        return method === "get"
+            ? { params: parameters }
+            : { data: parameters };
+    }
+
+    return Object.freeze({
+        $method$: $method$ // #method,
+    });
 }
+/* / */
 ```
 
-We can generate following client code;
+> We used a **codestache** template syntax because of its improved readability.
+> Below you can find a mustache version of the same code template.
+>
+> ::: details Mustache version
+>
+> ```javascript
+> 
+> {{#resource}}
+> function {{resource}}(url) {
+>     {{#method}}
+>     function {{method}}({{#parameter}}{{parameter}}{{^last}},{{/last}}{{/parameter}}) {
+>         return axios(
+>             method: "{{method}}",
+>             url: `${url}/{{resource}}`,
+>             ...parameters("{{method}}", {
+>                 {{#parameter}}
+>                 {{parameter}}: {{parameter}}{{^last}},{{/last}}
+>                 {{/parameter}}
+>             })
+>         ).then(response => response);
+>     }
+>     {{/method}}
+> 
+>     function parameters(method, parameters) {
+>         return method === "get"
+>             ? { params: parameters }
+>             : { data: parameters };
+>     }
+> 
+>     return Object.freeze({
+>         {{#method}}
+>         {{method}}: {{method}}{{^last}},{{/last}}
+>         {{/method}}
+>     });
+> }
+> {{/resource}}
+> ```
+>
+> :::
 
-`CODE: greeting.client.js`
+Now that its concepts and template are ready, client code can be generated
+during build time with the following script;
 
 ```javascript
-/**
- * @param {String} name
- * @return {String}
- */
-function hello(name) {
-    return axios
-        .get(`/sayHello/${name}`)
-        .then(response => {
-            return response;
-        })
-    ;
-}
+const schema = jc.Schema.load('photos.service.json', 'service.concepts.json');
+
+const photosClient = cs.render('client.template.js', schema.shadow);
+
+fs.writeFile('photos.client.js', photosClient);
 ```
+
+## Without Concepts
+
+> TBD
