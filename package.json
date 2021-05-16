@@ -1,13 +1,7 @@
 {
   "name": "json-concepts",
-  "version": "0.0.1",
   "description": "a meta-schema specification in JSON format",
-  "main": "index.js",
-  "authors": {
-    "name": "Cihan Deniz",
-    "email": "cihan@ikinoktabir.com"
-  },
-  "repository": "https://github.com/codingatwill/json-concepts/json-concepts",
+  "repository": "https://github.com/codingatwill/json-concepts",
   "scripts": {
     "dev": "vuepress dev .",
     "build": "vuepress build ."

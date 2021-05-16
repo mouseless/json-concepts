@@ -1,7 +1,7 @@
 {
   "name": "json-concepts",
   "version": "0.0.1",
-  "description": "json concepts is a meta-schema specification in json format.",
+  "description": "a meta-schema specification in JSON format",
   "main": "index.js",
   "keywords": [
     "json",
