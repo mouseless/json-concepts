@@ -49,23 +49,28 @@ shape makes sense in the context it is used.
 Any special character that doesn't suit well to this approach is subject to a
 change.
 
-| Character | Meaning             | Familiarity                            | Status     |
-| --------- | ------------------- | -------------------------------------- | ---------- |
-| $         | variable            | variables in php, bash, powershell     | :+1:       |
-| #         | macro               | c, c++, c# preprocessor directives,    | :+1:       |
-| :         | type                | specifying type in uml, swift or scala | :+1:       |
-| @         | meta-data           | java annotations                       | :+1:       |
-| ?         | zero or one         | regex, if-else, null propagation       | :+1:       |
-| +         | one or more         | regex                                  | :+1:       |
-| *         | zero or more, any   | regex, file path wildcard              | :thinking: |
-| **        | any child           | file path wildcard                     | :+1:       |
-| {,}       | quantifier          | regex                                  | :+1:       |
-| /         | path                | urls                                   | :+1:       |
-| ..        | parent              | file paths                             | :+1:       |
-| ...       | merge with existing | javascript spread operator             | :+1:       |
-| \         | escape              | regular escape character               | :+1:       |
-| &         | and                 | bitwise and                            | :+1:       |
-| \|        | or                  | bitwise or                             | :+1:       |
+| Character | Meaning                           | Familiarity                                 | Status     |
+| --------- | --------------------------------- | ------------------------------------------- | ---------- |
+| $         | variable                          | variables in php, bash, powershell          | :+1:       |
+| #         | macro                             | c, c++, c# preprocessor directives          | :+1:       |
+| !         | force                             | css important                               | :+1:       |
+| @         | meta-data                         | java annotations                            | :+1:       |
+| ?         | zero or one                       | regex, ternary operator                     | :+1:       |
+| +         | one or more                       | regex                                       | :+1:       |
+| {,}       | quantifier                        | regex                                       | :+1:       |
+| :         | type                              | specifying type in uml, swift or scala      | :+1:       |
+| *         | zero or more & any                | regex & file path wildcard                  | :thinking: |
+| **        | any child                         | file path wildcard                          | :+1:       |
+| /         | path                              | file paths, urls                            | :+1:       |
+| ..        | parent                            | file paths                                  | :+1:       |
+| ...       | spread                            | javascript spread operator                  | :+1:       |
+| \         | escape                            | escape character                            | :+1:       |
+| &         | and                               | bitwise and                                 | :+1:       |
+| \|        | or                                | bitwise or                                  | :+1:       |
+| []        | set default key                   | javascript property accessor                | :thinking: |
+| ()        | set default value & pluralization | function call & plain english, e.g. item(s) | :thinking: |
+| ^         | from beginning                    | regex start                                 | :thinking: |
+| -         | shift left                        | minus sign                                  | :thinking: |
 
 ## About Specifications
 
@@ -119,6 +124,6 @@ rather a suggestion for a potential implementation.
 
 Although **json concepts** is only a specification, there is a Node.js
 implementation as well. This implementation serves as a proof of concept that
-validates the specification.
+validates this specification.
 
 Let's go!

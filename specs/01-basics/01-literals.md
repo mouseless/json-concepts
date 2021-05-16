@@ -1,9 +1,8 @@
 # Literals
 
-Literals are definitions that are expected in schema files exactly the same as
-they exist in concepts files.
-
-In below file `sayHello`, `name` and `string` are literals.
+A literal is an expression that is expected in a schema as it appears in the
+concepts definition. Below definition has `sayHello`, `name` and `string` as
+literals.
 
 `CONCEPTS: service.concepts.json`
 
@@ -15,10 +14,12 @@ In below file `sayHello`, `name` and `string` are literals.
 }
 ```
 
-Literals on the left-hand side are called **key literals**. Those that are on
-the right-hand side are called **value literals**.
+Literals on the **left-hand** side are called **key literals**, literals on the
+**right-hand** side are called **value literals**. So `sayHello` and `name` are
+**key literals**, `string` is a **value literal**.
 
-Above concepts file only accepts below schema;
+Since this concepts definition consists of only literals, it only validates
+itself;
 
 `SCHEMA: greeting.service.json`
 
@@ -29,6 +30,3 @@ Above concepts file only accepts below schema;
     }
 }
 ```
-
-This is because there are no variables in above concepts file, but only
-literals.

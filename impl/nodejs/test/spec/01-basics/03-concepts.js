@@ -151,7 +151,7 @@ describe('spec/basics/concepts', function () {
             (() => concepts.validate({
                 "sayGoodbye": {
                     "response": "string",
-                    "response": "string"
+                    "response": "text"
                 }
             })).should.throw(error.Schema_definition_is_not_valid__REASON(
                 because => because.CONCEPT_is_missing('parameter')

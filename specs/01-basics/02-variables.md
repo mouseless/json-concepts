@@ -1,6 +1,7 @@
 # Variables
 
-When an **value** starts with `$` sign, it indicates that it is a variable. Below
+An expression is not a literal when it starts with a variable sign `$`. When it
+is on the **right-hand** side, an expression is called a **variable**. Below,
 `$type` is a variable.
 
 `CONCEPTS: service.concepts.json`

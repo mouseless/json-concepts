@@ -1,7 +1,8 @@
 # Concepts
 
-When a **key** starts with a `$` sign, it indicates that it is a concept. In below
-concepts file, there are two concepts `$service` and `$parameter`.
+When an expression on the **left-hand** side starts with a `$` sign, it
+indicates that it is a concept. In below concepts definition, there are two
+concepts: `$service` and `$parameter`.
 
 `CONCEPTS: service.concepts.json`
 
@@ -27,8 +28,8 @@ Below schema is a valid schema against above concepts file;
 
 ## Key Literals Under Concepts
 
-You can define a key literal under a concept. For the following concepts file
-`response` is a key literal under `$service` concept;
+You can define a key literal under a concept. For the following concepts
+definition `response` is a key literal under `$service` concept;
 
 `CONCEPTS: service.concepts.json`
 
@@ -56,8 +57,8 @@ Below is a valid schema for above concepts file;
 
 ## Conflicts in Key Literals and Concepts
 
-For below concepts file, `$parameter` concept cannot be `response`, because
-there is already a key literal with that name;
+For below concepts definition, `$parameter` concept cannot be `response`,
+because this definition already expects a key literal with that name;
 
 `CONCEPTS: service.concepts.json`
 
@@ -70,7 +71,8 @@ there is already a key literal with that name;
 }
 ```
 
-For this reason below schema is **NOT** valid;
+Below schema defines `response` key twice, which makes it an invalid JSON and an
+invalid schema;
 
 `SCHEMA: greeting.service.json`
 
@@ -78,7 +80,7 @@ For this reason below schema is **NOT** valid;
 {
     "sayGoodbye": {
         "response": "string",
-        "response": "string"
+        "response": "text"
     }
 }
 ```
