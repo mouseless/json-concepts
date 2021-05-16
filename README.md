@@ -79,8 +79,9 @@ Or you can directly dive into the [specs].
 [use cases]: use-cases/README.md
 [specs]: specs/README.md
 
----
+## Contribution
 
 Thanks for your interest in **json concepts**. If you want to ask a question or
-make a contribution to this project, just go to the [github repository], and
-open an issue.
+make a contribution to this project, just go to the [github repository].
+
+[github repository]: https://github.com/codingatwill/json-concepts
