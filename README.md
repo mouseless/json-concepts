@@ -76,5 +76,11 @@ To understand how you can make use of **json concepts**, have a look at its
 
 Or you can directly dive into the [specs].
 
-[use cases]: usecases/README.md
+[use cases]: use-cases/README.md
 [specs]: specs/README.md
+
+---
+
+Thanks for your interest in **json concepts**. If you want to ask a question or
+make a contribution to this project, just go to the [github repository], and
+open an issue.

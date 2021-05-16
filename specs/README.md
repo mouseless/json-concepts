@@ -1,12 +1,8 @@
 # Introduction
 
-"JSON Concepts" is a schema specification in JSON format which allows you to
-create a conceptual design for any type of data structure, especially those
-that represent a schema.
-
-A conceptual design is a file in JSON format with a `.concepts.json` extension.
-These files are referred as concepts files throughout the document. Below is an
-example of a concepts file;
+This section includes all the specifications of **json concepts**. A file that
+ends with `.concepts.json` is referred as a concepts definition throughout this
+document. Below is an example of a concepts definition;
 
 `CONCEPTS: service.concepts.json`
 
@@ -19,10 +15,7 @@ example of a concepts file;
 }
 ```
 
-Although it is more or less of a self explanatory example, what this document
-represents will become more and more clear as you go throughout this document.
-For now, we only need you to realise that this file defines concepts to
-validate a schema like the following;
+This definition represents a meta-schema that will validate a schema like below;
 
 `SCHEMA: greeting.service.json`
 
@@ -35,42 +28,97 @@ validate a schema like the following;
 }
 ```
 
-## About Specifications
-
-Every specification introduces a feature of JSON Concepts and there will be one
-or more cases to clearly define the feature. Just like above examples, there
-will be a sample concepts file and a sample schema to demonstrate that case.
-
 ## About Syntax
 
-To keep its syntax short, JSON Concepts makes a heavy use of special
-characters. This is a design decision to make the syntax expressive, just like
+To keep its syntax short, **json concepts** makes a heavy use of special
+characters. This is a design decision to have an expressive syntax, just like
 regular expressions.
 
-For readability there are two basic rules about usage of special characters;
+We ask two basic questions when choosing a special character;
 
-1. They should mean only one thing
-2. The meaning should be familiar for an acceptable reason
-   1. It may have the same meaning in another language or standard
-   2. Name or shape of the symbol makes sense
+1. Does it mean only one thing?
+2. Is it familiar?
 
-Any special character usage that doesn't suit above rules should be taken into
-reconsideration.
+If the answer is yes to both questions, then that special character is a good
+choice.
 
-| Character | Meaning | Familiarity |
-| - | - | - |
-| $ | variable | variables in php, bash, powershell |
-| # | macro | c macros, c# preprocessors |
-| : | type | uml, swift, scala |
-| @ | meta-data | java annotations |
-| ? | zero or one | regex, if-else, null propagation |
-| + | one or more | regex |
-| * | zero or more, any | regex, wildcard |
-| {,} | quantifier | regex |
-| / | path | urls |
-| .. | parent | file paths |
-| ** | any child | file path wildcard |
-| \ | escape | regular escape character |
-| _ | self or current | ?? |
-| & | and | bitwise and |
-| \| | or | bitwise or |
+A special character is considered to be familiar either because it has the same
+meaning in another well-known language or specification, or because its name or
+shape makes sense in the context it is used.
+
+Any special character that doesn't suit well to this approach is subject to a
+change.
+
+| Character | Meaning             | Familiarity                            | Status     |
+| --------- | ------------------- | -------------------------------------- | ---------- |
+| $         | variable            | variables in php, bash, powershell     | :+1:       |
+| #         | macro               | c, c++, c# preprocessor directives,    | :+1:       |
+| :         | type                | specifying type in uml, swift or scala | :+1:       |
+| @         | meta-data           | java annotations                       | :+1:       |
+| ?         | zero or one         | regex, if-else, null propagation       | :+1:       |
+| +         | one or more         | regex                                  | :+1:       |
+| *         | zero or more, any   | regex, file path wildcard              | :thinking: |
+| **        | any child           | file path wildcard                     | :+1:       |
+| {,}       | quantifier          | regex                                  | :+1:       |
+| /         | path                | urls                                   | :+1:       |
+| ..        | parent              | file paths                             | :+1:       |
+| ...       | merge with existing | javascript spread operator             | :+1:       |
+| \         | escape              | regular escape character               | :+1:       |
+| &         | and                 | bitwise and                            | :+1:       |
+| \|        | or                  | bitwise or                             | :+1:       |
+
+## About Specifications
+
+Every specification introduces a new feature of **json concepts**. Each spec is
+written assuming that you have read the specs before that one. There will be one
+or more cases to clearly define a feature. Just like above examples, there will
+be a sample concepts definition and a sample schema to demonstrate a case.
+
+`CONCEPTS: sample.concepts.json`
+
+```json
+{
+    "$sample*": "$definition"
+}
+```
+
+These concepts definitions are usually followed by a schema;
+
+`SCHEMA: schema.sample.json`
+
+```json
+{
+    "schema": "defined"
+}
+```
+
+### Another Case
+
+When there is more than one case, following cases will be in a different
+heading.
+
+If there is a need for an example code, it will be in `javascript`.
+
+`CODE: sample.js`
+
+```javascript
+const schema = Schema.load('schema.sample.json', 'sample.concepts.json');
+
+console.log(schema.definition);
+```
+
+When the case is an error case, expected error message will be specified like
+this;
+
+`ERROR: an expected error message`
+
+This does not mean that such an error message is expected word by word. It is
+rather a suggestion for a potential implementation.
+
+## Final Word
+
+Although **json concepts** is only a specification, there is a Node.js
+implementation as well. This implementation serves as a proof of concept that
+validates the specification.
+
+Let's go!

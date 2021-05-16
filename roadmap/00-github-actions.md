@@ -1,6 +1,6 @@
 # GitHub Actions
 
-Build and deploy automation should be configured.
+Build and deploy automation to be configured.
 
 - [x] Website
 - [ ] JS Build & Test with Coverage
