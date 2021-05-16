@@ -1,6 +1,5 @@
 # Concept Keys in Shadows
 
-> TBD -> change default from `_` to name of the concept
 > shadow should have name of the concept for the key of its identifier.
 > if there is a child literal or variable with the name of the concept, this
 > means it will override that value.

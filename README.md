@@ -74,7 +74,7 @@ definition validates a schema like this one;
 To understand how you can make use of **json concepts**, have a look at its
 [use cases].
 
-Or you can directly dive into its [specification].
+Or you can directly dive into the [specs].
 
 [use cases]: usecases/README.md
-[specification]: spec/README.md
+[specs]: specs/README.md

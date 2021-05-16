@@ -1,4 +1,4 @@
-# Move All Shadow Specs To Here
+# Move All Shadow Specs To Shadows Folder
 
 > TBD - leave related parts of shadow specs if it is necessary for that
 > spec only. e.g. below spec doesn't need to be in a separate section, and does

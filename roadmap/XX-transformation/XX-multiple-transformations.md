@@ -5,7 +5,7 @@
     "function": [
     {
         "from": "service",
-        "map": {
+        "select": {
             "_": "_ | after 'say' | camelCase",
             "rootPath": "_",
             "returnType": "responseType | capitalize"
@@ -13,7 +13,7 @@
     },
     {
         "from": "parameter",
-        "map": {
+        "select": {
             "_": "_",
             "type": "type | capitalize"
         }
