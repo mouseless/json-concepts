@@ -20,19 +20,19 @@ describe('spec/custom-types/validating-concept-name', function () {
 
         concepts.shadow.should.deep.equal({
             "concept": {
-                "_": "service",
+                "name": "service",
                 "type": "identifier",
                 "quantifier": { "min": 1 },
                 "concept": {
-                    "_": "method",
+                    "name": "method",
                     "type": "method",
                     "quantifier": { "min": 0 },
                     "concept": {
-                        "_": "parameter",
+                        "name": "parameter",
                         "type": "identifier",
                         "quantifier": { "min": 0 },
                         "variable": {
-                            "_": "type"
+                            "name": "type"
                         }
                     }
                 }

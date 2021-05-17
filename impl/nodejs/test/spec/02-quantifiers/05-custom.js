@@ -17,24 +17,24 @@ describe('spec/quantifiers/custom', function () {
 
         concepts.shadow.should.deep.equal({
             "concept": {
-                "_": "service",
+                "name": "service",
                 "quantifier": { "min": 1, "max": 3 },
                 "literal": {
-                    "_": "response",
+                    "name": "response",
                     "quantifier": { "min": 1, "max": 1 },
                     "concept": {
-                        "_": "status",
+                        "name": "status",
                         "quantifier": { "min": 2 },
                         "variable": {
-                            "_": "responseType"
+                            "name": "responseType"
                         }
                     }
                 },
                 "concept": {
-                    "_": "parameter",
+                    "name": "parameter",
                     "quantifier": { "max": 2 },
                     "variable": {
-                        "_": "type"
+                        "name": "type"
                     }
                 }
             }

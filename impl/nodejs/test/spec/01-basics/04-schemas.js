@@ -92,11 +92,12 @@ describe('spec/basics/schemas', function () {
                     }
                 }),
                 'greeting.service.json': JSON.stringify({
-                    "@concepts": "service.concepts.json",
                     "sayHello": {
                         "name": "string",
                         "response": "string"
-                    }
+                    },
+
+                    "@concepts": "service.concepts.json"
                 })
             });
 
@@ -129,11 +130,12 @@ describe('spec/basics/schemas', function () {
                         }
                     }),
                     'greeting.service.json': JSON.stringify({
-                        "@concepts": "service.concepts.json",
                         "sayHello": {
                             "name": "string",
                             "response": "string"
-                        }
+                        },
+
+                        "@concepts": "service.concepts.json"
                     })
                 }
             });
@@ -152,11 +154,12 @@ describe('spec/basics/schemas', function () {
                         }
                     }),
                     'greeting.service.json': JSON.stringify({
-                        "@concepts": "wrong.concepts.json",
                         "sayHello": {
                             "name": "string",
                             "response": "string"
-                        }
+                        },
+
+                        "@concepts": "wrong.concepts.json"
                     })
                 }
             });
@@ -181,11 +184,12 @@ describe('spec/basics/schemas', function () {
                 });
             fs({
                 'greeting.service.json': JSON.stringify({
-                    "@concepts": "http://test.com/service.concepts.json",
                     "sayHello": {
                         "name": "string",
                         "response": "string"
-                    }
+                    },
+
+                    "@concepts": "http://test.com/service.concepts.json"
                 })
             });
 

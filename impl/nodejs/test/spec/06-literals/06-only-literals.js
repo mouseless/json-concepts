@@ -18,22 +18,22 @@ describe('spec/literals/only-literals', function () {
 
         concepts.shadow.should.deep.equal({
             "literal": {
-                "_": "service",
+                "name": "service",
                 "literal": [
                     {
-                        "_": "name",
-                        "variable": { "_": "name" }
+                        "name": "name",
+                        "variable": { "name": "name" }
                     },
                     {
-                        "_": "parameter",
+                        "name": "parameter",
                         "literal": [
                             {
-                                "_": "name",
-                                "variable": { "_": "parameterName" }
+                                "name": "name",
+                                "variable": { "name": "parameterName" }
                             },
                             {
-                                "_": "type",
-                                "variable": { "_": "parameterType" }
+                                "name": "type",
+                                "variable": { "name": "parameterType" }
                             }
                         ]
                     }
@@ -89,27 +89,27 @@ describe('spec/literals/only-literals', function () {
 
             concepts.shadow.should.deep.equal({
                 "literal": {
-                    "_": "services",
+                    "name": "services",
                     "variable": {
                         "dimensions": 1,
                         "literal": [
                             {
-                                "_": "name",
-                                "variable": { "_": "name" }
+                                "name": "name",
+                                "variable": { "name": "name" }
                             },
                             {
-                                "_": "parameters",
+                                "name": "parameters",
                                 "quantifier": { "min": 0, "max": 1 },
                                 "variable": {
                                     "dimensions": 1,
                                     "literal": [
                                         {
-                                            "_": "name",
-                                            "variable": { "_": "name" }
+                                            "name": "name",
+                                            "variable": { "name": "name" }
                                         },
                                         {
-                                            "_": "type",
-                                            "variable": { "_": "type" }
+                                            "name": "type",
+                                            "variable": { "name": "type" }
                                         }
                                     ]
                                 }

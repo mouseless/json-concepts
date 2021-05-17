@@ -1,10 +1,8 @@
 # Shadows
 
-Shadows are traversable versions of concepts and schemas. They are to be
-generated automatically given a schema or concepts.
-
-> These are called shadows because they are not direct output of JSON Concepts,
-> rather they are handy data structures.
+A shadow is an easy-to-code version of a definition. A concepts definition has a
+concepts shadow, a schema definition has a schema shadow. They are generated
+automatically given a definition.
 
 Let's begin with a concept;
 
@@ -26,28 +24,46 @@ Corresponding shadow is as follows;
 ```json
 {
     "concept": {
-        "_": "service",
+        "name": "service",
         "literal": {
-            "_": "response",
+            "name": "response",
             "variable": {
-                "_": "responseType"
+                "name": "responseType"
             }
         },
         "concept": { 
-            "_": "parameter",
+            "name": "parameter",
             "variable": {
-                "_": "type"
+                "name": "type"
             }
         }
     }
 }
 ```
 
-> By default `_` key is added to represent name of an element.
+> `name` key is used to represent name of an element.
+
+Shadow is generated when its definition is loaded;
+
+`CODE: greeting.js`
+
+```javascript
+const concepts = Concepts.load('service.concepts.json');
+const shadow = concepts.shadow;
+
+const service = shadow.concept;
+console.log(service.name); // prints "service"
+
+const response = service.literal;
+console.log(response.name); // prints "response"
+
+const responseType = response.variable;
+console.log(responseType.name); // prints "responseType"
+```
 
 ## Schema Shadow
 
-Assume there is below schema that conforms to above concepts;
+Below is a schema that conforms to the above concepts definition;
 
 `SCHEMA: greeting.service.json`
 
@@ -60,16 +76,16 @@ Assume there is below schema that conforms to above concepts;
 }
 ```
 
-In this case `greeting.service.json` schema is expected to cast below shadow;
+This schema is expected to cast below shadow;
 
 `SCHEMA SHADOW`
 
 ```json
 {
     "service": {
-        "_": "sayHello",
+        "name": "sayHello",
         "parameter": {
-            "_": "name",
+            "name": "name",
             "type": "string"
         },
         "responseType": "string"
@@ -77,17 +93,18 @@ In this case `greeting.service.json` schema is expected to cast below shadow;
 }
 ```
 
-This way, schema becomes traversable. Following is an example in `javascript`;
+Below code uses schema shadow;
+
+`CODE: greeting.js`
 
 ```javascript
-const schema = Schema.load('greeting.service.json');
-const shadow = schema.shadow;
+const schema = Schema.load('greeting.service.json', 'service.concepts.json');
 
-const service = shadow.service;
-console.log(service._); // prints "sayHello"
+const service = schema.shadow.service;
+console.log(service.name); // prints "sayHello"
 console.log(service.responseType); // prints "string"
 
 const parameter = service.parameter;
-console.log(parameter._); // prints "name"
+console.log(parameter.name); // prints "name"
 console.log(parameter.type); // prints "string"
 ```

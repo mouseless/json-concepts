@@ -1,4 +1,4 @@
-const { Schema, Concepts } = require('../../..');
+const { Concepts } = require('../../..');
 const { should } = require('chai');
 
 should();
@@ -13,25 +13,25 @@ describe('spec/basics/shadows', function () {
         });
 
         concepts.shadow.should.deep.equal({
-            concept: {
-                _: "service",
-                literal: {
-                    _: "response",
-                    variable: {
-                        _: "responseType"
+            "concept": {
+                "name": "service",
+                "literal": {
+                    "name": "response",
+                    "variable": {
+                        "name": "responseType"
                     }
                 },
-                concept: {
-                    _: "parameter",
-                    variable: {
-                        "_": "type"
+                "concept": {
+                    "name": "parameter",
+                    "variable": {
+                        "name": "type"
                     }
                 }
             }
         })
     });
 
-    it('should have literal as leaf when no variable was given', function() {
+    it('should have literal as leaf when no variable was given', function () {
         const concepts = new Concepts({
             "$service": {
                 "response": "string"
@@ -39,12 +39,12 @@ describe('spec/basics/shadows', function () {
         });
 
         concepts.shadow.should.deep.equal({
-            concept: {
-                _: "service",
-                literal: {
-                    _: "response",
-                    literal: {
-                        _: "string"
+            "concept": {
+                "name": "service",
+                "literal": {
+                    "name": "response",
+                    "literal": {
+                        "name": "string"
                     }
                 }
             }
@@ -68,13 +68,13 @@ describe('spec/basics/shadows', function () {
             });
 
             schema.shadow.should.deep.equal({
-                service: {
-                    _: "sayHello",
-                    parameter: {
-                        _: "name",
-                        type: "string"
+                "service": {
+                    "name": "sayHello",
+                    "parameter": {
+                        "name": "name",
+                        "type": "string"
                     },
-                    responseType: "string"
+                    "responseType": "string"
                 }
             });
         });

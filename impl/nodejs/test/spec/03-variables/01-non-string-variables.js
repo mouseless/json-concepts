@@ -22,10 +22,10 @@ describe('spec/variables/non-string-variables', function () {
         schema.shadow.should.deep.equal({
             "service": [
                 {
-                    "_": "sayGoodbye",
+                    "name": "sayGoodbye",
                     "flag": [
                         {
-                            "_": "async",
+                            "name": "async",
                             "enabled": true
                         }
                     ],

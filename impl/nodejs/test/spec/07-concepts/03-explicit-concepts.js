@@ -26,7 +26,7 @@ describe('spec/concepts/explicit-concepts', function () {
             }
         });
 
-        schema.shadow.class[0].method[0]._.should.be.equal('logout');
+        schema.shadow.class[0].method[0].name.should.be.equal('logout');
     });
 
     it('should give error when concept does not exist', function () {
@@ -92,7 +92,7 @@ describe('spec/concepts/explicit-concepts', function () {
                 }
             });
 
-            schema.shadow.service[0].parameter[0]._.should.be.equal('response');
+            schema.shadow.service[0].parameter[0].name.should.be.equal('response');
         });
     });
 });

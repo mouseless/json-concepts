@@ -108,9 +108,9 @@ describe('spec/quantifiers/exactly-one', function () {
 
             schema.shadow.should.deep.equal({
                 "service": {
-                    "_": "sayHello",
+                    "name": "sayHello",
                     "parameter": {
-                        "_": "name",
+                        "name": "name",
                         "type": null
                     },
                     "responseType": null

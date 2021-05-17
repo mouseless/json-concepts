@@ -15,14 +15,14 @@ describe('spec/literals/concept-under-a-literal', function () {
 
         concepts.shadow.should.deep.equal({
             "concept": {
-                "_": "service",
+                "name": "service",
                 "quantifier": { "min": 1 },
                 "literal": {
-                    "_": "response",
+                    "name": "response",
                     "concept": {
-                        "_": "property",
+                        "name": "property",
                         "quantifier": { "min": 0 },
-                        "variable": { "_": "type" }
+                        "variable": { "name": "type" }
                     }
                 }
             }
@@ -40,14 +40,14 @@ describe('spec/literals/concept-under-a-literal', function () {
         schema.shadow.should.deep.equal({
             "service": [
                 {
-                    "_": "sayHello",
+                    "name": "sayHello",
                     "property": [
                         {
-                            "_": "message",
+                            "name": "message",
                             "type": "string"
                         },
                         {
-                            "_": "status",
+                            "name": "status",
                             "type": "number"
                         }
                     ]

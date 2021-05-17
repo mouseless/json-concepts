@@ -14,13 +14,13 @@ describe('spec/variables/variable-types', function () {
 
         concepts.shadow.should.deep.equal({
             "concept": {
-                "_": "service",
+                "name": "service",
                 "quantifier": { "min": 1 },
                 "concept": {
-                    "_": "flag",
+                    "name": "flag",
                     "quantifier": { "min": 0 },
                     "variable": {
-                        "_": "enabled",
+                        "name": "enabled",
                         "type": "boolean"
                     }
                 }

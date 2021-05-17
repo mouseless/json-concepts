@@ -14,13 +14,13 @@ describe('spec/arrays/declaring-an-array', function () {
 
         concepts.shadow.should.deep.equal({
             "concept": {
-                "_": "service",
+                "name": "service",
                 "quantifier": { "min": 1 },
                 "literal": {
-                    "_": "tags",
+                    "name": "tags",
                     "quantifier": { "min": 0, "max": 1 },
                     "variable": {
-                        "_": "tags",
+                        "name": "tags",
                         "dimensions": 1
                     }
                 }
@@ -66,13 +66,13 @@ describe('spec/arrays/declaring-an-array', function () {
 
             concepts.shadow.should.deep.equal({
                 "concept": {
-                    "_": "service",
+                    "name": "service",
                     "quantifier": { "min": 1 },
                     "concept": {
-                        "_": "parameter",
+                        "name": "parameter",
                         "quantifier": { "min": 0 },
                         "variable": {
-                            "_": "types",
+                            "name": "types",
                             "dimensions": 1
                         }
                     }
@@ -100,10 +100,10 @@ describe('spec/arrays/declaring-an-array', function () {
             schema.shadow.should.deep.equal({
                 "service": [
                     {
-                        "_": "sayHello",
+                        "name": "sayHello",
                         "parameter": [
                             {
-                                "_": "name",
+                                "name": "name",
                                 "types": ["string", "text"]
                             }
                         ],
@@ -160,10 +160,10 @@ describe('spec/arrays/declaring-an-array', function () {
             schema.shadow.should.deep.equal({
                 "service": [
                     {
-                        "_": "sayHello",
+                        "name": "sayHello",
                         "parameter": [
                             {
-                                "_": "name",
+                                "name": "name",
                                 "types": ["string"]
                             }
                         ],
@@ -191,10 +191,10 @@ describe('spec/arrays/declaring-an-array', function () {
             schema.shadow.should.deep.equal({
                 "service": [
                     {
-                        "_": "sayHello",
+                        "name": "sayHello",
                         "parameter": [
                             {
-                                "_": "name",
+                                "name": "name",
                                 "types": []
                             }
                         ],
@@ -213,10 +213,10 @@ describe('spec/arrays/declaring-an-array', function () {
 
             concepts.shadow.should.deep.equal({
                 "concept": {
-                    "_": "matrix",
+                    "name": "matrix",
                     "quantifier": { "min": 0 },
                     "variable": {
-                        "_": "value",
+                        "name": "value",
                         "dimensions": 2
                     }
                 }
@@ -231,15 +231,15 @@ describe('spec/arrays/declaring-an-array', function () {
             schema.shadow.should.deep.equal({
                 "matrix": [
                     {
-                        "_": "matrix-a",
+                        "name": "matrix-a",
                         "value": [[1, 2, 3], [4, 5, 6]]
                     },
                     {
-                        "_": "matrix-b",
+                        "name": "matrix-b",
                         "value": [[1, 2, 3]]
                     },
                     {
-                        "_": "matrix-c",
+                        "name": "matrix-c",
                         "value": [[1]]
                     }
                 ]

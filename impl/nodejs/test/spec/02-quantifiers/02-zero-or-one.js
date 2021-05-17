@@ -80,19 +80,19 @@ describe('spec/quantifiers/zero-or-one', function () {
 
             concepts.shadow.should.deep.equal({
                 "concept": {
-                    "_": "service",
+                    "name": "service",
                     "literal": {
-                        "_": "response",
+                        "name": "response",
                         "quantifier": { "min": 0, "max": 1 },
                         "variable": {
-                            "_": "responseType"
+                            "name": "responseType"
                         }
                     },
                     "concept": {
-                        "_": "parameter",
+                        "name": "parameter",
                         "quantifier": { "min": 0, "max": 1 },
                         "variable": {
-                            "_": "type"
+                            "name": "type"
                         }
                     }
                 }
@@ -116,9 +116,9 @@ describe('spec/quantifiers/zero-or-one', function () {
 
                 schema.shadow.should.deep.equal({
                     "service": {
-                        "_": "sayHello",
+                        "name": "sayHello",
                         "parameter": {
-                            "_": "name",
+                            "name": "name",
                             "type": "string"
                         },
                         "responseType": null
@@ -140,7 +140,7 @@ describe('spec/quantifiers/zero-or-one', function () {
 
                 schema.shadow.should.deep.equal({
                     "service": {
-                        "_": "sayHello",
+                        "name": "sayHello",
                         "parameter": null,
                         "responseType": null
                     }
@@ -176,7 +176,7 @@ describe('spec/quantifiers/zero-or-one', function () {
 
                 schema.shadow.should.deep.equal({
                     "service": {
-                        "_": "sayHello",
+                        "name": "sayHello",
                         "parameter": null,
                         "responseType": null
                     }

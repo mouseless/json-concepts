@@ -19,31 +19,31 @@ describe('spec/literals/nested-object-arrays', function () {
 
         concepts.shadow.should.deep.equal({
             "concept": {
-                "_": "service",
+                "name": "service",
                 "quantifier": { "min": 1 },
                 "literal": {
-                    "_": "parameters",
+                    "name": "parameters",
                     "quantifier": { "min": 0, "max": 1 },
                     "variable": {
                         "dimensions": 1,
                         "literal": [
                             {
-                                "_": "name",
-                                "variable": { "_": "name" }
+                                "name": "name",
+                                "variable": { "name": "name" }
                             },
                             {
-                                "_": "types",
+                                "name": "types",
                                 "variable": {
                                     "dimensions": 1,
                                     "literal": [
                                         {
-                                            "_": "name",
-                                            "variable": { "_": "name" }
+                                            "name": "name",
+                                            "variable": { "name": "name" }
                                         },
                                         {
-                                            "_": "validation",
+                                            "name": "validation",
                                             "variable": {
-                                                "_": "validators",
+                                                "name": "validators",
                                                 "dimensions": 1
                                             }
                                         }
@@ -88,7 +88,7 @@ describe('spec/literals/nested-object-arrays', function () {
         schema.shadow.should.deep.equal({
             "service": [
                 {
-                    "_": "sayHello",
+                    "name": "sayHello",
                     "parameters": [
                         {
                             "name": "name",

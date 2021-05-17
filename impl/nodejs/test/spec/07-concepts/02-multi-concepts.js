@@ -20,28 +20,28 @@ describe('spec/concepts/multi-concepts', function () {
 
         concepts.shadow.should.deep.equal({
             "concept": {
-                "_": "class",
+                "name": "class",
                 "quantifier": { "min": 0 },
                 "concept": [
                     {
-                        "_": "property",
+                        "name": "property",
                         "quantifier": { "min": 0 },
                         "literal": {
-                            "_": "returns",
-                            "variable": { "_": "returnType" }
+                            "name": "returns",
+                            "variable": { "name": "returnType" }
                         }
                     },
                     {
-                        "_": "method",
+                        "name": "method",
                         "quantifier": { "min": 0 },
                         "literal": {
-                            "_": "returns",
-                            "variable": { "_": "returnType" }
+                            "name": "returns",
+                            "variable": { "name": "returnType" }
                         },
                         "concept": {
-                            "_": "parameter",
+                            "name": "parameter",
                             "quantifier": { "min": 0 },
-                            "variable": { "_": "type" }
+                            "variable": { "name": "type" }
                         }
                     }
                 ]
@@ -93,18 +93,18 @@ describe('spec/concepts/multi-concepts', function () {
             schema.shadow.should.deep.equal({
                 "class": [
                     {
-                        "_": "user",
+                        "name": "user",
                         "property": [],
                         "method": [
                             {
-                                "_": "login",
+                                "name": "login",
                                 "parameter": [
                                     {
-                                        "_": "username",
+                                        "name": "username",
                                         "type": "string"
                                     },
                                     {
-                                        "_": "password",
+                                        "name": "password",
                                         "type": "string"
                                     }
                                 ],
@@ -168,7 +168,7 @@ describe('spec/concepts/multi-concepts', function () {
                 }
             });
 
-            schema.shadow.class[0].property[0]._.should.be.equal('logout');
+            schema.shadow.class[0].property[0].name.should.be.equal('logout');
         });
     });
 });

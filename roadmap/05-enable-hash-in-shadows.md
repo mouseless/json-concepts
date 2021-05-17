@@ -5,7 +5,7 @@
 ```json
 {
     "!$environment*": {
-        "$database(type)": "$connection"
+        "$database": "$connection"
     }
 }
 ```
@@ -16,7 +16,7 @@
         "development": {
             "name": "development",
             "database": {
-                "type": "mysql",
+                "name": "mysql",
                 "connection": "..."
             }
         }

@@ -17,12 +17,12 @@ describe('spec/custom-types/defining-a-custom-type', function () {
 
         concepts.shadow.should.deep.equal({
             "concept": {
-                "_": "service",
+                "name": "service",
                 "quantifier": { "min": 1 },
                 "literal": {
-                    "_": "name",
+                    "name": "name",
                     "variable": {
-                        "_": "name",
+                        "name": "name",
                         "type": "identifier"
                     }
                 }

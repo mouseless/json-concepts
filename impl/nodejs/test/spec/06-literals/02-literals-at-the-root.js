@@ -13,12 +13,12 @@ describe('spec/literals/literals-at-the-root', function () {
 
         concepts.shadow.should.deep.equal({
             "literal": {
-                "_": "services",
+                "name": "services",
                 "quantifier": { "min": 0, "max": 1 },
                 "concept": {
-                    "_": "service",
+                    "name": "service",
                     "quantifier": { "min": 1 },
-                    "variable": { "_": "response" }
+                    "variable": { "name": "response" }
                 }
             }
         });
@@ -33,11 +33,11 @@ describe('spec/literals/literals-at-the-root', function () {
         schema.shadow.should.deep.equal({
             "service": [
                 {
-                    "_": "sayHello",
+                    "name": "sayHello",
                     "response": "string"
                 },
                 {
-                    "_": "sayGoodbye",
+                    "name": "sayGoodbye",
                     "response": "string"
                 }
             ]

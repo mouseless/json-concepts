@@ -17,21 +17,21 @@ describe('spec/arrays/object-arrays', function () {
 
         concepts.shadow.should.deep.equal({
             "concept": {
-                "_": "service",
+                "name": "service",
                 "quantifier": { "min": 1 },
                 "literal": {
-                    "_": "parameters",
+                    "name": "parameters",
                     "quantifier": { "min": 0, "max": 1 },
                     "variable": {
                         "dimensions": 1,
                         "literal": [
                             {
-                                "_": "name",
-                                "variable": { "_": "pName" }
+                                "name": "name",
+                                "variable": { "name": "pName" }
                             },
                             {
-                                "_": "type",
-                                "variable": { "_": "pType" }
+                                "name": "type",
+                                "variable": { "name": "pType" }
                             }
                         ]
                     }
@@ -85,7 +85,7 @@ describe('spec/arrays/object-arrays', function () {
             schema.shadow.should.deep.equal({
                 "service": [
                     {
-                        "_": "sayHello",
+                        "name": "sayHello",
                         "parameters": [
                             {
                                 "pName": "name",
@@ -195,7 +195,7 @@ describe('spec/arrays/object-arrays', function () {
             const objectArray = new Concepts({
                 "$service+": {
                     "parameter?": [{
-                        "name": "$_",
+                        "name": "$name",
                         "type": "$type"
                     }]
                 }

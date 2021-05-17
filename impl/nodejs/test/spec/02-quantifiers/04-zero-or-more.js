@@ -48,13 +48,13 @@ describe('spec/quantifiers/zero-or-more', function () {
 
             concepts.shadow.should.deep.equal({
                 "concept": {
-                    "_": "service",
+                    "name": "service",
                     "quantifier": { "min": 1 },
                     "concept": {
-                        "_": "parameter",
+                        "name": "parameter",
                         "quantifier": { "min": 0 },
                         "variable": {
-                            "_": "type"
+                            "name": "type"
                         }
                     }
                 }
@@ -81,20 +81,20 @@ describe('spec/quantifiers/zero-or-more', function () {
             schema.shadow.should.deep.equal({
                 "service": [
                     {
-                        "_": "sayHello",
+                        "name": "sayHello",
                         "parameter": [
                             {
-                                "_": "name",
+                                "name": "name",
                                 "type": "string"
                             },
                             {
-                                "_": "surname",
+                                "name": "surname",
                                 "type": "string"
                             }
                         ]
                     },
                     {
-                        "_": "sayGoodbye",
+                        "name": "sayGoodbye",
                         "parameter": []
                     }
                 ]

@@ -43,9 +43,9 @@ describe('spec/references/nested-references', function () {
 
             concepts.shadow.should.deep.equal({
                 "concept": {
-                    "_": "root",
+                    "name": "root",
                     "concept": {
-                        "_": "node",
+                        "name": "node",
                         "quantifier": { "min": 0 },
                         "concept": { "reference": "node" }
                     }
@@ -71,30 +71,30 @@ describe('spec/references/nested-references', function () {
 
             schema.shadow.should.deep.equal({
                 "root": {
-                    "_": "ceo",
+                    "name": "ceo",
                     "node": [
                         {
-                            "_": "cfo",
+                            "name": "cfo",
                             "node": [
                                 {
-                                    "_": "accountant",
+                                    "name": "accountant",
                                     "node": [
-                                        { "_": "intern", "node": [] }
+                                        { "name": "intern", "node": [] }
                                     ]
                                 }
                             ]
                         },
                         {
-                            "_": "cto",
+                            "name": "cto",
                             "node": [
-                                { "_": "dba", "node": [] },
-                                { "_": "developer", "node": [] }
+                                { "name": "dba", "node": [] },
+                                { "name": "developer", "node": [] }
                             ]
                         },
                         {
-                            "_": "coo",
+                            "name": "coo",
                             "node": [
-                                { "_": "representative", "node": [] }
+                                { "name": "representative", "node": [] }
                             ]
                         }
                     ]
@@ -145,12 +145,12 @@ describe('spec/references/nested-references', function () {
 
             concepts.shadow.should.deep.equal({
                 "concept": {
-                    "_": "root",
+                    "name": "root",
                     "concept": {
-                        "_": "a",
+                        "name": "a",
                         "quantifier": { "min": 0 },
                         "concept": {
-                            "_": "b",
+                            "name": "b",
                             "quantifier": { "min": 0 },
                             "concept": { "reference": "a" }
                         }

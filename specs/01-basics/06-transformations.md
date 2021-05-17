@@ -1,9 +1,9 @@
 # Transformations
 
-Transformation is a definition to transform a schema of one concepts file to
-another.
+Transformation is a definition to transform a schema of one concepts definition
+to another.
 
-Assume you have two concepts file below;
+Assume you have two concepts definitions below;
 
 `SOURCE: service.concepts.json`
 
@@ -27,8 +27,7 @@ Assume you have two concepts file below;
 }
 ```
 
-Following file is a transformation from `service` concepts to `client`
-concepts;
+Following is a transformation from `service` concepts to `client` concepts;
 
 `TRANSFORMATION: client.from.service.json`
 

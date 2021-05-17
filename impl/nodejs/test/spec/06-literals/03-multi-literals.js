@@ -19,24 +19,24 @@ describe('spec/literals/multi-literals', function () {
         concepts.shadow.should.deep.equal({
             "literal": [
                 {
-                    "_": "services",
+                    "name": "services",
                     "quantifier": { "min": 0, "max": 1 },
                     "concept": {
-                        "_": "service",
+                        "name": "service",
                         "quantifier": { "min": 1 },
-                        "variable": { "_": "response" }
+                        "variable": { "name": "response" }
                     }
                 },
                 {
-                    "_": "models",
+                    "name": "models",
                     "quantifier": { "min": 0, "max": 1 },
                     "concept": {
-                        "_": "model",
+                        "name": "model",
                         "quantifier": { "min": 1 },
                         "concept": {
-                            "_": "field",
+                            "name": "field",
                             "quantifier": { "min": 0 },
-                            "variable": { "_": "type" }
+                            "variable": { "name": "type" }
                         }
                     }
                 }
@@ -60,24 +60,24 @@ describe('spec/literals/multi-literals', function () {
         schema.shadow.should.deep.equal({
             "service": [
                 {
-                    "_": "sayHello",
+                    "name": "sayHello",
                     "response": "message"
                 },
                 {
-                    "_": "sayGoodbye",
+                    "name": "sayGoodbye",
                     "response": "message"
                 }
             ],
             "model": [
                 {
-                    "_": "message",
+                    "name": "message",
                     "field": [
                         {
-                            "_": "text",
+                            "name": "text",
                             "type": "string"
                         },
                         {
-                            "_": "status",
+                            "name": "status",
                             "type": "number"
                         }
                     ]
@@ -109,12 +109,12 @@ describe('spec/literals/multi-literals', function () {
             schema.shadow.should.deep.equal({
                 "filter": [
                     {
-                        "_": "append",
+                        "name": "append",
                         "input": "string",
                         "output": "string"
                     },
                     {
-                        "_": "split",
+                        "name": "split",
                         "input": "string",
                         "output": "array"
                     }

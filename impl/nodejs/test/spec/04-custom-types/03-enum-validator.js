@@ -20,12 +20,12 @@ describe('spec/custom-types/enum-validator', function () {
 
         concepts.shadow.should.deep.equal({
             "concept": {
-                "_": "service",
+                "name": "service",
                 "quantifier": { "min": 1 },
                 "literal": {
-                    "_": "statusCode",
+                    "name": "statusCode",
                     "variable": {
-                        "_": "statusCode",
+                        "name": "statusCode",
                         "type": "httpStatus"
                     }
                 }

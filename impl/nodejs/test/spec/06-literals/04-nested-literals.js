@@ -16,18 +16,18 @@ describe('spec/literals/nested-literals', function () {
 
         concepts.shadow.should.deep.equal({
             "concept": {
-                "_": "service",
+                "name": "service",
                 "quantifier": { "min": 1 },
                 "literal": {
-                    "_": "response",
+                    "name": "response",
                     "literal": [
                         {
-                            "_": "type",
-                            "variable": { "_": "type" }
+                            "name": "type",
+                            "variable": { "name": "type" }
                         },
                         {
-                            "_": "status",
-                            "variable": { "_": "status" }
+                            "name": "status",
+                            "variable": { "name": "status" }
                         }
                     ]
                 }
@@ -46,7 +46,7 @@ describe('spec/literals/nested-literals', function () {
         schema.shadow.should.deep.equal({
             "service": [
                 {
-                    "_": "sayHello",
+                    "name": "sayHello",
                     "type": "string",
                     "status": 200
                 }

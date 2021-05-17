@@ -30,12 +30,12 @@ describe('spec/references/defining-a-reference', function () {
 
         concepts.shadow.should.deep.equal({
             "concept": {
-                "_": "class",
+                "name": "class",
                 "quantifier": { "min": 1 },
                 "concept": {
-                    "_": "property",
+                    "name": "property",
                     "quantifier": { "min": 0 },
-                    "variable": { "_": "type" }
+                    "variable": { "name": "type" }
                 }
             }
         });
