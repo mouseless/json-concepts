@@ -15,9 +15,9 @@ reference is being used. Below is an example.
 }
 ```
 
-Above there is a `#properties` reference in which `property` concept is defined.
-This reference is used right under `class` concept. So this definition is
-equivalent to below definition;
+Above there is a `#properties` reference in which `$property` concept is
+defined and it is used under `$class` concept. This definition is equivalent to
+below definition;
 
 `CONCEPTS 2: class.concepts.json`
 
@@ -29,12 +29,13 @@ equivalent to below definition;
 }
 ```
 
-References does not have an effect in concepts shadow and schema validation,
-they are exactly the same as definition in `CONCEPTS 2`.
+References does not have an effect in concepts shadow and schema validation, so
+`CONCEPTS 1` has exactly the same shadow and schema validation behavior with
+`CONCEPTS 2`.
 
 ## References Can Only Be Defined at the Root
 
-Below is an invalid definition because `#method` is defined under `class`
+Below is an invalid definition because `#method` is defined under `$class`
 concept instead of being defined at the root;
 
 `CONCEPTS: class.concepts.json`

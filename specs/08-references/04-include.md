@@ -1,8 +1,8 @@
 # Include
 
 `#include` loads a concepts file from given path and replaces definitions inside
-that file to the place where it was included. Below `parameter` concept is
-included from an outer file;
+that file to the place where it was included. Below, `$parameter` concept is
+included from another file;
 
 `CONCEPTS 1: parameter.concepts.json`
 
@@ -36,9 +36,9 @@ Here `service.concepts.json` is equivalent to below concepts definition;
 
 ## Processing Order
 
-When a concepts definition is loaded, `#include`s are processed first. Then it
-should process references of included definition, and it finally places processed
-definition into where it was included. Below is an example;
+When a concepts definition is loaded, first `#include`s are processed. Then it
+should process references of included definition, and it finally places
+processed definition into where it was included. Below is an example;
 
 `CONCEPTS 1: method.concepts.json`
 
@@ -74,6 +74,7 @@ For this example, processing order is as follows;
 - Look for `#include`s
   - Load file `method.concepts.json`
   - Look for `#include`s
+    - None found
   - Process references in `method.concepts.json`
   - Place processed definition of `method.concepts.json` where it was included
 - Process references in `class.concepts.json`

@@ -91,8 +91,8 @@ level, `**` means "any node" for every level.
 
 ## No Path
 
-When an injection does not have a `@path` meta-data, it means its definition is
-going to be injected at the root. Below is an example;
+When an injection does not have a `@path` meta-data, it means that its
+definition is going to be injected at the root. Below is an example;
 
 `CONCEPTS 1: class.concepts.json`
 
@@ -167,7 +167,8 @@ Above definition is equivalent to this;
 ## Order of Injections
 
 The order of injections matters, they are processed in the order they appear.
-Below definition will only have `$class` concept after being processed.
+Below definition will only have `$class` concept after being processed, because
+none of the paths hit a node in the definition;
 
 `CONCEPTS 1: class.concepts.json`
 
@@ -248,15 +249,19 @@ For this example, process order of `behavior.concepts.json` is as follows;
 
 1. Process `#include`s of `behavior.concepts.json`;
    1. Process `#include`s of `dto.concepts.json`
+      1. None found
    2. Process `#` references at the root of `dto.concepts.json`
       1. Process `#properties` reference
    3. Process `#inject`s of `dto.concepts.json`
+      1. None found
 2. Process `#` references at the root of `behavior.concepts.json`
+   1. None found
 3. Process `#inject`s of `behavior.concepts.json`
-   1. Process `#` references of first `#inject`
+   1. Process `#` references of first `#inject` (`$method`)
       1. Process `#parameters` reference
    2. Place first `#inject` to paths matching `/**/$class`
-   3. Process `#` references of second `#inject`
+   3. Process `#` references of second `#inject` (`$return`)
+      1. None found
    4. Place second `#inject` to paths matching `/**/$method` or `/**/$property`
 
 Therefore `behavior.concepts.json` is equivalent to below definition;

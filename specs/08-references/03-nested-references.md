@@ -77,7 +77,7 @@ Below is a valid schema for above concepts definition;
 }
 ```
 
-When a recursive definition found, concepts shadow cannot express it without
+When a recursive definition exists, concepts shadow cannot express it without
 using a reference. So in case of recursion, it makes use of the `reference`
 keyword;
 
@@ -86,9 +86,9 @@ keyword;
 ```json
 {
     "concept": {
-        "_": "root",
+        "name": "root",
         "concept": {
-            "_": "node",
+            "name": "node",
             "quantifier": { "min": 0 },
             "concept": { "reference": "node" }
         }
@@ -115,19 +115,19 @@ When there is an indirect recursion like in the below example, shadow should use
 }
 ```
 
-In this case, `#a` can include `#b`, but `#b` must have a reference to `#a`;
+In this case, `$a` can include `$b`, but `$b` must have a reference to `$a`;
 
 `CONCEPTS SHADOW`
 
 ```json
 {
     "concept": {
-        "_": "root",
+        "name": "root",
         "concept": {
-            "_": "a",
+            "name": "a",
             "quantifier": { "min": 0 },
             "concept": {
-                "_": "b",
+                "name": "b",
                 "quantifier": { "min": 0 },
                 "concept": { "reference": "a" }
             }
