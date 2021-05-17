@@ -8,7 +8,9 @@
         "**/node_modules": true,
         "**/bin": true,
         "**/obj": true,
-        ".vuepress/dist": true
+        ".vuepress/dist": true,
+        ".vuepress/.cache": true,
+        ".vuepress/.temp": true
     },
     "cSpell.words": [
         "AVLN",

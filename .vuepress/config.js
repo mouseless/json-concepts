@@ -16,15 +16,27 @@ module.exports = {
     ['meta', { name: 'apple-mobile-web-app-capable', content: 'yes' }],
     ['meta', { name: 'apple-mobile-web-app-status-bar-style', content: 'black' }]
   ],
-  patterns: config.patterns,
+  pagePatterns: config.pagePatterns,
   themeConfig: {
     repo: 'https://github.com/codingatwill/json-concepts',
-    editLinks: false,
+    repoLabel: 'GitHub',
+    docsRepo: 'https://github.com/codingatwill/json-concepts',
+    docsBranch: 'main',
     docsDir: '',
-    editLinkText: '',
+    editLink: false,
     lastUpdated: false,
-    nav: config.nav,
-    sidebar: config.sidebar
+    contributors: false,
+    navbar: config.navbar,
+    sidebar: config.sidebar,
+    sidebarDepth: 1
   },
-  plugins: []
+  plugins: [
+    [
+      '@vuepress/plugin-search',
+      {
+        locales: { '/': { placeholder: 'Search' } },
+        isSearchable: (page) => page.path !== '/' && !page.path.includes('XX-')
+      }
+    ]
+  ]
 };

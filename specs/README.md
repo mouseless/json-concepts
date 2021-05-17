@@ -125,5 +125,3 @@ rather a suggestion for a potential implementation.
 Although **json concepts** is only a specification, there is a Node.js
 implementation as well. This implementation serves as a proof of concept that
 validates this specification.
-
-Let's go!
