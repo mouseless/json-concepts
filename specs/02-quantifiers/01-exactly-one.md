@@ -1,10 +1,8 @@
 # Exactly One
 
-A concept definition, by default, means that exactly one of that concept will
-be allowed in output schemas.
-
-So for the following concepts definition, `service` and `parameter` instances
-should be exactly one for every schema of this definition.
+A concept, by default, requires exactly one instance in every schema. So the
+following concepts definition expects exactly one `service` and `parameter` in
+every schema.
 
 `CONCEPTS: service.concepts.json`
 
@@ -124,9 +122,9 @@ And its shadow is as follows;
 ```json
 {
     "service": {
-        "_": "sayHello",
+        "name": "sayHello",
         "parameter": {
-            "_": "name",
+            "name": "name",
             "type": null
         },
         "responseType": null

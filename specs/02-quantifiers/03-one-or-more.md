@@ -1,9 +1,8 @@
 # One or More
 
-`+` indicates that one or more of that concept can occur in a schema.
-
-So for the following concepts definition, `$service+` indicates that there
-will exist at least one `service` in every schema of this concepts file;
+`+` indicates that one or more of that concept can occur in a schema. So for the
+following concepts definition, `$service+` indicates that there will exist at
+least one `service` in every schema;
 
 `CONCEPTS: service.concepts.json`
 
@@ -80,13 +79,13 @@ For following concepts definition, quantifier of `service` doesn't have a max;
 ```json
 {
     "concept": {
-        "_": "service", 
+        "name": "service", 
         "quantifier": { "min": 1 },
         "concept": {
-            "_": "parameter",
+            "name": "parameter",
             "quantifier": { "min": 0, "max": 1 },
             "variable": {
-                "_": "type"
+                "name": "type"
             }
         }
     }
@@ -95,8 +94,8 @@ For following concepts definition, quantifier of `service` doesn't have a max;
 
 ## Schema Shadow
 
-When there more than one concept is allowed in a schema, schema shadow stores
-them in an array;
+When more than one concepts are allowed in a schema, schema shadow stores them
+in an array;
 
 `SCHEMA: greeting.service.json`
 
@@ -115,14 +114,14 @@ them in an array;
 {
     "service": [
         {
-            "_": "sayHello",
+            "name": "sayHello",
             "parameter": {
-                "_": "name",
+                "name": "name",
                 "type": "string"
             }
         },
         {
-            "_": "sayGoodbye",
+            "name": "sayGoodbye",
             "parameter": null
         }
     ]
@@ -148,9 +147,9 @@ array;
 {
     "service": [
         {
-            "_": "sayHello",
+            "name": "sayHello",
             "parameter": {
-                "_": "name",
+                "name": "name",
                 "type": "string"
             }
         }

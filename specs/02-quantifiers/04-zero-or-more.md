@@ -1,7 +1,7 @@
 # Zero or More
 
-A concept with `*` is allowed to occur any number of times in a schema. In
-below concepts definition, `$parameter*` expression means that any number of
+A concept with `*` is allowed to occur any number of times in a schema. In below
+concepts definition, `$parameter*` expression means that any number of
 parameters are allowed under a service concept;
 
 `CONCEPTS: service.concepts.json`
@@ -67,13 +67,13 @@ zero;
 ```json
 {
     "concept": {
-        "_": "service",
+        "name": "service",
         "quantifier": { "min": 1 },
         "concept": {
-            "_": "parameter",
+            "name": "parameter",
             "quantifier": { "min": 0 },
             "variable": {
-                "_": "type"
+                "name": "type"
             }
         }
     }
@@ -81,6 +81,10 @@ zero;
 ```
 
 ## Schema Shadow
+
+Default value for a concept is empty array instead of `null`, because its
+quantifier allows more than one instance. In below schema `sayGoodbye` service
+does not have a parameter, so in its shadow `parameter` is an empty array.
 
 `SCHEMA: greeting.service.json`
 
@@ -100,25 +104,22 @@ zero;
 {
     "service": [
         {
-            "_": "sayHello",
+            "name": "sayHello",
             "parameter": [
                 {
-                    "_": "name",
+                    "name": "name",
                     "type": "string"
                 },
                 {
-                    "_": "surname",
+                    "name": "surname",
                     "type": "string"
                 }
             ]
         },
         {
-            "_": "sayGoodbye",
+            "name": "sayGoodbye",
             "parameter": [ ]
         }
     ]
 }
 ```
-
-> Notice that `parameter` was set to an empty array instead of `null`, because
-> its quantifier allows more than one instance.

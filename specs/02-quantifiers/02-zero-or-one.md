@@ -1,9 +1,8 @@
 # Zero or One
 
-`?` indicates that the concept might or might not exist in schemas.
-
-So for the following, `$parameter?` indicates that parameter concept is
-optional under the `service` concept;
+`?` indicates that concept is optional and might or might not exist in schemas.
+So for the following, `$parameter?` indicates that parameter concept is optional
+under the `service` concept;
 
 `CONCEPTS: service.concepts.json`
 
@@ -37,7 +36,7 @@ So both of below schemas are valid now;
 
 ## More Than One Concept Fails Validation
 
-But below is **NOT** valid, because at most one parameter was expected;
+Below schema is **NOT** valid, because at most one parameter was expected;
 
 `SCHEMA: greeting.service.json`
 
@@ -50,8 +49,7 @@ But below is **NOT** valid, because at most one parameter was expected;
 }
 ```
 
-Validation is not expected to specify exactly what is wrong. A message like
-this is sufficient;
+It gives below error when this schema is loaded;
 
 `ERROR: 'greeting.service.json' is not valid, maximum allowed number of
 'parameter' is 1, but got 2.`
@@ -105,19 +103,19 @@ Concepts shadow is as follows;
 ```json
 {
     "concept": {
-        "_": "service",
+        "name": "service",
         "literal": {
-            "_": "response",
+            "name": "response",
             "quantifier": { "min": 0, "max": 1 },
             "variable": {
-                "_": "responseType"
+                "name": "responseType"
             }
         },
         "concept": {
-            "_": "parameter",
+            "name": "parameter",
             "quantifier": { "min": 0, "max": 1 },
             "variable": {
-                "_": "type"
+                "name": "type"
             }
         }
     }
@@ -143,7 +141,7 @@ schema shadow have `null` for that concept;
 ```json
 {
     "service": {
-        "_": "sayHello",
+        "name": "sayHello",
         "parameter": null,
         "responseType": null
     }
@@ -169,7 +167,7 @@ It casts the same shadow above;
 ```json
 {
     "service": {
-        "_": "sayHello",
+        "name": "sayHello",
         "parameter": null,
         "responseType": null
     }

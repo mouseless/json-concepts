@@ -37,34 +37,35 @@ This concepts definition should have following shadow;
 ```json
 {
     "concept": {
-        "_": "service",
+        "name": "service",
         "quantifier": { "min": 1, "max": 3 },
         "literal": {
-            "_": "response",
+            "name": "response",
             "quantifier": { "min": 1, "max": 1 },
             "concept": {
-                "_": "status",
+                "name": "status",
                 "quantifier": { "min": 0 },
                 "variable": {
-                    "_": "responseType"
+                    "name": "responseType"
                 }
             }
         },
         "concept": {
-            "_": "parameter",
+            "name": "parameter",
             "quantifier": { "max": 2 },
             "variable": {
-                "_": "type"
+                "name": "type"
             }
         }
     }
 }
 ```
 
-It is trivial to give schema validation examples here. Any concept or literal
-should not have less occurrences than their minimum quantifiers, and should not
-have more occurrences than their maximum quantifiers.
+It is trivial to give schema validation examples here. Basically, any concept or
+literal should not have less occurrences than their minimum quantifiers, and
+they should not have more occurrences than their maximum quantifiers.
 
-> Literals can only have four valid custom quantifiers `{,1}`, `{0,1}`, `{1}`,
-> `{1,1}`. All of these can be represented with default or `?` quantifier.
-> So it is trivial, but still supported for the sake of consistency.
+> Since literals can occur at most once, they can only have four valid custom
+> quantifiers `{,1}`, `{0,1}`, `{1}`, `{1,1}`. All of these can be represented
+> with default or `?` quantifier. So it is trivial, but still supported for the
+> sake of consistency.
