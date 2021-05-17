@@ -24,8 +24,8 @@ type is going to be validated against all validators in the inheritance chain.
 }
 ```
 
-Here `primitive` custom type can have `float`, but `type` cannot. This means
-`float` can never be used.
+Here `primitive` seems to allow `float`, but since `type` does not, `float` is
+not a valid `primitive` either.
 
 `SCHEMA: greeting.service.json`
 

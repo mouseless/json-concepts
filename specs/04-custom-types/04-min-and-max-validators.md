@@ -1,10 +1,9 @@
 # Min and Max Validators
 
 Min and max validators can be applied to `number` or `string` variables. When
-applied to a `string`, they validate its length.
-
-In following concepts definition, length of `name` should be between `1` and
-`10`, and value `dailyCallLimit` should be between `10` and `100`.
+applied to a `string`, they validate its length. In the following concepts
+definition, length of `name` is expected to be between `1` and `10`, and value
+of `dailyCallLimit` to be between `10` and `100`.
 
 `CONCEPTS: service.concepts.json`
 
@@ -29,38 +28,7 @@ In following concepts definition, length of `name` should be between `1` and
 }
 ```
 
-Above definition has following schema;
-
-`CONCEPTS SHADOW`
-
-```json
-{
-    "concept": {
-        "_": "service",
-        "quantifier": { "min": 1 },
-        "literal": [
-            {
-                "_": "name",
-                "variable": {
-                    "_": "name",
-                    "type": "identifier"
-                }
-            },
-            {
-                "_": "dailyCallLimit",
-                "variable": {
-                    "_": "dailyCallLimit",
-                    "type": "limit"
-                }
-            }
-        ]
-    }
-}
-```
-
 Below schemas are **INVALID** because of min-max validations;
-
----
 
 `SCHEMA 1: greeting.service.json`
 

@@ -1,6 +1,6 @@
 # Regex Validator
 
-Regex validator can be applied to custom types that inherit from `string`. You
+Regex validator can be applied to custom types that derive from `string`. You
 can define a regex pattern under `regex` key. For the following concepts
 definition, `identifier` type only accepts values that match the given regex
 pattern;

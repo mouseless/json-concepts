@@ -1,10 +1,8 @@
 # Enum Validator
 
 Enum validator enables you to restrict value of a custom type to be one of the
-items in a given list.
-
-For following concepts definition, `statusCode` is restricted to be either
-`200`, `400` or `500`.
+items in a given list. For the following concepts definition, `statusCode` is
+restricted to be either `200`, `400` or `500`.
 
 `CONCEPTS: service.concepts.json`
 
@@ -17,24 +15,6 @@ For following concepts definition, `statusCode` is restricted to be either
         "httpStatus": {
             "type": "number",
             "enum": [ 200, 400, 500 ]
-        }
-    }
-}
-```
-
-`CONCEPTS SHADOW`
-
-```json
-{
-    "concept": {
-        "_": "service",
-        "quantifier": { "min": 1 },
-        "literal": {
-            "_": "statusCode",
-            "variable": {
-                "_": "statusCode",
-                "type": "httpStatus"
-            }
         }
     }
 }
@@ -90,5 +70,5 @@ the array is a `number`.
 }
 ```
 
-type of `httpStatus` is automatically set to `any`, because not all of the
+Type of `httpStatus` is automatically set to `any`, because not all of the
 items are of the same type.

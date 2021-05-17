@@ -132,29 +132,6 @@ describe('spec/custom-types/min-and-max-validators', function () {
             }
         });
 
-        concepts.shadow.should.deep.equal({
-            "concept": {
-                "name": "service",
-                "quantifier": { "min": 1 },
-                "literal": [
-                    {
-                        "name": "name",
-                        "variable": {
-                            "name": "name",
-                            "type": "identifier"
-                        }
-                    },
-                    {
-                        "name": "dailyCallLimit",
-                        "variable": {
-                            "name": "dailyCallLimit",
-                            "type": "limit"
-                        }
-                    }
-                ]
-            }
-        });
-
         (() => concepts.validate({
             "sayHello": {
                 "name": "string",

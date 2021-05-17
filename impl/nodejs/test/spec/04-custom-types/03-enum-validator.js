@@ -18,28 +18,20 @@ describe('spec/custom-types/enum-validator', function () {
             }
         });
 
-        concepts.shadow.should.deep.equal({
-            "concept": {
-                "name": "service",
-                "quantifier": { "min": 1 },
-                "literal": {
-                    "name": "statusCode",
-                    "variable": {
-                        "name": "statusCode",
-                        "type": "httpStatus"
-                    }
-                }
-            }
-        });
-
         (() => concepts.validate({
             "sayHello": {
-                "statusCode": 200
+                "statusCode": 404
             }
-        })).should.not.throw();
+        })).should.throw(
+            error.Schema_definition_is_not_valid__REASON(
+                because => because.VALUE_is_not_a_valid_TYPE(
+                    '404', 'httpStatus'
+                )
+            ).message
+        );
     });
 
-    it('should give error when an enum variable has unlisted value', function () {
+    it('should not give error when value is one of the items', function () {
         const concepts = new Concepts({
             "$service+": {
                 "statusCode": "$statusCode:httpStatus"
@@ -54,15 +46,9 @@ describe('spec/custom-types/enum-validator', function () {
 
         (() => concepts.validate({
             "sayHello": {
-                "statusCode": 404
+                "statusCode": 200
             }
-        })).should.throw(
-            error.Schema_definition_is_not_valid__REASON(
-                because => because.VALUE_is_not_a_valid_TYPE(
-                    '404', 'httpStatus'
-                )
-            ).message
-        );
+        })).should.not.throw();
     });
 
     describe('short-hand usage', function () {

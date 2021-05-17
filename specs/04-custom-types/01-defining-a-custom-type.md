@@ -1,7 +1,7 @@
 # Defining a Custom Type
 
-Custom types are defined under `@types` meta-data. For below file, `identifier`
-is defined as a custom type. So `$name` variable is of type `identifier`.
+Custom types are defined under `@types` meta-data. In below definition,
+`identifier` is a custom type definition.
 
 `CONCEPTS: service.concepts.json`
 
@@ -16,22 +16,26 @@ is defined as a custom type. So `$name` variable is of type `identifier`.
 }
 ```
 
+Above definition makes `name` variable an `identifier`. `identifier` type
+derives from `any` type by default.
+
 > If a custom type does not exist under `@types`, then concepts definition
 > is **INVALID**.
 
-Concepts shadow keeps meta-data in the root under `metaData`;
+Concepts shadow does not reflect meta-data, however it still sets the type of
+`name` variable to `identifier`;
 
 `CONCEPTS SHADOW`
 
 ```json
 {
     "concept": {
-        "_": "service",
+        "name": "service",
         "quantifier": { "min": 1 },
         "literal": {
-            "_": "name",
+            "name": "name",
             "variable": {
-                "_": "name",
+                "name": "name",
                 "type": "identifier"
             }
         }
@@ -39,12 +43,9 @@ Concepts shadow keeps meta-data in the root under `metaData`;
 }
 ```
 
-Above definition makes `name` variable an `identifier`, and `identifier`
-inherits from `any` type, because we did not specify which type it is based on.
+## Specifying a Base Type
 
-## Specifying Base Type
-
-You can define the base type of a custom type by adding `type` key under its
+You can derive a custom type from another type by adding `type` key under its
 definition.
 
 `CONCEPTS: service.concepts.json`
