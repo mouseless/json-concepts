@@ -1,7 +1,6 @@
 # Non-String Variables
 
-A value of a variable can be a boolean or a number, surrounding quotes will not
-be expected in a schema.
+A value of a variable can be `string`, `boolean` or a `number`.
 
 For below concepts definition;
 
@@ -17,7 +16,7 @@ For below concepts definition;
 ```
 
 `$enabled` and `$limit` variables can be `true` and `100` respectively. Below
-schema is **valid** and its shadow is as follows;
+schema is **valid**;
 
 `SCHEMA: greeting.service.json`
 
@@ -30,16 +29,18 @@ schema is **valid** and its shadow is as follows;
 }
 ```
 
+Schema shadow also contains these values as they appear in definition;
+
 `SCHEMA SHADOW`
 
 ```json
 {
     "service": [
         {
-            "_": "sayGoodbye",
+            "name": "sayGoodbye",
             "flag": [
                 {
-                    "_": "async",
+                    "name": "async",
                     "enabled": true
                 }
             ],

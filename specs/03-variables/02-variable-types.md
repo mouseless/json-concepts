@@ -22,13 +22,13 @@ Concepts shadow contains type of a variable under `type` key;
 ```json
 {
     "concept": {
-        "_": "service",
+        "name": "service",
         "quantifier": { "min": 1 },
         "concept": {
-            "_": "flag",
+            "name": "flag",
             "quantifier": { "min": 0 },
             "variable": {
-                "_": "enabled",
+                "name": "enabled",
                 "type": "boolean"
             }
         }
@@ -57,8 +57,8 @@ Below is an **INVALID** schema;
 - `:boolean` allows only `true` or `false`
 - `:number` allows only numbers
 
-By default a variable type is `:any`. Below concept definitions behaves exactly
-the same;
+By default a variable type is implicitly `:any`, but it can be defined
+explicitly;
 
 `explicit.concepts.json`
 
