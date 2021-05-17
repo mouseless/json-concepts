@@ -1,8 +1,8 @@
 # Array Item Type
 
-Variable type syntax (`:`) also applies to array variables. When an array
-variable has a type, it means all items of that array is required to be of that
-type. Below is an example;
+Type syntax (`:`) also applies to array variables. When an array variable has a
+type, it means all items of that array is required to be of that type. Below is
+an example;
 
 `CONCEPTS: tags.concepts.json`
 
@@ -12,7 +12,8 @@ type. Below is an example;
 }
 ```
 
-Below schema is now invalid because all items in `tags` should be `string`;
+Below schema is **invalid** because all items in `tags` are expected to be a
+`string`;
 
 `SCHEMA: invalid.tags.json`
 

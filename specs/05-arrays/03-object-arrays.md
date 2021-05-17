@@ -1,6 +1,6 @@
 # Object Arrays
 
-Below is how to define array of objects;
+Object arrays can be defined using below syntax;
 
 `CONCEPTS: service.concepts.json`
 
@@ -15,26 +15,29 @@ Below is how to define array of objects;
 }
 ```
 
+This definition indicates that `parameters` literal expects to have an array of
+objects with `name` and `type` keys.
+
 `CONCEPTS SHADOW`
 
 ```json
 {
     "concept": {
-        "_": "service",
+        "name": "service",
         "quantifier": { "min": 1 },
         "literal": {
-            "_": "parameters",
+            "name": "parameters",
             "quantifier": { "min": 0, "max": 1 },
             "variable": {
                 "dimensions": 1,
                 "literal": [
                     {
-                        "_": "name",
-                        "variable": { "_": "pName" }
+                        "name": "name",
+                        "variable": { "name": "pName" }
                     },
                     {
-                        "_": "type",
-                        "variable": { "_": "pType" }
+                        "name": "type",
+                        "variable": { "name": "pType" }
                     }
                 ]
             }
@@ -43,20 +46,20 @@ Below is how to define array of objects;
 }
 ```
 
-> In concepts shadow, object array is represented as a variable with the
-> dimensions of the array definition. Since object array does not have a name,
-> this variable node does not have a `"_"` key.
+In concepts shadow, object array is represented as a variable with the
+dimensions of the array definition. Since object array does not have a name,
+this variable node does not have a `"name"` key.
 
 ## Schema
 
-A valid schema is as follows;
+A valid schema for previous concepts definition is as follows;
 
 `SCHEMA: greeting.service.json`
 
 ```json
 {
     "sayHello": {
-        "parameter": [
+        "parameters": [
             {
                 "name": "name",
                 "type": "string"
@@ -70,8 +73,9 @@ A valid schema is as follows;
 }
 ```
 
-Normally shadows does not contain literal names, however in this case name of
-the array is taken from its literal.
+As mentioned before, a schema shadow does not contain literals. However, in case
+of object arrays, it **does** contain literal names. Below, you can see that
+`parameters` literal appear in the schema shadow;
 
 `SCHEMA SHADOW`
 
@@ -79,8 +83,8 @@ the array is taken from its literal.
 {
     "service": [
             {
-            "_": "sayHello",
-            "parameter": [ 
+            "name": "sayHello",
+            "parameters": [ 
                 {
                     "pName": "name",
                     "pType": "string"
@@ -132,7 +136,7 @@ two different concepts definition.
     {
         "$service+": {
             "parameter?": [ {
-                "name": "$_",
+                "name": "$name",
                 "type": "$type"
             } ]
         }
@@ -158,20 +162,22 @@ two different concepts definition.
     }
     ```
 
+Schema shadow is the same for both of the above schemas;
+
 `SCHEMA SHADOW`
 
 ```json
 {
     "service": [
         {
-            "_": "sayHello",
+            "name": "sayHello",
             "parameter": [
                 {
-                    "_": "name",
+                    "name": "name",
                     "type": "string"
                 },
                 {
-                    "_": "surname",
+                    "name": "surname",
                     "type": "string"
                 }
             ]
@@ -182,10 +188,8 @@ two different concepts definition.
 
 ## Concepts and Object Arrays
 
-Concepts and object arrays does not have a use case that makes sense, however an
-implementation might allow such definitions.
-
-There are 3 possible cases for such definitions.
+Concepts and object arrays can also be used together. There are 3 possible cases
+for such definitions.
 
 1. Concepts under object arrays:
 
@@ -217,8 +221,8 @@ There are 3 possible cases for such definitions.
         } ]
     }
 
-No schema validation or shadow creation is specified since there are no apparent
-use cases for above definitions. So implementations are free to handle above
+No schema validation or shadow is specified since there are no apparent use
+cases for above definitions. So implementations are free to handle above
 definitions in whatever way they choose to.
 
 ## Multi-Dimensional Array

@@ -1,6 +1,6 @@
 # Validating Concept Name
 
-Concept names can also be validated like variable values;
+A concept can also have a type like a variable;
 
 `CONCEPTS: service.concepts.json`
 
@@ -18,24 +18,28 @@ Concept names can also be validated like variable values;
 }
 ```
 
+This concepts definition indicates that `service` and `parameter` names are
+expected to be valid `identifier`s, and `method` names to be valid `method`s.
+Concepts shadow includes `type` information under the `concept` object;
+
 `CONCEPTS SHADOW`
 
 ```json
 {
     "concept": {
-        "_": "service",
+        "name": "service",
         "type": "identifier",
         "quantifier": { "min": 1 },
         "concept": {
-            "_": "method",
+            "name": "method",
             "type": "method",
             "quantifier": { "min": 0 },
             "concept": {
-                "_": "parameter",
+                "name": "parameter",
                 "type": "identifier",
                 "quantifier": { "min": 0 },
                 "variable": {
-                    "_": "type"
+                    "name": "type"
                 }
             }
         }
@@ -43,4 +47,5 @@ Concept names can also be validated like variable values;
 }
 ```
 
-> Note that custom types used in concept names must derive from string.
+Types of concepts must be or derive from `string`, otherwise concepts definition
+becomes **invalid**.

@@ -1,6 +1,6 @@
 # Declaring an Array
 
-Below is an array declaration for a literal.
+Below is an array declaration under a literal.
 
 `CONCEPTS: service.concepts.json`
 
@@ -12,20 +12,20 @@ Below is an array declaration for a literal.
 }
 ```
 
-Below is its shadow;
+When a variable is an array, its shadow has `dimensions` key;
 
 `CONCEPTS SHADOW`
 
 ```json
 {
     "concept": {
-        "_": "service",
+        "name": "service",
         "quantifier": { "min": 1 },
         "literal": {
-            "_": "tags",
+            "name": "tags",
             "quantifier": { "min": 0, "max": 1 },
             "variable": {
-                "_": "tags",
+                "name": "tags",
                 "dimensions": 1
             }
         }
@@ -52,13 +52,13 @@ Array declaration is the same with concepts, below is an example;
 ```json
 {
     "concept": {
-        "_": "service",
+        "name": "service",
         "quantifier": { "min": 1 },
         "concept": {
-            "_": "parameter",
+            "name": "parameter",
             "quantifier": { "min": 0 },
             "variable": {
-                "_": "types",
+                "name": "types",
                 "dimensions": 1
             }
         }
@@ -98,10 +98,10 @@ Given this concepts definition, below schema is valid;
 {
     "service": [
         {
-            "_": "sayHello",
+            "name": "sayHello",
             "parameter": [
                 {
-                    "_": "name",
+                    "name": "name",
                     "types": [ "string", "text" ]
                 }
             ],
@@ -134,10 +134,10 @@ Its shadow still contains an array;
 {
     "service": [
         {
-            "_": "sayHello",
+            "name": "sayHello",
             "parameter": [
                 {
-                    "_": "name",
+                    "name": "name",
                     "types": [ "string" ]
                 }
             ],
@@ -164,10 +164,10 @@ Below concepts definition has a double array for `$value` variable;
 ```json
 {
     "concept": {
-        "_": "matrix",
+        "name": "matrix",
         "quantifier": { "min": 0 },
         "variable": {
-            "_": "value",
+            "name": "value",
             "dimensions": 2
         }
     }
@@ -193,15 +193,15 @@ one;
 {
     "matrix": [
         {
-            "_": "matrix-a",
+            "name": "matrix-a",
             "value": [ [ 1, 2, 3 ], [ 4, 5, 6 ] ]
         },
         {
-            "_": "matrix-b",
+            "name": "matrix-b",
             "value": [ [ 1, 2, 3 ] ]
         },
         {
-            "_": "matrix-c",
+            "name": "matrix-c",
             "value": [ [ 1 ] ]
         }
     ]
