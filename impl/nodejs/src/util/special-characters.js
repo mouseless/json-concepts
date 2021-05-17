@@ -27,7 +27,7 @@ const SpecialCharacters = {
     /** `/**` */
     ANY_CHILD: "**",
     /** `_` */
-    SELF: "_",
+    SELF: "name",
     /** `{` */
     BEGIN_QUANTIFIER: "{",
     /** `}` */

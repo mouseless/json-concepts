@@ -1,13 +1,18 @@
-# JSON Concepts
+---
+title: json concepts
+home: true
+footer: MIT License - Copyright (C) 2021, Cihan Deniz
+---
 
-"JSON Concepts" is a schema specification in JSON format which allows you to
-create a conceptual design for any type of data structure, especially those
+**json concepts** is a meta-schema specification in JSON format which allows you
+to create a conceptual design for any type of data structure, especially those
 that represent a schema.
 
-This repository mainly focuses on the specification of JSON Concepts, but there
-is going to be a node.js implementation for PoC purposes.
+It is designed for definitions to have the same hierarchy with the schema files
+they validate. So by looking at a definition, you will roughly understand what
+schema it expects.
 
-Below is a sample concepts file;
+Here is a quick example.
 
 `CONCEPTS: endpoint.concepts.json`
 
@@ -15,8 +20,8 @@ Below is a sample concepts file;
 {
     "$endpoint:path+": {
         "$method:method+": {
-            "$parameter*": "$model",
-            "response?": "$model",
+            "$parameter*": "$type",
+            "response?": "$responseType",
             "status": [ "$status:status" ]
         }
     },
@@ -26,14 +31,17 @@ Below is a sample concepts file;
         },
     },
     "@types": {
-        "path": "/\/.*/g",
-        "method": [ "GET", "POST", "PUT", "PATCH", "DELETE" ],
+        "path": "^\\/.*$",
+        "method": [ "GET", "POST", "PUT", "DELETE" ],
         "status": [ 200, 201, 202, 204, 400, 401, 403, 404, 500 ]
     }
 }
 ```
 
-Below is a sample schema;
+This definition introduces `$endpoint`, `$method`, `$parameter`, `$model` and
+`$field` concepts. `$endpoint` is of type `:path`, `$method` is `:method`, and
+so on. `@types` meta-data lists all custom types. Long story short, this
+definition validates a schema like this one;
 
 `SCHEMA: users.endpoint.json`
 
@@ -62,3 +70,21 @@ Below is a sample schema;
     }
 }
 ```
+
+To understand how you can make use of **json concepts**, have a look at its
+[use cases].
+
+Or you can directly dive into the [specs].
+
+## Contribution
+
+Thanks for your interest in **json concepts**. If you want to ask a question or
+make a contribution, just go to the [github repository]. If you view this page
+from github, then go ahead and open an issue to ask a question or create a pull
+request to make a contribution.
+
+See you around :wave:
+
+[use cases]: use-cases/README.md
+[specs]: specs/README.md
+[github repository]: https://github.com/codingatwill/json-concepts

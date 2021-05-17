@@ -7,14 +7,20 @@
         "**/.DS_Store": true,
         "**/node_modules": true,
         "**/bin": true,
-        "**/obj": true
+        "**/obj": true,
+        ".vuepress/dist": true,
+        ".vuepress/.cache": true,
+        ".vuepress/.temp": true
     },
     "cSpell.words": [
         "AVLN",
+        "Cihan",
         "Codestache",
+        "Deniz",
         "Grpc",
         "Nata",
         "Protos",
+        "Roadmap",
         "Rpcs",
         "Undecorates",
         "arrayify",
@@ -23,12 +29,14 @@
         "buildrjs",
         "businesslogic",
         "camelcase",
+        "collapsable",
         "jsonata",
         "jsonpath",
         "noopener",
         "noreferrer",
         "openapi",
         "plantuml",
+        "postgresql",
         "prego",
         "prepend",
         "preprocessors",
@@ -40,6 +48,12 @@
         "twitr",
         "typeof",
         "undecorate",
-        "unvisit"
-    ]
+        "unvisit",
+        "usecase",
+        "usecases",
+        "vuepress"
+    ],
+    "markdownlint.config": {
+        "MD033": false
+    }
 }
