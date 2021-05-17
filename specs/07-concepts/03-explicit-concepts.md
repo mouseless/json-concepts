@@ -19,7 +19,7 @@ Consider below concepts definition;
 ```
 
 In below schema definition, it is explicitly specified that `logout` is a
-`method`;
+`$method`;
 
 `SCHEMA: user.class.json`
 
@@ -33,7 +33,7 @@ In below schema definition, it is explicitly specified that `logout` is a
 }
 ```
 
-Without `:method`, it would be a `property`.
+Without `:method`, it would be a `$property`.
 
 ## Resolving Literal Conflicts
 
@@ -52,7 +52,7 @@ workaround this problem, concept name can be given explicitly.
 }
 ```
 
-Below schema defines a `parameter` named `response`;
+Below schema defines a `$parameter` named `response`;
 
 ```json
 {

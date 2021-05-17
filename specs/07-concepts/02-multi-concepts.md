@@ -1,7 +1,8 @@
 # Multi Concepts
 
-Concepts definition allows more than concepts at the same level. In below
-example, `property` and `method` concepts occur directly under `class` concept;
+A concepts definition allows more than one concept at the same level. In below
+example, `$property` and `$method` concepts appear directly under `$class`
+concept;
 
 `CONCEPTS: class.concepts.json`
 
@@ -19,35 +20,35 @@ example, `property` and `method` concepts occur directly under `class` concept;
 }
 ```
 
-Above definition is valid and its shadow has an array under `concept`;
+Above definition is valid and its shadow has an array under `concept` object;
 
 `CONCEPTS SHADOW`
 
 ```json
 {
     "concept": {
-        "_": "class",
+        "name": "class",
         "quantifier": { "min": 0 },
         "concept": [
             {
-                "_": "property",
+                "name": "property",
                 "quantifier": { "min": 0 },
                 "literal": {
-                    "_": "returns",
-                    "variable": { "_": "returnType" }
+                    "name": "returns",
+                    "variable": { "name": "returnType" }
                 }
             },
             {
-                "_": "method",
+                "name": "method",
                 "quantifier": { "min": 0 },
                 "literal": {
-                    "_": "returns",
-                    "variable": { "_": "returnType" }
+                    "name": "returns",
+                    "variable": { "name": "returnType" }
                 },
                 "concept": {
-                    "_": "parameter",
+                    "name": "parameter",
                     "quantifier": { "min": 0 },
-                    "variable": { "_": "type" }
+                    "variable": { "name": "type" }
                 }
             }
         ]
@@ -57,8 +58,8 @@ Above definition is valid and its shadow has an array under `concept`;
 
 ## Name Conflicts
 
-When there are more than one concept with the same name at the same level, then
-concept definition is invalid.
+When there exists more than one concept with the same name at the same level,
+then the concept definition is invalid.
 
 `CONCEPTS: invalid.concepts.json`
 
@@ -72,7 +73,7 @@ concept definition is invalid.
 ```
 
 Above concepts definition is in valid because there are two concepts named
-`conflict` at the same level.
+`$conflict` at the same level.
 
 `ERROR: 'invalid.concepts.json' is not valid, cannot declare 'conflict' more
 than once at the same level.`
@@ -99,7 +100,7 @@ concepts definition.
 ```
 
 For above concepts definition below schema has `login` definition to be resolved
-against `property` or `method` concepts;
+against `$property` or `$method` concepts;
 
 `SCHEMA: user.class.json`
 
@@ -115,9 +116,9 @@ against `property` or `method` concepts;
 }
 ```
 
-`login` will firstly be validated against `property` concept. Since it does not
-fit `property` concept, it will then be validated against `method` concept. So
-it will be an instance of a `method` concept.
+`login` will firstly be validated against `$property` concept. Since it does not
+fit `$property` concept, it will then be validated against `$method` concept. So
+it will be an instance of a `$method` concept.
 
 `SCHEMA SHADOW`
 
@@ -125,18 +126,18 @@ it will be an instance of a `method` concept.
 {
     "class": [
         {
-            "_": "user",
+            "name": "user",
             "property": [],
             "method": [
                 {
-                    "_": "login",
+                    "name": "login",
                     "parameter": [
                         {
-                            "_": "username",
+                            "name": "username",
                             "type": "string"
                         },
                         {
-                            "_": "password",
+                            "name": "password",
                             "type": "string"
                         }
                     ],
@@ -152,7 +153,7 @@ it will be an instance of a `method` concept.
 
 When there is a definition that matches more than one concept, then this
 definition is decided to be an instance of the first concept. For below schema,
-`logout` becomes a `property`.
+`logout` becomes a `$property`.
 
 `SCHEMA: user.class.json`
 

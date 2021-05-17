@@ -1,6 +1,7 @@
 # Inline Concepts
 
-Concepts definition can be embedded into a schema file in `@concepts` meta-data.
+Concepts definition can be embedded into a schema file using `@concepts`
+meta-data.
 
 `SCHEMA: greeting.service.json`
 
