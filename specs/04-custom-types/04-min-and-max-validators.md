@@ -13,6 +13,7 @@ of `$dailyCallLimit` to be between `10` and `100`.
         "name": "$name:identifier",
         "dailyCallLimit": "$dailyCallLimit:limit"
     },
+    
     "@types": {
         "identifier": {
             "type": "string",

@@ -11,6 +11,7 @@ restricted to be either `200`, `400` or `500`.
     "$service+": {
         "statusCode": "$statusCode:httpStatus"
     },
+
     "@types": {
         "httpStatus": {
             "type": "number",
@@ -46,6 +47,7 @@ Short-hand for enum validator is as follows;
     "$service+": {
         "statusCode": "$statusCode:httpStatus"
     },
+
     "@types": {
         "httpStatus": [ 200, 400, 500 ]
     }
@@ -64,6 +66,7 @@ the array is a `number`.
     "$service+": {
         "statusCode": "$statusCode:httpStatus"
     },
+    
     "@types": {
         "httpStatus": [ 200, "400", 500 ]
     }

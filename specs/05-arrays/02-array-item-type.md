@@ -34,6 +34,7 @@ Custom types are also supported.
 ```json
 {
     "$season*": [ "$months:month" ],
+    
     "@types": {
         "month": [
             "JAN", "FEB", "MAR",

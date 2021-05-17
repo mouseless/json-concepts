@@ -2,7 +2,7 @@
 
 A shadow is an easy-to-code version of a definition. A concepts definition has a
 concepts shadow, a schema definition has a schema shadow. They are generated
-automatically given a definition.
+automatically using the given definition.
 
 Let's begin with a concept;
 
@@ -41,7 +41,7 @@ Corresponding shadow is as follows;
 }
 ```
 
-> `name` key is used to represent name of an element.
+> To represent the name of an element, `name` key is used by default.
 
 Shadow is generated when its definition is loaded;
 

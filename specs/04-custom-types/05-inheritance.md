@@ -10,6 +10,7 @@ type is going to be validated against all validators in the inheritance chain.
     "$service+": {
         "$parameter*": "$type:primitive"
     },
+
     "@types": {
         "primitive": {
             "type": "type",
@@ -49,6 +50,7 @@ definition is not valid;
 ```json
 {
     "circular": "$type:a",
+    
     "@types": {
         "a": { "type": "b" },
         "b": { "type": "c" },

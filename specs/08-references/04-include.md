@@ -105,7 +105,7 @@ example;
 ```json
 {
     "$service+": {
-        "#include": "https://json-concepts.github.io/samples/parameter.concepts.json"
+        "#include": "https://my-concepts.com/parameter.concepts.json"
     }
 }
 ```

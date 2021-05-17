@@ -10,6 +10,7 @@ Custom types are defined under `@types` meta-data. In below definition,
     "$service+": {
         "name": "$name:identifier"
     },
+
     "@types": {
         "identifier": { }
     }
@@ -55,6 +56,7 @@ definition.
     "$service+": {
         "name": "$name:identifier"
     },
+    
     "@types": {
         "identifier": { 
             "type": "string"

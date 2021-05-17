@@ -7,14 +7,15 @@ meta-data.
 
 ```json
 {
+    "sayHello": {
+        "name": "string",
+        "surname": "string"
+    },
+
     "@concepts": {
         "$service+": {
             "$parameter*": "$type"
         }
-    },
-    "sayHello": {
-        "name": "string",
-        "surname": "string"
     }
 }
 ```

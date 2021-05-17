@@ -14,7 +14,7 @@ definition. Below is an example;
 }
 ```
 
-This schema can be validated against following concepts definition;
+This schema can be validated against the following concepts definition;
 
 `CONCEPTS: service.concepts.json`
 

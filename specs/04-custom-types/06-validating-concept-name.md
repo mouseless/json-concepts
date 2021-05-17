@@ -11,6 +11,7 @@ A concept may have a type similar to a variable;
             "$parameter:identifier*": "$type"
         }
     },
+    
     "@types": {
         "identifier": "^[a-zA-Z][0-9a-zA-Z]*$",
         "method": [ "get", "post", "put", "delete" ]
