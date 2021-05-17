@@ -2,7 +2,7 @@
 
 A concept with `*` is allowed to occur any number of times in a schema. In below
 concepts definition, `$parameter*` expression means that any number of
-parameters are allowed under a service concept;
+parameters are allowed under a `$service` concept;
 
 `CONCEPTS: service.concepts.json`
 
@@ -49,7 +49,7 @@ quantifier.`
 
 ## Concepts Shadow
 
-For following concepts definition, quantifier of `parameter` has its min set to
+For following concepts definition, quantifier of `$parameter` has its min set to
 zero;
 
 `CONCEPTS: service.concepts.json`

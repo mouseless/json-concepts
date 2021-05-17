@@ -11,7 +11,8 @@ Below is an example of both key and value literals;
 }
 ```
 
-Below is the only valid schema for this concepts definition;
+Below is the only valid schema for this concepts definition, because it only
+contains literals;
 
 `SCHEMA: concepts.escape.json`
 

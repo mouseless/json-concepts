@@ -1,6 +1,6 @@
 # Declaring an Array
 
-Below is an array declaration under a literal.
+Below definition declares a `$tags` variable as an array under `tags` literal.
 
 `CONCEPTS: service.concepts.json`
 
@@ -149,7 +149,7 @@ Its shadow still contains an array;
 
 ## Multi-Dimensional Arrays
 
-Below concepts definition has a double array for `$value` variable;
+Below concepts definition declares `$value` as a double array;
 
 `CONCEPTS: matrix.concepts.json`
 

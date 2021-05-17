@@ -1,7 +1,7 @@
 # Exactly One
 
 A concept, by default, requires exactly one instance in every schema. So the
-following concepts definition expects exactly one `service` and `parameter` in
+following concepts definition expects exactly one `$service` and `$parameter` in
 every schema.
 
 `CONCEPTS: service.concepts.json`
@@ -28,7 +28,7 @@ We've already seen that following schema is valid;
 
 ## Missing a Concept
 
-However following schema is **NOT** valid;
+However following schema is **not** valid;
 
 `SCHEMA: greeting.service.json`
 
@@ -38,14 +38,14 @@ However following schema is **NOT** valid;
 }
 ```
 
-Because it is missing a `parameter`. Validation should give an error containing
+Because it is missing a `$parameter`. Validation should give an error containing
 the missing concept name;
 
 `ERROR: 'greeting.service.json' is not valid, 'parameter' is missing.`
 
 ## Missing More Than One Concept
 
-Below schema is missing both `service` and a `parameter` data;
+Below schema is missing both `$service` and a `$parameter` concepts;
 
 `SCHEMA: greeting.service.json`
 
@@ -72,7 +72,7 @@ Just like a concept, a key literal is also required by default;
 }
 ```
 
-Following schema will **NOT** be validated;
+Following schema will **not** be validated;
 
 `SCHEMA: greeting.service.json`
 
@@ -88,8 +88,8 @@ Error message should contain the missing literal;
 
 ## Null Variables
 
-It is valid to set variables to `null`. Below concepts has two variables `type`
-and `responseType`.
+It is valid to set variables to `null`. Below concepts has two variables `$type`
+and `$responseType`.
 
 `CONCEPTS: service.concepts.json`
 
@@ -102,7 +102,7 @@ and `responseType`.
 }
 ```
 
-Below schema is **VALID**;
+Below schema is **valid**;
 
 `SCHEMA: greeting.service.json`
 

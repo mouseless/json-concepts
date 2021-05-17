@@ -16,14 +16,14 @@ Custom types are defined under `@types` meta-data. In below definition,
 }
 ```
 
-Above definition makes `name` variable an `identifier`. `identifier` type
-derives from `any` type by default.
+Above definition makes `$name` an `identifier`. `identifier` type derives from
+`any` type by default.
 
 > If a custom type does not exist under `@types`, then concepts definition
-> is **INVALID**.
+> is **invalid**.
 
 Concepts shadow does not reflect meta-data, however it still sets the type of
-`name` variable to `identifier`;
+`$name` to `identifier`;
 
 `CONCEPTS SHADOW`
 
@@ -63,8 +63,8 @@ definition.
 }
 ```
 
-Now `$name` variable is an `identifier` which is a `string`. So it will allow
-only `string` values.
+Now `$name` is an `identifier` which is a `string`. So it will allow only
+`string` values.
 
 > `type` can be either one of the built-in types (`boolean`, `string`, `number`
 > or `any`) or another custom type.

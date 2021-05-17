@@ -13,6 +13,15 @@ describe('spec/literals/concept-under-a-literal', function () {
             }
         });
 
+        const schema = concepts.create({
+            "sayHello": {
+                "response": {
+                    "message": "string",
+                    "status": "number"
+                }
+            }
+        });
+
         concepts.shadow.should.deep.equal({
             "concept": {
                 "name": "service",
@@ -24,15 +33,6 @@ describe('spec/literals/concept-under-a-literal', function () {
                         "quantifier": { "min": 0 },
                         "variable": { "name": "type" }
                     }
-                }
-            }
-        });
-
-        const schema = concepts.create({
-            "sayHello": {
-                "response": {
-                    "message": "string",
-                    "status": "number"
                 }
             }
         });

@@ -16,6 +16,16 @@ describe('spec/literals/only-literals', function () {
             }
         });
 
+        const schema = concepts.create({
+            "service": {
+                "name": "sayHello",
+                "parameter": {
+                    "name": "name",
+                    "type": "string"
+                }
+            }
+        });
+
         concepts.shadow.should.deep.equal({
             "literal": {
                 "name": "service",
@@ -38,16 +48,6 @@ describe('spec/literals/only-literals', function () {
                         ]
                     }
                 ]
-            }
-        });
-
-        const schema = concepts.create({
-            "service": {
-                "name": "sayHello",
-                "parameter": {
-                    "name": "name",
-                    "type": "string"
-                }
             }
         });
 

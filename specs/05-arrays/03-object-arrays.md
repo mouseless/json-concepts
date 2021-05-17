@@ -48,7 +48,7 @@ objects with `name` and `type` keys.
 
 In concepts shadow, object array is represented as a variable with the
 dimensions of the array definition. Since object array does not have a name,
-this variable node does not have a `"name"` key.
+this variable node does not have a `name` key.
 
 ## Schema
 
@@ -73,9 +73,9 @@ A valid schema for previous concepts definition is as follows;
 }
 ```
 
-As mentioned before, a schema shadow does not contain literals. However, in case
-of object arrays, it **does** contain literal names. Below, you can see that
-`parameters` literal appear in the schema shadow;
+A schema shadow does not contain literals. However, in case of object arrays,
+it **does** contain name of the literal. Below, you can see that `parameters`
+literal appear in the schema shadow;
 
 `SCHEMA SHADOW`
 

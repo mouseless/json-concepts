@@ -1,7 +1,7 @@
 # Enum Validator
 
 Enum validator enables you to restrict value of a custom type to be one of the
-items in a given list. For the following concepts definition, `statusCode` is
+items in a given list. For the following concepts definition, `$statusCode` is
 restricted to be either `200`, `400` or `500`.
 
 `CONCEPTS: service.concepts.json`

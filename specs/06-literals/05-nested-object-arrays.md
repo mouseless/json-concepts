@@ -18,49 +18,6 @@ Concepts definition can have nested object arrays like below;
 }
 ```
 
-`CONCEPTS SHADOW`
-
-```json
-{
-    "concept": {
-        "_": "service",
-        "quantifier": { "min": 1 },
-        "literal": {
-            "_": "parameters",
-            "quantifier": { "min": 0, "max": 1 },
-            "variable": {
-                "dimensions": 1,
-                "literal": [
-                    {
-                        "_": "name",
-                        "variable": { "_": "name" }
-                    },
-                    {
-                        "_": "types",
-                        "variable": {
-                            "dimensions": 1,
-                            "literal": [
-                                {
-                                    "_": "name",
-                                    "variable": { "_": "name" }
-                                },
-                                {
-                                    "_": "validation",
-                                    "variable": {
-                                        "_": "validators",
-                                        "dimensions": 1
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                ]
-            }
-        }
-    }
-}
-```
-
 An example valid schema is as follows;
 
 `SCHEMA: greeting.service.json`
@@ -96,13 +53,58 @@ An example valid schema is as follows;
 }
 ```
 
+Concepts and schema shadows are as follows;
+
+`CONCEPTS SHADOW`
+
+```json
+{
+    "concept": {
+        "name": "service",
+        "quantifier": { "min": 1 },
+        "literal": {
+            "name": "parameters",
+            "quantifier": { "min": 0, "max": 1 },
+            "variable": {
+                "dimensions": 1,
+                "literal": [
+                    {
+                        "name": "name",
+                        "variable": { "name": "name" }
+                    },
+                    {
+                        "name": "types",
+                        "variable": {
+                            "dimensions": 1,
+                            "literal": [
+                                {
+                                    "name": "name",
+                                    "variable": { "name": "name" }
+                                },
+                                {
+                                    "name": "validation",
+                                    "variable": {
+                                        "name": "validators",
+                                        "dimensions": 1
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        }
+    }
+}
+```
+
 `SCHEMA SHADOW`
 
 ```json
 {
     "service": [
         {
-            "_": "sayHello",
+            "name": "sayHello",
             "parameters": [
                 {
                     "name": "name",

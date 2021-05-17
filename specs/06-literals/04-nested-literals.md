@@ -1,6 +1,7 @@
 # Nested Literals
 
-A concept can have nested literals. Below is an example;
+A concept can have nested literals. In below an example, it has `type` and
+`status` literals nested under `response` literal.
 
 `CONCEPTS: 'nested.concepts.json'`
 
@@ -15,23 +16,25 @@ A concept can have nested literals. Below is an example;
 }
 ```
 
+Concepts shadow reflects this hierarchy as it appears in concepts definition;
+
 `CONCEPTS SHADOW`
 
 ```json
 {
     "concept": {
-        "_": "service",
+        "name": "service",
         "quantifier": { "min": 1 },
         "literal": {
-            "_": "response",
+            "name": "response",
             "literal": [
                 {
-                    "_": "type",
-                    "variable": { "_": "type" }
+                    "name": "type",
+                    "variable": { "name": "type" }
                 },
                 {
-                    "_": "status",
-                    "variable": { "_": "status" }
+                    "name": "status",
+                    "variable": { "name": "status" }
                 }
             ]
         }
@@ -55,7 +58,7 @@ Below is a valid schema and its shadow;
 ```
 
 Schema shadows are not allowed to have literals except the case with object
-arrays. So shadow only has `type` and `status` variables under `service`
+arrays. So shadow only has `$type` and `$status` variables under `$service`
 concept.
 
 `SCHEMA SHADOW`
@@ -64,7 +67,7 @@ concept.
 {
     "service": [
         {
-            "_": "sayHello",
+            "name": "sayHello",
             "type": "string",
             "status": 200
         }

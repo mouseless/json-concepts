@@ -1,7 +1,7 @@
 # Duplicate Variables
 
 There can only be one variable with the same name under the same concept. Below
-concepts definition is **NOT** valid
+concepts definition is **not** valid
 
 `CONCEPTS: example.concepts.json`
 

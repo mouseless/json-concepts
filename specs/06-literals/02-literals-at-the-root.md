@@ -1,6 +1,6 @@
 # Literals At The Root
 
-Literals can be at the root of the concepts definition;
+Literals are allowed to be at the root of a concepts definition;
 
 `CONCEPTS: service.concepts.json`
 
@@ -8,22 +8,6 @@ Literals can be at the root of the concepts definition;
 {
     "services?": {
         "$service+": "$response"
-    }
-}
-```
-
-`CONCEPTS SHADOW`
-
-```json
-{
-    "literal": {
-        "_": "services",
-        "quantifier": { "min": 0, "max": 1 },
-        "concept": {
-            "_": "service",
-            "quantifier": { "min": 1 },
-            "variable": { "_": "response" }
-        }
     }
 }
 ```
@@ -41,6 +25,24 @@ Below is a valid schema;
 }
 ```
 
+Concepts shadow is as follows;
+
+`CONCEPTS SHADOW`
+
+```json
+{
+    "literal": {
+        "name": "services",
+        "quantifier": { "min": 0, "max": 1 },
+        "concept": {
+            "name": "service",
+            "quantifier": { "min": 1 },
+            "variable": { "name": "response" }
+        }
+    }
+}
+```
+
 Schema shadow does not include literal;
 
 `SCHEMA SHADOW`
@@ -49,11 +51,11 @@ Schema shadow does not include literal;
 {
     "service": [
         {
-            "_": "sayHello",
+            "name": "sayHello",
             "response": "string"
         },
         {
-            "_": "sayGoodbye",
+            "name": "sayGoodbye",
             "response": "string"
         }
     ]

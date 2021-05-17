@@ -27,7 +27,7 @@ Assume you have two concepts definitions below;
 }
 ```
 
-Following is a transformation from `service` concepts to `client` concepts;
+Following is a transformation from `$service` concepts to `$client` concepts;
 
 `TRANSFORMATION: client.from.service.json`
 

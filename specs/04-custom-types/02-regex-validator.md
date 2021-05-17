@@ -21,7 +21,7 @@ pattern;
 }
 ```
 
-For above concepts definition following schema is **NOT** valid;
+For above concepts definition following schema is **not** valid;
 
 `SCHEMA: greeting.service.json`
 
@@ -33,7 +33,7 @@ For above concepts definition following schema is **NOT** valid;
 }
 ```
 
-Because `say hello` does **NOT** match `^[a-zA-Z]*$` pattern.
+Because `say hello` does **not** match `^[a-zA-Z]*$` pattern.
 
 `ERROR: 'greeting.service.json' is not valid, 'say hello' is not a valid
 identifier.`

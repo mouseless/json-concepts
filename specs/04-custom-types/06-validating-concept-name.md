@@ -1,6 +1,6 @@
 # Validating Concept Name
 
-A concept can also have a type like a variable;
+A concept may have a type similar to a variable;
 
 `CONCEPTS: service.concepts.json`
 
@@ -18,8 +18,8 @@ A concept can also have a type like a variable;
 }
 ```
 
-This concepts definition indicates that `service` and `parameter` names are
-expected to be valid `identifier`s, and `method` names to be valid `method`s.
+This concepts definition indicates that `$service` and `$parameter` names are
+expected to be valid `identifier`s, and `$method` names to be valid `method`s.
 Concepts shadow includes `type` information under the `concept` object;
 
 `CONCEPTS SHADOW`

@@ -2,7 +2,7 @@
 
 Variable types can be defined explicitly.
 
-For this concepts definition, `$enabled:boolean` denotes that `enabled` should
+For this concepts definition, `$enabled:boolean` denotes that `$enabled` should
 be a `boolean`;
 
 `CONCEPTS: service.concepts.json`
@@ -36,7 +36,7 @@ Concepts shadow contains type of a variable under `type` key;
 }
 ```
 
-Below is an **INVALID** schema;
+Below is an **invalid** schema;
 
 `SCHEMA: greeting.service.json`
 

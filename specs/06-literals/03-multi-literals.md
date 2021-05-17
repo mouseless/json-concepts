@@ -1,6 +1,7 @@
 # Multi Literals
 
-Any number of literals can be defined at the same level;
+Any number of literals can be defined at the same level. Below concepts
+definition has `services` and `models` literals at the root;
 
 `CONCEPTS: service.concepts.json`
 
@@ -17,7 +18,8 @@ Any number of literals can be defined at the same level;
 }
 ```
 
-Shadow has an array of literals instead of a single literal object;
+In this case, concepts shadow has an array of literals instead of a single
+literal object;
 
 `CONCEPTS SHADOW`
 
@@ -25,24 +27,24 @@ Shadow has an array of literals instead of a single literal object;
 {
     "literal": [
         {
-            "_": "services",
+            "name": "services",
             "quantifier": { "min": 0, "max": 1 },
             "concept": {
-                "_": "service",
+                "name": "service",
                 "quantifier": { "min": 1 },
-                "variable": { "_": "response" }
+                "variable": { "name": "response" }
             }
         },
         {
-            "_": "models",
+            "name": "models",
             "quantifier": { "min": 0, "max": 1 },
             "concept": {
-                "_": "model",
+                "name": "model",
                 "quantifier": { "min": 1 },
                 "concept": {
-                    "_": "field",
+                    "name": "field",
                     "quantifier": { "min": 0 },
-                    "variable": { "_": "type" }
+                    "variable": { "name": "type" }
                 }
             }
         }
@@ -70,30 +72,32 @@ Below is a valid schema;
 }
 ```
 
+Schema shadow is expected to be as the following;
+
 `SCHEMA SHADOW`
 
 ```json
 {
     "service": [
         {
-            "_": "sayHello",
+            "name": "sayHello",
             "response": "message"
         },
         {
-            "_": "sayGoodbye",
+            "name": "sayGoodbye",
             "response": "message"
         }
     ],
     "model": [
         {
-            "_": "message",
+            "name": "message",
             "field": [
                 {
-                    "_": "text",
+                    "name": "text",
                     "type": "string"
                 },
                 {
-                    "_": "status",
+                    "name": "status",
                     "type": "number"
                 }
             ]
@@ -104,8 +108,8 @@ Below is a valid schema;
 
 ## Multiple Variables in a Concept
 
-Multiple literals allow more than one variable in a concept. Below is an
-example;
+Multiple literals allow more than one variable in a concept. Below example
+demonstrates that `$filter` concept has `$input` and `$output` variables;
 
 `CONCEPTS: filters.concepts.json`
 
@@ -117,6 +121,8 @@ example;
     }
 }
 ```
+
+A valid schema with multiple variables;
 
 `SCHEMA: default.filters.json`
 
@@ -133,18 +139,20 @@ example;
 }
 ```
 
+Schema shadow lists all variables of a concept next to each other.
+
 `SCHEMA SHADOW`
 
 ```json
 {
     "filter": [
         {
-            "_": "append",
+            "name": "append",
             "input": "string",
             "output": "string"
         },
         {
-            "_": "split",
+            "name": "split",
             "input": "string",
             "output": "array"
         }

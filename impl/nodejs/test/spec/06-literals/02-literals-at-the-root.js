@@ -11,6 +11,13 @@ describe('spec/literals/literals-at-the-root', function () {
             }
         });
 
+        const schema = concepts.create({
+            "services": {
+                "sayHello": "string",
+                "sayGoodbye": "string"
+            }
+        });
+
         concepts.shadow.should.deep.equal({
             "literal": {
                 "name": "services",
@@ -20,13 +27,6 @@ describe('spec/literals/literals-at-the-root', function () {
                     "quantifier": { "min": 1 },
                     "variable": { "name": "response" }
                 }
-            }
-        });
-
-        const schema = concepts.create({
-            "services": {
-                "sayHello": "string",
-                "sayGoodbye": "string"
             }
         });
 

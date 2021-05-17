@@ -12,7 +12,7 @@ an example;
 }
 ```
 
-Below schema is **invalid** because all items in `tags` are expected to be a
+Below schema is **invalid** because all items in `$tags` are expected to be a
 `string`;
 
 `SCHEMA: invalid.tags.json`

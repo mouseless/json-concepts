@@ -17,6 +17,35 @@ describe('spec/literals/nested-object-arrays', function () {
             }
         });
 
+        const schema = concepts.create({
+            "sayHello": {
+                "parameters": [
+                    {
+                        "name": "name",
+                        "types": [
+                            {
+                                "name": "string",
+                                "validation": ["regex", "min"]
+                            },
+                            {
+                                "name": "text",
+                                "validation": ["regex", "max"]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "surname",
+                        "types": [
+                            {
+                                "name": "string",
+                                "validation": ["regex"]
+                            }
+                        ]
+                    }
+                ]
+            }
+        });
+
         concepts.shadow.should.deep.equal({
             "concept": {
                 "name": "service",
@@ -53,35 +82,6 @@ describe('spec/literals/nested-object-arrays', function () {
                         ]
                     }
                 }
-            }
-        });
-
-        const schema = concepts.create({
-            "sayHello": {
-                "parameters": [
-                    {
-                        "name": "name",
-                        "types": [
-                            {
-                                "name": "string",
-                                "validation": ["regex", "min"]
-                            },
-                            {
-                                "name": "text",
-                                "validation": ["regex", "max"]
-                            }
-                        ]
-                    },
-                    {
-                        "name": "surname",
-                        "types": [
-                            {
-                                "name": "string",
-                                "validation": ["regex"]
-                            }
-                        ]
-                    }
-                ]
             }
         });
 

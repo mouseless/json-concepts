@@ -18,36 +18,7 @@ demonstrates a simple literal-only concepts definition;
 ```
 
 > Here `parameter` literal cannot have `$name` variable, because it would
-> conflict with other `$name` variable.
-
-`CONCEPTS SHADOW`
-
-```json
-{
-    "literal": {
-        "_": "service",
-        "literal": [
-            {
-                "_": "name",
-                "variable": { "_": "name" }
-            },
-            {
-                "_": "parameter",
-                "literal": [
-                    {
-                        "_": "name",
-                        "variable": { "_": "parameterName" }
-                    },
-                    {
-                        "_": "type",
-                        "variable": { "_": "parameterType" }
-                    }
-                ]
-            }
-        ]
-    }
-}
-```
+> conflict with the other `$name` variable.
 
 `SCHEMA: greeting.service.json`
 
@@ -62,6 +33,40 @@ demonstrates a simple literal-only concepts definition;
     }
 }
 ```
+
+Corresponding shadows are as follows;
+
+`CONCEPTS SHADOW`
+
+```json
+{
+    "literal": {
+        "name": "service",
+        "literal": [
+            {
+                "name": "name",
+                "variable": { "name": "name" }
+            },
+            {
+                "name": "parameter",
+                "literal": [
+                    {
+                        "name": "name",
+                        "variable": { "name": "parameterName" }
+                    },
+                    {
+                        "name": "type",
+                        "variable": { "name": "parameterType" }
+                    }
+                ]
+            }
+        ]
+    }
+}
+```
+
+> Above we said that `parameter` literal cannot have `$name` variable, below you
+> can see how it would conflict with the other `$name` variable.
 
 `SCHEMA SHADOW`
 
@@ -98,27 +103,27 @@ demonstrates a simple literal-only concepts definition;
 ```json
 {
     "literal": {
-        "_": "services",
+        "name": "services",
         "variable": {
             "dimensions": 1,
             "literal": [
                 {
-                    "_": "name",
-                    "variable": { "_": "name" }
+                    "name": "name",
+                    "variable": { "name": "name" }
                 },
                 {
-                    "_": "parameters",
+                    "name": "parameters",
                     "quantifier": { "min": 0, "max": 1 },
                     "variable": {
                         "dimensions": 1,
                         "literal": [
                             {
-                                "_": "name",
-                                "variable": { "_": "name" }
+                                "name": "name",
+                                "variable": { "name": "name" }
                             },
                             {
-                                "_": "type",
-                                "variable": { "_": "type" }
+                                "name": "type",
+                                "variable": { "name": "type" }
                             }
                         ]
                     }
@@ -128,6 +133,8 @@ demonstrates a simple literal-only concepts definition;
     }
 }
 ```
+
+Below is a valid schema and its shadow;
 
 `SCHEMA: greeting.service.json`
 
@@ -173,5 +180,5 @@ demonstrates a simple literal-only concepts definition;
 }
 ```
 
-As you can see a schema, that conforms to a concepts definition which consists of
-only literals, is identical with its shadow.
+As you can see, a schema that conforms to a concepts definition which consists
+of only literals, is identical with its shadow.

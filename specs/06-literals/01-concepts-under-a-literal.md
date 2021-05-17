@@ -1,7 +1,7 @@
 # Concepts Under A Literal
 
-Concepts can be defined under a literal. Below, it defines a `property` concept
-under the `response` literal;
+Concepts can be defined under a literal. Below definition has a `$property`
+concept under the `response` literal;
 
 `CONCEPTS: service.concepts.json`
 
@@ -10,25 +10,6 @@ under the `response` literal;
     "$service+": {
         "response": {
             "$property*": "$type"
-        }
-    }
-}
-```
-
-`CONCEPTS SHADOW`
-
-```json
-{
-    "concept": {
-        "_": "service",
-        "quantifier": { "min": 1 },
-        "literal": {
-            "_": "response",
-            "concept": {
-                "_": "property",
-                "quantifier": { "min": 0 },
-                "variable": { "_": "type" }
-            }
         }
     }
 }
@@ -49,8 +30,29 @@ Below is a valid schema;
 }
 ```
 
-Shadow of this schema does not contain literal information. `property` concept
-occurs directly under `service` concept;
+Concepts shadow is as follows;
+
+`CONCEPTS SHADOW`
+
+```json
+{
+    "concept": {
+        "name": "service",
+        "quantifier": { "min": 1 },
+        "literal": {
+            "name": "response",
+            "concept": {
+                "name": "property",
+                "quantifier": { "min": 0 },
+                "variable": { "name": "type" }
+            }
+        }
+    }
+}
+```
+
+Schema shadow does not contain literal information. `$property` concept resides
+directly under `$service` concept;
 
 `SCHEMA SHADOW`
 
@@ -58,14 +60,14 @@ occurs directly under `service` concept;
 {
     "service": [
         {
-            "_": "sayHello",
+            "name": "sayHello",
             "property": [
                 {
-                    "_": "message",
+                    "name": "message",
                     "type": "string"
                 },
                 {
-                    "_": "status",
+                    "name": "status",
                     "type": "number"
                 }
             ]

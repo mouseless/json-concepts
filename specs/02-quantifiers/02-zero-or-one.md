@@ -2,7 +2,7 @@
 
 `?` indicates that concept is optional and might or might not exist in schemas.
 So for the following, `$parameter?` indicates that parameter concept is optional
-under the `service` concept;
+under the `$service` concept;
 
 `CONCEPTS: service.concepts.json`
 
@@ -36,7 +36,7 @@ So both of below schemas are valid now;
 
 ## More Than One Concept Fails Validation
 
-Below schema is **NOT** valid, because at most one parameter was expected;
+Below schema is **not** valid, because at most one parameter was expected;
 
 `SCHEMA: greeting.service.json`
 

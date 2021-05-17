@@ -2,7 +2,7 @@
 
 `+` indicates that one or more of that concept can occur in a schema. So for the
 following concepts definition, `$service+` indicates that there will exist at
-least one `service` in every schema;
+least one `$service` in every schema;
 
 `CONCEPTS: service.concepts.json`
 
@@ -29,7 +29,7 @@ Below schema is now valid;
 
 ## Requires At Least One
 
-When no concept is given, schema becomes **INVALID**;
+When no concept is given, schema becomes **invalid**;
 
 `SCHEMA: greeting.service.json`
 
@@ -62,7 +62,7 @@ quantifier.`
 
 ## Concepts Shadow
 
-For following concepts definition, quantifier of `service` doesn't have a max;
+For following concepts definition, quantifier of `$service` doesn't have a max;
 
 `CONCEPTS: service.concepts.json`
 
@@ -128,8 +128,7 @@ in an array;
 }
 ```
 
-Even if there is only one `service` instance, schema shadow still has it in an
-array;
+Even if there is only one `$service`, schema shadow still has it in an array;
 
 `SCHEMA: greeting.service.json`
 
