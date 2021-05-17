@@ -21,7 +21,7 @@ restricted to be either `200`, `400` or `500`.
 }
 ```
 
-Below schema is **NOT** valid, because `404` is not listed in `httpStatus`
+Below schema is **not** valid, because `404` is not listed in `httpStatus`
 definition;
 
 `SCHEMA: greeting.service.json`

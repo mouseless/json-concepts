@@ -1,7 +1,7 @@
 # Nested Literals
 
-A concept can have nested literals. In below an example, it has `type` and
-`status` literals nested under `response` literal.
+A concept can have nested literals. In below example, it has `type` and `status`
+literals nested under `response` literal.
 
 `CONCEPTS: 'nested.concepts.json'`
 

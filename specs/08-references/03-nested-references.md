@@ -77,9 +77,9 @@ Below is a valid schema for above concepts definition;
 }
 ```
 
-When a recursive definition exists, concepts shadow cannot express it without
-using a reference. So in case of recursion, it makes use of the `reference`
-keyword;
+When a recursive definition exists, concepts shadow cannot express this case
+without using a reference. So in case of recursion, it makes use of the
+`reference` key;
 
 `CONCEPTS SHADOW`
 
