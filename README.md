@@ -79,8 +79,11 @@ Or you can directly dive into the [specs].
 ## Contribution
 
 Thanks for your interest in **json concepts**. If you want to ask a question or
-make a contribution, just go to the [github repository]. See you
-there :wave:
+make a contribution, just go to the [github repository]. If you view this page
+from github, then go ahead and open an issue to ask a question or create a pull
+request to make a contribution.
+
+See you around :wave:
 
 [use cases]: use-cases/README.md
 [specs]: specs/README.md
