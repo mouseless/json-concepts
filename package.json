@@ -5,7 +5,7 @@
   "scripts": {
     "website": "vuepress dev .",
     "build:website": "vuepress build .",
-    "build:spec": "node build.js"
+    "build:specs": "node build.js"
   },
   "license": "MIT",
   "devDependencies": {

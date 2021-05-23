@@ -7,7 +7,7 @@ Assume you have two concepts definitions below;
 
 `SOURCE: service.concepts.json`
 
-```json
+```json name="service.concepts.json"
 {
     "$service": {
         "$parameter": "$type",
@@ -18,7 +18,7 @@ Assume you have two concepts definitions below;
 
 `TARGET: client.concepts.json`
 
-```json
+```json name="client.concepts.json"
 {
     "$function": {
         "$argument": "$type",
@@ -31,7 +31,7 @@ Following is a transformation from `$service` concepts to `$client` concepts;
 
 `TRANSFORMATION: client.from.service.json`
 
-```json
+```json name="client.from.service.json"
 {
     "function": {
         "from": "service",
@@ -52,7 +52,7 @@ Above transformation takes following schema;
 
 `INPUT: greeting.service.json`
 
-```json
+```json name="greeting.service.json"
 {
     "sayHello": {
         "name": "string",
@@ -65,7 +65,7 @@ and transforms it into this one;
 
 `OUTPUT: greeting.client.json`
 
-```json
+```json name="greeting.client.json"
 {
     "sayHello": {
         "name": "string",

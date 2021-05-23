@@ -8,7 +8,7 @@ Let's begin with a concept;
 
 `CONCEPTS: service.concepts.json`
 
-```json
+```json name="service.concepts.json"
 {
     "$service": {
         "$parameter": "$type",
@@ -21,7 +21,7 @@ Corresponding shadow is as follows;
 
 `CONCEPTS SHADOW`
 
-```json
+```json name="service.concepts-shadow.json"
 {
     "concept": {
         "name": "service",
@@ -67,7 +67,7 @@ Below is a schema that conforms to the above concepts definition;
 
 `SCHEMA: greeting.service.json`
 
-```json
+```json name="greeting.service.json"
 {
     "sayHello": {
         "name": "string",
@@ -80,7 +80,7 @@ This schema is expected to cast below shadow;
 
 `SCHEMA SHADOW`
 
-```json
+```json name="greeting.service-shadow.json"
 {
     "service": {
         "name": "sayHello",
