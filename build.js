@@ -2,7 +2,7 @@ const path = require('path');
 const fs = require('fs');
 const cb = require('code-blocks');
 
-fs.rmdirSync('./.dist/test-cases', { recursive: true });
+fs.rmdirSync('./.dist', { recursive: true });
 
 const specDirOrFile = /[0-9]{2}-[a-z-]*([.]md)?/; // 01-spec-dir or 01-spec-file.md
 const specFiles = files('./specs', entry => specDirOrFile.test(entry.name));
@@ -13,29 +13,25 @@ const specs = fromFileToSpec(specFiles, _ => {
         path: _.file.path
     };
 });
-
 const testCases = fromSpecToTestCase(specs, _ => {
-    if (_.block.lang === 'json') {
-        try {
-            JSON.parse(_.block.value);
-        } catch (e) {
-            console.error(`\x1b[31m` +
-                `invalid json '${_.block.info.name}' ` +
-                `at ${_.block.position.start.line}-${_.block.position.end.line} ` +
-                `in '${_.spec.path}'.\n` +
-                `${e}` +
-                `\x1b[37m`);
-            process.exit(1);
-        }
-
-    }
-
     return {
         path: `./.dist/test-cases/${_.spec.section}/${_.spec.name}/${_.block.info.name}`,
         content: _.block.value
     };
 });
 
+// copy specs to .dist/specs
+for (const spec of specs) {
+    const targetPath = `./.dist/specs/${spec.section}/${spec.name}.md`;
+    const dir = path.dirname(targetPath);
+    if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir, { recursive: true });
+    }
+
+    fs.copyFileSync(spec.path, targetPath);
+}
+
+// extract code blocks to .dist/test-cases
 for (const testCase of testCases) {
     if (fs.existsSync(testCase.path)) {
         throw new Error(`'${testCase.path}' already exists`);
@@ -97,6 +93,21 @@ function fromSpecToTestCase(specs, map) {
     specs.forEach(spec => {
         const blocks = cb.fromFileSync(spec.path);
         for (const block of blocks.filter(b => b.info.name)) {
+            if (block.lang === 'json') {
+                try {
+                    JSON.parse(block.value);
+                } catch (e) {
+                    console.error(`\x1b[31m` +
+                        `invalid json '${block.info.name}' ` +
+                        `at ${block.position.start.line}-${block.position.end.line} ` +
+                        `in '${block.source.file}'.\n` +
+                        `${e}` +
+                        `\x1b[37m`);
+
+                    process.exit(1);
+                }
+            }
+
             result.push(map({ spec, block }));
         }
     });
