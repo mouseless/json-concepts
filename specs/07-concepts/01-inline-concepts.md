@@ -5,7 +5,7 @@ meta-data.
 
 `SCHEMA: greeting.service.json`
 
-```json
+```json name="greeting.service.json"
 {
     "sayHello": {
         "name": "string",
