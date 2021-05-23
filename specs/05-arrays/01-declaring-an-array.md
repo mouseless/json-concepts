@@ -4,7 +4,7 @@ Below definition declares a `$tags` variable as an array under `tags` literal.
 
 `CONCEPTS: service.concepts.json`
 
-```json
+```json name="service.concepts.json"
 {
     "$service+": {
         "tags?": [ "$tags" ]
@@ -16,7 +16,7 @@ When a variable is an array, its shadow has `dimensions` key;
 
 `CONCEPTS SHADOW`
 
-```json
+```json name="service.concepts-shadow.json"
 {
     "concept": {
         "name": "service",
@@ -39,7 +39,7 @@ Array declaration is the same with concepts, below is an example;
 
 `CONCEPTS: service.concepts.json`
 
-```json
+```json name="arrays/service.concepts.json"
 {
     "$service+": {
         "$parameter*": [ "$types" ]
@@ -49,7 +49,7 @@ Array declaration is the same with concepts, below is an example;
 
 `CONCEPTS SHADOW`
 
-```json
+```json name="arrays/service.concepts-shadow.json"
 {
     "concept": {
         "name": "service",
@@ -70,7 +70,7 @@ Array declaration is the same with concepts, below is an example;
 
 `CONCEPTS: service.concepts.json`
 
-```json
+```json name="schemas/service.concepts.json"
 {
     "$service+": {
         "$parameter*": [ "$types" ],
@@ -83,7 +83,7 @@ Given this concepts definition, below schema is valid;
 
 `SCHEMA: greeting.service.json`
 
-```json
+```json name="schemas/greeting.service.json"
 {
     "sayHello": {
         "name": [ "string", "text" ],
@@ -94,7 +94,7 @@ Given this concepts definition, below schema is valid;
 
 `SCHEMA SHADOW`
 
-```json
+```json name="schemas/greeting.service-shadow.json"
 {
     "service": [
         {
@@ -117,7 +117,7 @@ An array variable is allowed to have a single item without array notation.
 
 `SCHEMA: greeting.service.json`
 
-```json
+```json name="single-item/greeting.service.json"
 {
     "sayHello": {
         "name": "string",
@@ -130,7 +130,7 @@ Its shadow still contains an array;
 
 `SCHEMA SHADOW`
 
-```json
+```json name="single-item/greeting.service-shadow.json"
 {
     "service": [
         {
@@ -153,7 +153,7 @@ Below concepts definition declares `$value` as a double array;
 
 `CONCEPTS: matrix.concepts.json`
 
-```json
+```json name="multi-dimensional/matrix.concepts.json"
 {
     "$matrix*": [ [ "$value" ] ]
 }
@@ -161,7 +161,7 @@ Below concepts definition declares `$value` as a double array;
 
 `CONCEPTS SHADOW`
 
-```json
+```json name="multi-dimensional/matrix.concepts-shadow.json"
 {
     "concept": {
         "name": "matrix",
@@ -179,7 +179,7 @@ one;
 
 `SCHEMA: sample.matrix.json`
 
-```json
+```json name="multi-dimensional/sample.matrix.json"
 {
     "matrix-a": [ [ 1, 2, 3 ], [ 4, 5, 6 ] ],
     "matrix-b": [ 1, 2, 3 ],
@@ -189,7 +189,7 @@ one;
 
 `SCHEMA SHADOW`
 
-```json
+```json name="multi-dimensional/sample.matrix-shadow.json"
 {
     "matrix": [
         {

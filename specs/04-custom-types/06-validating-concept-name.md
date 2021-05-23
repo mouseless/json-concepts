@@ -4,7 +4,7 @@ A concept may have a type similar to a variable;
 
 `CONCEPTS: service.concepts.json`
 
-```json
+```json name="service.concepts.json"
 {
     "$service:identifier+": {
         "$method:method*": {
@@ -25,7 +25,7 @@ Concepts shadow includes `type` information under the `concept` object;
 
 `CONCEPTS SHADOW`
 
-```json
+```json name="service.concepts-shadow.json"
 {
     "concept": {
         "name": "service",

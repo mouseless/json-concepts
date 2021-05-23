@@ -5,7 +5,7 @@ type is going to be validated against all validators in the inheritance chain.
 
 `CONCEPTS: service.concepts.json`
 
-```json
+```json name="service.concepts.json"
 {
     "$service+": {
         "$parameter*": "$type:primitive"
@@ -30,7 +30,7 @@ not a valid `primitive` either.
 
 `SCHEMA: greeting.service.json`
 
-```json
+```json name="greeting.service.json"
 {
     "sayHello": {
         "name": "float"
@@ -47,7 +47,7 @@ definition is not valid;
 
 `CONCEPTS: service.concepts.json`
 
-```json
+```json name="circular/service.concepts.json"
 {
     "circular": "$type:a",
     

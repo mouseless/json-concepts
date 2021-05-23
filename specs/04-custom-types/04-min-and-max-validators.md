@@ -7,7 +7,7 @@ of `$dailyCallLimit` to be between `10` and `100`.
 
 `CONCEPTS: service.concepts.json`
 
-```json
+```json name="service.concepts.json"
 {
     "$service+": {
         "name": "$name:identifier",
@@ -31,9 +31,9 @@ of `$dailyCallLimit` to be between `10` and `100`.
 
 Below schemas are **invalid** because of min-max validations;
 
-`SCHEMA 1: greeting.service.json`
+`SCHEMA: greeting-1.service.json`
 
-```json
+```json name="greeting-1.service.json"
 {
     "sayHello": {
         "name": "string",
@@ -42,13 +42,13 @@ Below schemas are **invalid** because of min-max validations;
 }
 ```
 
-`ERROR: 'greeting.service.json' is not valid, '9' is not a valid limit.`
+`ERROR: 'greeting-1.service.json' is not valid, '9' is not a valid limit.`
 
 ---
 
-`SCHEMA 2: greeting.service.json`
+`SCHEMA: greeting-2.service.json`
 
-```json
+```json name="greeting-2.service.json"
 {
     "sayHello": {
         "name": "string",
@@ -57,13 +57,13 @@ Below schemas are **invalid** because of min-max validations;
 }
 ```
 
-`ERROR: 'greeting.service.json' is not valid, '101' is not a valid limit.`
+`ERROR: 'greeting-2.service.json' is not valid, '101' is not a valid limit.`
 
 ---
 
-`SCHEMA 3: greeting.service.json`
+`SCHEMA: greeting-3.service.json`
 
-```json
+```json name="greeting-3.service.json"
 {
     "sayHello": {
         "name": "",
@@ -72,13 +72,13 @@ Below schemas are **invalid** because of min-max validations;
 }
 ```
 
-`ERROR: 'greeting.service.json' is not valid, '' is not a valid identifier.`
+`ERROR: 'greeting-3.service.json' is not valid, '' is not a valid identifier.`
 
 ---
 
-`SCHEMA 4: greeting.service.json`
+`SCHEMA: greeting-4.service.json`
 
-```json
+```json name="greeting-4.service.json"
 {
     "sayHello": {
         "name": "01234567890",
@@ -87,5 +87,5 @@ Below schemas are **invalid** because of min-max validations;
 }
 ```
 
-`ERROR: 'greeting.service.json' is not valid, '01234567890' is not a valid
+`ERROR: 'greeting-4.service.json' is not valid, '01234567890' is not a valid
 identifier.`

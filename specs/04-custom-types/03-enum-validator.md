@@ -6,7 +6,7 @@ restricted to be either `200`, `400` or `500`.
 
 `CONCEPTS: service.concepts.json`
 
-```json
+```json name="service.concepts.json"
 {
     "$service+": {
         "statusCode": "$statusCode:httpStatus"
@@ -26,7 +26,7 @@ definition;
 
 `SCHEMA: greeting.service.json`
 
-```json
+```json name="greeting.service.json"
 {
     "sayHello": {
         "statusCode": 404
@@ -42,7 +42,7 @@ Short-hand for enum validator is as follows;
 
 `CONCEPTS: service.concepts.json`
 
-```json
+```json name="short-hand/service.concepts.json"
 {
     "$service+": {
         "statusCode": "$statusCode:httpStatus"
@@ -61,7 +61,7 @@ the array is a `number`.
 
 `CONCEPTS: service.concepts.json`
 
-```json
+```json name="any/service.concepts.json"
 {
     "$service+": {
         "statusCode": "$statusCode:httpStatus"

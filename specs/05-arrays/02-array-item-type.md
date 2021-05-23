@@ -6,7 +6,7 @@ an example;
 
 `CONCEPTS: tags.concepts.json`
 
-```json
+```json name="tags.concepts.json"
 {
     "tags?": [ "$tags:string" ]
 }
@@ -17,7 +17,7 @@ Below schema is **invalid** because all items in `$tags` are expected to be a
 
 `SCHEMA: invalid.tags.json`
 
-```json
+```json name="invalid.tags.json"
 {
     "tags": [ "number", "not", "allowed", 0 ]
 }
@@ -31,7 +31,7 @@ Custom types are also supported.
 
 `CONCEPTS: season.concepts.json`
 
-```json
+```json name="custom/season.concepts.json"
 {
     "$season*": [ "$months:month" ],
     
@@ -48,7 +48,7 @@ Custom types are also supported.
 
 `SCHEMA: invalid.season.json`
 
-```json
+```json name="custom/invalid.season.json"
 {
     "summer": [ "JUN", "JUL", "AUH" ]
 }
