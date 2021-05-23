@@ -102,7 +102,7 @@ in an array;
 ```json name="schema-shadow/greeting.service.json"
 {
     "sayHello": {
-        "name": "string",
+        "name": "string"
     },
     "sayGoodbye": { }
 }
@@ -135,7 +135,7 @@ Even if there is only one `$service`, schema shadow still has it in an array;
 ```json name="schema-shadow/greeting-2.service.json"
 {
     "sayHello": {
-        "name": "string",
+        "name": "string"
     }
 }
 ```

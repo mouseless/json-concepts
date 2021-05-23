@@ -15,6 +15,21 @@ const specs = fromFileToSpec(specFiles, _ => {
 });
 
 const testCases = fromSpecToTestCase(specs, _ => {
+    if (_.block.lang === 'json') {
+        try {
+            JSON.parse(_.block.value);
+        } catch (e) {
+            console.error(`\x1b[31m` +
+                `invalid json '${_.block.info.name}' ` +
+                `at ${_.block.position.start.line}-${_.block.position.end.line} ` +
+                `in '${_.spec.path}'.\n` +
+                `${e}` +
+                `\x1b[37m`);
+            process.exit(1);
+        }
+
+    }
+
     return {
         path: `./.dist/test-cases/${_.spec.section}/${_.spec.name}/${_.block.info.name}`,
         content: _.block.value

@@ -43,7 +43,7 @@ Below is an **invalid** schema;
 ```json name="greeting.service.json"
 {
     "sayGoodbye": {
-        "async": "yes",
+        "async": "yes"
     }
 }
 ```

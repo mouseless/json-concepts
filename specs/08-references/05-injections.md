@@ -128,15 +128,15 @@ This is equivalent to the following;
         },
         {
             "$property+": { },
-            "@path": "/**/$class",
+            "@path": "/**/$class"
         },
         {
             "$method+": { },
-            "@path": "/**/$class",
+            "@path": "/**/$class"
         },
         {
             "returns": "$returnType",
-            "@path": [ "/**/$method", "/**/$property" ],
+            "@path": [ "/**/$method", "/**/$property" ]
         },
         {
             "$parameter*": "$type",
@@ -181,15 +181,15 @@ none of the paths hit a node in the definition;
         },
         {
             "returns": "$returnType",
-            "@path": [ "/**/$method", "/**/$property" ],
+            "@path": [ "/**/$method", "/**/$property" ]
         },
         {
             "$method+": { },
-            "@path": "/**/$class",
+            "@path": "/**/$class"
         },
         {
             "$property+": { },
-            "@path": "/**/$class",
+            "@path": "/**/$class"
         },
         {
             "$class+": { }
@@ -235,11 +235,11 @@ its own references.
             "#parameters": {
                 "$parameter*": "$type"
             },
-            "@path": "/**/$class",
+            "@path": "/**/$class"
         },
         {
             "returns": "$returnType",
-            "@path": [ "/**/$method", "/**/$property" ],
+            "@path": [ "/**/$method", "/**/$property" ]
         }
     ]
 }
