@@ -4,9 +4,9 @@ A key with a `#` prefix at the root of the file means that it is a definition of
 a reusable reference. When it is encountered in value side, it means that
 reference is being used. Below is an example.
 
-`CONCEPTS 1: class.concepts.json`
+`CONCEPTS: class-1.concepts.json`
 
-```json
+```json name="class-1.concepts.json"
 {
     "$class+": "#properties",
     "#properties": {
@@ -19,9 +19,9 @@ Above there is a `#properties` reference in which `$property` concept is
 defined and it is used under `$class` concept. This definition is equivalent to
 below definition;
 
-`CONCEPTS 2: class.concepts.json`
+`CONCEPTS: class-2.concepts.json`
 
-```json
+```json name="class-2.concepts.json"
 {
     "$class+": {
         "$property*": "$type"
@@ -30,8 +30,8 @@ below definition;
 ```
 
 References does not have an effect in concepts shadow and schema validation, so
-`CONCEPTS 1` has exactly the same shadow and schema validation behavior with
-`CONCEPTS 2`.
+`class-1.concepts.json` has exactly the same shadow and schema validation
+behavior with `class-2.concepts.json`.
 
 ## References Can Only Be Defined at the Root
 
@@ -40,7 +40,7 @@ concept instead of being defined at the root;
 
 `CONCEPTS: class.concepts.json`
 
-```json
+```json name="root/class.concepts.json"
 {
     "$class+": {
         "$method*": "#method",

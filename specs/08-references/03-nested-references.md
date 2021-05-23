@@ -2,9 +2,9 @@
 
 References can be used within other references. Below is an example;
 
-`CONCEPTS 1: class.concepts.json`
+`CONCEPTS: class-1.concepts.json`
 
-```json
+```json name="class-1.concepts.json"
 {
     "$class+": "#properties & #methods",
     "#properties": {
@@ -24,9 +24,9 @@ References can be used within other references. Below is an example;
 
 This is equivalent to following;
 
-`CONCEPTS 2: class.concepts.json`
+`CONCEPTS: class-2.concepts.json`
 
-```json
+```json name="class-2.concepts.json"
 {
     "$class+": {
         "$property*": "$type",
@@ -45,7 +45,7 @@ is an example;
 
 `CONCEPTS: tree.concepts.json`
 
-```json
+```json name="recursion/tree.concepts.json"
 {
     "$root": "#node",
     "#node": {
@@ -58,7 +58,7 @@ Below is a valid schema for above concepts definition;
 
 `SCHEMA: organization.tree.json`
 
-```json
+```json name="recursion/organization.tree.json"
 {
     "ceo": {
         "cfo": {
@@ -83,7 +83,7 @@ without using a reference. So in case of recursion, it makes use of the
 
 `CONCEPTS SHADOW`
 
-```json
+```json name="recursion/tree.concepts-shadow.json"
 {
     "concept": {
         "name": "root",
@@ -101,9 +101,9 @@ without using a reference. So in case of recursion, it makes use of the
 When there is an indirect recursion like in the below example, shadow should use
 'reference' keyword whenever a recursion occurs first;
 
-`CONCEPTS: tree.concepts.json`
+`CONCEPTS: recursion.concepts.json`
 
-```json
+```json name="indirect/recursion.concepts.json"
 {
     "$root": "#a",
     "#a": {
@@ -119,7 +119,7 @@ In this case, `$a` can include `$b`, but `$b` must have a reference to `$a`;
 
 `CONCEPTS SHADOW`
 
-```json
+```json name="indirect/recursion.concepts-shadow.json"
 {
     "concept": {
         "name": "root",

@@ -4,9 +4,9 @@
 in `@path` meta-data. In below definition, `return` literal is defined
 separately and injected under `$property` concept;
 
-`CONCEPTS 1: class.concepts.json`
+`CONCEPTS: class-1.concepts.json`
 
-```json
+```json name="class-1.concepts.json"
 {
     "$class+": { 
         "$property*": { }
@@ -20,9 +20,9 @@ separately and injected under `$property` concept;
 
 This is equivalent to below definition;
 
-`CONCEPTS 2: class.concepts.json`
+`CONCEPTS: class-2.concepts.json`
 
-```json
+```json name="class-2.concepts.json"
 {
     "$class+": { 
         "$property*": {
@@ -37,9 +37,9 @@ This is equivalent to below definition;
 It can inject a definition to multiple paths. Below example injects `return`
 literal to both `$property` and `$method` concepts;
 
-`CONCEPTS 1: class.concepts.json`
+`CONCEPTS: class-1.concepts.json`
 
-```json
+```json name="multiple-paths/class-1.concepts.json"
 {
     "$class+": { 
         "$property*": { },
@@ -54,9 +54,9 @@ literal to both `$property` and `$method` concepts;
 
 This is equivalent to below definition;
 
-`CONCEPTS 2: class.concepts.json`
+`CONCEPTS: class-2.concepts.json`
 
-```json
+```json name="multiple-paths/class-2.concepts.json"
 {
     "$class+": { 
         "$property*": {
@@ -76,7 +76,7 @@ level, `**` means "any node" for every level.
 
 `CONCEPTS: class.concepts.json`
 
-```json
+```json name="wildcard/class.concepts.json"
 {
     "$class+": { 
         "$property*": { },
@@ -94,9 +94,9 @@ level, `**` means "any node" for every level.
 When an injection does not have a `@path` meta-data, it means that its
 definition is going to be injected at the root. Below is an example;
 
-`CONCEPTS 1: class.concepts.json`
+`CONCEPTS: class-1.concepts.json`
 
-```json
+```json name="no-path/class-1.concepts.json"
 {
     "#inject": {
         "$class+": { }
@@ -106,9 +106,9 @@ definition is going to be injected at the root. Below is an example;
 
 This is equivalent to the following;
 
-`CONCEPTS 2: class.concepts.json`
+`CONCEPTS: class-2.concepts.json`
 
-```json
+```json name="no-path/class-2.concepts.json"
 {
     "$class+": { }
 }
@@ -118,9 +118,9 @@ This is equivalent to the following;
 
 `#inject` can have an array of definitions.
 
-`CONCEPTS 1: class.concepts.json`
+`CONCEPTS: class-1.concepts.json`
 
-```json
+```json name="multiple-injections/class-1.concepts.json"
 {
     "#inject": [
         {
@@ -148,9 +148,9 @@ This is equivalent to the following;
 
 Above definition is equivalent to this;
 
-`CONCEPTS 2: class.concepts.json`
+`CONCEPTS: class-2.concepts.json`
 
-```json
+```json name="multiple-injections/class-2.concepts.json"
 {
     "$class+": {
         "$property+": { 
@@ -170,9 +170,9 @@ The order of injections matters, they are processed in the order they appear.
 Below definition will only have `$class` concept after being processed, because
 none of the paths hit a node in the definition;
 
-`CONCEPTS 1: class.concepts.json`
+`CONCEPTS: class-1.concepts.json`
 
-```json
+```json name="order/class-1.concepts.json"
 {
     "#inject": [
         {
@@ -200,9 +200,9 @@ none of the paths hit a node in the definition;
 
 This is equivalent to the following;
 
-`CONCEPTS 2: class.concepts.json`
+`CONCEPTS: class-2.concepts.json`
 
-```json
+```json name="order/class-2.concepts.json"
 {
     "$class+": { }
 }
@@ -213,9 +213,9 @@ This is equivalent to the following;
 Just like included concepts definitions, an injected definition can also have
 its own references.
 
-`CONCEPTS 1: dto.concepts.json`
+`CONCEPTS: dto.concepts.json`
 
-```json
+```json name="process-order/dto.concepts.json"
 {
     "$class+": "#properties",
     "#properties": {
@@ -224,9 +224,9 @@ its own references.
 }
 ```
 
-`CONCEPTS 2: behavior.concepts.json`
+`CONCEPTS: behavior.concepts.json`
 
-```json
+```json name="process-order/behavior.concepts.json"
 {
     "#include": "dto.concepts.json",
     "#inject": [
@@ -266,9 +266,9 @@ For this example, process order of `behavior.concepts.json` is as follows;
 
 Therefore `behavior.concepts.json` is equivalent to below definition;
 
-`CONCEPTS 3: class.concepts.json`
+`CONCEPTS: class.concepts.json`
 
-```json
+```json name="process-order/class.concepts.json"
 {
     "$class+": {
         "$property+": { 
