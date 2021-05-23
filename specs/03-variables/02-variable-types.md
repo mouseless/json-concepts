@@ -7,7 +7,7 @@ be a `boolean`;
 
 `CONCEPTS: service.concepts.json`
 
-```json
+```json name="service.concepts.json"
 {
     "$service+": {
         "$flag*": "$enabled:boolean"
@@ -19,7 +19,7 @@ Concepts shadow contains type of a variable under `type` key;
 
 `CONCEPTS SHADOW`
 
-```json
+```json name="service.concepts-shadow.json"
 {
     "concept": {
         "name": "service",
@@ -40,7 +40,7 @@ Below is an **invalid** schema;
 
 `SCHEMA: greeting.service.json`
 
-```json
+```json name="greeting.service.json"
 {
     "sayGoodbye": {
         "async": "yes",
@@ -62,7 +62,7 @@ explicitly;
 
 `explicit.concepts.json`
 
-```json
+```json name="available/explicit.concepts.json"
 {
     "$service+": {
         "extra": "$extra:any"
@@ -72,7 +72,7 @@ explicitly;
 
 `implicit.concepts.json`
 
-```json
+```json name="available/implicit.concepts.json"
 {
     "$service+": {
         "extra": "$extra"

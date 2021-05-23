@@ -6,7 +6,7 @@ For below concepts definition;
 
 `CONCEPTS: service.concepts.json`
 
-```json
+```json name="service.concepts.json"
 {
     "$service+": {
         "$flag*": "$enabled",
@@ -20,7 +20,7 @@ schema is **valid**;
 
 `SCHEMA: greeting.service.json`
 
-```json
+```json name="greeting.service.json"
 {
     "sayGoodbye": {
         "async": true,
@@ -33,7 +33,7 @@ Schema shadow also contains these values as they appear in definition;
 
 `SCHEMA SHADOW`
 
-```json
+```json name="greeting.service-shadow.json"
 {
     "service": [
         {
