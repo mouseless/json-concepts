@@ -5,7 +5,7 @@ demonstrates a simple literal-only concepts definition;
 
 `CONCEPTS: service.concepts.json`
 
-```json
+```json name="service.concepts.json"
 {
     "service": {
         "name": "$name",
@@ -22,7 +22,7 @@ demonstrates a simple literal-only concepts definition;
 
 `SCHEMA: greeting.service.json`
 
-```json
+```json name="greeting.service.json"
 {
     "service": {
         "name": "sayHello",
@@ -38,7 +38,7 @@ Corresponding shadows are as follows;
 
 `CONCEPTS SHADOW`
 
-```json
+```json name="service.concepts-shadow.json"
 {
     "literal": {
         "name": "service",
@@ -70,7 +70,7 @@ Corresponding shadows are as follows;
 
 `SCHEMA SHADOW`
 
-```json
+```json name="greeting.service-shadow.json"
 {
     "name": "sayHello",
     "parameterName": "name",
@@ -82,7 +82,7 @@ Corresponding shadows are as follows;
 
 `CONCEPTS: service.concepts.json`
 
-```json
+```json name="object-arrays/service.concepts.json"
 {
     "services": [ {
         "name": "$name",
@@ -100,7 +100,7 @@ Corresponding shadows are as follows;
 
 `CONCEPTS SHADOW`
 
-```json
+```json name="object-arrays/service.concepts-shadow.json"
 {
     "literal": {
         "name": "services",
@@ -138,7 +138,7 @@ Below is a valid schema and its shadow;
 
 `SCHEMA: greeting.service.json`
 
-```json
+```json name="object-arrays/greeting.service.json"
 {
     "services": [
         {
@@ -160,7 +160,7 @@ Below is a valid schema and its shadow;
 
 `SCHEMA SHADOW`
 
-```json
+```json name="object-arrays/greeting.service-shadow.json"
 {
     "services": [
         {

@@ -5,7 +5,7 @@ concept under the `response` literal;
 
 `CONCEPTS: service.concepts.json`
 
-```json
+```json name="service.concepts.json"
 {
     "$service+": {
         "response": {
@@ -19,7 +19,7 @@ Below is a valid schema;
 
 `SCHEMA: greeting.service.json`
 
-```json
+```json name="greeting.service.json"
 {
     "sayHello": {
         "response": {
@@ -34,7 +34,7 @@ Concepts shadow is as follows;
 
 `CONCEPTS SHADOW`
 
-```json
+```json name="service.concepts-shadow.json"
 {
     "concept": {
         "name": "service",
@@ -56,7 +56,7 @@ directly under `$service` concept;
 
 `SCHEMA SHADOW`
 
-```json
+```json name="greeting.service-shadow.json"
 {
     "service": [
         {

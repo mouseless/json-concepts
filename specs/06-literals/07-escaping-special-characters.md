@@ -5,7 +5,7 @@ Below is an example of both key and value literals;
 
 `CONCEPTS: escape.concepts.json`
 
-```json
+```json name="escape.concepts.json"
 {
     "\\$service\\+": "\\$response"
 }
@@ -16,7 +16,7 @@ contains literals;
 
 `SCHEMA: concepts.escape.json`
 
-```json
+```json name="concepts.escape.json"
 {
     "$service+": "$response"
 }
