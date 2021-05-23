@@ -3,13 +3,15 @@
   "description": "a meta-schema specification in JSON format",
   "repository": "https://github.com/codingatwill/json-concepts",
   "scripts": {
-    "dev": "vuepress dev .",
-    "build": "vuepress build ."
+    "website": "vuepress dev .",
+    "build:website": "vuepress build .",
+    "build:spec": "node build.js"
   },
   "license": "MIT",
   "devDependencies": {
     "@vuepress/plugin-search": "^2.0.0-beta.14",
     "capitalize": "^2.0.3",
+    "code-blocks": "^1.1.0",
     "vuepress": "^2.0.0-beta.14"
   }
 }
