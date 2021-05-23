@@ -6,7 +6,7 @@ least one `$service` in every schema;
 
 `CONCEPTS: service.concepts.json`
 
-```json
+```json name="service.concepts.json"
 {
     "$service+": {
         "$parameter?": "$type"
@@ -18,7 +18,7 @@ Below schema is now valid;
 
 `SCHEMA: greeting.service.json`
 
-```json
+```json name="greeting.service.json"
 {
     "sayHello": { 
         "name": "string"
@@ -33,7 +33,7 @@ When no concept is given, schema becomes **invalid**;
 
 `SCHEMA: greeting.service.json`
 
-```json
+```json name="at-least-one/greeting.service.json"
 {
 }
 ```
@@ -48,7 +48,7 @@ once. Below concepts definition is invalid;
 
 `CONCEPTS: service.concepts.json`
 
-```json
+```json name="key-literals/service.concepts.json"
 {
     "$service+": {
         "$parameter?": "$type",
@@ -66,7 +66,7 @@ For following concepts definition, quantifier of `$service` doesn't have a max;
 
 `CONCEPTS: service.concepts.json`
 
-```json
+```json name="concepts-shadow/service.concepts.json"
 {
     "$service+": {
         "$parameter?": "$type"
@@ -76,7 +76,7 @@ For following concepts definition, quantifier of `$service` doesn't have a max;
 
 `CONCEPTS SHADOW`
 
-```json
+```json name="concepts-shadow/service.concepts-shadow.json"
 {
     "concept": {
         "name": "service", 
@@ -99,7 +99,7 @@ in an array;
 
 `SCHEMA: greeting.service.json`
 
-```json
+```json name="schema-shadow/greeting.service.json"
 {
     "sayHello": {
         "name": "string",
@@ -110,7 +110,7 @@ in an array;
 
 `SCHEMA SHADOW`
 
-```json
+```json name="schema-shadow/greeting.service-shadow.json"
 {
     "service": [
         {
@@ -130,9 +130,9 @@ in an array;
 
 Even if there is only one `$service`, schema shadow still has it in an array;
 
-`SCHEMA: greeting.service.json`
+`SCHEMA: greeting-2.service.json`
 
-```json
+```json name="schema-shadow/greeting-2.service.json"
 {
     "sayHello": {
         "name": "string",
@@ -142,7 +142,7 @@ Even if there is only one `$service`, schema shadow still has it in an array;
 
 `SCHEMA SHADOW`
 
-```json
+```json name="schema-shadow/greeting-2.service-shadow.json"
 {
     "service": [
         {

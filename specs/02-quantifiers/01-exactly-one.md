@@ -6,7 +6,7 @@ every schema.
 
 `CONCEPTS: service.concepts.json`
 
-```json
+```json name="service.concepts.json"
 {
     "$service": {
         "$parameter": "$type"
@@ -18,7 +18,7 @@ We've already seen that following schema is valid;
 
 `SCHEMA: greeting.service.json`
 
-```json
+```json name="greeting.service.json"
 {
     "sayHello": {
         "name": "string"
@@ -32,7 +32,7 @@ However following schema is **not** valid;
 
 `SCHEMA: greeting.service.json`
 
-```json
+```json name="missing-one/greeting.service.json"
 {
     "sayHello": { }
 }
@@ -49,7 +49,7 @@ Below schema is missing both `$service` and a `$parameter` concepts;
 
 `SCHEMA: greeting.service.json`
 
-```json
+```json name="missing-two/greeting.service.json"
 {
 }
 ```
@@ -64,7 +64,7 @@ Just like a concept, a key literal is also required by default;
 
 `CONCEPTS: service.concepts.json`
 
-```json
+```json name="key-literals/service.concepts.json"
 {
     "$service": {
         "response": "$responseType"
@@ -76,7 +76,7 @@ Following schema will **not** be validated;
 
 `SCHEMA: greeting.service.json`
 
-```json
+```json name="key-literals/greeting.service.json"
 {
     "sayHello": { }
 }
@@ -93,7 +93,7 @@ and `$responseType`.
 
 `CONCEPTS: service.concepts.json`
 
-```json
+```json name="null/service.concepts.json"
 {
     "$service": {
         "$parameter": "$type",
@@ -106,7 +106,7 @@ Below schema is **valid**;
 
 `SCHEMA: greeting.service.json`
 
-```json
+```json name="null/greeting.service.json"
 {
     "sayHello": { 
         "name": null,
@@ -119,7 +119,7 @@ And its shadow is as follows;
 
 `SCHEMA SHADOW`
 
-```json
+```json name="null/greeting.service-shadow.json"
 {
     "service": {
         "name": "sayHello",

@@ -19,7 +19,7 @@ For example;
 
 `CONCEPTS: service.concepts.json`
 
-```json
+```json name="service.concepts.json"
 {
     "$service{1,3}": {
         "$parameter{,2}": "$type",
@@ -34,7 +34,7 @@ This concepts definition should have following shadow;
 
 `CONCEPTS SHADOW`
 
-```json
+```json name="service.concepts-shadow.json"
 {
     "concept": {
         "name": "service",

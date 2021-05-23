@@ -36,7 +36,7 @@ module.exports = {
       '@vuepress/plugin-search',
       {
         locales: { '/': { placeholder: 'Search' } },
-        isSearchable: (page) => page.path !== '/' && !page.path.includes('XX-')
+        isSearchable: (page) => page.path !== '/'
       }
     ]
   ]
