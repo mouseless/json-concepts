@@ -4,7 +4,8 @@ const { create, Levels } = require('./auto-config');
 const config = create({
   "use-cases": Levels.ONE,
   "specs": Levels.TWO,
-  "roadmap": Levels.ONE
+  "roadmap": Levels.ONE,
+  "proposals": Levels.ONE
 });
 
 module.exports = {
