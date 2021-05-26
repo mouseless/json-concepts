@@ -1,0 +1,98 @@
+{
+    "basics": {
+        "key-literal": "value-literal",
+        "concept-instance": {
+            "key-literal": "value"
+        }
+    },
+    "quantifiers": {
+        "exactly-one": {
+            "is": "required"
+        },
+        "one-or-more-1": {
+            "is": "required-at-least-once"
+        },
+        "one-or-more-2": {
+            "is": "required-at-least-once"
+        },
+        "zero-or-more-1": {
+            "can": "occur-any-number-of-times"
+        },
+        "zero-or-more-2": {
+            "can": "occur-any-number-of-times"
+        },
+        "custom-1": {
+            "is": "required-3-times"
+        },
+        "custom-2": {
+            "is": "required-3-times"
+        },
+        "custom-3": {
+            "is": "required-3-times"
+        }
+    },
+    "variables": {
+        "any-boolean": true,
+        "any-number": 1,
+        "any-string": "string",
+        "boolean": true,
+        "number": 1,
+        "string": "string"
+    },
+    "custom-types": {
+        "regex": "rgx",
+        "enum": "value 1",
+        "min-max": 2,
+        "inheritance": "r-inheritance-x",
+        "r-concept-x": "validating-concept-name"
+    },
+    "arrays": {
+        "array": [
+            "item 1",
+            "item 2"
+        ],
+        "two-dimensional": [
+            [
+                1,
+                2,
+                3
+            ],
+            [
+                4,
+                5,
+                6
+            ]
+        ],
+        "array-item-type": [
+            "is",
+            "string"
+        ],
+        "object-array": [
+            {
+                "value": "value 1"
+            },
+            {
+                "value": "value 2"
+            }
+        ],
+        "two-dimensional-object-array": [
+            [
+                {
+                    "value": "value 1"
+                },
+                {
+                    "value": "value 2"
+                }
+            ],
+            [
+                {
+                    "value": "value 1"
+                },
+                {
+                    "value": "value 2"
+                }
+            ]
+        ]
+    },
+    "@concepts": "example.concepts.json"
+}

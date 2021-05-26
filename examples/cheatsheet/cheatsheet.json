@@ -1,0 +1,78 @@
+{
+    "basics": {
+        "key-literal": "value-literal",
+        "$concept": {
+            "key-literal": "$variable"
+        }
+    },
+    "quantifiers": {
+        "$exactly-one": {
+            "is": "required"
+        },
+        "$zero-or-one?": {
+            "is": "optional"
+        },
+        "$one-or-more+": {
+            "is": "required-at-least-once"
+        },
+        "$zero-or-more*": {
+            "can": "occur-any-number-of-times"
+        },
+        "$custom{3}": {
+            "is": "required-3-times"
+        }
+    },
+    "variables": {
+        "$any*": "$any",
+        "boolean": "$boolean:boolean",
+        "number": "$number:number",
+        "string": "$string:string"
+    },
+    "custom-types": {
+        "regex": "$regex:regex",
+        "enum": "$enum:enum",
+        "min-max": "$min-max:min-max",
+        "inheritance": "$inheritance:inheritance",
+        "$concept:regex": "validating-concept-name"
+    },
+    "arrays": {
+        "array": [
+            "$array"
+        ],
+        "two-dimensional": [
+            [
+                "$two-dimensional"
+            ]
+        ],
+        "array-item-type": [
+            "$array-item-type:string"
+        ],
+        "object-array": [
+            {
+                "value": "$value"
+            }
+        ],
+        "two-dimensional-object-array": [
+            [
+                {
+                    "value": "$value"
+                }
+            ]
+        ]
+    },
+    "@types": {
+        "regex": "^r.*x$",
+        "enum": [
+            "value 1",
+            "value 2"
+        ],
+        "min-max": {
+            "type": "number",
+            "min": 1,
+            "max": 3
+        },
+        "inheritance": {
+            "type": "regex"
+        }
+    }
+}

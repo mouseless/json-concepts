@@ -72,7 +72,7 @@ Just like a concept, a key literal is also required by default;
 }
 ```
 
-Following schema will **not** be validated;
+Following schema is **invalid**;
 
 `SCHEMA: greeting.service.json`
 
