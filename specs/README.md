@@ -34,7 +34,7 @@ To keep its syntax short, **json concepts** makes a heavy use of special
 characters. This is a design decision to have an expressive syntax, just like
 regular expressions.
 
-We ask two basic questions when choosing a special character;
+There are two basic questions to choose a special character;
 
 1. Does it mean only one thing?
 2. Is it familiar?

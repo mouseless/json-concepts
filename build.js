@@ -4,9 +4,10 @@ const cb = require('code-blocks');
 
 fs.rmdirSync('./.dist', { recursive: true });
 
-const specDirOrFile = /[0-9]{2}-[a-z-]*([.]md)?/; // 01-spec-dir or 01-spec-file.md
+// 01-spec-dir or 01-spec-file.md
+const specDirOrFile = /^[0-9]{2}-[a-z-]*([.]md)?$/;
 const specFiles = files('./specs', entry => specDirOrFile.test(entry.name));
-const specs = fromFileToSpec(specFiles, _ => {
+const specs = fromFileToTwoLevelHierarchy(specFiles, _ => {
     return {
         section: _.file.parent.name,
         name: _.file.name.substring(0, _.file.name.length - 3),
@@ -19,15 +20,24 @@ const testCases = fromSpecToTestCase(specs, _ => {
         content: _.block.value
     };
 });
+// example-folder or example.json
+// - exclude hidden e.g. .gitignore
+// - exclude drafts e.g. xx-not-yet
+const exampleDirOrFile = /^(?!\.)(?!xx-)[a-z-]*(([.][a-z-]*)?[.]json)?$/;
+const exampleFiles = files('./examples', entry => exampleDirOrFile.test(entry.name));
+const examples = fromFileToTwoLevelHierarchy(exampleFiles, _ => {
+    return {
+        group: _.file.parent.name,
+        name: _.file.name,
+        path: _.file.path
+    };
+});
 
 // copy specs to .dist/specs
 for (const spec of specs) {
     const targetPath = `./.dist/specs/${spec.section}/${spec.name}.md`;
-    const dir = path.dirname(targetPath);
-    if (!fs.existsSync(dir)) {
-        fs.mkdirSync(dir, { recursive: true });
-    }
 
+    mkdir(targetPath);
     fs.copyFileSync(spec.path, targetPath);
 }
 
@@ -37,18 +47,29 @@ for (const testCase of testCases) {
         throw new Error(`'${testCase.path}' already exists`);
     }
 
-    const dir = path.dirname(testCase.path);
+    mkdir(testCase.path);
+    fs.writeFileSync(testCase.path, testCase.content);
+}
+
+// copy examples to .dist/examples
+for (const example of examples) {
+    const targetPath = `./.dist/examples/${example.group}/${example.name}`;
+
+    mkdir(targetPath);
+    fs.copyFileSync(example.path, targetPath);
+}
+
+function mkdir(targetPath) {
+    const dir = path.dirname(targetPath);
     if (!fs.existsSync(dir)) {
         fs.mkdirSync(dir, { recursive: true });
     }
-
-    fs.writeFileSync(testCase.path, testCase.content);
 }
 
 function files(root, filter, _parent) {
     const entries = fs
         .readdirSync(root, { withFileTypes: true })
-        .filter(file => filter(file));
+        .filter(file => filter(file) && file.name != 'node_modules');
 
     if (entries.length == 0) {
         return {};
@@ -78,11 +99,13 @@ function files(root, filter, _parent) {
     return result;
 }
 
-function fromFileToSpec(specFiles, map) {
+function fromFileToTwoLevelHierarchy(files, map) {
     const result = [];
-    for (const sectionDir of Object.values(specFiles)) {
-        for (const specFile of Object.values(sectionDir.children)) {
-            result.push(map({ file: specFile }));
+    for (const parent of Object.values(files)) {
+        if (parent.children) {
+            for (const child of Object.values(parent.children)) {
+                result.push(map({ file: child }));
+            }
         }
     }
     return result;

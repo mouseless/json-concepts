@@ -60,6 +60,70 @@
             ]
         ]
     },
+    "literals": {
+        "$concept-under-a": "literal",
+        "nested-object-array": [
+            {
+                "object-array": [
+                    {
+                        "$prop": "$value"
+                    }
+                ]
+            }
+        ],
+        "\\$escaping": "\\$special-characters"
+    },
+    "concepts": {
+        "multi-concepts": {
+            "$concept-a": "$value:number",
+            "$concept-b": "$value:string"
+        },
+        "explicit-concepts": {
+            "$concept-c": "$value",
+            "$concept-d": "$value",
+            "concept": "$value"
+        }
+    },
+    "references": {
+        "define": "#reference",
+        "merge": "#reference & #other",
+        "nested": "#nested",
+        "include": {
+            "#include": "include.json"
+        },
+        "injections": {
+            "single": {},
+            "multiple": {},
+            "wildcard": {}
+        }
+    },
+    "#reference": {
+        "$referenced-concept": "$value"
+    },
+    "#other": {
+        "merged-literal": "$merged"
+    },
+    "#nested": {
+        "reference?": "#reference",
+        "recursion?": "#nested"
+    },
+    "#inject": [
+        {
+            "injected-only": "to /references/injections/single",
+            "@path": "/references/injections/single"
+        },
+        {
+            "injected-both": "to /references/injections/single and /references/injections/multiple",
+            "@path": [
+                "/references/injections/single",
+                "/references/injections/multiple"
+            ]
+        },
+        {
+            "injected-via-wildcard": "to /**/injections/*",
+            "@path": "/**/injections/*"
+        }
+    ],
     "@types": {
         "regex": "^r.*x$",
         "enum": [

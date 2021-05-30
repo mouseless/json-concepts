@@ -17,7 +17,7 @@ const InvalidConceptsReasons = {
     LITERAL_cannot_have_QUANTIFIER:
         (LITERAL, QUANTIFIER) => `'${LITERAL}' cannot have '${QUANTIFIER}' quantifier`,
     Cannot_declare_VARIABLE_more_than_once:
-        (VARIABLE) => `Cannot declare ${VARIABLE} more than once`,
+        (VARIABLE) => `Cannot declare '${SC.VARIABLE}${VARIABLE}' more than once`,
     CONCEPT_cannot_declare_VARIABLE_more_than_once:
         (CONCEPT, VARIABLE) => CONCEPT == null
             ? InvalidConceptsReasons.Cannot_declare_VARIABLE_more_than_once(VARIABLE)

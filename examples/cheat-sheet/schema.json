@@ -94,5 +94,69 @@
             ]
         ]
     },
+    "literals": {
+        "concept-under-a": "literal",
+        "nested-object-array": [
+            {
+                "object-array": [
+                    {
+                        "a-prop": "a-value"
+                    }
+                ]
+            }
+        ],
+        "$escaping": "$special-characters"
+    },
+    "concepts": {
+        "multi-concepts": {
+            "concept-a-instance": 10,
+            "concept-b-instance": "text"
+        },
+        "explicit-concepts": {
+            "concept:concept-c": "text",
+            "concept:concept-d": "text",
+            "concept": "text"
+        }
+    },
+    "references": {
+        "define": {
+            "referenced-concept-instance": null
+        },
+        "merge": {
+            "referenced-concept-instance": null,
+            "merged-literal": null
+        },
+        "nested": {
+            "reference": {
+                "concept": null
+            },
+            "recursion": {
+                "recursion": {
+                    "recursion": {
+                        "reference": {
+                            "concept": null
+                        }
+                    }
+                }
+            }
+        },
+        "include": {
+            "included": "from-other-file"
+        },
+        "injections": {
+            "single": {
+                "injected-only": "to /references/injections/single",
+                "injected-both": "to /references/injections/single and /references/injections/multiple",
+                "injected-via-wildcard": "to /**/injections/*"
+            },
+            "multiple": {
+                "injected-both": "to /references/injections/single and /references/injections/multiple",
+                "injected-via-wildcard": "to /**/injections/*"
+            },
+            "wildcard": {
+                "injected-via-wildcard": "to /**/injections/*"
+            }
+        }
+    },
     "@concepts": "example.concepts.json"
 }
