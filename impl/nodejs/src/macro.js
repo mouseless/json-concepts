@@ -13,7 +13,7 @@ class Macro {
         definitionPath = required('definitionPath'),
         relativeTo
     ) {
-        return _load(undefined, definitionPath, relativeTo);
+        return await _load(undefined, definitionPath, relativeTo);
     }
 
     /**
