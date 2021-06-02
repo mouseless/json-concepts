@@ -9,8 +9,8 @@ const specDirOrFile = /^[0-9]{2}-[a-z-]*([.]md)?$/;
 const specFiles = files('./specs', entry => specDirOrFile.test(entry.name));
 const specs = fromFileToTwoLevelHierarchy(specFiles, _ => {
     return {
-        section: _.file.parent.name,
-        name: _.file.name.substring(0, _.file.name.length - 3),
+        section: _.file.parent.name.substring(3, _.file.parent.name.length),
+        name: _.file.name.substring(3, _.file.name.length - 3),
         path: _.file.path
     };
 });

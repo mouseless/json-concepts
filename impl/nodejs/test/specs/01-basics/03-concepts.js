@@ -1,22 +1,18 @@
 const { Concepts } = require('../../..');
 const { error } = require('../../../src/util');
 const { should: buildShould } = require('chai');
+const { readTestCase } = require('../../lib');
 
 const should = buildShould();
 
 describe('specs/basics/concepts', function () {
-    it('should validate', function () {
-        const concepts = new Concepts({
-            "$service": {
-                "$parameter": "$type"
-            }
-        });
+    const from = (path) => readTestCase(this, path);
 
-        (() => concepts.validate({
-            "sayGoodbye": {
-                "cry": "boolean"
-            }
-        })).should.not.throw();
+    it('should validate', function () {
+        const concepts = new Concepts(from('service.concepts.json'));
+
+        (() => concepts.validate(from('greeting.service.json')))
+            .should.not.throw();
     });
 
     it('should be able to list all concepts', function () {
@@ -104,30 +100,18 @@ describe('specs/basics/concepts', function () {
         variable.name.should.equal('variable1');
     });
 
-    describe('key literals under concepts', function () {
-        it('should validate', function () {
-            const concepts = new Concepts({
-                "$service": {
-                    "$parameter": "$type",
-                    "response": "$responseType"
-                }
-            });
+    describe('key-literals', function () {
+        const from = (path) => readTestCase(this, path);
 
-            (() => concepts.validate({
-                "sayGoodbye": {
-                    "cry": "boolean",
-                    "response": "string"
-                }
-            })).should.not.throw();
+        it('should validate', function () {
+            const concepts = new Concepts(from('service.concepts.json'));
+
+            (() => concepts.validate(from('greeting.service.json')))
+                .should.not.throw();
         });
 
         it('should not validate', function () {
-            const concepts = new Concepts({
-                "$service": {
-                    "$parameter": "$type",
-                    "response": "$responseType"
-                }
-            });
+            const concepts = new Concepts(from('service.concepts.json'));
 
             (() => concepts.validate({
                 "sayGoodbye": {
@@ -139,23 +123,18 @@ describe('specs/basics/concepts', function () {
         });
     });
 
-    describe('conflicts in key literals and concepts', function () {
-        it('should not validate', function () {
-            const concepts = new Concepts({
-                "$service": {
-                    "$parameter": "$type",
-                    "response": "$responseType"
-                }
-            });
+    describe('conflicts', function () {
+        const from = (path) => readTestCase(this, path);
 
-            (() => concepts.validate({
-                "sayGoodbye": {
-                    "response": "string",
-                    "response": "text"
-                }
-            })).should.throw(error.Schema_definition_is_not_valid__REASON(
-                because => because.CONCEPT_is_missing('parameter')
-            ).message);
+        it('should not validate', function () {
+            const concepts = new Concepts(from('service.concepts.json'));
+
+            (() => concepts.validate(from('greeting.service.json')))
+                .should.throw(
+                    error.Schema_definition_is_not_valid__REASON(
+                        because => because.CONCEPT_is_missing('parameter')
+                    ).message
+                );
         });
     });
 });
