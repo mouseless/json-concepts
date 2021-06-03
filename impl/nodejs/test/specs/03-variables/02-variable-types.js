@@ -1,31 +1,17 @@
 const { Concepts } = require('../../..');
 const { error } = require('../../../src/util');
 const { should: buildShould } = require('chai');
+const { readTestCase } = require('../../lib');
 
 const should = buildShould();
 
 describe('specs/variables/variable-types', function () {
-    it('should parse variable type', function () {
-        const concepts = new Concepts({
-            "$service+": {
-                "$flag*": "$enabled:boolean"
-            }
-        });
+    const from = (path) => readTestCase(this, path);
 
-        concepts.shadow.should.deep.equal({
-            "concept": {
-                "name": "service",
-                "quantifier": { "min": 1 },
-                "concept": {
-                    "name": "flag",
-                    "quantifier": { "min": 0 },
-                    "variable": {
-                        "name": "enabled",
-                        "type": "boolean"
-                    }
-                }
-            }
-        });
+    it('should parse variable type', function () {
+        const concepts = new Concepts(from('service.concepts.json'));
+
+        concepts.shadow.should.deep.equal(from('service.concepts-shadow.json'));
     });
 
     it('should give error when type is not defined after :', function () {
@@ -42,8 +28,21 @@ describe('specs/variables/variable-types', function () {
         );
     });
 
-    describe('available variable types', function () {
+    describe('available', function () {
+        const from = (path) => readTestCase(this, path);
+
         it('should support any', function () {
+            const explicit = new Concepts(from('explicit.concepts.json'));
+
+            explicit.shadow.concept.literal.variable.type
+                .should.equal('any');
+
+            const implicit = new Concepts(from('implicit.concepts.json'));
+
+            should.not.exist(implicit.shadow.concept.literal.variable.type);
+        });
+
+        it('should support string, boolean or number when type is any', function () {
             const concepts = new Concepts({
                 "$key*": "$any:any"
             });
