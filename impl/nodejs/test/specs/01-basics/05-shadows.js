@@ -1,34 +1,16 @@
 const { Concepts } = require('../../..');
 const { should } = require('chai');
+const { readTestCase } = require('../../lib');
 
 should();
 
 describe('specs/basics/shadows', function () {
-    it('should cast shadow', function () {
-        const concepts = new Concepts({
-            "$service": {
-                "$parameter": "$type",
-                "response": "$responseType"
-            }
-        });
+    const from = (path) => readTestCase(this, path);
 
-        concepts.shadow.should.deep.equal({
-            "concept": {
-                "name": "service",
-                "literal": {
-                    "name": "response",
-                    "variable": {
-                        "name": "responseType"
-                    }
-                },
-                "concept": {
-                    "name": "parameter",
-                    "variable": {
-                        "name": "type"
-                    }
-                }
-            }
-        })
+    it('should cast shadow', function () {
+        const concepts = new Concepts(from('service.concepts.json'));
+
+        concepts.shadow.should.deep.equal(from('service.concepts-shadow.json'));
     });
 
     it('should have literal as leaf when no variable was given', function () {
@@ -51,32 +33,15 @@ describe('specs/basics/shadows', function () {
         })
     });
 
-    describe('schema shadow', function () {
+    describe('schema-shadow', function () {
+        const from = (path) => readTestCase(this, path);
+
         it('should cast shadow', function () {
-            const concepts = new Concepts({
-                "$service": {
-                    "$parameter": "$type",
-                    "response": "$responseType"
-                }
-            });
+            const concepts = new Concepts(from('../service.concepts.json'));
 
-            const schema = concepts.create({
-                "sayHello": {
-                    "name": "string",
-                    "response": "string"
-                }
-            });
+            const schema = concepts.create(from('greeting.service.json'));
 
-            schema.shadow.should.deep.equal({
-                "service": {
-                    "name": "sayHello",
-                    "parameter": {
-                        "name": "name",
-                        "type": "string"
-                    },
-                    "responseType": "string"
-                }
-            });
+            schema.shadow.should.deep.equal(from('greeting.service-shadow.json'));
         });
     });
 });

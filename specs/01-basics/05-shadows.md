@@ -67,7 +67,7 @@ Below is a schema that conforms to the above concepts definition;
 
 `SCHEMA: greeting.service.json`
 
-```json name="greeting.service.json"
+```json name="schema-shadow/greeting.service.json"
 {
     "sayHello": {
         "name": "string",
@@ -80,7 +80,7 @@ This schema is expected to cast below shadow;
 
 `SCHEMA SHADOW`
 
-```json name="greeting.service-shadow.json"
+```json name="schema-shadow/greeting.service-shadow.json"
 {
     "service": {
         "name": "sayHello",

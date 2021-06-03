@@ -10,7 +10,9 @@
         "**/obj": true,
         ".vuepress/dist": true,
         ".vuepress/.cache": true,
-        ".vuepress/.temp": true
+        ".vuepress/.temp": true,
+        ".dist": true,
+        "**/package-lock.json": true
     },
     "cSpell.words": [
         "AVLN",
