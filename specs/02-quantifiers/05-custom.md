@@ -24,7 +24,7 @@ For example;
     "$service{1,3}": {
         "$parameter{,2}": "$type",
         "response{1}": {
-            "$status{0,}": "$responseType"
+            "$status{2,}": "$responseType"
         }
     }
 }
@@ -44,7 +44,7 @@ This concepts definition should have following shadow;
             "quantifier": { "min": 1, "max": 1 },
             "concept": {
                 "name": "status",
-                "quantifier": { "min": 0 },
+                "quantifier": { "min": 2 },
                 "variable": {
                     "name": "responseType"
                 }

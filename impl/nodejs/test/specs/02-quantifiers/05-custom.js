@@ -1,44 +1,17 @@
 const { Concepts } = require('../../..');
 const { error } = require('../../../src/util');
 const { should } = require('chai');
+const { readTestCase } = require('../../lib');
 
 should();
 
 describe('specs/quantifiers/custom', function () {
-    it('should support curly bracket syntax', function () {
-        const concepts = new Concepts({
-            "$service{1,3}": {
-                "$parameter{,2}": "$type",
-                "response{1}": {
-                    "$status{2,}": "$responseType"
-                }
-            }
-        });
+    const from = (path) => readTestCase(this, path);
 
-        concepts.shadow.should.deep.equal({
-            "concept": {
-                "name": "service",
-                "quantifier": { "min": 1, "max": 3 },
-                "literal": {
-                    "name": "response",
-                    "quantifier": { "min": 1, "max": 1 },
-                    "concept": {
-                        "name": "status",
-                        "quantifier": { "min": 2 },
-                        "variable": {
-                            "name": "responseType"
-                        }
-                    }
-                },
-                "concept": {
-                    "name": "parameter",
-                    "quantifier": { "max": 2 },
-                    "variable": {
-                        "name": "type"
-                    }
-                }
-            }
-        });
+    it('should support {#,#} syntax', function () {
+        const concepts = new Concepts(from('service.concepts.json'));
+
+        concepts.shadow.should.deep.equal(from('service.concepts-shadow.json'));
     });
 
     it('should include check min max values and include them in error messages', function () {

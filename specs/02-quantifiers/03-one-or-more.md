@@ -44,7 +44,7 @@ expected.`
 ## Key Literals
 
 Key literals cannot have `+` quantifier, because they cannot occur more than
-once. Below concepts definition is invalid;
+once. Below concepts definition is **invalid**;
 
 `CONCEPTS: service.concepts.json`
 
@@ -97,9 +97,9 @@ For following concepts definition, quantifier of `$service` doesn't have a max;
 When more than one concepts are allowed in a schema, schema shadow stores them
 in an array;
 
-`SCHEMA: greeting.service.json`
+`SCHEMA: greeting-1.service.json`
 
-```json name="schema-shadow/greeting.service.json"
+```json name="schema-shadow/greeting-1.service.json"
 {
     "sayHello": {
         "name": "string"
@@ -110,7 +110,7 @@ in an array;
 
 `SCHEMA SHADOW`
 
-```json name="schema-shadow/greeting.service-shadow.json"
+```json name="schema-shadow/greeting-1.service-shadow.json"
 {
     "service": [
         {
