@@ -23,5 +23,5 @@ meta-data.
 This is a self-validating schema and can be loaded as follows;
 
 ```javascript
-const schema = Schema.load("greeting.service.json");
+const schema = await Schema.load("greeting.service.json");
 ```
