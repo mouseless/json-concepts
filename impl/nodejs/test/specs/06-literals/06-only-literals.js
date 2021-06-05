@@ -1,61 +1,19 @@
 const { Concepts } = require('../../..');
 const { error } = require('../../../src/util');
 const { should } = require('chai');
+const { readTestCase } = require('../../lib');
 
 should();
 
 describe('specs/literals/only-literals', function () {
+    const from = (path) => readTestCase(this, path);
+
     it('should allow a concepts definition that consists of only literals', function () {
-        const concepts = new Concepts({
-            "service": {
-                "name": "$name",
-                "parameter": {
-                    "name": "$parameterName",
-                    "type": "$parameterType"
-                }
-            }
-        });
+        const concepts = new Concepts(from('service.concepts.json'));
+        const schema = concepts.create(from('greeting.service.json'));
 
-        const schema = concepts.create({
-            "service": {
-                "name": "sayHello",
-                "parameter": {
-                    "name": "name",
-                    "type": "string"
-                }
-            }
-        });
-
-        concepts.shadow.should.deep.equal({
-            "literal": {
-                "name": "service",
-                "literal": [
-                    {
-                        "name": "name",
-                        "variable": { "name": "name" }
-                    },
-                    {
-                        "name": "parameter",
-                        "literal": [
-                            {
-                                "name": "name",
-                                "variable": { "name": "parameterName" }
-                            },
-                            {
-                                "name": "type",
-                                "variable": { "name": "parameterType" }
-                            }
-                        ]
-                    }
-                ]
-            }
-        });
-
-        schema.shadow.should.deep.equal({
-            "name": "sayHello",
-            "parameterName": "name",
-            "parameterType": "string"
-        });
+        concepts.shadow.should.deep.equal(from('service.concepts-shadow.json'));
+        schema.shadow.should.deep.equal(from('greeting.service-shadow.json'));
     });
 
     it('should not allow duplicate variable name', function () {
@@ -75,85 +33,15 @@ describe('specs/literals/only-literals', function () {
         );
     });
 
-    describe('literals with object arrays instead of concepts', function () {
+    describe('object-arrays', function () {
+        const from = (path) => readTestCase(this, path);
+
         it('should create schemas whose shadow is identical to their definitions', function () {
-            const concepts = new Concepts({
-                "services": [{
-                    "name": "$name",
-                    "parameters?": [{
-                        "name": "$name",
-                        "type": "$type"
-                    }]
-                }]
-            });
+            const concepts = new Concepts(from('service.concepts.json'));
+            concepts.shadow.should.deep.equal(from('service.concepts-shadow.json'));
 
-            concepts.shadow.should.deep.equal({
-                "literal": {
-                    "name": "services",
-                    "variable": {
-                        "dimensions": 1,
-                        "literal": [
-                            {
-                                "name": "name",
-                                "variable": { "name": "name" }
-                            },
-                            {
-                                "name": "parameters",
-                                "quantifier": { "min": 0, "max": 1 },
-                                "variable": {
-                                    "dimensions": 1,
-                                    "literal": [
-                                        {
-                                            "name": "name",
-                                            "variable": { "name": "name" }
-                                        },
-                                        {
-                                            "name": "type",
-                                            "variable": { "name": "type" }
-                                        }
-                                    ]
-                                }
-                            }
-                        ]
-                    }
-                }
-            });
-
-            const schema = concepts.create({
-                "services": [
-                    {
-                        "name": "sayHello",
-                        "parameters": [
-                            {
-                                "name": "name",
-                                "type": "string"
-                            },
-                            {
-                                "name": "surname",
-                                "type": "string"
-                            }
-                        ]
-                    }
-                ]
-            });
-
-            schema.shadow.should.deep.equal({
-                "services": [
-                    {
-                        "name": "sayHello",
-                        "parameters": [
-                            {
-                                "name": "name",
-                                "type": "string"
-                            },
-                            {
-                                "name": "surname",
-                                "type": "string"
-                            }
-                        ]
-                    }
-                ]
-            })
+            const schema = concepts.create(from('greeting.service.json'));
+            schema.shadow.should.deep.equal(from('greeting.service-shadow.json'));
         });
     });
 });

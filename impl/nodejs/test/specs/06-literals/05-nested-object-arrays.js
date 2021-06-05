@@ -1,120 +1,17 @@
 const { Concepts } = require('../../..');
 const { should } = require('chai');
+const { readTestCase } = require('../../lib');
 
 should();
 
 describe('specs/literals/nested-object-arrays', function () {
+    const from = (path) => readTestCase(this, path);
+
     it('should allow object arrays under object arrays', function () {
-        const concepts = new Concepts({
-            "$service+": {
-                "parameters?": [{
-                    "name": "$name",
-                    "types": [{
-                        "name": "$name",
-                        "validation": ["$validators"]
-                    }]
-                }]
-            }
-        });
+        const concepts = new Concepts(from('service.concepts.json'));
+        const schema = concepts.create(from('greeting.service.json'));
 
-        const schema = concepts.create({
-            "sayHello": {
-                "parameters": [
-                    {
-                        "name": "name",
-                        "types": [
-                            {
-                                "name": "string",
-                                "validation": ["regex", "min"]
-                            },
-                            {
-                                "name": "text",
-                                "validation": ["regex", "max"]
-                            }
-                        ]
-                    },
-                    {
-                        "name": "surname",
-                        "types": [
-                            {
-                                "name": "string",
-                                "validation": ["regex"]
-                            }
-                        ]
-                    }
-                ]
-            }
-        });
-
-        concepts.shadow.should.deep.equal({
-            "concept": {
-                "name": "service",
-                "quantifier": { "min": 1 },
-                "literal": {
-                    "name": "parameters",
-                    "quantifier": { "min": 0, "max": 1 },
-                    "variable": {
-                        "dimensions": 1,
-                        "literal": [
-                            {
-                                "name": "name",
-                                "variable": { "name": "name" }
-                            },
-                            {
-                                "name": "types",
-                                "variable": {
-                                    "dimensions": 1,
-                                    "literal": [
-                                        {
-                                            "name": "name",
-                                            "variable": { "name": "name" }
-                                        },
-                                        {
-                                            "name": "validation",
-                                            "variable": {
-                                                "name": "validators",
-                                                "dimensions": 1
-                                            }
-                                        }
-                                    ]
-                                }
-                            }
-                        ]
-                    }
-                }
-            }
-        });
-
-        schema.shadow.should.deep.equal({
-            "service": [
-                {
-                    "name": "sayHello",
-                    "parameters": [
-                        {
-                            "name": "name",
-                            "types": [
-                                {
-                                    "name": "string",
-                                    "validators": ["regex", "min"]
-                                },
-                                {
-                                    "name": "text",
-                                    "validators": ["regex", "max"]
-                                }
-                            ]
-                        },
-                        {
-                            "name": "surname",
-                            "types": [
-                                {
-                                    "name": "string",
-                                    "validators": ["regex"]
-                                }
-                            ]
-                        }
-                    ]
-                }
-            ]
-        });
+        concepts.shadow.should.deep.equal(from('service.concepts-shadow.json'));
+        schema.shadow.should.deep.equal(from('greeting.service-shadow.json'));
     })
 });

@@ -1,8 +1,8 @@
 const { Concepts } = require('../../..');
 const { error } = require('../../../src/util');
 const { should } = require('chai');
-const { readTestCase } = require('../../lib');
 const { dimensions } = require('../../../src/util/arrayify');
+const { readTestCase } = require('../../lib');
 
 should();
 

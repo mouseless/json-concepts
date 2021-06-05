@@ -1,46 +1,17 @@
 const { Concepts } = require('../../..');
 const { should } = require('chai');
+const { readTestCase } = require('../../lib');
 
 should();
 
 describe('specs/literals/literals-at-the-root', function () {
+    const from = (path) => readTestCase(this, path);
+
     it('should allow literals at the root', function () {
-        const concepts = new Concepts({
-            "services?": {
-                "$service+": "$response"
-            }
-        });
+        const concepts = new Concepts(from('service.concepts.json'));
+        const schema = concepts.create(from('greeting.service.json'));
 
-        const schema = concepts.create({
-            "services": {
-                "sayHello": "string",
-                "sayGoodbye": "string"
-            }
-        });
-
-        concepts.shadow.should.deep.equal({
-            "literal": {
-                "name": "services",
-                "quantifier": { "min": 0, "max": 1 },
-                "concept": {
-                    "name": "service",
-                    "quantifier": { "min": 1 },
-                    "variable": { "name": "response" }
-                }
-            }
-        });
-
-        schema.shadow.should.deep.equal({
-            "service": [
-                {
-                    "name": "sayHello",
-                    "response": "string"
-                },
-                {
-                    "name": "sayGoodbye",
-                    "response": "string"
-                }
-            ]
-        });
+        concepts.shadow.should.deep.equal(from('service.concepts-shadow.json'));
+        schema.shadow.should.deep.equal(from('greeting.service-shadow.json'));
     });
 });

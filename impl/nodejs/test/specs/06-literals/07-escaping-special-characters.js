@@ -1,20 +1,20 @@
 const { Concepts } = require('../../..');
 const { should } = require('chai');
+const { readTestCase } = require('../../lib');
 
 should();
 
 describe('specs/literals/escaping-special-characters', function () {
-    it('it should escape special characters', function () {
-        const concepts = new Concepts({
-            "\\$service\\+": "\\$response"
-        });
+    const from = (path) => readTestCase(this, path);
 
-        (() => concepts.validate({
-            "$service+": "$response"
-        })).should.not.throw();
+    it('escapes special characters', function () {
+        const concepts = new Concepts(from('escape.concepts.json'));
+
+        (() => concepts.validate(from('concepts.escape.json')))
+            .should.not.throw();
     });
 
-    it('should escape escape character', function () {
+    it('escapes escape character as well', function () {
         const concepts = new Concepts({
             "\\\\": "\\\\"
         });
