@@ -17,8 +17,10 @@
     "index": "./bin/index.js"
   },
   "scripts": {
-    "pretest": "cd ../..; npm run build:specs",
-    "test": "mocha test/**/* -w --reporter min"
+    "pretest:dev": "cd ../..; npm run build:specs",
+    "test:dev": "mocha test/**/* -w --reporter min",
+    "pretest:build": "cd ../..; npm run build:specs",
+    "test:build": "nyc mocha test/**/*"
   },
   "devDependencies": {
     "chai": "^4.3.4",
@@ -26,6 +28,7 @@
     "json-format": "^1.0.1",
     "mocha": "^8.3.2",
     "mock-fs": "^4.13.0",
-    "nock": "^13.0.11"
+    "nock": "^13.0.11",
+    "nyc": "^15.1.0"
   }
 }

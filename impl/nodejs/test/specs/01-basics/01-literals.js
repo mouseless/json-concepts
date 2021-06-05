@@ -9,7 +9,6 @@ describe('specs/basics/literals', function () {
     const from = (path) => readTestCase(this, path);
 
     it('should validate', async function () {
-        console.log();
         const concepts = new Concepts(from('service.concepts.json'));
 
         (() => concepts.validate(from('greeting.service.json')))

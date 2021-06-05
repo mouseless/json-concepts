@@ -12,7 +12,8 @@
         ".vuepress/.cache": true,
         ".vuepress/.temp": true,
         ".dist": true,
-        "**/package-lock.json": true
+        "**/package-lock.json": true,
+        "**/.nyc_output": true
     },
     "cSpell.words": [
         "AVLN",
