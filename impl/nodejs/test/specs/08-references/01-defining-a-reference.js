@@ -1,44 +1,19 @@
 const { Concepts } = require('../../..');
 const { error } = require('../../../src/util');
 const { should } = require('chai');
+const { readTestCase } = require('../../lib');
 
 should();
 
 describe('specs/references/defining-a-reference', function () {
+    const from = (path) => readTestCase(this, path);
+
     it('should define a reference', function () {
-        const concepts = new Concepts({
-            "$class+": "#properties",
-            "#properties": {
-                "$property*": "$type"
-            }
-        });
+        const class1 = new Concepts(from('class-1.concepts.json'));
+        const class2 = new Concepts(from('class-2.concepts.json'));
 
-        concepts.definition.should.deep.equal({
-            "$class+": {
-                "$property*": "$type"
-            }
-        });
-    });
-
-    it('should not affect shadow of a concepts definition', function () {
-        const concepts = new Concepts({
-            "$class+": "#properties",
-            "#properties": {
-                "$property*": "$type"
-            }
-        });
-
-        concepts.shadow.should.deep.equal({
-            "concept": {
-                "name": "class",
-                "quantifier": { "min": 1 },
-                "concept": {
-                    "name": "property",
-                    "quantifier": { "min": 0 },
-                    "variable": { "name": "type" }
-                }
-            }
-        });
+        class1.definition.should.deep.equal(class2.definition);
+        class1.shadow.should.deep.equal(class2.shadow);
     });
 
     it('should allow to be used multiple times', function () {
@@ -135,27 +110,18 @@ describe('specs/references/defining-a-reference', function () {
         })).should.not.throw();
     });
 
-    describe('references can only be defined at the root', function () {
-        it('should give error when a referenced defined in a child node', function () {
-            (() => {
-                const concepts = new Concepts({
-                    "$class+": {
-                        "$method*": "#method",
-                        "#method": {
-                            "$parameter*": "$type",
-                            "returns": "$type"
-                        }
-                    }
-                });
+    describe('root', function () {
+        const from = (path) => readTestCase(this, path);
 
-                return concepts;
-            }).should.throw(
-                error.Concepts_definition_is_not_valid__REASON(
-                    because => because.REFERENCE_should_be_defined_at_the_root(
-                        '#method'
-                    )
-                ).message
-            );
+        it('should give error when a referenced defined in a child node', function () {
+            (() => new Concepts(from('class.concepts.json')))
+                .should.throw(
+                    error.Concepts_definition_is_not_valid__REASON(
+                        because => because.REFERENCE_should_be_defined_at_the_root(
+                            '#method'
+                        )
+                    ).message
+                );
         });
     });
 });

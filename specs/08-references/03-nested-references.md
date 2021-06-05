@@ -96,6 +96,42 @@ without using a reference. So in case of recursion, it makes use of the
 }
 ```
 
+`SCHEMA SHADOW`
+
+```json name="recursion/organization.tree-shadow.json"
+{
+    "root": {
+        "name": "ceo",
+        "node": [
+            {
+                "name": "cfo",
+                "node": [
+                    {
+                        "name": "accountant",
+                        "node": [
+                            { "name": "intern", "node": [] }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "cto",
+                "node": [
+                    { "name": "dba", "node": [] },
+                    { "name": "developer", "node": [] }
+                ]
+            },
+            {
+                "name": "coo",
+                "node": [
+                    { "name": "representative", "node": [] }
+                ]
+            }
+        ]
+    }
+}
+```
+
 ## Indirect Recursion
 
 When there is an indirect recursion like in the below example, shadow should use

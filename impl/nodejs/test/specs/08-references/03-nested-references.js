@@ -1,105 +1,27 @@
 const { Concepts } = require('../../..');
 const { should } = require('chai');
+const { readTestCase } = require('../../lib');
 
 should();
 
 describe('specs/references/nested-references', function () {
-    it('should process references within references', function () {
-        const concepts = new Concepts({
-            "$class+": "#properties & #methods",
-            "#properties": {
-                "$property*": "$type"
-            },
-            "#methods": {
-                "$method*": "#parameters & #return"
-            },
-            "#parameters": {
-                "$parameter*": "$type"
-            },
-            "#return": {
-                "returns": "$type"
-            }
-        });
+    const from = (path) => readTestCase(this, path);
 
-        concepts.definition.should.deep.equal({
-            "$class+": {
-                "$property*": "$type",
-                "$method*": {
-                    "$parameter*": "$type",
-                    "returns": "$type"
-                }
-            }
-        });
+    it('should process references within references', function () {
+        const concepts = new Concepts(from('class-1.concepts.json'));
+
+        concepts.definition.should.deep.equal(from('class-2.concepts.json'));
     });
 
     describe('recursion', function () {
+        const from = (path) => readTestCase(this, path);
+
         it('should allow recursive definitions', function () {
-            const concepts = new Concepts({
-                "$root": "#node",
-                "#node": {
-                    "$node*": "#node"
-                }
-            });
+            const concepts = new Concepts(from('tree.concepts.json'));
+            const schema = concepts.create(from('organization.tree.json'));
 
-            concepts.shadow.should.deep.equal({
-                "concept": {
-                    "name": "root",
-                    "concept": {
-                        "name": "node",
-                        "quantifier": { "min": 0 },
-                        "concept": { "reference": "node" }
-                    }
-                }
-            });
-
-            const schema = concepts.create({
-                "ceo": {
-                    "cfo": {
-                        "accountant": {
-                            "intern": null
-                        }
-                    },
-                    "cto": {
-                        "dba": null,
-                        "developer": null
-                    },
-                    "coo": {
-                        "representative": null
-                    }
-                }
-            });
-
-            schema.shadow.should.deep.equal({
-                "root": {
-                    "name": "ceo",
-                    "node": [
-                        {
-                            "name": "cfo",
-                            "node": [
-                                {
-                                    "name": "accountant",
-                                    "node": [
-                                        { "name": "intern", "node": [] }
-                                    ]
-                                }
-                            ]
-                        },
-                        {
-                            "name": "cto",
-                            "node": [
-                                { "name": "dba", "node": [] },
-                                { "name": "developer", "node": [] }
-                            ]
-                        },
-                        {
-                            "name": "coo",
-                            "node": [
-                                { "name": "representative", "node": [] }
-                            ]
-                        }
-                    ]
-                }
-            });
+            concepts.shadow.should.deep.equal(from('tree.concepts-shadow.json'));
+            schema.shadow.should.deep.equal(from('organization.tree-shadow.json'));
         });
 
         it('should handle double self-reference', function () {
@@ -131,32 +53,13 @@ describe('specs/references/nested-references', function () {
         });
     });
 
-    describe('indirect recursion', function () {
-        it('should detect recursion even if it is indirect', function () {
-            const concepts = new Concepts({
-                "$root": "#a",
-                "#a": {
-                    "$a*": "#b"
-                },
-                "#b": {
-                    "$b*": "#a"
-                }
-            });
+    describe('indirect', function () {
+        const from = (path) => readTestCase(this, path);
 
-            concepts.shadow.should.deep.equal({
-                "concept": {
-                    "name": "root",
-                    "concept": {
-                        "name": "a",
-                        "quantifier": { "min": 0 },
-                        "concept": {
-                            "name": "b",
-                            "quantifier": { "min": 0 },
-                            "concept": { "reference": "a" }
-                        }
-                    }
-                }
-            });
+        it('should detect recursion even if it is indirect', function () {
+            const concepts = new Concepts(from('recursion.concepts.json'));
+
+            concepts.shadow.should.deep.equal(from('recursion.concepts-shadow.json'));
         });
     });
 });

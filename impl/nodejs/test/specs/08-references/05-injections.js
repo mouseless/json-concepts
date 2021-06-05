@@ -2,28 +2,17 @@ const { Concepts } = require('../../..');
 const { error } = require('../../../src/util');
 const fs = require('mock-fs');
 const { should } = require('chai');
+const { readTestCase } = require('../../lib');
 
 should();
 
 describe('specs/references/injections', function () {
-    it('should inject definition to path', function () {
-        const concepts = new Concepts({
-            "$class+": {
-                "$property*": {}
-            },
-            "#inject": {
-                "return": "$returnType",
-                "@path": "/$class/$property"
-            }
-        });
+    const from = (path) => readTestCase(this, path);
 
-        concepts.definition.should.deep.equal({
-            "$class+": {
-                "$property*": {
-                    "return": "$returnType"
-                }
-            }
-        });
+    it('should inject definition to path', function () {
+        const concepts = new Concepts(from('class-1.concepts.json'));
+
+        concepts.definition.should.deep.equal(from('class-2.concepts.json'));
     });
 
     it('should give error when conflict occurs', function () {
@@ -62,7 +51,7 @@ describe('specs/references/injections', function () {
         });
     });
 
-    it('include should stop when it hits a recursion', function () {
+    it('should stop injecting when it hits a recursion', function () {
         (() => new Concepts({
             "root": "#recursion",
             "#recursion": {
@@ -94,55 +83,23 @@ describe('specs/references/injections', function () {
         });
     });
 
-    describe('multiple paths', function () {
-        it('should inject to all paths', function () {
-            const concepts = new Concepts({
-                "$class+": {
-                    "$property*": {},
-                    "$method*": {}
-                },
-                "#inject": {
-                    "return": "$returnType",
-                    "@path": ["/$class/$property", "/$class/$method"]
-                }
-            });
+    describe('multiple-paths', function () {
+        const from = (path) => readTestCase(this, path);
 
-            concepts.definition.should.deep.equal({
-                "$class+": {
-                    "$property*": {
-                        "return": "$returnType"
-                    },
-                    "$method*": {
-                        "return": "$returnType"
-                    }
-                }
-            })
+        it('should inject to all paths', function () {
+            const concepts = new Concepts(from('class-1.concepts.json'));
+
+            concepts.definition.should.deep.equal(from('class-2.concepts.json'));
         });
     });
 
-    describe('wildcard support', function () {
-        it('should support wildcard paths', function () {
-            const concepts = new Concepts({
-                "$class+": {
-                    "$property*": {},
-                    "$method*": {}
-                },
-                "#inject": {
-                    "return": "$returnType",
-                    "@path": ["/*/$property", "/**/$method"]
-                }
-            });
+    describe('wildcard', function () {
+        const from = (path) => readTestCase(this, path);
 
-            concepts.definition.should.deep.equal({
-                "$class+": {
-                    "$property*": {
-                        "return": "$returnType"
-                    },
-                    "$method*": {
-                        "return": "$returnType"
-                    }
-                }
-            });
+        it('should support wildcard paths', function () {
+            const concepts = new Concepts(from('class.concepts.json'));
+
+            concepts.definition.should.deep.equal(from('../multiple-paths/class-2.concepts.json'));
         });
 
         it('should not give error when injecting same definition multiple times', function () {
@@ -157,70 +114,27 @@ describe('specs/references/injections', function () {
                 }
             });
 
-            concepts.definition.should.deep.equal({
-                "$class+": {
-                    "$property*": {
-                        "return": "$returnType"
-                    },
-                    "$method*": {
-                        "return": "$returnType"
-                    }
-                }
-            });
+            concepts.definition.should.deep.equal(from('../multiple-paths/class-2.concepts.json'));
         });
     });
 
-    describe('no path', function () {
+    describe('no-path', function () {
+        const from = (path) => readTestCase(this, path);
+
         it('should inject to root when no path specified', function () {
-            const concepts = new Concepts({
-                "#inject": {
-                    "$class+": {}
-                }
-            });
+            const concepts = new Concepts(from('class-1.concepts.json'));
 
-            concepts.definition.should.deep.equal({
-                "$class+": {}
-            });
+            concepts.definition.should.deep.equal(from('class-2.concepts.json'));
         });
     });
 
-    describe('multiple injections', function () {
-        it('should process all of the injections', function () {
-            const concepts = new Concepts({
-                "#inject": [
-                    {
-                        "$class+": {}
-                    },
-                    {
-                        "$property+": {},
-                        "@path": "/**/$class",
-                    },
-                    {
-                        "$method+": {},
-                        "@path": "/**/$class",
-                    },
-                    {
-                        "returns": "$returnType",
-                        "@path": ["/**/$method", "/**/$property"],
-                    },
-                    {
-                        "$parameter*": "$type",
-                        "@path": "/**/$method"
-                    }
-                ]
-            });
+    describe('multiple-injections', function () {
+        const from = (path) => readTestCase(this, path);
 
-            concepts.definition.should.deep.equal({
-                "$class+": {
-                    "$property+": {
-                        "returns": "$returnType"
-                    },
-                    "$method+": {
-                        "$parameter*": "$type",
-                        "returns": "$returnType"
-                    }
-                }
-            });
+        it('should process all of the injections', function () {
+            const concepts = new Concepts(from('class-1.concepts.json'));
+
+            concepts.definition.should.deep.equal(from('class-2.concepts.json'));
         });
 
         it('should only allow objects under injection array', function () {
@@ -246,82 +160,32 @@ describe('specs/references/injections', function () {
         });
     });
 
-    describe('order of injections', function () {
-        it('should process injections in the order they appear', function () {
-            const concepts = new Concepts({
-                "#inject": [
-                    {
-                        "$parameter*": "$type",
-                        "@path": "/**/$method"
-                    },
-                    {
-                        "returns": "$returnType",
-                        "@path": ["/**/$method", "/**/$property"],
-                    },
-                    {
-                        "$method+": {},
-                        "@path": "/**/$class",
-                    },
-                    {
-                        "$property+": {},
-                        "@path": "/**/$class",
-                    },
-                    {
-                        "$class+": {}
-                    }
-                ]
-            });
+    describe('order', function () {
+        const from = (path) => readTestCase(this, path);
 
-            concepts.definition.should.deep.equal({
-                "$class+": {}
-            });
+        it('should process injections in the order they appear', function () {
+            const concepts = new Concepts(from('class-1.concepts.json'));
+
+            concepts.definition.should.deep.equal(from('class-2.concepts.json'));
         });
     });
 
-    describe('processing order', function () {
+    describe('process-order', function () {
+        const from = (path) => readTestCase(this, path);
+
         after(function () {
             fs.restore();
         })
 
         it('should process in the expected order', async function () {
             fs({
-                'dto.concepts.json': JSON.stringify({
-                    "$class+": "#properties",
-                    "#properties": {
-                        "$property+": {}
-                    }
-                }),
-                'behavior.concepts.json': JSON.stringify({
-                    "#include": "dto.concepts.json",
-                    "#inject": [
-                        {
-                            "$method+": "#parameters",
-                            "#parameters": {
-                                "$parameter*": "$type"
-                            },
-                            "@path": "/**/$class",
-                        },
-                        {
-                            "returns": "$returnType",
-                            "@path": ["/**/$method", "/**/$property"],
-                        }
-                    ]
-                })
+                'dto.concepts.json': JSON.stringify(from('dto.concepts.json')),
+                'behavior.concepts.json': JSON.stringify(from('behavior.concepts.json'))
             });
 
             const concepts = await Concepts.load('behavior.concepts.json');
 
-            concepts.definition.should.deep.equal({
-                "$class+": {
-                    "$property+": {
-                        "returns": "$returnType"
-                    },
-                    "$method+": {
-                        "$parameter*": "$type",
-                        "returns": "$returnType"
-                    }
-                }
-            });
+            concepts.definition.should.deep.equal(from('class.concepts.json'));
         });
     });
 });
