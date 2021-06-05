@@ -45,9 +45,9 @@ not a valid `primitive` either.
 Inheritance chain cannot cause a circular dependency. Following concepts
 definition is not valid;
 
-`CONCEPTS: service.concepts.json`
+`CONCEPTS: circular.concepts.json`
 
-```json name="circular/service.concepts.json"
+```json name="circular/circular.concepts.json"
 {
     "circular": "$type:a",
     
@@ -59,4 +59,4 @@ definition is not valid;
 }
 ```
 
-`ERROR: 'service.concepts.json' is not valid, 'c' cannot inherit from 'a'.`
+`ERROR: 'circular.concepts.json' is not valid, 'c' cannot inherit from 'a'.`

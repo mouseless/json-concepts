@@ -1,10 +1,13 @@
 const { Concepts } = require('../../..');
 const { error } = require('../../../src/util');
 const { should } = require('chai');
+const { readTestCase } = require('../../lib');
 
 should();
 
 describe('specs/custom-types/min-and-max-validators', function () {
+    const from = (path) => readTestCase(this, path);
+
     it('should allow only values more than or equal to min', function () {
         const concepts = new Concepts({
             "$service+": {
@@ -37,7 +40,7 @@ describe('specs/custom-types/min-and-max-validators', function () {
         );
     });
 
-    it('should allow only values less than or equal to max', function() {
+    it('should allow only values less than or equal to max', function () {
         const concepts = new Concepts({
             "$service+": {
                 "dailyCallLimit": "$dailyCallLimit:limit"
@@ -69,7 +72,7 @@ describe('specs/custom-types/min-and-max-validators', function () {
         );
     });
 
-    it('should validate length of the string when value is string', function() {
+    it('should validate length of the string when value is string', function () {
         const concepts = new Concepts({
             "$service+": {
                 "name?": "$name:short-identifier",
@@ -113,75 +116,42 @@ describe('specs/custom-types/min-and-max-validators', function () {
     });
 
     it('should allow usage of min and max together', function () {
-        const concepts = new Concepts({
-            "$service+": {
-                "name": "$name:identifier",
-                "dailyCallLimit": "$dailyCallLimit:limit"
-            },
-            "@types": {
-                "identifier": {
-                    "type": "string",
-                    "min": 1,
-                    "max": 10
-                },
-                "limit": {
-                    "type": "number",
-                    "min": 10,
-                    "max": 100
-                }
-            }
-        });
+        const concepts = new Concepts(from('service.concepts.json'));
 
-        (() => concepts.validate({
-            "sayHello": {
-                "name": "string",
-                "dailyCallLimit": 9
-            }
-        })).should.throw(
-            error.Schema_definition_is_not_valid__REASON(
-                because => because.VALUE_is_not_a_valid_TYPE(
-                    '9', 'limit'
-                )
-            ).message
-        );
+        (() => concepts.validate(from('greeting-1.service.json')))
+            .should.throw(
+                error.Schema_definition_is_not_valid__REASON(
+                    because => because.VALUE_is_not_a_valid_TYPE(
+                        '9', 'limit'
+                    )
+                ).message
+            );
 
-        (() => concepts.validate({
-            "sayHello": {
-                "name": "string",
-                "dailyCallLimit": 101
-            }
-        })).should.throw(
-            error.Schema_definition_is_not_valid__REASON(
-                because => because.VALUE_is_not_a_valid_TYPE(
-                    '101', 'limit'
-                )
-            ).message
-        );
+        (() => concepts.validate(from('greeting-2.service.json')))
+            .should.throw(
+                error.Schema_definition_is_not_valid__REASON(
+                    because => because.VALUE_is_not_a_valid_TYPE(
+                        '101', 'limit'
+                    )
+                ).message
+            );
 
-        (() => concepts.validate({
-            "sayHello": {
-                "name": "",
-                "dailyCallLimit": 50
-            }
-        })).should.throw(
-            error.Schema_definition_is_not_valid__REASON(
-                because => because.VALUE_is_not_a_valid_TYPE(
-                    '', 'identifier'
-                )
-            ).message
-        );
+        (() => concepts.validate(from('greeting-3.service.json')))
+            .should.throw(
+                error.Schema_definition_is_not_valid__REASON(
+                    because => because.VALUE_is_not_a_valid_TYPE(
+                        '', 'identifier'
+                    )
+                ).message
+            );
 
-        (() => concepts.validate({
-            "sayHello": {
-                "name": "01234567890",
-                "dailyCallLimit": 50
-            }
-        })).should.throw(
-            error.Schema_definition_is_not_valid__REASON(
-                because => because.VALUE_is_not_a_valid_TYPE(
-                    '01234567890', 'identifier'
-                )
-            ).message
-        );
+        (() => concepts.validate(from('greeting-4.service.json')))
+            .should.throw(
+                error.Schema_definition_is_not_valid__REASON(
+                    because => because.VALUE_is_not_a_valid_TYPE(
+                        '01234567890', 'identifier'
+                    )
+                ).message
+            );
     });
 });

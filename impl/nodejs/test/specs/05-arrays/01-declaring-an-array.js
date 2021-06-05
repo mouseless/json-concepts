@@ -1,10 +1,13 @@
 const { Concepts } = require('../../..');
 const { error } = require('../../../src/util');
 const { should } = require('chai');
+const { readTestCase } = require('../../lib');
 
 should();
 
 describe('specs/arrays/declaring-an-array', function () {
+    const from = (path) => readTestCase(this, path);
+
     it('should make variable one dimensional', function () {
         const concepts = new Concepts({
             "$service+": {

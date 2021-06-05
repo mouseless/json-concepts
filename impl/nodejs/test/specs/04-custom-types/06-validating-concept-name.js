@@ -1,43 +1,17 @@
 const { Concepts } = require('../../..');
 const { error } = require('../../../src/util');
 const { should } = require('chai');
+const { readTestCase } = require('../../lib');
 
 should();
 
 describe('specs/custom-types/validating-concept-name', function () {
-    it('should allow validating concept names as well', function () {
-        const concepts = new Concepts({
-            "$service:identifier+": {
-                "$method:method*": {
-                    "$parameter:identifier*": "$type"
-                }
-            },
-            "@types": {
-                "identifier": "^[a-zA-Z][0-9a-zA-Z]*$",
-                "method": ["GET", "POST", "PUT", "DELETE"]
-            }
-        });
+    const from = (path) => readTestCase(this, path);
 
-        concepts.shadow.should.deep.equal({
-            "concept": {
-                "name": "service",
-                "type": "identifier",
-                "quantifier": { "min": 1 },
-                "concept": {
-                    "name": "method",
-                    "type": "method",
-                    "quantifier": { "min": 0 },
-                    "concept": {
-                        "name": "parameter",
-                        "type": "identifier",
-                        "quantifier": { "min": 0 },
-                        "variable": {
-                            "name": "type"
-                        }
-                    }
-                }
-            }
-        });
+    it('should allow validating concept names as well', function () {
+        const concepts = new Concepts(from('service.concepts.json'));
+
+        concepts.shadow.should.deep.equal(from('service.concepts-shadow.json'));
 
         (() => concepts.validate({
             "/users": {}

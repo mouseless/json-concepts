@@ -1,53 +1,24 @@
 const { Concepts } = require('../../..');
 const { error } = require('../../../src/util');
 const { should } = require('chai');
+const { readTestCase } = require('../../lib');
 
 should();
 
 describe('specs/custom-types/defining-a-custom-type', function () {
+    const from = (path) => readTestCase(this, path);
+
     it('should parse custom type and include it in shadow', function () {
-        const concepts = new Concepts({
-            "$service+": {
-                "name": "$name:identifier"
-            },
-            "@types": {
-                "identifier": {}
-            }
-        });
+        const concepts = new Concepts(from('service.concepts.json'));
 
-        concepts.shadow.should.deep.equal({
-            "concept": {
-                "name": "service",
-                "quantifier": { "min": 1 },
-                "literal": {
-                    "name": "name",
-                    "variable": {
-                        "name": "name",
-                        "type": "identifier"
-                    }
-                }
-            }
-        });
-
-        concepts.validate({
-            "sayHello": {
-                "name": "sayHello"
-            }
-        });
+        concepts.shadow.should.deep.equal(from('service.concepts-shadow.json'));
     });
 
-    describe('specifying a base type', function () {
+    describe('base-type', function () {
+        const from = (path) => readTestCase(this, path);
+
         it('should use base type of custom type when validating values', function () {
-            const concepts = new Concepts({
-                "$service+": {
-                    "name": "$name:identifier"
-                },
-                "@types": {
-                    "identifier": {
-                        "type": "string"
-                    }
-                }
-            });
+            const concepts = new Concepts(from('service.concepts.json'));
 
             (() => concepts.validate({
                 "sayHello": {
