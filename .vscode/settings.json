@@ -35,6 +35,7 @@
         "collapsable",
         "jsonata",
         "jsonpath",
+        "lcov",
         "noopener",
         "noreferrer",
         "openapi",

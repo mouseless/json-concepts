@@ -19,12 +19,14 @@
   "scripts": {
     "pretest:dev": "cd ../..; npm run build:specs",
     "test:dev": "mocha test/**/* -w --reporter min",
-    "pretest:build": "cd ../..; npm run build:specs",
-    "test:build": "nyc mocha test/**/*"
+    "pretest": "cd ../..; npm run build:specs",
+    "test": "nyc mocha test/**/*",
+    "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "devDependencies": {
     "chai": "^4.3.4",
     "chai-as-promised": "^7.1.1",
+    "coveralls": "^3.1.0",
     "json-format": "^1.0.1",
     "mocha": "^8.3.2",
     "mock-fs": "^4.13.0",
