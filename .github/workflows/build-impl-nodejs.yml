@@ -7,6 +7,9 @@ on:
 jobs:
   build-impl-nodejs:
     runs-on: ubuntu-latest
+    env:
+      COVERALLS_REPO_TOKEN: "${{ secrets.COVERALLS_REPO_TOKEN }}"
+      COVERALLS_GIT_BRANCH: "${{ github.ref }}"
     steps:
       - name: Checkout main
         uses: actions/checkout@v2
