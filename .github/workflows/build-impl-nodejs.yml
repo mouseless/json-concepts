@@ -1,4 +1,4 @@
-name: build specs
+name: build impl nodejs
 on:
   push:
     branches: 
@@ -14,8 +14,9 @@ jobs:
         uses: actions/setup-node@v2.1.5
         with:
           node-version: 12.x
-      - name: Build specs
+      - name: Build nodejs implementation
         run: |
+          npm install
           cd impl/nodejs
           npm install
           npm test
