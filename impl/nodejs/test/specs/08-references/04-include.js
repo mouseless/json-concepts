@@ -30,17 +30,17 @@ describe('specs/references/include', function () {
     it('should load includes relative to concepts file', async function () {
         fs({
             'concepts/include/parameter.concepts.json': JSON.stringify({
-                "$parameter*": "$type"
+                '$parameter*': '$type'
             }),
             'concepts/service.concepts.json': JSON.stringify({
-                "$service+": {
-                    "#include": "include/parameter.concepts.json"
+                '$service+': {
+                    '#include': 'include/parameter.concepts.json'
                 }
             }),
             'schema/greeting.service.json': JSON.stringify({
-                "@concepts": "../concepts/service.concepts.json",
-                "sayHello": {
-                    "name": "string"
+                '@concepts': '../concepts/service.concepts.json',
+                'sayHello': {
+                    'name': 'string'
                 }
             })
         });
@@ -54,16 +54,16 @@ describe('specs/references/include', function () {
 
     it('should allow include local object', function () {
         const concepts = new Concepts({
-            "$service+": {
-                "#include": {
-                    "$parameter*": "$type"
+            '$service+': {
+                '#include': {
+                    '$parameter*': '$type'
                 }
             }
         });
 
         concepts.definition.should.deep.equal({
-            "$service+": {
-                "$parameter*": "$type"
+            '$service+': {
+                '$parameter*': '$type'
             }
         });
     });
@@ -71,16 +71,16 @@ describe('specs/references/include', function () {
     it('should allow nested includes', async function () {
         fs({
             'parameter.concepts.json': JSON.stringify({
-                "$parameter*": "$type"
+                '$parameter*': '$type'
             }),
             'method.concepts.json': JSON.stringify({
-                "$method*": {
-                    "#include": "parameter.concepts.json"
+                '$method*': {
+                    '#include': 'parameter.concepts.json'
                 }
             }),
             'class.concepts.json': JSON.stringify({
-                "$class+": {
-                    "#include": "method.concepts.json"
+                '$class+': {
+                    '#include': 'method.concepts.json'
                 }
             })
         });
@@ -88,9 +88,9 @@ describe('specs/references/include', function () {
         const concepts = await Concepts.load('class.concepts.json');
 
         concepts.definition.should.deep.equal({
-            "$class+": {
-                "$method*": {
-                    "$parameter*": "$type"
+            '$class+': {
+                '$method*': {
+                    '$parameter*': '$type'
                 }
             }
         });
@@ -99,39 +99,41 @@ describe('specs/references/include', function () {
     it('should load includes relative to included file', async function () {
         fs({
             'concepts/include/parameter.concepts.json': JSON.stringify({
-                "$parameter*": "$type"
+                '$parameter*': '$type'
             }),
             'concepts/include/method.concepts.json': JSON.stringify({
-                "$method*": {
-                    "#include": "parameter.concepts.json"
+                '$method*': {
+                    '#include': 'parameter.concepts.json'
                 }
             }),
             'concepts/class.concepts.json': JSON.stringify({
-                "$class+": {
-                    "#include": "include/method.concepts.json"
+                '$class+': {
+                    '#include': 'include/method.concepts.json'
                 }
             }),
             'schema/user.class.json': JSON.stringify({
-                "@concepts": "../concepts/class.concepts.json",
-                "user": {
-                    "login": {
-                        "email": "string",
-                        "password": "string"
+                '@concepts': '../concepts/class.concepts.json',
+                'user': {
+                    'login': {
+                        'email': 'string',
+                        'password': 'string'
                     }
                 }
             })
         });
 
-        await Concepts.load('concepts/class.concepts.json').should.not.be.rejected
-        await Schema.load('schema/user.class.json').should.not.be.rejected
+        await Concepts.load('concepts/class.concepts.json')
+            .should.not.be.rejected;
+        await Schema.load('schema/user.class.json')
+            .should.not.be.rejected;
     });
 
     it('should give error when a conflict occurs', function () {
         (() => new Concepts({
-            "#include": {
-                "conflict": "value a"
+            '#include': {
+                'conflict': 'value a'
             },
-            "conflict": "value b"
+            'conflict': 'value b'
         })).should.throw(
             error.Concepts_definition_is_not_valid__REASON(
                 because => because.Cannot_assign_SOURCE_to_KEY__there_is_already_a_value__TARGET(

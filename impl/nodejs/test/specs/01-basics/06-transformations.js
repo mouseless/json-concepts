@@ -59,29 +59,29 @@ describe('specs/basics/transformations', function () {
 
     it('should validate given schema against source concepts', function () {
         const source = new Concepts({
-            "$service": {
-                "response": "$responseType"
+            '$service': {
+                'response': '$responseType'
             }
         });
 
         const target = new Concepts({
-            "$function": {
-                "return": "$returnType"
+            '$function': {
+                'return': '$returnType'
             }
         });
 
         const transformation = new Transformation({
-            "function": {
-                "from": "service",
-                "select": {
-                    "returnType": "responseType"
+            'function': {
+                'from': 'service',
+                'select': {
+                    'returnType': 'responseType'
                 }
             }
         }, source, target);
 
         const targetInput = target.create({
-            "sayHello": {
-                "return": "string"
+            'sayHello': {
+                'return': 'string'
             }
         });
 
@@ -95,22 +95,22 @@ describe('specs/basics/transformations', function () {
 
     it('should verify that given source and target are compatible with transformation', function () {
         const source = new Concepts({
-            "$service": {
-                "response": "$responseType"
+            '$service': {
+                'response': '$responseType'
             }
         });
 
         const target = new Concepts({
-            "$function": {
-                "return": "$returnType"
+            '$function': {
+                'return': '$returnType'
             }
         });
 
         (() => new Transformation({
-            "function": {
-                "from": "service_",
-                "select": {
-                    "returnType": "responseType"
+            'function': {
+                'from': 'service_',
+                'select': {
+                    'returnType': 'responseType'
                 }
             }
         }, source, target)).should.throw(error
@@ -120,10 +120,10 @@ describe('specs/basics/transformations', function () {
         );
 
         (() => new Transformation({
-            "function": {
-                "from": "service",
-                "select": {
-                    "returnType": "responseType_"
+            'function': {
+                'from': 'service',
+                'select': {
+                    'returnType': 'responseType_'
                 }
             }
         }, source, target)).should.throw(error
@@ -133,10 +133,10 @@ describe('specs/basics/transformations', function () {
         );
 
         (() => new Transformation({
-            "function_": {
-                "from": "service",
-                "select": {
-                    "returnType": "responseType"
+            'function_': {
+                'from': 'service',
+                'select': {
+                    'returnType': 'responseType'
                 }
             }
         }, source, target)).should.throw(error
@@ -146,10 +146,10 @@ describe('specs/basics/transformations', function () {
         );
 
         (() => new Transformation({
-            "function": {
-                "from": "service",
-                "select": {
-                    "returnType_": "responseType"
+            'function': {
+                'from': 'service',
+                'select': {
+                    'returnType_': 'responseType'
                 }
             }
         }, source, target)).should.throw(error
@@ -162,20 +162,20 @@ describe('specs/basics/transformations', function () {
     it('should include path in error message when it is loaded', async function () {
         fs({
             'service.concepts.json': JSON.stringify({
-                "$service": {
-                    "response": "$responseType"
+                '$service': {
+                    'response': '$responseType'
                 }
             }),
             'client.concepts.json': JSON.stringify({
-                "$function": {
-                    "return": "$returnType"
+                '$function': {
+                    'return': '$returnType'
                 }
             }),
             'client.from.service.json': JSON.stringify({
-                "function": {
-                    "from": "service",
-                    "select": {
-                        "returnType_": "responseType"
+                'function': {
+                    'from': 'service',
+                    'select': {
+                        'returnType_': 'responseType'
                     }
                 }
             })

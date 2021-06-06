@@ -15,14 +15,14 @@ describe('specs/custom-types/inheritance', function () {
             .should.throw(
                 error.Schema_definition_is_not_valid__REASON(
                     because => because.VALUE_is_not_a_valid_TYPE(
-                        "float", "primitive"
+                        'float', 'primitive'
                     )
                 ).message
             );
 
         (() => concepts.validate({
-            "sayGoodbye": {
-                "cry": "boolean"
+            'sayGoodbye': {
+                'cry': 'boolean'
             }
         })).should.not.throw();
     });

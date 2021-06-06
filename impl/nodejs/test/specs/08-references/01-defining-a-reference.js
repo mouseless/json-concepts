@@ -18,34 +18,34 @@ describe('specs/references/defining-a-reference', function () {
 
     it('should allow to be used multiple times', function () {
         const concepts = new Concepts({
-            "$concept1": "#ref",
-            "$concept2": "#ref",
-            "#ref": "$value"
+            '$concept1': '#ref',
+            '$concept2': '#ref',
+            '#ref': '$value'
         });
 
         concepts.definition.should.deep.equal({
-            "$concept1": "$value",
-            "$concept2": "$value"
+            '$concept1': '$value',
+            '$concept2': '$value'
         });
     });
 
     it('should make a deep search', function () {
         const concepts = new Concepts({
-            "$concept": {
-                "$concept": {
-                    "$concept": {
-                        "$concept": "#ref"
+            '$concept': {
+                '$concept': {
+                    '$concept': {
+                        '$concept': '#ref'
                     }
                 }
             },
-            "#ref": "$value"
+            '#ref': '$value'
         });
 
         concepts.definition.should.deep.equal({
-            "$concept": {
-                "$concept": {
-                    "$concept": {
-                        "$concept": "$value"
+            '$concept': {
+                '$concept': {
+                    '$concept': {
+                        '$concept': '$value'
                     }
                 }
             }
@@ -54,22 +54,22 @@ describe('specs/references/defining-a-reference', function () {
 
     it('should allow macros in object arrays', function () {
         const concepts = new Concepts({
-            "classes": [{
-                "name": "$name",
-                "properties": "#properties"
+            'classes': [{
+                'name': '$name',
+                'properties': '#properties'
             }],
-            "#properties": [{
-                "name": "$name",
-                "type": "$type"
+            '#properties': [{
+                'name': '$name',
+                'type': '$type'
             }]
         });
 
         concepts.definition.should.deep.equal({
-            "classes": [{
-                "name": "$name",
-                "properties": [{
-                    "name": "$name",
-                    "type": "$type"
+            'classes': [{
+                'name': '$name',
+                'properties': [{
+                    'name': '$name',
+                    'type': '$type'
                 }]
             }]
         });
@@ -78,7 +78,7 @@ describe('specs/references/defining-a-reference', function () {
 
     it('should give error when a reference does not exist', function () {
         (() => new Concepts({
-            "$concept": "#wrong"
+            '$concept': '#wrong'
         })).should.throw(
             error.Concepts_definition_is_not_valid__REASON(
                 because => because.REFERENCE_cannot_be_found(
@@ -90,7 +90,7 @@ describe('specs/references/defining-a-reference', function () {
 
     it('should give error when a reference definition does not have a name', function () {
         (() => new Concepts({
-            "#": "$value"
+            '#': '$value'
         })).should.throw(
             error.Concepts_definition_is_not_valid__REASON(
                 because => because.Reference_EXPRESSION_must_have_a_name(
@@ -102,11 +102,11 @@ describe('specs/references/defining-a-reference', function () {
 
     it('should escape macro character when it starts with an escape sequence', function () {
         const concepts = new Concepts({
-            "\\#literal": "\\#value"
+            '\\#literal': '\\#value'
         });
 
         (() => concepts.validate({
-            "#literal": "#value"
+            '#literal': '#value'
         })).should.not.throw();
     });
 

@@ -20,18 +20,18 @@ describe('specs/custom-types/regex-validator', function () {
         );
 
         (() => concepts.validate({
-            "service": {
-                "name": "sayHello"
+            'service': {
+                'name': 'sayHello'
             }
         })).should.not.throw();
     });
 
     it('should allow regex only for string based custom types', function () {
         (() => new Concepts({
-            "@types": {
-                "identifier": {
-                    "type": "number",
-                    "regex": "^[a-zA-Z]*$"
+            '@types': {
+                'identifier': {
+                    'type': 'number',
+                    'regex': '^[a-zA-Z]*$'
                 }
             }
         })).should.throw(
@@ -43,9 +43,9 @@ describe('specs/custom-types/regex-validator', function () {
         );
 
         (() => new Concepts({
-            "@types": {
-                "identifier": {
-                    "regex": "^[a-zA-Z]*$"
+            '@types': {
+                'identifier': {
+                    'regex': '^[a-zA-Z]*$'
                 }
             }
         })).should.throw(
@@ -59,10 +59,10 @@ describe('specs/custom-types/regex-validator', function () {
 
     it('should give error for an unknown validator', function () {
         (() => new Concepts({
-            "@types": {
-                "identifier": {
-                    "type": "number",
-                    "non-existing-validator": null
+            '@types': {
+                'identifier': {
+                    'type': 'number',
+                    'non-existing-validator': null
                 }
             }
         })).should.throw(
@@ -87,8 +87,8 @@ describe('specs/custom-types/regex-validator', function () {
 
         it('should give error for an unsupported shortcut', function () {
             (() => new Concepts({
-                "@types": {
-                    "identifier": 0
+                '@types': {
+                    'identifier': 0
                 }
             })).should.throw(
                 error.Concepts_definition_is_not_valid__REASON(

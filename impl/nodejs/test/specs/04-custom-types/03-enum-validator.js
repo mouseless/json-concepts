@@ -25,8 +25,8 @@ describe('specs/custom-types/enum-validator', function () {
         const concepts = new Concepts(from('service.concepts.json'));
 
         (() => concepts.validate({
-            "sayHello": {
-                "statusCode": 200
+            'sayHello': {
+                'statusCode': 200
             }
         })).should.not.throw();
     });
@@ -46,10 +46,10 @@ describe('specs/custom-types/enum-validator', function () {
 
         it('should have common type of all values as a base type automatically', function () {
             const concepts = new Concepts({
-                "@types": {
-                    "numbers": [200, 400, 500],
-                    "strings": ["A", "B", "C"],
-                    "booleans": [true, false]
+                '@types': {
+                    'numbers': [200, 400, 500],
+                    'strings': ['A', 'B', 'C'],
+                    'booleans': [true, false]
                 }
             });
 
@@ -59,7 +59,7 @@ describe('specs/custom-types/enum-validator', function () {
                 .base.name.should.equal('string');
             concepts.types.find(type => type.name === 'booleans')
                 .base.name.should.equal('boolean');
-        })
+        });
     });
 
     describe('any', function () {

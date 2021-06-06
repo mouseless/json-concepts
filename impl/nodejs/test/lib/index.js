@@ -1,6 +1,5 @@
 const { readFileSync } = require('fs');
 const { bypass } = require('mock-fs');
-const path = require('path');
 
 module.exports = {
     readTestCase(fixture, file) {

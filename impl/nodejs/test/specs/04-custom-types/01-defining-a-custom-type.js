@@ -21,14 +21,14 @@ describe('specs/custom-types/defining-a-custom-type', function () {
             const concepts = new Concepts(from('service.concepts.json'));
 
             (() => concepts.validate({
-                "sayHello": {
-                    "name": "sayHello"
+                'sayHello': {
+                    'name': 'sayHello'
                 }
             })).should.not.throw();
 
             (() => concepts.validate({
-                "sayHello": {
-                    "name": 100
+                'sayHello': {
+                    'name': 100
                 }
             })).should.throw(
                 error.Schema_definition_is_not_valid__REASON(
@@ -39,42 +39,42 @@ describe('specs/custom-types/defining-a-custom-type', function () {
 
         it('should use any type when no base type is specified', function () {
             const concepts = new Concepts({
-                "$any*": "$value:x-any",
-                "@types": {
-                    "x-any": {}
+                '$any*': '$value:x-any',
+                '@types': {
+                    'x-any': {}
                 }
             });
 
             (() => concepts.validate({
-                "string": "string",
-                "number": 100,
-                "boolean": true
+                'string': 'string',
+                'number': 100,
+                'boolean': true
             })).should.not.throw();
         });
 
         it('should allow built-in types as base type', function () {
             (() => new Concepts({
-                "x-string": "$string:x-string",
-                "x-boolean": "$boolean:x-boolean",
-                "x-number": "$number:x-number",
-                "x-any": "$any:x-any",
-                "@types": {
-                    "x-string": { "type": "string" },
-                    "x-boolean": { "type": "boolean" },
-                    "x-number": { "type": "number" },
-                    "x-any": { "type": "any" }
+                'x-string': '$string:x-string',
+                'x-boolean': '$boolean:x-boolean',
+                'x-number': '$number:x-number',
+                'x-any': '$any:x-any',
+                '@types': {
+                    'x-string': { 'type': 'string' },
+                    'x-boolean': { 'type': 'boolean' },
+                    'x-number': { 'type': 'number' },
+                    'x-any': { 'type': 'any' }
                 }
             })).should.not.throw();
         });
 
         it('should give error when base type is not defined', function () {
             (() => new Concepts({
-                "$service+": {
-                    "name": "$name:identifier"
+                '$service+': {
+                    'name': '$name:identifier'
                 },
-                "@types": {
-                    "identifier": {
-                        "type": "text"
+                '@types': {
+                    'identifier': {
+                        'type': 'text'
                     }
                 }
             })).should.throw(

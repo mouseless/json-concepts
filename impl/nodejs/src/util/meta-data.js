@@ -39,7 +39,7 @@ function read(
     }
 
     return result;
-};
+}
 
 /**
  * Deletes meta-data from object.

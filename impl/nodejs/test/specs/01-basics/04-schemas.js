@@ -53,8 +53,8 @@ describe('specs/basics/schemas', function () {
         fs({
             'service.concepts.json': JSON.stringify(from('service.concepts.json')),
             'greeting.service.json': JSON.stringify({
-                "sayHello": {
-                    "name": "string",
+                'sayHello': {
+                    'name': 'string',
                 }
             })
         });
@@ -87,9 +87,9 @@ describe('specs/basics/schemas', function () {
         it('should not load if schema is not self-validating', async function () {
             fs({
                 'greeting.service.json': JSON.stringify({
-                    "sayHello": {
-                        "name": "string",
-                        "response": "string"
+                    'sayHello': {
+                        'name': 'string',
+                        'response': 'string'
                     }
                 })
             });
@@ -116,12 +116,12 @@ describe('specs/basics/schemas', function () {
                 'folder': {
                     'service.concepts.json': JSON.stringify(from('../service.concepts.json')),
                     'greeting.service.json': JSON.stringify({
-                        "sayHello": {
-                            "name": "string",
-                            "response": "string"
+                        'sayHello': {
+                            'name': 'string',
+                            'response': 'string'
                         },
 
-                        "@concepts": "wrong.concepts.json"
+                        '@concepts': 'wrong.concepts.json'
                     })
                 }
             });
@@ -139,8 +139,8 @@ describe('specs/basics/schemas', function () {
         });
 
         it('should validate', async function () {
-            nock("https://my-concepts.com")
-                .get("/service.concepts.json")
+            nock('https://my-concepts.com')
+                .get('/service.concepts.json')
                 .reply(200, from('../service.concepts.json'));
             fs({
                 'greeting.service.json': JSON.stringify(from('greeting.service.json'))

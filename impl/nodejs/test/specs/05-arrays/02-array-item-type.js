@@ -20,7 +20,7 @@ describe('specs/arrays/array-item-type', function () {
         );
 
         (() => concepts.validate({
-            "tags": ["only", "strings", "allowed"]
+            'tags': ['only', 'strings', 'allowed']
         })).should.not.throw();
     });
 
@@ -40,7 +40,7 @@ describe('specs/arrays/array-item-type', function () {
                 );
 
             (() => concepts.validate({
-                "summer": ["JUN", "JUL", "AUG"]
+                'summer': ['JUN', 'JUL', 'AUG']
             })).should.not.throw();
         });
     });

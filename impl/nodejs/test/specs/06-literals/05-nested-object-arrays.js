@@ -13,5 +13,5 @@ describe('specs/literals/nested-object-arrays', function () {
 
         concepts.shadow.should.deep.equal(from('service.concepts-shadow.json'));
         schema.shadow.should.deep.equal(from('greeting.service-shadow.json'));
-    })
+    });
 });

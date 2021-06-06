@@ -71,7 +71,7 @@ const _validators = {
 function createValidator(definition = required('definition')) {
     if (typeof definition === 'string') {
         definition = {
-            type: "string",
+            type: 'string',
             regex: definition
         };
     }
@@ -82,7 +82,7 @@ function createValidator(definition = required('definition')) {
             if (type === null) {
                 type = typeof member;
             } else if (typeof member !== type) {
-                type = "any";
+                type = 'any';
                 break;
             }
         }
@@ -96,7 +96,7 @@ function createValidator(definition = required('definition')) {
     if (typeof definition !== 'object') {
         throw error.Concepts_definition_is_not_valid__REASON(
             because => because.Cannot_create_a_validator_from_EXPRESSION(definition)
-        )
+        );
     }
 
     const result = {

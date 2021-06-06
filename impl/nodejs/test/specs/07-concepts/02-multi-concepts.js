@@ -44,10 +44,10 @@ describe('specs/concepts/multi-concepts', function () {
             const concepts = new Concepts(from('class.concepts.json'));
 
             (() => concepts.create({
-                "user": {
-                    "login": {
-                        "username": "string",
-                        "password": "string"
+                'user': {
+                    'login': {
+                        'username': 'string',
+                        'password': 'string'
                     }
                 }
             })).should.throw(

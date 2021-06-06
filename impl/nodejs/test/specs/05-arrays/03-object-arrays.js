@@ -17,7 +17,7 @@ describe('specs/arrays/object-arrays', function () {
 
     it('should give error when array does not have a definition', function () {
         (() => new Concepts({
-            "array": []
+            'array': []
         })).should.throw(
             error.Concepts_definition_is_not_valid__REASON(
                 because => because.KEY_array_should_have_1_item__but_got_COUNT(
@@ -27,7 +27,7 @@ describe('specs/arrays/object-arrays', function () {
         );
 
         (() => new Concepts({
-            "array": [{}]
+            'array': [{}]
         })).should.not.throw();
     });
 
@@ -46,8 +46,8 @@ describe('specs/arrays/object-arrays', function () {
             const concepts = new Concepts(from('../service.concepts.json'));
 
             (() => concepts.validate({
-                "sayHello": {
-                    "parameters": [{}]
+                'sayHello': {
+                    'parameters': [{}]
                 }
             })).should.throw(
                 error.Schema_definition_is_not_valid__REASON(
@@ -56,10 +56,10 @@ describe('specs/arrays/object-arrays', function () {
             );
 
             (() => concepts.validate({
-                "sayHello": {
-                    "parameters": [
-                        { "name": "string", "type": "string" },
-                        { "type": "string" }
+                'sayHello': {
+                    'parameters': [
+                        { 'name': 'string', 'type': 'string' },
+                        { 'type': 'string' }
                     ]
                 }
             })).should.throw(
@@ -71,11 +71,11 @@ describe('specs/arrays/object-arrays', function () {
 
         it('should not accept arrays when object array is not expected', function () {
             const concepts = new Concepts({
-                "zero": { "value": "$value" }
+                'zero': { 'value': '$value' }
             });
 
             (() => concepts.validate({
-                "zero": [{}]
+                'zero': [{}]
             })).should.throw(
                 error.Schema_definition_is_not_valid__REASON(
                     because => because.VARIABLE_is_not_an_array(
@@ -87,17 +87,17 @@ describe('specs/arrays/object-arrays', function () {
 
         it('should treat the literal that holds the object array as a schema node', function () {
             const concepts = new Concepts({
-                "$service+": {
-                    "parameters?": [{
-                        "name": "$pName"
+                '$service+': {
+                    'parameters?': [{
+                        'name': '$pName'
                     }]
                 }
             });
 
             const schema = concepts.create({
-                "sayHello": {
-                    "parameters": [{
-                        "name": "name"
+                'sayHello': {
+                    'parameters': [{
+                        'name': 'name'
                     }]
                 }
             });
@@ -106,7 +106,7 @@ describe('specs/arrays/object-arrays', function () {
             const parameters = sayHello.getSchemas('parameters')[0];
 
             parameters.data.should.deep.equal({
-                "pName": "name"
+                'pName': 'name'
             });
         });
     });
@@ -154,9 +154,9 @@ describe('specs/arrays/object-arrays', function () {
             const schema = concepts.create(from('two.matrix.json'));
 
             schema.shadow.should.deep.equal({
-                "matrix": [[
-                    { "value": 1 },
-                    { "value": 2 }
+                'matrix': [[
+                    { 'value': 1 },
+                    { 'value': 2 }
                 ]]
             });
         });

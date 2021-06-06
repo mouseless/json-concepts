@@ -18,17 +18,17 @@ describe('specs/concepts/explicit-concepts', function () {
 
     it('should give error when concept does not exist', function () {
         const concepts = new Concepts({
-            "$class*": {
-                "$property*": {
-                    "returns": "$returnType"
+            '$class*': {
+                '$property*': {
+                    'returns': '$returnType'
                 }
             }
         });
 
         (() => concepts.create({
-            "user": {
-                "logout:method": {
-                    "returns": "number"
+            'user': {
+                'logout:method': {
+                    'returns': 'number'
                 }
             }
         })).should.throw(
@@ -42,17 +42,17 @@ describe('specs/concepts/explicit-concepts', function () {
 
     it('should give syntax error when nothing follows type symbol', function () {
         const concepts = new Concepts({
-            "$class*": {
-                "$property*": {
-                    "returns": "$returnType"
+            '$class*': {
+                '$property*': {
+                    'returns': '$returnType'
                 }
             }
         });
 
         (() => concepts.create({
-            "user": {
-                "logout:": {
-                    "returns": "number"
+            'user': {
+                'logout:': {
+                    'returns': 'number'
                 }
             }
         })).should.throw(

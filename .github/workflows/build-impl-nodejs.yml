@@ -22,5 +22,6 @@ jobs:
           npm install
           cd impl/nodejs
           npm install
+          npm run build
           npm test
           npm run coverage

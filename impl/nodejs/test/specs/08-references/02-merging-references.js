@@ -16,28 +16,28 @@ describe('specs/references/merging-references', function () {
 
     it('should merge any number of references', function () {
         const concepts = new Concepts({
-            "merged": "#a & #b & #c",
-            "#a": { "a": true },
-            "#b": { "b": true },
-            "#c": { "c": true }
+            'merged': '#a & #b & #c',
+            '#a': { 'a': true },
+            '#b': { 'b': true },
+            '#c': { 'c': true }
         });
 
         concepts.definition.should.deep.equal({
-            "merged": {
-                "a": true,
-                "b": true,
-                "c": true
+            'merged': {
+                'a': true,
+                'b': true,
+                'c': true
             }
         });
     });
 
     it('should give error when not all items in expression is a reference', function () {
         (() => new Concepts({
-            "$class+": "#properties & $methods"
+            '$class+': '#properties & $methods'
         })).should.throw(
             error.Concepts_definition_is_not_valid__REASON(
                 because => because.All_items_in_EXPRESSION_should_be_a_reference(
-                    "#properties & $methods"
+                    '#properties & $methods'
                 )
             ).message
         );
@@ -45,11 +45,11 @@ describe('specs/references/merging-references', function () {
 
     it('should give error when one of the references not refer to an object', function () {
         (() => new Concepts({
-            "$class+": "#properties & #methods",
-            "#properties": {
-                "$property*": "$type"
+            '$class+': '#properties & #methods',
+            '#properties': {
+                '$property*': '$type'
             },
-            "#methods": "$type"
+            '#methods': '$type'
         })).should.throw(
             error.Concepts_definition_is_not_valid__REASON(
                 because => because.Cannot_merge_a_non_object_reference__REFERENCE(
@@ -61,17 +61,17 @@ describe('specs/references/merging-references', function () {
 
     it('should give error when conflict occurs during merge', function () {
         (() => new Concepts({
-            "$class+": "#properties & #methods",
-            "#properties": {
-                "$property*": "$type"
+            '$class+': '#properties & #methods',
+            '#properties': {
+                '$property*': '$type'
             },
-            "#methods": {
-                "$property*": "$type"
+            '#methods': {
+                '$property*': '$type'
             }
         })).should.throw(
             error.Concepts_definition_is_not_valid__REASON(
                 because => because.Cannot_merge_REFERENCES__conflict_occurs_on_KEY(
-                    ["#properties", "#methods"], '$property*'
+                    ['#properties', '#methods'], '$property*'
                 )
             ).message
         );
@@ -79,24 +79,24 @@ describe('specs/references/merging-references', function () {
 
     it('should merge references in arrays and get object arrays', function () {
         const concepts = new Concepts({
-            "classes": ["#properties & #methods"],
-            "#properties": {
-                "$property*": "$type"
+            'classes': ['#properties & #methods'],
+            '#properties': {
+                '$property*': '$type'
             },
-            "#methods": {
-                "$method*": {
-                    "$parameter*": "$type",
-                    "returns": "$type"
+            '#methods': {
+                '$method*': {
+                    '$parameter*': '$type',
+                    'returns': '$type'
                 }
             }
         });
 
         concepts.definition.should.deep.equal({
-            "classes": [{
-                "$property*": "$type",
-                "$method*": {
-                    "$parameter*": "$type",
-                    "returns": "$type"
+            'classes': [{
+                '$property*': '$type',
+                '$method*': {
+                    '$parameter*': '$type',
+                    'returns': '$type'
                 }
             }]
         });

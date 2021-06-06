@@ -16,10 +16,10 @@ describe('specs/quantifiers/custom', function () {
 
     it('should include check min max values and include them in error messages', function () {
         const concepts = new Concepts({
-            "$service{1,3}": {
-                "$parameter{,2}": "$type",
-                "response{1}": {
-                    "$status{2,}": "$responseType"
+            '$service{1,3}': {
+                '$parameter{,2}': '$type',
+                'response{1}': {
+                    '$status{2,}': '$responseType'
                 }
             }
         });
@@ -34,10 +34,10 @@ describe('specs/quantifiers/custom', function () {
             );
 
         (() => concepts.validate({
-            "a": { "response": { "200": "string", "400": "string" } },
-            "b": { "response": { "200": "string", "400": "string" } },
-            "c": { "response": { "200": "string", "400": "string" } },
-            "d": { "response": { "200": "string", "400": "string" } }
+            'a': { 'response': { '200': 'string', '400': 'string' } },
+            'b': { 'response': { '200': 'string', '400': 'string' } },
+            'c': { 'response': { '200': 'string', '400': 'string' } },
+            'd': { 'response': { '200': 'string', '400': 'string' } }
         })).should.throw(
             error.Schema_definition_is_not_valid__REASON(
                 because => because.Maximum_allowed_number_of_CONCEPT_is_MAX__but_got_COUNT(
@@ -47,11 +47,11 @@ describe('specs/quantifiers/custom', function () {
         );
 
         (() => concepts.validate({
-            "sayHello": {
-                "name": "string",
-                "middle": "string",
-                "surname": "string",
-                "response": { "200": "string", "400": "string" }
+            'sayHello': {
+                'name': 'string',
+                'middle': 'string',
+                'surname': 'string',
+                'response': { '200': 'string', '400': 'string' }
             }
         })).should.throw(
             error.Schema_definition_is_not_valid__REASON(
@@ -62,7 +62,7 @@ describe('specs/quantifiers/custom', function () {
         );
 
         (() => concepts.validate({
-            "sayHello": {}
+            'sayHello': {}
         })).should.throw(
             error.Schema_definition_is_not_valid__REASON(
                 because => because.LITERAL_is_missing('response')
@@ -70,8 +70,8 @@ describe('specs/quantifiers/custom', function () {
         );
 
         (() => concepts.validate({
-            "sayHello": {
-                "response": { "200": "string" }
+            'sayHello': {
+                'response': { '200': 'string' }
             }
         })).should.throw(
             error.Schema_definition_is_not_valid__REASON(
@@ -84,23 +84,23 @@ describe('specs/quantifiers/custom', function () {
 
     it('should only allow quantifier max 1 for key literals', function () {
         (() => new Concepts({
-            "service{1,1}": {}
+            'service{1,1}': {}
         })).should.not.throw();
 
         (() => new Concepts({
-            "service{,1}": {}
+            'service{,1}': {}
         })).should.not.throw();
 
         (() => new Concepts({
-            "service{0,1}": {}
+            'service{0,1}': {}
         })).should.not.throw();
 
         (() => new Concepts({
-            "service{1}": {}
+            'service{1}': {}
         })).should.not.throw();
 
         (() => new Concepts({
-            "service{,2}": {}
+            'service{,2}': {}
         })).should.throw(
             error.Concepts_definition_is_not_valid__REASON(
                 because => because.LITERAL_cannot_have_QUANTIFIER(

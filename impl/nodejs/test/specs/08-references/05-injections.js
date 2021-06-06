@@ -17,12 +17,12 @@ describe('specs/references/injections', function () {
 
     it('should give error when conflict occurs', function () {
         (() => new Concepts({
-            "$class+": {
-                "$property*": {}
+            '$class+': {
+                '$property*': {}
             },
-            "#inject": {
-                "$property*": "$returnType",
-                "@path": "/$class"
+            '#inject': {
+                '$property*': '$returnType',
+                '@path': '/$class'
             }
         })).should.throw(
             error.Concepts_definition_is_not_valid__REASON(
@@ -30,54 +30,54 @@ describe('specs/references/injections', function () {
                     '$returnType', '$property*', {}
                 )
             ).message
-        )
+        );
     });
 
     it('should not inject if nothing exists at path', function () {
         const concepts = new Concepts({
-            "$class+": {
-                "$property*": {}
+            '$class+': {
+                '$property*': {}
             },
-            "#inject": {
-                "return": "$returnType",
-                "@path": "/$notfound"
+            '#inject': {
+                'return': '$returnType',
+                '@path': '/$notfound'
             }
         });
 
         concepts.definition.should.deep.equal({
-            "$class+": {
-                "$property*": {}
+            '$class+': {
+                '$property*': {}
             }
         });
     });
 
     it('should stop injecting when it hits a recursion', function () {
         (() => new Concepts({
-            "root": "#recursion",
-            "#recursion": {
-                "recursion": "#recursion"
+            'root': '#recursion',
+            '#recursion': {
+                'recursion': '#recursion'
             },
-            "#inject": {
-                "@path": "/"
+            '#inject': {
+                '@path': '/'
             }
         })).should.not.throw();
     });
 
     it('should inject to object arrays', function () {
         const concepts = new Concepts({
-            "$class+": {
-                "properties": [{}]
+            '$class+': {
+                'properties': [{}]
             },
-            "#inject": {
-                "return": "$returnType",
-                "@path": "/**/properties"
+            '#inject': {
+                'return': '$returnType',
+                '@path': '/**/properties'
             }
         });
 
         concepts.definition.should.deep.equal({
-            "$class+": {
-                "properties": [{
-                    "return": "$returnType"
+            '$class+': {
+                'properties': [{
+                    'return': '$returnType'
                 }]
             }
         });
@@ -104,13 +104,13 @@ describe('specs/references/injections', function () {
 
         it('should not give error when injecting same definition multiple times', function () {
             const concepts = new Concepts({
-                "$class+": {
-                    "$property*": {},
-                    "$method*": {}
+                '$class+': {
+                    '$property*': {},
+                    '$method*': {}
                 },
-                "#inject": {
-                    "return": "$returnType",
-                    "@path": ["/*/$property", "/**/$method", "/*/$*"]
+                '#inject': {
+                    'return': '$returnType',
+                    '@path': ['/*/$property', '/**/$method', '/*/$*']
                 }
             });
 
@@ -139,21 +139,21 @@ describe('specs/references/injections', function () {
 
         it('should only allow objects under injection array', function () {
             (() => new Concepts({
-                "#inject": "test"
+                '#inject': 'test'
             })).should.throw(
                 error.Concepts_definition_is_not_valid__REASON(
                     because => because.Inject_expects_an_object_or_an_array_of_objects__but_got_VALUE(
-                        "test"
+                        'test'
                     )
                 ).message
             );
 
             (() => new Concepts({
-                "#inject": ["test"]
+                '#inject': ['test']
             })).should.throw(
                 error.Concepts_definition_is_not_valid__REASON(
                     because => because.Inject_expects_an_object_or_an_array_of_objects__but_got_VALUE(
-                        "test"
+                        'test'
                     )
                 ).message
             );
@@ -175,7 +175,7 @@ describe('specs/references/injections', function () {
 
         after(function () {
             fs.restore();
-        })
+        });
 
         it('should process in the expected order', async function () {
             fs({

@@ -21,7 +21,7 @@
             concepts = metaData.read(definition, 'concepts', /* burnAfterReading */ true);
             relativeTo = path;
         } else {
-            metaData.burn(definition, 'concepts')
+            metaData.burn(definition, 'concepts');
         }
 
         if (concepts === null) {

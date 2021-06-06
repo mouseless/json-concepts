@@ -28,27 +28,27 @@ describe('specs/references/nested-references', function () {
             let concepts;
 
             (() => concepts = new Concepts({
-                "$root": "#node",
-                "#node": {
-                    "$node1*": "#node",
-                    "$node2*": "#node"
+                '$root': '#node',
+                '#node': {
+                    '$node1*': '#node',
+                    '$node2*': '#node'
                 }
             })).should.not.throw();
 
             (() => concepts.create({
-                "root": {}
+                'root': {}
             })).should.not.throw();
 
             (() => concepts = new Concepts({
-                "root": "#node",
-                "#node": {
-                    "a?": "#node",
-                    "b?": "#node"
+                'root': '#node',
+                '#node': {
+                    'a?': '#node',
+                    'b?': '#node'
                 }
             })).should.not.throw();
 
             (() => concepts.create({
-                "root": {}
+                'root': {}
             })).should.not.throw();
         });
     });

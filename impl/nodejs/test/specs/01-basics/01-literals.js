@@ -48,7 +48,7 @@ describe('specs/basics/literals', function () {
         const concepts = new Concepts(from('service.concepts.json'));
 
         (() => concepts.validate({
-            "sayHello": {}
+            'sayHello': {}
         })).should.throw(
             error.Schema_definition_is_not_valid__REASON(
                 because => because.LITERAL_is_missing('name')
@@ -60,9 +60,9 @@ describe('specs/basics/literals', function () {
         const concepts = new Concepts(from('service.concepts.json'));
 
         (() => concepts.validate({
-            "sayHello": {
-                "name": "string",
-                "surname": "string"
+            'sayHello': {
+                'name': 'string',
+                'surname': 'string'
             }
         })).should.throw(
             error.Schema_definition_is_not_valid__REASON(
@@ -75,8 +75,8 @@ describe('specs/basics/literals', function () {
         const concepts = new Concepts(from('service.concepts.json'));
 
         (() => concepts.validate({
-            "sayHello": {
-                "name": "text"
+            'sayHello': {
+                'name': 'text'
             }
         })).should.throw(
             error.Schema_definition_is_not_valid__REASON(

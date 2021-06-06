@@ -14,7 +14,7 @@ describe('specs/custom-types/validating-concept-name', function () {
         concepts.shadow.should.deep.equal(from('service.concepts-shadow.json'));
 
         (() => concepts.validate({
-            "/users": {}
+            '/users': {}
         })).should.throw(
             error.Schema_definition_is_not_valid__REASON(
                 because => because.VALUE_is_not_a_valid_TYPE(
@@ -24,8 +24,8 @@ describe('specs/custom-types/validating-concept-name', function () {
         );
 
         (() => concepts.validate({
-            "users": {
-                "PATCH": {}
+            'users': {
+                'PATCH': {}
             }
         })).should.throw(
             error.Schema_definition_is_not_valid__REASON(
@@ -38,7 +38,7 @@ describe('specs/custom-types/validating-concept-name', function () {
 
     it('should only allow string types for concept name types', function () {
         (() => new Concepts({
-            "$service:number+": "$type"
+            '$service:number+': '$type'
         })).should.throw(
             error.Concepts_definition_is_not_valid__REASON(
                 because => because.CONCEPT_cannot_be_TYPE__only_string_allowed(
@@ -48,9 +48,9 @@ describe('specs/custom-types/validating-concept-name', function () {
         );
 
         (() => new Concepts({
-            "$service:identifier+": "$type",
-            "@types": {
-                "identifier": { "type": "number" }
+            '$service:identifier+': '$type',
+            '@types': {
+                'identifier': { 'type': 'number' }
             }
         })).should.throw(
             error.Concepts_definition_is_not_valid__REASON(
@@ -63,18 +63,18 @@ describe('specs/custom-types/validating-concept-name', function () {
 
     it('should allow inheritance as long as root type is string', function () {
         (() => new Concepts({
-            "$service:identifier+": "$type",
-            "@types": {
-                "identifier": { "type": "text" },
-                "text": { "type": "string" }
+            '$service:identifier+': '$type',
+            '@types': {
+                'identifier': { 'type': 'text' },
+                'text': { 'type': 'string' }
             }
         })).should.not.throw();
 
         (() => new Concepts({
-            "$service:money+": "$type",
-            "@types": {
-                "money": { "type": "decimal" },
-                "decimal": { "type": "number" }
+            '$service:money+': '$type',
+            '@types': {
+                'money': { 'type': 'decimal' },
+                'decimal': { 'type': 'number' }
             }
         })).should.throw(
             error.Concepts_definition_is_not_valid__REASON(
@@ -87,10 +87,10 @@ describe('specs/custom-types/validating-concept-name', function () {
 
     it('should not confuse type error with quantifier error', function () {
         (() => new Concepts({
-            "$service:+": "$type",
-            "@types": {
-                "identifier": { "type": "text" },
-                "text": { "type": "string" }
+            '$service:+': '$type',
+            '@types': {
+                'identifier': { 'type': 'text' },
+                'text': { 'type': 'string' }
             }
         })).should.throw(
             error.Concepts_definition_is_not_valid__REASON(

@@ -110,7 +110,7 @@
      * @param {String} name (Required) Name to check
      * @returns {boolean} `true` if it exists, `false` otherwise
      */
-    has(name = required('name')) { return this.#concepts.hasOwnProperty(name); }
+    has(name = required('name')) { return Object.prototype.hasOwnProperty.call(this.#concepts, name); }
     /**
      * Gets concept with a given name. Returns `undefined` when a concept with
      * given name does not exist.

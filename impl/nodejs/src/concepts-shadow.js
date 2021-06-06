@@ -366,7 +366,7 @@ class ConceptsShadow {
 
                     quantities[concept.name]++;
                     delete schemaKeys[key];
-                    if (errors.hasOwnProperty(key)) {
+                    if (Object.prototype.hasOwnProperty.call(errors, key)) {
                         delete errors[key];
                     }
                 } catch (e) {
@@ -383,7 +383,7 @@ class ConceptsShadow {
         if (remainingKeys.length > 0) {
             const remainingKey = remainingKeys[0];
 
-            if (errors.hasOwnProperty(remainingKey)) {
+            if (Object.prototype.hasOwnProperty.call(errors, remainingKey)) {
                 throw arrayify.pull(errors, remainingKey)[0];
             } else {
                 throw error.Schema_definition_is_not_valid__REASON(
@@ -423,12 +423,12 @@ class ConceptsShadow {
         _trace.add(this);
 
         if (this.hasOnlyVariableLeafNode()) {
-            if (_result.hasOwnProperty(this.#variable.name)) {
+            if (Object.prototype.hasOwnProperty.call(_result, this.#variable.name)) {
                 throw error.Concepts_definition_is_not_valid__REASON(
                     because => because.CONCEPT_cannot_declare_VARIABLE_more_than_once(
                         name, this.#variable.name
                     )
-                )
+                );
             }
 
             _result[this.#variable.name] = { name: this.#variable.name };

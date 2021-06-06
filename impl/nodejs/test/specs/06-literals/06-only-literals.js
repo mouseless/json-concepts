@@ -18,10 +18,10 @@ describe('specs/literals/only-literals', function () {
 
     it('should not allow duplicate variable name', function () {
         (() => new Concepts({
-            "service": {
-                "name": "$name",
-                "parameter": {
-                    "name": "$name",
+            'service': {
+                'name': '$name',
+                'parameter': {
+                    'name': '$name',
                 }
             }
         })).should.throw(

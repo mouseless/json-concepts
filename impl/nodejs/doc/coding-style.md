@@ -148,6 +148,15 @@ function doSomething() {
 const AVLN = require('./a-very-long-name');
 ```
 
+### Require only for JSDoc
+
+Put an underscore to indicate that this require was called for JSDoc, which
+also helps refactoring.
+
+```javascript
+const Class_ = require('./class');
+```
+
 ## Boolean Parameters
 
 ```javascript

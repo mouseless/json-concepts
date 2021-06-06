@@ -15,22 +15,22 @@ describe('specs/basics/shadows', function () {
 
     it('should have literal as leaf when no variable was given', function () {
         const concepts = new Concepts({
-            "$service": {
-                "response": "string"
+            '$service': {
+                'response': 'string'
             }
         });
 
         concepts.shadow.should.deep.equal({
-            "concept": {
-                "name": "service",
-                "literal": {
-                    "name": "response",
-                    "literal": {
-                        "name": "string"
+            'concept': {
+                'name': 'service',
+                'literal': {
+                    'name': 'response',
+                    'literal': {
+                        'name': 'string'
                     }
                 }
             }
-        })
+        });
     });
 
     describe('schema-shadow', function () {

@@ -5,8 +5,8 @@
      * @async
      * @param {String} path (Required) File path or URL referring to a json
      * content.
-     * @param {Concepts} source Source concepts to transform from
-     * @param {Concepts} target Target concepts to transform to
+     * @param {Concepts_} source Source concepts to transform from
+     * @param {Concepts_} target Target concepts to transform to
      * 
      * @returns {Promise<Transformation>} Transformation at given path
      */
@@ -42,8 +42,8 @@
      * concepts, and builds queries from given definition.
      * 
      * @param {Object} definition Transformation definition
-     * @param {Concepts} source Source concepts
-     * @param {Concepts} target Target concepts
+     * @param {Concepts_} source Source concepts
+     * @param {Concepts_} target Target concepts
      */
     constructor(
         definition = required('definition'),
@@ -109,15 +109,15 @@
     }
 
     /**
-     * @param {SchemaShadow} schema 
-     * @param {ConceptsShadow} target 
+     * @param {SchemaShadow_} schema 
+     * @param {ConceptsShadow_} target 
      * @param {Object} context 
      * 
      * @returns {Object}
      */
     _transform(schema, target, context = {}) {
         if (target.hasOnlyVariableLeafNode()) {
-            if (!context.hasOwnProperty(target.variable.name)) {
+            if (!Object.prototype.hasOwnProperty.call(context, target.variable.name)) {
                 return null;
             }
 
@@ -144,9 +144,9 @@
 
 module.exports = Transformation;
 
-const Concepts = require('./concepts');
+const Concepts_ = require('./concepts');
 const Schema = require('./schema');
 const Query = require('./query');
-const SchemaShadow = require('./schema-shadow');
-const ConceptsShadow = require('./concepts-shadow');
+const SchemaShadow_ = require('./schema-shadow');
+const ConceptsShadow_ = require('./concepts-shadow');
 const { error, arrayify, required, loadJSONData } = require('./util');

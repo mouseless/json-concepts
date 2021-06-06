@@ -8,7 +8,7 @@ const Names = {
     SCHEMA_ERROR: 'SchemaError',
     /** Other errors */
     ERROR: 'Error'
-}
+};
 
 /**
  * Reason messages for invalid concepts.
@@ -38,7 +38,7 @@ const InvalidConceptsReasons = {
         (EXPRESSION) => `Cannot create a validator from '${EXPRESSION}'`,
     TYPE_cannot_inherit_from_BASE__it_would_cause_a_circular_dependency:
         (TYPE, BASE) => `'${TYPE}' cannot inherit from '${BASE}', it would ` +
-            `cause a circular dependency`,
+            'cause a circular dependency',
     CONCEPT_cannot_be_TYPE__only_string_allowed:
         (CONCEPT, TYPE) => `'${CONCEPT}' cannot be '${TYPE}', only string is allowed`,
     CONCEPT_cannot_be_TYPE__only_string_allowed_but_TYPE_is_ROOT:
@@ -95,7 +95,7 @@ const InvalidSchemaReasons = {
         (EXPRESSION, CONCEPT) => CONCEPT
             ? InvalidSchemaReasons.EXPRESSION_could_not_be_parsed(EXPRESSION)
             : `'${EXPRESSION}' could not be parsed, '${CONCEPT}' does not exist`
-}
+};
 
 /**
  * Builds reason message for given concepts name.
@@ -117,7 +117,7 @@ const InvalidTransformationReasons = {
      * @returns {invalidTransformationReasonBuilder}
      */
     VARIABLE_not_found: VARIABLE => CONCEPTS => `Variable named '${VARIABLE}' is not found in ${CONCEPTS} concepts`,
-}
+};
 
 function _error(message, name = Names.ERROR) {
     const result = new Error(message);

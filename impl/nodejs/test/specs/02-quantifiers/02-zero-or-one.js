@@ -1,5 +1,5 @@
-const { Concepts } = require("../../..");
-const { error } = require("../../../src/util");
+const { Concepts } = require('../../..');
+const { error } = require('../../../src/util');
 const { should } = require('chai');
 const { readTestCase } = require('../../lib');
 
@@ -35,7 +35,7 @@ describe('specs/quantifiers/zero-or-one', function () {
                     ).message
                 );
         });
-    })
+    });
 
     describe('key-literals', function () {
         const from = (path) => readTestCase(this, path);

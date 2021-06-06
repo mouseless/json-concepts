@@ -16,11 +16,11 @@ describe('specs/literals/escaping-special-characters', function () {
 
     it('escapes escape character as well', function () {
         const concepts = new Concepts({
-            "\\\\": "\\\\"
+            '\\\\': '\\\\'
         });
 
         (() => concepts.validate({
-            "\\": "\\"
+            '\\': '\\'
         })).should.not.throw();
     });
 });

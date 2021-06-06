@@ -5,41 +5,41 @@
  */
 const SpecialCharacters = {
     /** `$variable` */
-    VARIABLE: "$",
+    VARIABLE: '$',
     /** `#macro` */
-    MACRO: "#",
+    MACRO: '#',
     /** `:type` */
-    TYPE: ":",
+    TYPE: ':',
     /** `@metaData` */
-    META_DATA: "@",
+    META_DATA: '@',
     /** `zeroOrOne?` */
-    ZERO_OR_ONE: "?",
+    ZERO_OR_ONE: '?',
     /** `zeroOrMore*` */
-    ZERO_OR_MORE: "*",
+    ZERO_OR_MORE: '*',
     /** `oneOrMore+` */
-    ONE_OR_MORE: "+",
+    ONE_OR_MORE: '+',
     /** `/path/to/something` */
-    PATH: "/",
+    PATH: '/',
     /** `../parent` */
-    PARENT: "..",
+    PARENT: '..',
     /** `/*` */
-    ANY: "*",
+    ANY: '*',
     /** `/**` */
-    ANY_CHILD: "**",
+    ANY_CHILD: '**',
     /** `_` */
-    SELF: "name",
+    SELF: 'name',
     /** `{` */
-    BEGIN_QUANTIFIER: "{",
+    BEGIN_QUANTIFIER: '{',
     /** `}` */
-    END_QUANTIFIER: "}",
+    END_QUANTIFIER: '}',
     /** `,` */
-    QUANTIFIER_SEPARATOR: ",",
+    QUANTIFIER_SEPARATOR: ',',
     /** `\` */
-    ESCAPE: "\\",
+    ESCAPE: '\\',
     /** `&` */
-    AND: "&",
+    AND: '&',
     /** `|` */
-    OR: "|"
-}
+    OR: '|'
+};
 
 module.exports = SpecialCharacters;

@@ -33,7 +33,7 @@ async function loadJSON(
         path: path,
         data: await loadJSONData(path)
     };
-};
+}
 
 /**
  * Loads json file at given path.
@@ -85,7 +85,7 @@ function _isURL(path) {
  */
 async function _get(url) {
     return new Promise((resolve, reject) => {
-        const make = url.startsWith("https") ? https : http;
+        const make = url.startsWith('https') ? https : http;
 
         make.request(url, res => {
             if (!_is2xx(res.statusCode)) {

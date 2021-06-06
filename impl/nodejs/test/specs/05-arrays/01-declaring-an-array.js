@@ -16,8 +16,8 @@ describe('specs/arrays/declaring-an-array', function () {
 
     it('should give error when more than one item exists in array definition', function () {
         (() => new Concepts({
-            "$service+": {
-                "tags?": ["$tags", "not allowed"]
+            '$service+': {
+                'tags?': ['$tags', 'not allowed']
             }
         })).should.throw(
             error.Concepts_definition_is_not_valid__REASON(
@@ -30,8 +30,8 @@ describe('specs/arrays/declaring-an-array', function () {
 
     it('should expect variable inside an array', function () {
         (() => new Concepts({
-            "$service+": {
-                "tags?": ["tags"]
+            '$service+': {
+                'tags?': ['tags']
             }
         })).should.throw(
             error.Concepts_definition_is_not_valid__REASON(
@@ -65,12 +65,12 @@ describe('specs/arrays/declaring-an-array', function () {
 
         it('should give error when value has more dimensions than definition', function () {
             const concepts = new Concepts({
-                "zero?": "$zero",
-                "one?": ["$one"]
+                'zero?': '$zero',
+                'one?': ['$one']
             });
 
             (() => concepts.validate({
-                "zero": ["not valid"]
+                'zero': ['not valid']
             })).should.throw(
                 error.Schema_definition_is_not_valid__REASON(
                     because => because.VARIABLE_is_not_an_array(
@@ -80,7 +80,7 @@ describe('specs/arrays/declaring-an-array', function () {
             );
 
             (() => concepts.validate({
-                "one": [["not valid"]]
+                'one': [['not valid']]
             })).should.throw(
                 error.Schema_definition_is_not_valid__REASON(
                     because => because.VARIABLE_expects_at_most_EXPECTED_dimensional_array__but_got_ACTUAL(
@@ -106,23 +106,23 @@ describe('specs/arrays/declaring-an-array', function () {
             const concepts = new Concepts(from('../schemas/service.concepts.json'));
 
             const schema = concepts.create({
-                "sayHello": {
-                    "name": null,
-                    "tags": null,
+                'sayHello': {
+                    'name': null,
+                    'tags': null,
                 }
             });
 
             schema.shadow.should.deep.equal({
-                "service": [
+                'service': [
                     {
-                        "name": "sayHello",
-                        "parameter": [
+                        'name': 'sayHello',
+                        'parameter': [
                             {
-                                "name": "name",
-                                "types": []
+                                'name': 'name',
+                                'types': []
                             }
                         ],
-                        "tags": []
+                        'tags': []
                     }
                 ]
             });
@@ -144,7 +144,7 @@ describe('specs/arrays/declaring-an-array', function () {
 
         it('should give error when more than one item exists in array definition', function () {
             (() => new Concepts({
-                "$matrix*": [["$value", "not allowed"]]
+                '$matrix*': [['$value', 'not allowed']]
             })).should.throw(
                 error.Concepts_definition_is_not_valid__REASON(
                     because => because.KEY_array_should_have_1_item__but_got_COUNT(
@@ -154,7 +154,7 @@ describe('specs/arrays/declaring-an-array', function () {
             );
 
             (() => new Concepts({
-                "$matrix*": [["$value"], ["not allowed"]]
+                '$matrix*': [['$value'], ['not allowed']]
             })).should.throw(
                 error.Concepts_definition_is_not_valid__REASON(
                     because => because.KEY_array_should_have_1_item__but_got_COUNT(
@@ -166,11 +166,11 @@ describe('specs/arrays/declaring-an-array', function () {
 
         it('should give error when value has more dimensions than definition', function () {
             const concepts = new Concepts({
-                "$matrix*": [["$value"]]
+                '$matrix*': [['$value']]
             });
 
             (() => concepts.validate({
-                "matrix": [[[3]]]
+                'matrix': [[[3]]]
             })).should.throw(
                 error.Schema_definition_is_not_valid__REASON(
                     because => because.VARIABLE_expects_at_most_EXPECTED_dimensional_array__but_got_ACTUAL(
@@ -182,30 +182,30 @@ describe('specs/arrays/declaring-an-array', function () {
 
         it('should not allow objects in arrays', function () {
             const concepts = new Concepts({
-                "explicit?": ["$explicit:any"],
-                "implicit?": ["$implicit"]
+                'explicit?': ['$explicit:any'],
+                'implicit?': ['$implicit']
             });
 
             (() => concepts.validate({
-                "explicit": [
-                    { "is": "invalid" }
+                'explicit': [
+                    { 'is': 'invalid' }
                 ]
             })).should.throw(
                 error.Schema_definition_is_not_valid__REASON(
                     because => because.Object_not_expected(
-                        { "is": "invalid" }
+                        { 'is': 'invalid' }
                     )
                 ).message
             );
 
             (() => concepts.validate({
-                "implicit": [
-                    { "is": "invalid" }
+                'implicit': [
+                    { 'is': 'invalid' }
                 ]
             })).should.throw(
                 error.Schema_definition_is_not_valid__REASON(
                     because => because.Object_not_expected(
-                        { "is": "invalid" }
+                        { 'is': 'invalid' }
                     )
                 ).message
             );

@@ -162,4 +162,4 @@ module.exports = {
     each
 };
 
-const { required } = require("./validation");
+const { required } = require('./validation');

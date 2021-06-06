@@ -11,7 +11,7 @@ describe('specs/quantifiers/exactly-one', function () {
 
     after(function () {
         fs.restore();
-    })
+    });
 
     it('should validate', function () {
         const concepts = new Concepts(from('service.concepts.json'));

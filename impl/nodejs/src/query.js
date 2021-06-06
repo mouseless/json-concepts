@@ -20,7 +20,7 @@ class Query {
      * 
      * @param {import('./concepts').ConceptData} targetConcept Target concept
      * data. Pass the concept data to which result of this query will be set.
-     * @param {Concepts} source Source concepts from which this query will
+     * @param {Concepts_} source Source concepts from which this query will
      * fetch its result.
      */
     validate(targetConcept, source) {
@@ -34,13 +34,13 @@ class Query {
         for (const targetVariable in this.#definition.select) {
             const sourceVariable = this.#definition.select[targetVariable];
 
-            if (!targetConcept.variables.hasOwnProperty(targetVariable)) {
+            if (!Object.prototype.hasOwnProperty.call(targetConcept.variables, targetVariable)) {
                 throw error.Definition_is_not_compatible_with_its_CONCEPTS__REASON(
                     'target', reason => reason.VARIABLE_not_found(targetVariable)
                 );
             }
 
-            if (!sourceConcept.variables.hasOwnProperty(sourceVariable)) {
+            if (!Object.prototype.hasOwnProperty.call(sourceConcept.variables, sourceVariable)) {
                 throw error.Definition_is_not_compatible_with_its_CONCEPTS__REASON(
                     'source', reason => reason.VARIABLE_not_found(sourceVariable)
                 );
@@ -52,7 +52,7 @@ class Query {
      * Executed for each source found in given schema.
      * 
      * @callback executeCallback
-     * @param {SchemaShadow} childSchema Child schema found in given schema
+     * @param {SchemaShadow_} childSchema Child schema found in given schema
      * @param {Object} variableContext Projected variable context 
      */
     /**
@@ -60,7 +60,7 @@ class Query {
      * target schema. For every child schema calls back given function with
      * child schema and projected variable context.
      * 
-     * @param {SchemaShadow} schema Schema on which this query will be executed
+     * @param {SchemaShadow_} schema Schema on which this query will be executed
      * @param {executeCallback} callback  Function to callback for each child
      * schema.
      */
@@ -73,19 +73,19 @@ class Query {
 
             callback(source, projection);
         }
-    };
+    }
 
     /**
-     * @param {SchemaShadow} schema 
+     * @param {SchemaShadow_} schema 
      * 
-     * @returns {Array.<SchemaShadow>}
+     * @returns {Array.<SchemaShadow_>}
      */
     _from(schema) {
         return schema.getSchemas(this.#definition.from);
     }
 
     /**
-     * @param {SchemaShadow} schema 
+     * @param {SchemaShadow_} schema 
      * 
      * @returns {Object}
      */
@@ -104,6 +104,6 @@ class Query {
 
 module.exports = Query;
 
-const Concepts = require('./concepts');
-const SchemaShadow = require('./schema-shadow');
+const Concepts_ = require('./concepts');
+const SchemaShadow_ = require('./schema-shadow');
 const { error, required } = require('./util');

@@ -10,26 +10,26 @@ describe('specs/custom-types/min-and-max-validators', function () {
 
     it('should allow only values more than or equal to min', function () {
         const concepts = new Concepts({
-            "$service+": {
-                "dailyCallLimit": "$dailyCallLimit:limit"
+            '$service+': {
+                'dailyCallLimit': '$dailyCallLimit:limit'
             },
-            "@types": {
-                "limit": {
-                    "type": "number",
-                    "min": 10
+            '@types': {
+                'limit': {
+                    'type': 'number',
+                    'min': 10
                 }
             }
         });
 
         (() => concepts.validate({
-            "sayHello": {
-                "dailyCallLimit": 10
+            'sayHello': {
+                'dailyCallLimit': 10
             }
         })).should.not.throw();
 
         (() => concepts.validate({
-            "sayHello": {
-                "dailyCallLimit": 9
+            'sayHello': {
+                'dailyCallLimit': 9
             }
         })).should.throw(
             error.Schema_definition_is_not_valid__REASON(
@@ -42,26 +42,26 @@ describe('specs/custom-types/min-and-max-validators', function () {
 
     it('should allow only values less than or equal to max', function () {
         const concepts = new Concepts({
-            "$service+": {
-                "dailyCallLimit": "$dailyCallLimit:limit"
+            '$service+': {
+                'dailyCallLimit': '$dailyCallLimit:limit'
             },
-            "@types": {
-                "limit": {
-                    "type": "number",
-                    "max": 100
+            '@types': {
+                'limit': {
+                    'type': 'number',
+                    'max': 100
                 }
             }
         });
 
         (() => concepts.validate({
-            "sayHello": {
-                "dailyCallLimit": 100
+            'sayHello': {
+                'dailyCallLimit': 100
             }
         })).should.not.throw();
 
         (() => concepts.validate({
-            "sayHello": {
-                "dailyCallLimit": 101
+            'sayHello': {
+                'dailyCallLimit': 101
             }
         })).should.throw(
             error.Schema_definition_is_not_valid__REASON(
@@ -74,25 +74,25 @@ describe('specs/custom-types/min-and-max-validators', function () {
 
     it('should validate length of the string when value is string', function () {
         const concepts = new Concepts({
-            "$service+": {
-                "name?": "$name:short-identifier",
-                "surname?": "$surname:long-identifier"
+            '$service+': {
+                'name?': '$name:short-identifier',
+                'surname?': '$surname:long-identifier'
             },
-            "@types": {
-                "short-identifier": {
-                    "type": "string",
-                    "max": 5
+            '@types': {
+                'short-identifier': {
+                    'type': 'string',
+                    'max': 5
                 },
-                "long-identifier": {
-                    "type": "string",
-                    "min": 10
+                'long-identifier': {
+                    'type': 'string',
+                    'min': 10
                 }
             }
         });
 
         (() => concepts.validate({
-            "sayHello": {
-                "name": "a very long name"
+            'sayHello': {
+                'name': 'a very long name'
             }
         })).should.throw(
             error.Schema_definition_is_not_valid__REASON(
@@ -103,8 +103,8 @@ describe('specs/custom-types/min-and-max-validators', function () {
         );
 
         (() => concepts.validate({
-            "sayHello": {
-                "surname": "short"
+            'sayHello': {
+                'surname': 'short'
             }
         })).should.throw(
             error.Schema_definition_is_not_valid__REASON(

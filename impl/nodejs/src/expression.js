@@ -287,7 +287,7 @@ function _scan(
     const tokens = [];
 
     let escape = false;
-    let current = "";
+    let current = '';
     for (const c of expression) {
         if (escape) {
             current += c;
@@ -305,7 +305,7 @@ function _scan(
         if (scHash[c]) {
             if (current.length > 0) {
                 tokens.push(current);
-                current = "";
+                current = '';
             }
 
             tokens.push(scHash[c]);

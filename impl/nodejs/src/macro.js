@@ -52,7 +52,7 @@ class Macro {
             for (const key in this.#definition) {
                 if (!_expressionIsMacro(key)) { continue; }
 
-                if (key.substring(SC.MACRO.length) == "") {
+                if (key.substring(SC.MACRO.length) == '') {
                     throw error.Concepts_definition_is_not_valid__REASON(
                         because => because.Reference_EXPRESSION_must_have_a_name(this.#definition[key])
                     );
@@ -222,7 +222,7 @@ function _include(definition) {
             const include = Macro.process(definition[key]);
 
             delete definition[key];
-            _assign(definition, include)
+            _assign(definition, include);
         } else {
             _include(definition[key]);
         }
