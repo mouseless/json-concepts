@@ -89,7 +89,7 @@
         "merge": "#reference & #other",
         "nested": "#nested",
         "include": {
-            "#include": "include.json"
+            "#include": "include.concepts.json"
         },
         "injections": {
             "single": {},

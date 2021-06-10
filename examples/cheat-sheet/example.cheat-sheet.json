@@ -158,5 +158,5 @@
             }
         }
     },
-    "@concepts": "example.concepts.json"
+    "@concepts": "cheat-sheet.concepts.json"
 }
