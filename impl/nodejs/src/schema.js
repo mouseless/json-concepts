@@ -1,4 +1,4 @@
-/* exported */ class Schema {
+/** @public */ class Schema {
     /**
      * Loads schema from given path.
      * 
@@ -90,6 +90,9 @@
      */
     get shadow() { return this.#shadow.data; }
 
+    /**
+     * @private
+     */
     get _shadow() { return this.#shadow; }
 }
 

@@ -1,4 +1,4 @@
-class Trace {
+/** @private */ class Trace {
     /* const */ #map;
 
     /**

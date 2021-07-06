@@ -3,6 +3,8 @@
  * that it will give error when no value was given to a parameter.
  * 
  * @param {String} name (Required) Name of the parameter
+ * 
+ * @private
  */
 function required(name = required('name')) {
     throw error.PARAMETER_is_required(name);
@@ -14,6 +16,8 @@ function required(name = required('name')) {
  * 
  * @param {Object} object (Required) Object whose type is to be checked
  * @param {String} type (Required) Expected type
+ * 
+ * @private
  */
 function checkType(
     object = required('object'),

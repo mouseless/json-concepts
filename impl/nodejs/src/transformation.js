@@ -1,4 +1,4 @@
-/* exported */ class Transformation {
+/** @public */ class Transformation {
     /**
      * Loads transformation from given path.
      * 
@@ -88,6 +88,9 @@
         );
     }
 
+    /**
+     * @private
+     */
     _build() {
         for (const concept in this.#definition) {
             if (!this.#target.has(concept)) {
@@ -114,6 +117,8 @@
      * @param {Object} context 
      * 
      * @returns {Object}
+     * 
+     * @private
      */
     _transform(schema, target, context = {}) {
         if (target.hasOnlyVariableLeafNode()) {

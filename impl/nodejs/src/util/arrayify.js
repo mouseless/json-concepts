@@ -7,12 +7,14 @@
  * @param {String} key (Required) Key of data to pull
  * 
  * @returns {Array.<Object>} Data at source[key] as an array
+ * 
+ * @private
  */
 function pull(
     source = required('source'),
     key = required('key')
 ) {
-    if (!source.hasOwnProperty(key)) {
+    if (!Object.prototype.hasOwnProperty.call(source, key)) {
         return [];
     }
 
@@ -32,13 +34,15 @@ function pull(
  * @param {Object} source (Required) The object to push data to
  * @param {String} key (Required) Key of data to be pushed
  * @param {Object} value (Required) The data to be pushed
+ * 
+ * @private
  */
 function push(
     source = required('source'),
     key = required('key'),
     value = required('value')
 ) {
-    if (!source.hasOwnProperty(key)) {
+    if (!Object.prototype.hasOwnProperty.call(source, key)) {
         source[key] = value;
     } else {
         if (!Array.isArray(source[key])) {
@@ -56,6 +60,8 @@ function push(
  * @param {*} value Any value to calculate its dimensions
  * 
  * @returns {Number} Number of dimensions
+ * 
+ * @private
  */
 function dimensions(value = null) {
     let result;
@@ -80,6 +86,8 @@ function dimensions(value = null) {
  * @param {*} value Any value to make a n dimensional array
  * 
  * @returns {Array} An n dimensional array
+ * 
+ * @private
  */
 function make(
     dimensions = 0,
@@ -102,6 +110,8 @@ function make(
  * @param {Array} array 
  * @param {Array.<Number>|Number} indices 
  * @param {*} value 
+ * 
+ * @private
  */
 function set(
     array = required('array'),
@@ -129,6 +139,8 @@ function set(
  * @callback eachAction
  * @param {*} item An item in n dimensional array
  * @param {Array.<Number>} indices Indices of this item
+ * 
+ * @private
  */
 /**
  * Iterates through an n dimensional array, and perform given action for every
@@ -136,6 +148,8 @@ function set(
  * 
  * @param {*} value Value to iterate
  * @param {eachAction} action (Required) Action to perform
+ * 
+ * @private
  */
 function each(
     value,

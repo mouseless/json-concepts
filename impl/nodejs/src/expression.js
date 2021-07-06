@@ -1,6 +1,6 @@
 const { SpecialCharacters: SC, error, required } = require('./util');
 
-class Expression {
+/** @private */ class Expression {
     /**
      * Quantifier represents the definition of allowed number of instances for
      * a token.
@@ -12,6 +12,8 @@ class Expression {
      * @property {String} expression Quantifier expression
      * @property {{min:Number?, max:Number?}?} data Data representation of
      * quantifier data.
+     * 
+     * @private
      */
 
     /**
@@ -250,6 +252,8 @@ class Expression {
 
 /**
  * @enum {QuantifierData}
+ * 
+ * @private
  */
 const _quantifiers = {
     DEFAULT: _quantifier(),
@@ -279,6 +283,8 @@ const _valueSC = {
  * @param {Object} scHash
  * 
  * @returns {Array.<String>}
+ * 
+ * @private
  */
 function _scan(
     expression = required('expression'),
@@ -323,12 +329,13 @@ function _scan(
 }
 
 /**
- * 
  * @param {Array.<String>} tokens 
  * @param {Object.<string, import('./types').TypeData>} types
  * @param {String} expression
  * 
  * @returns {import('./types').TypeData}
+ * 
+ * @private
  */
 function _parseType(
     tokens = required('tokens'),
@@ -355,6 +362,8 @@ function _parseType(
  * @param {Array.<String>} tokens 
  * 
  * @returns {QuantifierData}
+ * 
+ * @private
  */
 function _parseQuantifier(tokens) {
     let token = tokens.shift();
@@ -412,6 +421,8 @@ function _parseQuantifier(tokens) {
  * @param {Number?} max 
  * 
  * @returns {QuantifierData}
+ * 
+ * @private
  */
 function _quantifier(min, max, expression) {
     if (min == null && max == null) {

@@ -1,4 +1,4 @@
-/* exported */ class Concepts {
+/** @public */ class Concepts {
     /**
      * Data that represents a concept
      * 
@@ -102,6 +102,9 @@
      */
     get types() { return Object.values(this.#types); }
 
+    /**
+     * @private
+     */
     get _shadow() { return this.#shadow; }
 
     /**
@@ -162,6 +165,8 @@
 
     /**
      * @param {ConceptsShadow} shadow
+     * 
+     * @private
      */
     _build(
         shadow,

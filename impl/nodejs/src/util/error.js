@@ -2,6 +2,8 @@
  * Names of errors to be thrown from this module.
  * 
  * @enum {String}
+ * 
+ * @private
  */
 const Names = {
     /** Schema validation errors */
@@ -12,6 +14,8 @@ const Names = {
 
 /**
  * Reason messages for invalid concepts.
+ * 
+ * @private
  */
 const InvalidConceptsReasons = {
     LITERAL_cannot_have_QUANTIFIER:
@@ -72,6 +76,8 @@ const InvalidConceptsReasons = {
 
 /**
  * Reason messages for invalid schemas.
+ * 
+ * @private
  */
 const InvalidSchemaReasons = {
     CONCEPT_is_missing: CONCEPT => `'${CONCEPT}' is missing`,
@@ -104,9 +110,13 @@ const InvalidSchemaReasons = {
  * @param {String} concepts Name of concepts
  * 
  * @returns {String} Reason message
+ * 
+ * @private
  */
 /**
  * Reason message builders for invalid transformations.
+ * 
+ * @private
  */
 const InvalidTransformationReasons = {
     /**
@@ -119,6 +129,14 @@ const InvalidTransformationReasons = {
     VARIABLE_not_found: VARIABLE => CONCEPTS => `Variable named '${VARIABLE}' is not found in ${CONCEPTS} concepts`,
 };
 
+/**
+ * @param {String} message 
+ * @param {Names} name 
+ * 
+ * @returns {String}
+ * 
+ * @private
+ */
 function _error(message, name = Names.ERROR) {
     const result = new Error(message);
 
@@ -156,6 +174,8 @@ module.exports = {
      * @param {InvalidConceptsReasons}
      * 
      * @returns {String}
+     * 
+     * @private
      */
     /**
      * @param {invalidConceptsReasonCallback} REASON 
@@ -181,6 +201,8 @@ module.exports = {
      * @param {InvalidSchemaReasons}
      * 
      * @returns {String}
+     * 
+     * @private
      */
     /**
      * @param {invalidSchemaReasonCallback} REASON 
@@ -206,6 +228,8 @@ module.exports = {
      * @param {InvalidTransformationReasons} reasons Reason builder
      * 
      * @returns {invalidTransformationReasonBuilder}
+     * 
+     * @private
      */
     /**
      * @param {String} CONCEPTS 

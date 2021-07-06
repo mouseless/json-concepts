@@ -5,6 +5,8 @@
  * @param {String} name Name of the meta-data to check
  * 
  * @returns {boolean} `true` if it exists, `false` otherwise
+ * 
+ * @private
  */
 function exists(
     obj = required('obj'),
@@ -22,6 +24,8 @@ function exists(
  * deletes the meta-data after reading.
  * 
  * @returns {Object} meta-data as an object or `null` if does not exist
+ * 
+ * @private
  */
 function read(
     obj = required('obj'),
@@ -46,6 +50,8 @@ function read(
  * 
  * @param {Object} obj (Required) Object to delete meta-data from
  * @param {String} name (Required) Name of the meta-data to delete
+ * 
+ * @private
  */
 function burn(
     obj = required('obj'),
@@ -54,6 +60,13 @@ function burn(
     delete obj[_key(name)];
 }
 
+/**
+ * @param {String} name 
+ * 
+ * @returns {String}
+ * 
+ * @private
+ */
 function _key(name = required('name')) {
     return `${SC.META_DATA}${name}`;
 }

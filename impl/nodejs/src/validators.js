@@ -4,6 +4,8 @@
  * 
  * @callback validateRoot
  * @param {String} root Type to check
+ * 
+ * @private
  */
 /**
  * Checks if given value is valid according to this validator.
@@ -12,6 +14,8 @@
  * @param {Number|String|Boolean} value Value to validate
  * 
  * @returns {Boolean} `true` if valid, `false` otherwise 
+ * 
+ * @private
  */
 /**
  * Represents validator object built specifically for a defined custom type.
@@ -20,15 +24,21 @@
  * @property {String} type Base type of custom type
  * @property {validateRoot} validateRoot
  * @property {isValid} isValid
+ * 
+ * @private
  */
 
 /**
  * @callback test
  * @param {*} definition
  * @param {Number|String|Boolean} value
+ * 
+ * @private
  */
 /**
  * @type {Object.<string,{validTypes:Array.<string>,test:test}>}
+ * 
+ * @private
  */
 const _validators = {
     regex: {
@@ -67,6 +77,8 @@ const _validators = {
  * @param {Object|Array|String} definition (Required) Custom type definition
  * 
  * @returns {ValidatorObject} Validator object for given definition
+ * 
+ * @private
  */
 function createValidator(definition = required('definition')) {
     if (typeof definition === 'string') {
@@ -127,6 +139,8 @@ function createValidator(definition = required('definition')) {
 
 /**
  * @param {String} root 
+ * 
+ * @private
  */
 function _validateRoot(root) {
     for (const validation of this._validations) {
@@ -144,6 +158,8 @@ function _validateRoot(root) {
  * @param {Number|String|Boolean} value 
  * 
  * @returns {Boolean}
+ * 
+ * @private
  */
 function _isValid(value) {
     for (const validation of this._validations) {

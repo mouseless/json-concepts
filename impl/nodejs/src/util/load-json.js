@@ -2,6 +2,8 @@
  * @typedef {Object} JSONData
  * @property {String} path
  * @property {*} data
+ * 
+ * @private
  */
 
 /**
@@ -14,6 +16,8 @@
  * @param {String} relativeTo Path or URL to load file relatively to
  * 
  * @returns {Promise.<JSONData>} Path or URL of file and its data
+ * 
+ * @private
  */
 async function loadJSON(
     path = required('path'),
@@ -42,6 +46,8 @@ async function loadJSON(
  * @param {String} path (Required) Path or URL to load json from
  * 
  * @returns {Promise.<Object>} Loaded object
+ * 
+ * @private
  */
 async function loadJSONData(path = required('path')) {
     checkType(path, 'string');
@@ -69,19 +75,22 @@ async function loadJSONData(path = required('path')) {
 }
 
 /**
- * @param {*} url 
+ * @param {String} url 
  * 
- * @returns 
+ * @returns {Boolean}
+ * 
+ * @private
  */
 function _isURL(path) {
     return path.startsWith('http://') || path.startsWith('https://');
 }
 
 /**
- * 
  * @param {String} url 
  * 
  * @returns  {Promise.<Object>}
+ * 
+ * @private
  */
 async function _get(url) {
     return new Promise((resolve, reject) => {
@@ -102,6 +111,13 @@ async function _get(url) {
     });
 }
 
+/**
+ * @param {Number} statusCode 
+ * 
+ * @returns {Boolean}
+ * 
+ * @private
+ */
 function _is2xx(statusCode) {
     return statusCode / 100 === 2;
 }

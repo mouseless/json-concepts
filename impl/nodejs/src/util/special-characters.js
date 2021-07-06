@@ -2,6 +2,8 @@
  * Contains all available special characters.
  * 
  * @enum {String}
+ * 
+ * @private
  */
 const SpecialCharacters = {
     /** `$variable` */

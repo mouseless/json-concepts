@@ -354,11 +354,17 @@ class Example {
 
     }
 
+    /**
+     * @private
+     */
     _privateMethods() {
 
     }
 }
 
+/**
+ * @private
+ */
 function _privateStaticMethods() {
     
 }
@@ -370,7 +376,7 @@ function _privateStaticMethods() {
 `src/example.js`
 
 ```javascript
-/* exported */ class Example {
+/** @public */ class Example {
 
 }
 
@@ -394,7 +400,7 @@ module.exports = {
 `src/example.js`
 
 ```javascript
-class Example {
+/** @private */ class Example {
 
 }
 

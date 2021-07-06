@@ -1,4 +1,4 @@
-class ConceptsShadow {
+/** @private */ class ConceptsShadow {
     /* const */ #expression;
     /* const */ #dimensions;
     /* const */ #variable;
@@ -399,6 +399,8 @@ class ConceptsShadow {
 
     /**
      * @returns {ConceptsShadow}
+     * 
+     * @private
      */
     _asReference() {
         this.#referring = true;
@@ -410,6 +412,8 @@ class ConceptsShadow {
      * @param {String} name
      * 
      * @returns {import('./concepts').VariablesData}
+     * 
+     * @private
      */
     _variables(
         name = required('name'),

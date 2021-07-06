@@ -1,4 +1,4 @@
-class Query {
+/** @private */ class Query {
     /* const */ #definition;
 
     /**
@@ -54,6 +54,8 @@ class Query {
      * @callback executeCallback
      * @param {SchemaShadow_} childSchema Child schema found in given schema
      * @param {Object} variableContext Projected variable context 
+     * 
+     * @private
      */
     /**
      * Finds list of schemas and projects them into a variable context for the
@@ -79,6 +81,8 @@ class Query {
      * @param {SchemaShadow_} schema 
      * 
      * @returns {Array.<SchemaShadow_>}
+     * 
+     * @private
      */
     _from(schema) {
         return schema.getSchemas(this.#definition.from);
@@ -88,6 +92,8 @@ class Query {
      * @param {SchemaShadow_} schema 
      * 
      * @returns {Object}
+     * 
+     * @private
      */
     _select(schema) {
         const projection = {};

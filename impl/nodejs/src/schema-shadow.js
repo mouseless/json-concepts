@@ -1,4 +1,4 @@
-class SchemaShadow {
+/** @private */ class SchemaShadow {
     /* const */ #conceptsShadow;
     /* const */ #name;
     /* const */ #variables;
@@ -113,6 +113,8 @@ class SchemaShadow {
      * @param {ConceptsShadow_} conceptsShadow 
      * @param {Object} definition
      * @param {Array.<Number>} indices
+     * 
+     * @private
      */
     _build(
         conceptsShadow = required('conceptsShadow'),
