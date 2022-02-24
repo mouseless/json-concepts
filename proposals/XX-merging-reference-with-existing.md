@@ -5,7 +5,7 @@
     "$parameters*": {
         "name": "$name",
         "in": "$in:parameterPosition",
-        "...": "#parameterLike"
+        "...": [ "#parameterLike" ]
     },
     "#parameterLike": {
         "required?": "$required:boolean",
