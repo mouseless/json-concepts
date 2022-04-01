@@ -16,6 +16,8 @@ describe('specs/concepts/explicit-concepts', function () {
         schema.shadow.class[0].method[0].name.should.be.equal('logout');
     });
 
+    it('should not give error when concept does not exist, 09:30-10:30 should be able to be valid');
+
     it('should give error when concept does not exist', function () {
         const concepts = new Concepts({
             '$class*': {
