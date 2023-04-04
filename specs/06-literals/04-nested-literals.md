@@ -5,7 +5,7 @@ literals nested under `response` literal.
 
 `CONCEPTS: 'nested.concepts.json'`
 
-```json
+```json name="nested.concepts.json"
 {
     "$service+": {
         "response": {
@@ -20,7 +20,7 @@ Concepts shadow reflects this hierarchy as it appears in concepts definition;
 
 `CONCEPTS SHADOW`
 
-```json
+```json name="nested.concepts-shadow.json"
 {
     "concept": {
         "name": "service",
@@ -46,7 +46,7 @@ Below is a valid schema and its shadow;
 
 `SCHEMA: 'text.nested.json'`
 
-```json
+```json name="text.nested.json"
 {
     "sayHello": {
         "response": {
@@ -63,7 +63,7 @@ concept.
 
 `SCHEMA SHADOW`
 
-```json
+```json name="text.nested-shadow.json"
 {
     "service": [
         {

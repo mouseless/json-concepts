@@ -1,37 +1,23 @@
 const { Concepts } = require('../../..');
 const { error } = require('../../../src/util');
 const { should } = require('chai');
+const { readTestCase } = require('../../lib');
 
 should();
 
 describe('specs/arrays/declaring-an-array', function () {
-    it('should make variable one dimensional', function () {
-        const concepts = new Concepts({
-            "$service+": {
-                "tags?": ["$tags"]
-            }
-        });
+    const from = (path) => readTestCase(this, path);
 
-        concepts.shadow.should.deep.equal({
-            "concept": {
-                "name": "service",
-                "quantifier": { "min": 1 },
-                "literal": {
-                    "name": "tags",
-                    "quantifier": { "min": 0, "max": 1 },
-                    "variable": {
-                        "name": "tags",
-                        "dimensions": 1
-                    }
-                }
-            }
-        });
+    it('should make variable one dimensional', function () {
+        const concepts = new Concepts(from('service.concepts.json'));
+
+        concepts.shadow.should.deep.equal(from('service.concepts-shadow.json'));
     });
 
     it('should give error when more than one item exists in array definition', function () {
         (() => new Concepts({
-            "$service+": {
-                "tags?": ["$tags", "not allowed"]
+            '$service+': {
+                'tags?': ['$tags', 'not allowed']
             }
         })).should.throw(
             error.Concepts_definition_is_not_valid__REASON(
@@ -44,8 +30,8 @@ describe('specs/arrays/declaring-an-array', function () {
 
     it('should expect variable inside an array', function () {
         (() => new Concepts({
-            "$service+": {
-                "tags?": ["tags"]
+            '$service+': {
+                'tags?': ['tags']
             }
         })).should.throw(
             error.Concepts_definition_is_not_valid__REASON(
@@ -56,71 +42,35 @@ describe('specs/arrays/declaring-an-array', function () {
         );
     });
 
-    describe('arrays of concepts', function () {
-        it('should make variable one dimensional', function () {
-            const concepts = new Concepts({
-                "$service+": {
-                    "$parameter*": ["$types"]
-                }
-            });
+    describe('arrays', function () {
+        const from = (path) => readTestCase(this, path);
 
-            concepts.shadow.should.deep.equal({
-                "concept": {
-                    "name": "service",
-                    "quantifier": { "min": 1 },
-                    "concept": {
-                        "name": "parameter",
-                        "quantifier": { "min": 0 },
-                        "variable": {
-                            "name": "types",
-                            "dimensions": 1
-                        }
-                    }
-                }
-            });
+        it('should make variable one dimensional', function () {
+            const concepts = new Concepts(from('service.concepts.json'));
+
+            concepts.shadow.should.deep.equal(from('service.concepts-shadow.json'));
         });
     });
 
     describe('schemas', function () {
+        const from = (path) => readTestCase(this, path);
+
         it('should allow arrays as values', function () {
-            const concepts = new Concepts({
-                "$service+": {
-                    "$parameter*": ["$types"],
-                    "tags?": ["$tags"]
-                }
-            });
+            const concepts = new Concepts(from('service.concepts.json'));
 
-            const schema = concepts.create({
-                "sayHello": {
-                    "name": ["string", "text"],
-                    "tags": ["readonly", "friendly"]
-                }
-            });
+            const schema = concepts.create(from('greeting.service.json'));
 
-            schema.shadow.should.deep.equal({
-                "service": [
-                    {
-                        "name": "sayHello",
-                        "parameter": [
-                            {
-                                "name": "name",
-                                "types": ["string", "text"]
-                            }
-                        ],
-                        "tags": ["readonly", "friendly"]
-                    }
-                ]
-            });
+            schema.shadow.should.deep.equal(from('greeting.service-shadow.json'));
         });
 
         it('should give error when value has more dimensions than definition', function () {
             const concepts = new Concepts({
-                "zero?": "$zero",
-                "one?": ["$one"]
+                'zero?': '$zero',
+                'one?': ['$one']
             });
 
             (() => concepts.validate({
-                "zero": ["not valid"]
+                'zero': ['not valid']
             })).should.throw(
                 error.Schema_definition_is_not_valid__REASON(
                     because => because.VARIABLE_is_not_an_array(
@@ -130,7 +80,7 @@ describe('specs/arrays/declaring-an-array', function () {
             );
 
             (() => concepts.validate({
-                "one": [["not valid"]]
+                'one': [['not valid']]
             })).should.throw(
                 error.Schema_definition_is_not_valid__REASON(
                     because => because.VARIABLE_expects_at_most_EXPECTED_dimensional_array__but_got_ACTUAL(
@@ -141,114 +91,60 @@ describe('specs/arrays/declaring-an-array', function () {
         });
     });
 
-    describe('single item', function () {
+    describe('single-item', function () {
+        const from = (path) => readTestCase(this, path);
+
         it('should allow zero dimensions, but shadow should have it in array', function () {
-            const concepts = new Concepts({
-                "$service+": {
-                    "$parameter*": ["$types"],
-                    "tags?": ["$tags"]
-                }
-            });
+            const concepts = new Concepts(from('../schemas/service.concepts.json'));
 
-            const schema = concepts.create({
-                "sayHello": {
-                    "name": "string",
-                    "tags": "readonly"
-                }
-            });
+            const schema = concepts.create(from('greeting.service.json'));
 
-            schema.shadow.should.deep.equal({
-                "service": [
-                    {
-                        "name": "sayHello",
-                        "parameter": [
-                            {
-                                "name": "name",
-                                "types": ["string"]
-                            }
-                        ],
-                        "tags": ["readonly"]
-                    }
-                ]
-            });
+            schema.shadow.should.deep.equal(from('greeting.service-shadow.json'));
         });
 
         it('should allow null, treat it as an empty array', function () {
-            const concepts = new Concepts({
-                "$service+": {
-                    "$parameter*": ["$types"],
-                    "tags?": ["$tags"]
-                }
-            });
+            const concepts = new Concepts(from('../schemas/service.concepts.json'));
 
             const schema = concepts.create({
-                "sayHello": {
-                    "name": null,
-                    "tags": null,
+                'sayHello': {
+                    'name': null,
+                    'tags': null,
                 }
             });
 
             schema.shadow.should.deep.equal({
-                "service": [
+                'service': [
                     {
-                        "name": "sayHello",
-                        "parameter": [
+                        'name': 'sayHello',
+                        'parameter': [
                             {
-                                "name": "name",
-                                "types": []
+                                'name': 'name',
+                                'types': []
                             }
                         ],
-                        "tags": []
+                        'tags': []
                     }
                 ]
             });
         });
     });
 
-    describe('multi-dimensional array', function () {
+    describe('multi-dimensional', function () {
+        const from = (path) => readTestCase(this, path);
+
         it('should make variable a multi-dimensional array', function () {
-            const concepts = new Concepts({
-                "$matrix*": [["$value"]]
-            });
+            const concepts = new Concepts(from('matrix.concepts.json'));
 
-            concepts.shadow.should.deep.equal({
-                "concept": {
-                    "name": "matrix",
-                    "quantifier": { "min": 0 },
-                    "variable": {
-                        "name": "value",
-                        "dimensions": 2
-                    }
-                }
-            });
+            concepts.shadow.should.deep.equal(from('matrix.concepts-shadow.json'));
 
-            const schema = concepts.create({
-                "matrix-a": [[1, 2, 3], [4, 5, 6]],
-                "matrix-b": [1, 2, 3],
-                "matrix-c": 1
-            });
+            const schema = concepts.create(from('sample.matrix.json'));
 
-            schema.shadow.should.deep.equal({
-                "matrix": [
-                    {
-                        "name": "matrix-a",
-                        "value": [[1, 2, 3], [4, 5, 6]]
-                    },
-                    {
-                        "name": "matrix-b",
-                        "value": [[1, 2, 3]]
-                    },
-                    {
-                        "name": "matrix-c",
-                        "value": [[1]]
-                    }
-                ]
-            });
+            schema.shadow.should.deep.equal(from('sample.matrix-shadow.json'));
         });
 
         it('should give error when more than one item exists in array definition', function () {
             (() => new Concepts({
-                "$matrix*": [["$value", "not allowed"]]
+                '$matrix*': [['$value', 'not allowed']]
             })).should.throw(
                 error.Concepts_definition_is_not_valid__REASON(
                     because => because.KEY_array_should_have_1_item__but_got_COUNT(
@@ -258,7 +154,7 @@ describe('specs/arrays/declaring-an-array', function () {
             );
 
             (() => new Concepts({
-                "$matrix*": [["$value"], ["not allowed"]]
+                '$matrix*': [['$value'], ['not allowed']]
             })).should.throw(
                 error.Concepts_definition_is_not_valid__REASON(
                     because => because.KEY_array_should_have_1_item__but_got_COUNT(
@@ -270,11 +166,11 @@ describe('specs/arrays/declaring-an-array', function () {
 
         it('should give error when value has more dimensions than definition', function () {
             const concepts = new Concepts({
-                "$matrix*": [["$value"]]
+                '$matrix*': [['$value']]
             });
 
             (() => concepts.validate({
-                "matrix": [[[3]]]
+                'matrix': [[[3]]]
             })).should.throw(
                 error.Schema_definition_is_not_valid__REASON(
                     because => because.VARIABLE_expects_at_most_EXPECTED_dimensional_array__but_got_ACTUAL(
@@ -286,30 +182,30 @@ describe('specs/arrays/declaring-an-array', function () {
 
         it('should not allow objects in arrays', function () {
             const concepts = new Concepts({
-                "explicit?": ["$explicit:any"],
-                "implicit?": ["$implicit"]
+                'explicit?': ['$explicit:any'],
+                'implicit?': ['$implicit']
             });
 
             (() => concepts.validate({
-                "explicit": [
-                    { "is": "invalid" }
+                'explicit': [
+                    { 'is': 'invalid' }
                 ]
             })).should.throw(
                 error.Schema_definition_is_not_valid__REASON(
                     because => because.Object_not_expected(
-                        { "is": "invalid" }
+                        { 'is': 'invalid' }
                     )
                 ).message
             );
 
             (() => concepts.validate({
-                "implicit": [
-                    { "is": "invalid" }
+                'implicit': [
+                    { 'is': 'invalid' }
                 ]
             })).should.throw(
                 error.Schema_definition_is_not_valid__REASON(
                     because => because.Object_not_expected(
-                        { "is": "invalid" }
+                        { 'is': 'invalid' }
                     )
                 ).message
             );

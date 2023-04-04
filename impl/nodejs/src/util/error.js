@@ -2,22 +2,26 @@
  * Names of errors to be thrown from this module.
  * 
  * @enum {String}
+ * 
+ * @private
  */
 const Names = {
     /** Schema validation errors */
     SCHEMA_ERROR: 'SchemaError',
     /** Other errors */
     ERROR: 'Error'
-}
+};
 
 /**
  * Reason messages for invalid concepts.
+ * 
+ * @private
  */
 const InvalidConceptsReasons = {
     LITERAL_cannot_have_QUANTIFIER:
         (LITERAL, QUANTIFIER) => `'${LITERAL}' cannot have '${QUANTIFIER}' quantifier`,
     Cannot_declare_VARIABLE_more_than_once:
-        (VARIABLE) => `Cannot declare ${VARIABLE} more than once`,
+        (VARIABLE) => `Cannot declare '${SC.VARIABLE}${VARIABLE}' more than once`,
     CONCEPT_cannot_declare_VARIABLE_more_than_once:
         (CONCEPT, VARIABLE) => CONCEPT == null
             ? InvalidConceptsReasons.Cannot_declare_VARIABLE_more_than_once(VARIABLE)
@@ -38,7 +42,7 @@ const InvalidConceptsReasons = {
         (EXPRESSION) => `Cannot create a validator from '${EXPRESSION}'`,
     TYPE_cannot_inherit_from_BASE__it_would_cause_a_circular_dependency:
         (TYPE, BASE) => `'${TYPE}' cannot inherit from '${BASE}', it would ` +
-            `cause a circular dependency`,
+            'cause a circular dependency',
     CONCEPT_cannot_be_TYPE__only_string_allowed:
         (CONCEPT, TYPE) => `'${CONCEPT}' cannot be '${TYPE}', only string is allowed`,
     CONCEPT_cannot_be_TYPE__only_string_allowed_but_TYPE_is_ROOT:
@@ -72,6 +76,8 @@ const InvalidConceptsReasons = {
 
 /**
  * Reason messages for invalid schemas.
+ * 
+ * @private
  */
 const InvalidSchemaReasons = {
     CONCEPT_is_missing: CONCEPT => `'${CONCEPT}' is missing`,
@@ -95,7 +101,7 @@ const InvalidSchemaReasons = {
         (EXPRESSION, CONCEPT) => CONCEPT
             ? InvalidSchemaReasons.EXPRESSION_could_not_be_parsed(EXPRESSION)
             : `'${EXPRESSION}' could not be parsed, '${CONCEPT}' does not exist`
-}
+};
 
 /**
  * Builds reason message for given concepts name.
@@ -104,9 +110,13 @@ const InvalidSchemaReasons = {
  * @param {String} concepts Name of concepts
  * 
  * @returns {String} Reason message
+ * 
+ * @private
  */
 /**
  * Reason message builders for invalid transformations.
+ * 
+ * @private
  */
 const InvalidTransformationReasons = {
     /**
@@ -117,8 +127,16 @@ const InvalidTransformationReasons = {
      * @returns {invalidTransformationReasonBuilder}
      */
     VARIABLE_not_found: VARIABLE => CONCEPTS => `Variable named '${VARIABLE}' is not found in ${CONCEPTS} concepts`,
-}
+};
 
+/**
+ * @param {String} message 
+ * @param {Names} name 
+ * 
+ * @returns {String}
+ * 
+ * @private
+ */
 function _error(message, name = Names.ERROR) {
     const result = new Error(message);
 
@@ -156,6 +174,8 @@ module.exports = {
      * @param {InvalidConceptsReasons}
      * 
      * @returns {String}
+     * 
+     * @private
      */
     /**
      * @param {invalidConceptsReasonCallback} REASON 
@@ -181,6 +201,8 @@ module.exports = {
      * @param {InvalidSchemaReasons}
      * 
      * @returns {String}
+     * 
+     * @private
      */
     /**
      * @param {invalidSchemaReasonCallback} REASON 
@@ -206,6 +228,8 @@ module.exports = {
      * @param {InvalidTransformationReasons} reasons Reason builder
      * 
      * @returns {invalidTransformationReasonBuilder}
+     * 
+     * @private
      */
     /**
      * @param {String} CONCEPTS 

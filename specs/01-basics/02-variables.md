@@ -6,7 +6,7 @@ is on the **right-hand** side, an expression is called a **variable**. Below,
 
 `CONCEPTS: service.concepts.json`
 
-```json
+```json name="service.concepts.json"
 {
     "sayHello": {
         "name": "$type"
@@ -16,9 +16,9 @@ is on the **right-hand** side, an expression is called a **variable**. Below,
 
 Using above concepts file, now both of below schemas are valid.
 
-`SCHEMA 1: greeting.service.json`
+`SCHEMA: greeting-1.service.json`
 
-```json
+```json name="greeting-1.service.json"
 {
     "sayHello": {
         "name": "string"
@@ -26,9 +26,9 @@ Using above concepts file, now both of below schemas are valid.
 }
 ```
 
-`SCHEMA 2: greeting.service.json`
+`SCHEMA: greeting-2.service.json`
 
-```json
+```json name="greeting-2.service.json"
 {
     "sayHello": {
         "name": "text"

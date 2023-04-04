@@ -1,48 +1,23 @@
 const { Concepts } = require('../../..');
 const { error } = require('../../../src/util');
 const { should } = require('chai');
+const { dimensions } = require('../../../src/util/arrayify');
+const { readTestCase } = require('../../lib');
 
 should();
 
 describe('specs/arrays/object-arrays', function () {
-    it('should allow object arrays for literals', function () {
-        const concepts = new Concepts({
-            "$service+": {
-                "parameters?": [{
-                    "name": "$pName",
-                    "type": "$pType"
-                }]
-            }
-        });
+    const from = (path) => readTestCase(this, path);
 
-        concepts.shadow.should.deep.equal({
-            "concept": {
-                "name": "service",
-                "quantifier": { "min": 1 },
-                "literal": {
-                    "name": "parameters",
-                    "quantifier": { "min": 0, "max": 1 },
-                    "variable": {
-                        "dimensions": 1,
-                        "literal": [
-                            {
-                                "name": "name",
-                                "variable": { "name": "pName" }
-                            },
-                            {
-                                "name": "type",
-                                "variable": { "name": "pType" }
-                            }
-                        ]
-                    }
-                }
-            }
-        });
+    it('should allow object arrays for literals', function () {
+        const concepts = new Concepts(from('service.concepts.json'));
+
+        concepts.shadow.should.deep.equal(from('service.concepts-shadow.json'));
     });
 
     it('should give error when array does not have a definition', function () {
         (() => new Concepts({
-            "array": []
+            'array': []
         })).should.throw(
             error.Concepts_definition_is_not_valid__REASON(
                 because => because.KEY_array_should_have_1_item__but_got_COUNT(
@@ -52,68 +27,27 @@ describe('specs/arrays/object-arrays', function () {
         );
 
         (() => new Concepts({
-            "array": [{}]
+            'array': [{}]
         })).should.not.throw();
     });
 
     describe('schema', function () {
+        const from = (path) => readTestCase(this, path);
+
         it('should validate object arrays', function () {
-            const concepts = new Concepts({
-                "$service+": {
-                    "parameters?": [{
-                        "name": "$pName",
-                        "type": "$pType"
-                    }]
-                }
-            });
+            const concepts = new Concepts(from('../service.concepts.json'));
 
-            const schema = concepts.create({
-                "sayHello": {
-                    "parameters": [
-                        {
-                            "name": "name",
-                            "type": "string"
-                        },
-                        {
-                            "name": "surname",
-                            "type": "string"
-                        }
-                    ]
-                }
-            });
+            const schema = concepts.create(from('greeting.service.json'));
 
-            schema.shadow.should.deep.equal({
-                "service": [
-                    {
-                        "name": "sayHello",
-                        "parameters": [
-                            {
-                                "pName": "name",
-                                "pType": "string"
-                            },
-                            {
-                                "pName": "surname",
-                                "pType": "string"
-                            }
-                        ]
-                    }
-                ]
-            });
+            schema.shadow.should.deep.equal(from('greeting.service-shadow.json'));
         });
 
         it('should validate every item in object array', function () {
-            const concepts = new Concepts({
-                "$service+": {
-                    "parameters?": [{
-                        "name": "$name",
-                        "type?": "$type"
-                    }]
-                }
-            });
+            const concepts = new Concepts(from('../service.concepts.json'));
 
             (() => concepts.validate({
-                "sayHello": {
-                    "parameters": [{}]
+                'sayHello': {
+                    'parameters': [{}]
                 }
             })).should.throw(
                 error.Schema_definition_is_not_valid__REASON(
@@ -122,10 +56,10 @@ describe('specs/arrays/object-arrays', function () {
             );
 
             (() => concepts.validate({
-                "sayHello": {
-                    "parameters": [
-                        { "name": "string" },
-                        { "type": "string" }
+                'sayHello': {
+                    'parameters': [
+                        { 'name': 'string', 'type': 'string' },
+                        { 'type': 'string' }
                     ]
                 }
             })).should.throw(
@@ -137,11 +71,11 @@ describe('specs/arrays/object-arrays', function () {
 
         it('should not accept arrays when object array is not expected', function () {
             const concepts = new Concepts({
-                "zero": { "value": "$value" }
+                'zero': { 'value': '$value' }
             });
 
             (() => concepts.validate({
-                "zero": [{}]
+                'zero': [{}]
             })).should.throw(
                 error.Schema_definition_is_not_valid__REASON(
                     because => because.VARIABLE_is_not_an_array(
@@ -153,17 +87,17 @@ describe('specs/arrays/object-arrays', function () {
 
         it('should treat the literal that holds the object array as a schema node', function () {
             const concepts = new Concepts({
-                "$service+": {
-                    "parameters?": [{
-                        "name": "$pName"
+                '$service+': {
+                    'parameters?': [{
+                        'name': '$pName'
                     }]
                 }
             });
 
             const schema = concepts.create({
-                "sayHello": {
-                    "parameters": [{
-                        "name": "name"
+                'sayHello': {
+                    'parameters': [{
+                        'name': 'name'
                     }]
                 }
             });
@@ -172,140 +106,85 @@ describe('specs/arrays/object-arrays', function () {
             const parameters = sayHello.getSchemas('parameters')[0];
 
             parameters.data.should.deep.equal({
-                "pName": "name"
+                'pName': 'name'
             });
         });
     });
 
-    describe('concepts vs object arrays', function () {
+    describe('concepts-vs-arrays', function () {
+        const from = (path) => readTestCase(this, path);
+
         it('should cast the same schema shadow', function () {
-            const concepts = new Concepts({
-                "$service+": {
-                    "$parameter*": "$type"
-                }
-            });
+            const concepts = new Concepts(from('concepts/service.concepts.json'));
+            const schema1 = concepts.create(from('concepts/greeting.service.json'));
 
-            const schema1 = concepts.create({
-                "sayHello": {
-                    "name": "string",
-                    "surname": "string"
-                }
-            });
+            const objectArray = new Concepts(from('arrays/service.concepts.json'));
+            const schema2 = objectArray.create(from('arrays/greeting.service.json'));
 
-            const objectArray = new Concepts({
-                "$service+": {
-                    "parameter?": [{
-                        "name": "$name",
-                        "type": "$type"
-                    }]
-                }
-            });
-
-            const schema2 = objectArray.create({
-                "sayHello": {
-                    "parameter": [
-                        {
-                            "name": "name",
-                            "type": "string"
-                        },
-                        {
-                            "name": "surname",
-                            "type": "string"
-                        }
-                    ]
-                }
-            });
-
-            schema1.shadow.should.deep.equal(schema2.shadow);
+            schema1.shadow.should.deep.equal(from('greeting.service-shadow.json'));
+            schema2.shadow.should.deep.equal(from('greeting.service-shadow.json'));
         });
     });
 
-    describe('concepts and object arrays', function () {
+    describe('concepts-and-arrays', function () {
+        const from = (path) => readTestCase(this, path);
+
         it('should allow concepts under object arrays', function () {
-            (() => new Concepts({
-                "array?": [{
-                    "$field*": "$value"
-                }]
-            })).should.not.throw();
+            (() => new Concepts(from('sample-1.concepts.json')))
+                .should.not.throw();
         });
 
         it('should allow object arrays under concepts', function () {
-            (() => new Concepts({
-                "$data*": [{
-                    "name": "$name",
-                    "value": "$value"
-                }]
-            })).should.not.throw();
+            (() => new Concepts(from('sample-2.concepts.json')))
+                .should.not.throw();
         });
 
         it('should concepts under object arrays under concepts', function () {
-            (() => new Concepts({
-                "$data*": [{
-                    "$field*": "$value"
-                }]
-            })).should.not.throw();
+            (() => new Concepts(from('sample-3.concepts.json')))
+                .should.not.throw();
         });
     });
 
-    describe('multi-dimensional array', function () {
-        it('should allow more than one dimensions', function () {
-            const concepts = new Concepts({
-                "matrix": [[{ "value": "$value" }]]
-            });
+    describe('multi-dimensional', function () {
+        const from = (path) => readTestCase(this, path);
 
-            const schema = concepts.create({
-                "matrix": [[{ "value": 1 }, { "value": 2 }]]
-            });
+        it('should allow more than one dimensions', function () {
+            const concepts = new Concepts(from('matrix.concepts.json'));
+
+            const schema = concepts.create(from('two.matrix.json'));
 
             schema.shadow.should.deep.equal({
-                "matrix": [[
-                    { "value": 1 },
-                    { "value": 2 }
+                'matrix': [[
+                    { 'value': 1 },
+                    { 'value': 2 }
                 ]]
             });
         });
 
         it('should allow less dimensions in schema', function () {
-            const concepts = new Concepts({
-                "matrix": [[{ "value": "$value" }]]
-            });
+            const concepts = new Concepts(from('matrix.concepts.json'));
 
-            const schema1 = concepts.create({
-                "matrix": [{ "value": 1 }, { "value": 2 }]
-            });
+            const two = concepts.create(from('two.matrix.json'));
+            dimensions(two.shadow.matrix).should.equal(2);
 
-            schema1.shadow.should.deep.equal({
-                "matrix": [[
-                    { "value": 1 },
-                    { "value": 2 }
-                ]]
-            });
+            const one = concepts.create(from('one.matrix.json'));
+            dimensions(one.shadow.matrix).should.equal(2);
 
-            const schema2 = concepts.create({
-                "matrix": { "value": 1 }
-            });
-
-            schema2.shadow.should.deep.equal({
-                "matrix": [[
-                    { "value": 1 }
-                ]]
-            });
+            const zero = concepts.create(from('zero.matrix.json'));
+            dimensions(zero.shadow.matrix).should.equal(2);
         });
 
         it('should not allow more dimensions than expected', function () {
-            const concepts = new Concepts({
-                "matrix": [[{ "value": "$value" }]]
-            });
+            const concepts = new Concepts(from('matrix.concepts.json'));
 
-            (() => concepts.create({
-                "matrix": [[[{ "value": 1 }]]]
-            })).should.throw(
-                error.Schema_definition_is_not_valid__REASON(
-                    because => because.VARIABLE_expects_at_most_EXPECTED_dimensional_array__but_got_ACTUAL(
-                        'matrix', 2, 3
-                    )
-                ).message
-            );
+            (() => concepts.create(from('invalid.matrix.json')))
+                .should.throw(
+                    error.Schema_definition_is_not_valid__REASON(
+                        because => because.VARIABLE_expects_at_most_EXPECTED_dimensional_array__but_got_ACTUAL(
+                            'matrix', 2, 3
+                        )
+                    ).message
+                );
         });
     });
 });

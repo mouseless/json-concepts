@@ -4,7 +4,7 @@ Object arrays can be defined using below syntax;
 
 `CONCEPTS: service.concepts.json`
 
-```json
+```json name="service.concepts.json"
 {
     "$service+": {
         "parameters?": [ {
@@ -20,7 +20,7 @@ objects with `name` and `type` keys.
 
 `CONCEPTS SHADOW`
 
-```json
+```json name="service.concepts-shadow.json"
 {
     "concept": {
         "name": "service",
@@ -56,7 +56,7 @@ A valid schema for previous concepts definition is as follows;
 
 `SCHEMA: greeting.service.json`
 
-```json
+```json name="schema/greeting.service.json"
 {
     "sayHello": {
         "parameters": [
@@ -79,7 +79,7 @@ literal appear in the schema shadow;
 
 `SCHEMA SHADOW`
 
-```json
+```json name="schema/greeting.service-shadow.json"
 {
     "service": [
             {
@@ -109,7 +109,7 @@ two different concepts definition.
 
     `CONCEPTS: service.concepts.json`
 
-    ```json
+    ```json name="concepts-vs-arrays/concepts/service.concepts.json"
     {
         "$service+": {
             "$parameter*": "$type"
@@ -119,7 +119,7 @@ two different concepts definition.
 
     `SCHEMA: greeting.service.json`
 
-    ```json
+    ```json name="concepts-vs-arrays/concepts/greeting.service.json"
     {
         "sayHello": {
             "name": "string",
@@ -132,7 +132,7 @@ two different concepts definition.
 
     `CONCEPTS: service.concepts.json`
 
-    ```json
+    ```json name="concepts-vs-arrays/arrays/service.concepts.json"
     {
         "$service+": {
             "parameter?": [ {
@@ -145,7 +145,7 @@ two different concepts definition.
 
     `SCHEMA: greeting.service.json`
 
-    ```json
+    ```json name="concepts-vs-arrays/arrays/greeting.service.json"
     {
         "sayHello": {
             "parameter": [
@@ -166,7 +166,7 @@ Schema shadow is the same for both of the above schemas;
 
 `SCHEMA SHADOW`
 
-```json
+```json name="concepts-vs-arrays/greeting.service-shadow.json"
 {
     "service": [
         {
@@ -193,7 +193,7 @@ for such definitions.
 
 1. Concepts under object arrays:
 
-    ```json
+    ```json name="concepts-and-arrays/sample-1.concepts.json"
     {
         "array?": [ {
             "$field*": "$value"
@@ -203,7 +203,7 @@ for such definitions.
 
 2. Object arrays under concepts:
 
-    ```json
+    ```json name="concepts-and-arrays/sample-2.concepts.json"
     {
         "$data*": [ {
             "name": "$name",
@@ -214,7 +214,7 @@ for such definitions.
 
 3. Concepts under object arrays under concepts;
 
-    ```json
+    ```json name="concepts-and-arrays/sample-3.concepts.json"
     {
         "$data*": [ {
             "$field*": "$value"
@@ -231,15 +231,15 @@ It should support multi-dimensional array definitions. Below is an example;
 
 `CONCEPTS: matrix.concepts.json`
 
-```json
+```json name="multi-dimensional/matrix.concepts.json"
 {
     "matrix": [ [ { "value": "$value" } ] ]
 }
 ```
 
-`SCHEMA 1: two.matrix.json`
+`SCHEMA: two.matrix.json`
 
-```json
+```json name="multi-dimensional/two.matrix.json"
 {
     "matrix": [ [ { "value": 1 }, { "value": 2 } ] ]
 }
@@ -247,17 +247,17 @@ It should support multi-dimensional array definitions. Below is an example;
 
 Note that just like regular arrays, it allows less dimensions;
 
-`SCHEMA 2: one.matrix.json`
+`SCHEMA: one.matrix.json`
 
-```json
+```json name="multi-dimensional/one.matrix.json"
 {
     "matrix": [ { "value": 1 }, { "value": 2 } ]
 }
 ```
 
-`SCHEMA 2: zero.matrix.json`
+`SCHEMA: zero.matrix.json`
 
-```json
+```json name="multi-dimensional/zero.matrix.json"
 {
     "matrix": { "value": 1 }
 }
@@ -265,9 +265,9 @@ Note that just like regular arrays, it allows less dimensions;
 
 But does not allow more dimensions;
 
-`SCHEMA 3: invalid.matrix.json`
+`SCHEMA: invalid.matrix.json`
 
-```json
+```json name="multi-dimensional/invalid.matrix.json"
 {
     "matrix": [ [ [ { "value": 1 } ] ] ]
 }

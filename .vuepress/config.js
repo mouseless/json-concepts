@@ -4,7 +4,8 @@ const { create, Levels } = require('./auto-config');
 const config = create({
   "use-cases": Levels.ONE,
   "specs": Levels.TWO,
-  "roadmap": Levels.ONE
+  "roadmap": Levels.ONE,
+  "proposals": Levels.ONE
 });
 
 module.exports = {
@@ -35,7 +36,7 @@ module.exports = {
       '@vuepress/plugin-search',
       {
         locales: { '/': { placeholder: 'Search' } },
-        isSearchable: (page) => page.path !== '/' && !page.path.includes('XX-')
+        isSearchable: (page) => page.path !== '/'
       }
     ]
   ]

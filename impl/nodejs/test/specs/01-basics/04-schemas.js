@@ -4,29 +4,22 @@ const fs = require('mock-fs');
 const nock = require('nock');
 const { use, should } = require('chai');
 const chaiAsPromised = require('chai-as-promised');
+const { readTestCase } = require('../../lib');
 
 use(chaiAsPromised);
 should();
 
 describe('specs/basics/schemas', function () {
+    const from = (path) => readTestCase(this, path);
+
     after(function () {
         fs.restore();
     });
 
     it('should validate', async function () {
         fs({
-            'service.concepts.json': JSON.stringify({
-                "$service": {
-                    "$parameter": "$type",
-                    "response": "$responseType"
-                }
-            }),
-            'greeting.service.json': JSON.stringify({
-                "sayHello": {
-                    "name": "string",
-                    "response": "string"
-                }
-            })
+            'service.concepts.json': JSON.stringify(from('service.concepts.json')),
+            'greeting.service.json': JSON.stringify(from('greeting.service.json'))
         });
 
         const schema1 = await (await Concepts.load('service.concepts.json')).load('greeting.service.json');
@@ -58,15 +51,10 @@ describe('specs/basics/schemas', function () {
 
     it('should not validate if it does not conform to its concepts', async function () {
         fs({
-            'service.concepts.json': JSON.stringify({
-                "$service": {
-                    "$parameter": "$type",
-                    "response": "$responseType"
-                }
-            }),
+            'service.concepts.json': JSON.stringify(from('service.concepts.json')),
             'greeting.service.json': JSON.stringify({
-                "sayHello": {
-                    "name": "string",
+                'sayHello': {
+                    'name': 'string',
                 }
             })
         });
@@ -82,23 +70,13 @@ describe('specs/basics/schemas', function () {
             );
     });
 
-    describe('self-validating schema', function () {
+    describe('self-validating', function () {
+        const from = (path) => readTestCase(this, path);
+
         it('should validate', async function () {
             fs({
-                'service.concepts.json': JSON.stringify({
-                    "$service": {
-                        "$parameter": "$type",
-                        "response": "$responseType"
-                    }
-                }),
-                'greeting.service.json': JSON.stringify({
-                    "sayHello": {
-                        "name": "string",
-                        "response": "string"
-                    },
-
-                    "@concepts": "service.concepts.json"
-                })
+                'service.concepts.json': JSON.stringify(from('../service.concepts.json')),
+                'greeting.service.json': JSON.stringify(from('greeting.service.json'))
             });
 
             const actual = await Schema.load('greeting.service.json');
@@ -109,9 +87,9 @@ describe('specs/basics/schemas', function () {
         it('should not load if schema is not self-validating', async function () {
             fs({
                 'greeting.service.json': JSON.stringify({
-                    "sayHello": {
-                        "name": "string",
-                        "response": "string"
+                    'sayHello': {
+                        'name': 'string',
+                        'response': 'string'
                     }
                 })
             });
@@ -123,74 +101,49 @@ describe('specs/basics/schemas', function () {
         it('should use base path of schema file when loading concepts from file', async function () {
             fs({
                 'folder': {
-                    'service.concepts.json': JSON.stringify({
-                        "$service": {
-                            "$parameter": "$type",
-                            "response": "$responseType"
-                        }
-                    }),
-                    'greeting.service.json': JSON.stringify({
-                        "sayHello": {
-                            "name": "string",
-                            "response": "string"
-                        },
-
-                        "@concepts": "service.concepts.json"
-                    })
+                    'service.concepts.json': JSON.stringify(from('../service.concepts.json')),
+                    'greeting.service.json': JSON.stringify(from('greeting.service.json'))
                 }
             });
 
             await Schema.load('folder/greeting.service.json').should.not.be.rejected;
-            await Concepts.load('service.concepts.json', 'folder/greeting.service.json').should.not.be.rejected;
+            await Concepts.load('service.concepts.json', 'folder/greeting.service.json')
+                .should.not.be.rejected;
         });
 
         it('should override concepts meta data when concepts path is given explicitly', async function () {
             fs({
                 'folder': {
-                    'service.concepts.json': JSON.stringify({
-                        "$service": {
-                            "$parameter": "$type",
-                            "response": "$responseType"
-                        }
-                    }),
+                    'service.concepts.json': JSON.stringify(from('../service.concepts.json')),
                     'greeting.service.json': JSON.stringify({
-                        "sayHello": {
-                            "name": "string",
-                            "response": "string"
+                        'sayHello': {
+                            'name': 'string',
+                            'response': 'string'
                         },
 
-                        "@concepts": "wrong.concepts.json"
+                        '@concepts': 'wrong.concepts.json'
                     })
                 }
             });
 
-            await Schema.load('folder/greeting.service.json', 'folder/service.concepts.json').should.not.be.rejected;
+            await Schema.load('folder/greeting.service.json', 'folder/service.concepts.json')
+                .should.not.be.rejected;
         });
     });
 
-    describe('referring-to-a-remote-concepts-file', function () {
+    describe('referring', function () {
+        const from = (path) => readTestCase(this, path);
+
         after(async function () {
             nock.cleanAll();
         });
 
         it('should validate', async function () {
-            nock("http://test.com")
-                .get("/service.concepts.json")
-                .reply(200, {
-                    "$service": {
-                        "$parameter": "$type",
-                        "response": "$responseType"
-                    }
-                });
+            nock('https://my-concepts.com')
+                .get('/service.concepts.json')
+                .reply(200, from('../service.concepts.json'));
             fs({
-                'greeting.service.json': JSON.stringify({
-                    "sayHello": {
-                        "name": "string",
-                        "response": "string"
-                    },
-
-                    "@concepts": "http://test.com/service.concepts.json"
-                })
+                'greeting.service.json': JSON.stringify(from('greeting.service.json'))
             });
 
             const actual = await Schema.load('greeting.service.json');

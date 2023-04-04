@@ -10,7 +10,10 @@
         "**/obj": true,
         ".vuepress/dist": true,
         ".vuepress/.cache": true,
-        ".vuepress/.temp": true
+        ".vuepress/.temp": true,
+        ".dist": true,
+        "**/package-lock.json": true,
+        "**/.nyc_output": true
     },
     "cSpell.words": [
         "AVLN",
@@ -32,6 +35,9 @@
         "collapsable",
         "jsonata",
         "jsonpath",
+        "lcov",
+        "linebreak",
+        "minami",
         "noopener",
         "noreferrer",
         "openapi",

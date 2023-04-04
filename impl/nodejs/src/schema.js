@@ -1,4 +1,4 @@
-/* exported */ class Schema {
+/** @public */ class Schema {
     /**
      * Loads schema from given path.
      * 
@@ -21,7 +21,7 @@
             concepts = metaData.read(definition, 'concepts', /* burnAfterReading */ true);
             relativeTo = path;
         } else {
-            metaData.burn(definition, 'concepts')
+            metaData.burn(definition, 'concepts');
         }
 
         if (concepts === null) {
@@ -90,6 +90,9 @@
      */
     get shadow() { return this.#shadow.data; }
 
+    /**
+     * @private
+     */
     get _shadow() { return this.#shadow; }
 }
 

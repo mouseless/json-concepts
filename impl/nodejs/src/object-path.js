@@ -5,6 +5,8 @@
  * @param {String|Array.<String>} pathOrPaths Path(s) to find
  * 
  * @returns {Array.<Object>} Found objects at path(s)
+ * 
+ * @private
  */
 function find(target, pathOrPaths) {
     /** @type {Array.<String>} */
@@ -30,6 +32,8 @@ function find(target, pathOrPaths) {
  * @param {Object} object
  * 
  * @returns {Object.<string, Object>}
+ * 
+ * @private
  */
 function _index(
     object = required('object'),
@@ -66,6 +70,8 @@ function _index(
  * @param {String} wildcard 
  * 
  * @returns {RegExp}
+ * 
+ * @private
  */
 function _regex(wildcard) {
     if (wildcard == '/') {

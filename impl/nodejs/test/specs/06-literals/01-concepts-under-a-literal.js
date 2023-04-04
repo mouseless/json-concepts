@@ -1,58 +1,17 @@
 const { Concepts } = require('../../..');
 const { should } = require('chai');
+const { readTestCase } = require('../../lib');
 
 should();
 
-describe('specs/literals/concept-under-a-literal', function () {
+describe('specs/literals/concepts-under-a-literal', function () {
+    const from = (path) => readTestCase(this, path);
+
     it('should allow concepts under literals', function () {
-        const concepts = new Concepts({
-            "$service+": {
-                "response": {
-                    "$property*": "$type"
-                }
-            }
-        });
+        const concepts = new Concepts(from('service.concepts.json'));
+        const schema = concepts.create(from('greeting.service.json'));
 
-        const schema = concepts.create({
-            "sayHello": {
-                "response": {
-                    "message": "string",
-                    "status": "number"
-                }
-            }
-        });
-
-        concepts.shadow.should.deep.equal({
-            "concept": {
-                "name": "service",
-                "quantifier": { "min": 1 },
-                "literal": {
-                    "name": "response",
-                    "concept": {
-                        "name": "property",
-                        "quantifier": { "min": 0 },
-                        "variable": { "name": "type" }
-                    }
-                }
-            }
-        });
-
-        schema.shadow.should.deep.equal({
-            "service": [
-                {
-                    "name": "sayHello",
-                    "property": [
-                        {
-                            "name": "message",
-                            "type": "string"
-                        },
-                        {
-                            "name": "status",
-                            "type": "number"
-                        }
-                    ]
-                }
-            ]
-        });
+        concepts.shadow.should.deep.equal(from('service.concepts-shadow.json'));
+        schema.shadow.should.deep.equal(from('greeting.service-shadow.json'));
     });
 });

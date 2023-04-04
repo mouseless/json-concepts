@@ -4,7 +4,7 @@ Consider below concepts definition;
 
 `CONCEPTS: class.concepts.json`
 
-```json
+```json name="class.concepts.json"
 {
     "$class*": {
         "$property*": {
@@ -23,7 +23,7 @@ In below schema definition, it is explicitly specified that `logout` is a
 
 `SCHEMA: user.class.json`
 
-```json
+```json name="user.class.json"
 {
     "user": {
         "logout:method": {
@@ -43,7 +43,7 @@ workaround this problem, concept name can be given explicitly.
 
 `CONCEPTS: service.concepts.json`
 
-```json
+```json name="resolve/service.concepts.json"
 {
     "$service+": {
         "$parameter*": "$type",
@@ -54,7 +54,9 @@ workaround this problem, concept name can be given explicitly.
 
 Below schema defines a `$parameter` named `response`;
 
-```json
+`SCHEMA: log.service.json`
+
+```json name="resolve/log.service.json"
 {
     "writeLog": {
         "response:parameter": "string"

@@ -6,7 +6,7 @@ parameters are allowed under a `$service` concept;
 
 `CONCEPTS: service.concepts.json`
 
-```json
+```json name="service.concepts.json"
 {
     "$service+": {
         "$parameter*": "$type"
@@ -18,7 +18,7 @@ Following schema is now valid;
 
 `SCHEMA: greeting.service.json`
 
-```json
+```json name="greeting.service.json"
 {
     "sayHello": { 
         "name": "string",
@@ -35,7 +35,7 @@ once. Below concepts definition is invalid;
 
 `CONCEPTS: service.concepts.json`
 
-```json
+```json name="key-literals/service.concepts.json"
 {
     "$service+": {
         "$parameter?": "$type",
@@ -54,7 +54,7 @@ zero;
 
 `CONCEPTS: service.concepts.json`
 
-```json
+```json name="concepts-shadow/service.concepts.json"
 {
     "$service+": {
         "$parameter*": "$type"
@@ -64,7 +64,7 @@ zero;
 
 `CONCEPTS SHADOW`
 
-```json
+```json name="concepts-shadow/service.concepts-shadow.json"
 {
     "concept": {
         "name": "service",
@@ -88,7 +88,7 @@ does not have a parameter, so in its shadow `parameter` is an empty array.
 
 `SCHEMA: greeting.service.json`
 
-```json
+```json name="schema-shadow/greeting.service.json"
 {
     "sayHello": {
         "name": "string",
@@ -100,7 +100,7 @@ does not have a parameter, so in its shadow `parameter` is an empty array.
 
 `SCHEMA SHADOW`
 
-```json
+```json name="schema-shadow/greeting.service-shadow.json"
 {
     "service": [
         {

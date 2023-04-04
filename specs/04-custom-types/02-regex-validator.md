@@ -7,7 +7,7 @@ pattern;
 
 `CONCEPTS: service.concepts.json`
 
-```json
+```json name="service.concepts.json"
 {
     "$service+": {
         "name": "$name:identifier"
@@ -26,7 +26,7 @@ For above concepts definition following schema is **not** valid;
 
 `SCHEMA: greeting.service.json`
 
-```json
+```json name="greeting.service.json"
 {
     "service": {
         "name": "say hello"
@@ -45,7 +45,7 @@ Following definition demonstrates a short-hand usage of `regex` validator.
 
 `CONCEPTS: service.concepts.json`
 
-```json
+```json name="short-hand/service.concepts.json"
 {
     "$service+": {
         "name": "$name:identifier"

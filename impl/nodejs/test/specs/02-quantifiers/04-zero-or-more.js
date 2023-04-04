@@ -1,104 +1,54 @@
 const { Concepts } = require('../../..');
 const { error } = require('../../../src/util');
 const { should } = require('chai');
+const { readTestCase } = require('../../lib');
 
 should();
 
 describe('specs/quantifiers/zero-or-more', function () {
+    const from = (path) => readTestCase(this, path);
+
     it('should allow a concept to have one or many instances in schema', function () {
-        const concepts = new Concepts({
-            "$service+": {
-                "$parameter*": "$type"
-            }
-        });
+        const concepts = new Concepts(from('service.concepts.json'));
 
-        (() => concepts.validate({
-            "sayHello": {
-                "name": "string",
-                "surname": "string"
-            },
-            "sayGoodbye": {}
-        })).should.not.throw();
+        (() => concepts.validate(from('greeting.service.json')))
+            .should.not.throw();
     });
 
-    describe('key literals', function () {
+    describe('key-literals', function () {
+        const from = (path) => readTestCase(this, path);
+
         it('should allow a literal to not exist', function () {
-            (() => new Concepts({
-                "$service+": {
-                    "$parameter*": "$type",
-                    "tags*": "$tags"
-                }
-            })).should.throw(
-                error.Concepts_definition_is_not_valid__REASON(
-                    because => because.LITERAL_cannot_have_QUANTIFIER(
-                        'tags', '*'
-                    )
-                ).message
-            );
+            (() => new Concepts(from('service.concepts.json')))
+                .should.throw(
+                    error.Concepts_definition_is_not_valid__REASON(
+                        because => because.LITERAL_cannot_have_QUANTIFIER(
+                            'tags', '*'
+                        )
+                    ).message
+                );
         });
     });
 
-    describe('concepts shadow', function () {
+    describe('concepts-shadow', function () {
+        const from = (path) => readTestCase(this, path);
+
         it('should have set quantifier min to zero', function () {
-            const concepts = new Concepts({
-                "$service+": {
-                    "$parameter*": "$type"
-                }
-            });
+            const concepts = new Concepts(from('service.concepts.json'));
 
-            concepts.shadow.should.deep.equal({
-                "concept": {
-                    "name": "service",
-                    "quantifier": { "min": 1 },
-                    "concept": {
-                        "name": "parameter",
-                        "quantifier": { "min": 0 },
-                        "variable": {
-                            "name": "type"
-                        }
-                    }
-                }
-            });
+            concepts.shadow.should.deep.equal(from('service.concepts-shadow.json'));
         });
     });
 
-    describe('schema shadow', function () {
+    describe('schema-shadow', function () {
+        const from = (path) => readTestCase(this, path);
+
         it('should have empty arrays instead of null values', function () {
-            const concepts = new Concepts({
-                "$service+": {
-                    "$parameter*": "$type"
-                }
-            });
+            const concepts = new Concepts(from('../concepts-shadow/service.concepts.json'));
 
-            const schema = concepts.create({
-                "sayHello": {
-                    "name": "string",
-                    "surname": "string"
-                },
-                "sayGoodbye": {}
-            });
+            const schema = concepts.create(from('greeting.service.json'));
 
-            schema.shadow.should.deep.equal({
-                "service": [
-                    {
-                        "name": "sayHello",
-                        "parameter": [
-                            {
-                                "name": "name",
-                                "type": "string"
-                            },
-                            {
-                                "name": "surname",
-                                "type": "string"
-                            }
-                        ]
-                    },
-                    {
-                        "name": "sayGoodbye",
-                        "parameter": []
-                    }
-                ]
-            });
+            schema.shadow.should.deep.equal(from('greeting.service-shadow.json'));
         });
     });
 });

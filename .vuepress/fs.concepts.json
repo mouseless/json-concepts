@@ -1,12 +1,11 @@
 {
-    "$entry*": {
+    "$entry*": "#entry",
+    "#entry": {
         "type": "$type",
-        "children?": "#entries"
-    },
-    "#entries": {
-        "$entry*": {
-            "type": "$type",
-            "children?": "#entries"
+        "path": "$path",
+        "parent?": "#entry",
+        "children?": {
+            "$entry*": "#entry"
         }
     }
 }

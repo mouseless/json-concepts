@@ -4,7 +4,7 @@ Literals are allowed to be at the root of a concepts definition;
 
 `CONCEPTS: service.concepts.json`
 
-```json
+```json name="service.concepts.json"
 {
     "services?": {
         "$service+": "$response"
@@ -16,7 +16,7 @@ Below is a valid schema;
 
 `SCHEMA: greeting.service.json`
 
-```json
+```json name="greeting.service.json"
 {
     "services": {
         "sayHello": "string",
@@ -29,7 +29,7 @@ Concepts shadow is as follows;
 
 `CONCEPTS SHADOW`
 
-```json
+```json name="service.concepts-shadow.json"
 {
     "literal": {
         "name": "services",
@@ -47,7 +47,7 @@ Schema shadow does not include literal;
 
 `SCHEMA SHADOW`
 
-```json
+```json name="greeting.service-shadow.json"
 {
     "service": [
         {
