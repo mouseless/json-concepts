@@ -1,0 +1,162 @@
+{
+    "basics": {
+        "key-literal": "value-literal",
+        "concept-instance": {
+            "key-literal": "value"
+        }
+    },
+    "quantifiers": {
+        "exactly-one": {
+            "is": "required"
+        },
+        "one-or-more-1": {
+            "is": "required-at-least-once"
+        },
+        "one-or-more-2": {
+            "is": "required-at-least-once"
+        },
+        "zero-or-more-1": {
+            "can": "occur-any-number-of-times"
+        },
+        "zero-or-more-2": {
+            "can": "occur-any-number-of-times"
+        },
+        "custom-1": {
+            "is": "required-3-times"
+        },
+        "custom-2": {
+            "is": "required-3-times"
+        },
+        "custom-3": {
+            "is": "required-3-times"
+        }
+    },
+    "variables": {
+        "any-boolean": true,
+        "any-number": 1,
+        "any-string": "string",
+        "boolean": true,
+        "number": 1,
+        "string": "string"
+    },
+    "custom-types": {
+        "regex": "rgx",
+        "enum": "value 1",
+        "min-max": 2,
+        "inheritance": "r-inheritance-x",
+        "r-concept-x": "validating-concept-name"
+    },
+    "arrays": {
+        "array": [
+            "item 1",
+            "item 2"
+        ],
+        "two-dimensional": [
+            [
+                1,
+                2,
+                3
+            ],
+            [
+                4,
+                5,
+                6
+            ]
+        ],
+        "array-item-type": [
+            "is",
+            "string"
+        ],
+        "object-array": [
+            {
+                "value": "value 1"
+            },
+            {
+                "value": "value 2"
+            }
+        ],
+        "two-dimensional-object-array": [
+            [
+                {
+                    "value": "value 1"
+                },
+                {
+                    "value": "value 2"
+                }
+            ],
+            [
+                {
+                    "value": "value 1"
+                },
+                {
+                    "value": "value 2"
+                }
+            ]
+        ]
+    },
+    "literals": {
+        "concept-under-a": "literal",
+        "nested-object-array": [
+            {
+                "object-array": [
+                    {
+                        "a-prop": "a-value"
+                    }
+                ]
+            }
+        ],
+        "$escaping": "$special-characters"
+    },
+    "concepts": {
+        "multi-concepts": {
+            "concept-a-instance": 10,
+            "concept-b-instance": "text"
+        },
+        "explicit-concepts": {
+            "concept:concept-c": "text",
+            "concept:concept-d": "text",
+            "concept": "text"
+        }
+    },
+    "references": {
+        "define": {
+            "referenced-concept-instance": null
+        },
+        "merge": {
+            "referenced-concept-instance": null,
+            "merged-literal": null
+        },
+        "nested": {
+            "reference": {
+                "concept": null
+            },
+            "recursion": {
+                "recursion": {
+                    "recursion": {
+                        "reference": {
+                            "concept": null
+                        }
+                    }
+                }
+            }
+        },
+        "include": {
+            "included": "from-other-file"
+        },
+        "injections": {
+            "single": {
+                "injected-only": "to /references/injections/single",
+                "injected-both": "to /references/injections/single and /references/injections/multiple",
+                "injected-via-wildcard": "to /**/injections/*"
+            },
+            "multiple": {
+                "injected-both": "to /references/injections/single and /references/injections/multiple",
+                "injected-via-wildcard": "to /**/injections/*"
+            },
+            "wildcard": {
+                "injected-via-wildcard": "to /**/injections/*"
+            }
+        }
+    },
+    "@concepts": "cheat-sheet.concepts.json"
+}

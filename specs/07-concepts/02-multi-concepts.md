@@ -6,7 +6,7 @@ concept;
 
 `CONCEPTS: class.concepts.json`
 
-```json
+```json name="class.concepts.json"
 {
     "$class*": {
         "$property*": {
@@ -24,7 +24,7 @@ Above definition is valid and its shadow has an array under `concept` object;
 
 `CONCEPTS SHADOW`
 
-```json
+```json name="class.concepts-shadow.json"
 {
     "concept": {
         "name": "class",
@@ -63,7 +63,7 @@ then the concept definition is invalid.
 
 `CONCEPTS: invalid.concepts.json`
 
-```json
+```json name="conflicts/invalid.concepts.json"
 {
     "$conflict*": "$value",
     "$conflict+": {
@@ -85,7 +85,7 @@ concepts definition.
 
 `CONCEPTS: class.concepts.json`
 
-```json
+```json name="resolution/class.concepts.json"
 {
     "$class*": {
         "$property*": {
@@ -104,7 +104,7 @@ against `$property` or `$method` concepts;
 
 `SCHEMA: user.class.json`
 
-```json
+```json name="resolution/user.class.json"
 {
     "user": {
         "login": {
@@ -122,7 +122,7 @@ it will be an instance of a `$method` concept.
 
 `SCHEMA SHADOW`
 
-```json
+```json name="resolution/user.class-shadow.json"
 {
     "class": [
         {
@@ -157,7 +157,7 @@ definition is decided to be an instance of the first concept. For below schema,
 
 `SCHEMA: user.class.json`
 
-```json
+```json name="more-than-one/user.class.json"
 {
     "user": {
         "logout": {

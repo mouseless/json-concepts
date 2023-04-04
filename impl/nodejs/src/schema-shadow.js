@@ -1,4 +1,4 @@
-class SchemaShadow {
+/** @private */ class SchemaShadow {
     /* const */ #conceptsShadow;
     /* const */ #name;
     /* const */ #variables;
@@ -13,7 +13,7 @@ class SchemaShadow {
      * This constructor only initializes this node. It should be built after
      * its construction.
      * 
-     * @param {ConceptsShadow} conceptsShadow (Required) Corresponding concepts
+     * @param {ConceptsShadow_} conceptsShadow (Required) Corresponding concepts
      * shadow of this node.
      * @param {String} name Name of this node
      */
@@ -110,9 +110,11 @@ class SchemaShadow {
     }
 
     /**
-     * @param {ConceptsShadow} conceptsShadow 
+     * @param {ConceptsShadow_} conceptsShadow 
      * @param {Object} definition
      * @param {Array.<Number>} indices
+     * 
+     * @private
      */
     _build(
         conceptsShadow = required('conceptsShadow'),
@@ -189,6 +191,6 @@ class SchemaShadow {
 
 module.exports = SchemaShadow;
 
-const ConceptsShadow = require('./concepts-shadow');
+const ConceptsShadow_ = require('./concepts-shadow');
 const SchemaKey = require('./schema-key');
 const { SpecialCharacters: SC, error, arrayify, required } = require('./util');

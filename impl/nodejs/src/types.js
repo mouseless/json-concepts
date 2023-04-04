@@ -5,6 +5,8 @@
  * @param {Number|String|Boolean} value Value to validate
  * 
  * @returns {void}
+ * 
+ * @private
  */
 /**
  * TypeData represents a variable type.
@@ -15,6 +17,8 @@
  * otherwise.
  * @property {TypeData} root Self reference
  * @property {validate} validate Validate function to validate a value
+ * 
+ * @private
  */
 /**
  * CustomTypeData represents a variable custom type.
@@ -26,10 +30,14 @@
  * @property {TypeData|CustomTypeData} base Base type of this custom type
  * @property {import('./validators').ValidatorObject} _validator Validator
  * object.
+ * 
+ * @private
  */
 
 /**
  * @type {Object.<string, TypeData>}
+ * 
+ * @private
  */
 const _builtInTypes = Object.freeze({
     implicit: _builtInType('any', _validateAny, /* implicit */ true),
@@ -45,6 +53,8 @@ const _builtInTypes = Object.freeze({
  * @param {Object} definitions (Required) Definition object of custom types
  * 
  * @returns {Object.<string, TypeData>}
+ * 
+ * @private
  */
 function createTypes(definitions = required('definitions')) {
     /** @type {Object.<string, CustomTypeData>} */
@@ -95,6 +105,8 @@ function createTypes(definitions = required('definitions')) {
  * @param {validate} validate 
  * 
  * @returns {TypeData}
+ * 
+ * @private
  */
 function _builtInType(
     name = required('name'),
@@ -114,6 +126,8 @@ function _builtInType(
 
 /**
  * @param {Number|String|Boolean} value 
+ * 
+ * @private
  */
 function _validateAny(value) {
     if (value != null && typeof value == 'object') {
@@ -124,6 +138,8 @@ function _validateAny(value) {
 }
 
 /**
+ * @private
+ * 
  * @param {Number|String|Boolean} value
  */
 function _validateType(value) {
@@ -135,7 +151,9 @@ function _validateType(value) {
 }
 
 /**
- * @param {Number|String|Boolean} value 
+ * @param {Number|String|Boolean} value
+ * 
+ * @private
  */
 function _validateCustomType(value) {
     if (!this._validator.isValid(value)) {
@@ -158,6 +176,8 @@ function _validateCustomType(value) {
  * @param {Object.<String,Boolean>} hit 
  * 
  * @returns {TypeData}
+ * 
+ * @private
  */
 function _findRoot(
     type = required('type'),

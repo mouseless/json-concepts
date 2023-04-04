@@ -1,56 +1,17 @@
 const { Concepts } = require('../../..');
 const { should } = require('chai');
+const { readTestCase } = require('../../lib');
 
 should();
 
 describe('specs/literals/nested-literals', function () {
+    const from = (path) => readTestCase(this, path);
+
     it('should allow literals under literals', function () {
-        const concepts = new Concepts({
-            "$service+": {
-                "response": {
-                    "type": "$type",
-                    "status": "$status"
-                }
-            }
-        });
+        const concepts = new Concepts(from('nested.concepts.json'));
+        concepts.shadow.should.deep.equal(from('nested.concepts-shadow.json'));
 
-        concepts.shadow.should.deep.equal({
-            "concept": {
-                "name": "service",
-                "quantifier": { "min": 1 },
-                "literal": {
-                    "name": "response",
-                    "literal": [
-                        {
-                            "name": "type",
-                            "variable": { "name": "type" }
-                        },
-                        {
-                            "name": "status",
-                            "variable": { "name": "status" }
-                        }
-                    ]
-                }
-            }
-        });
-
-        const schema = concepts.create({
-            "sayHello": {
-                "response": {
-                    "type": "string",
-                    "status": 200
-                }
-            }
-        });
-
-        schema.shadow.should.deep.equal({
-            "service": [
-                {
-                    "name": "sayHello",
-                    "type": "string",
-                    "status": 200
-                }
-            ]
-        });
+        const schema = concepts.create(from('text.nested.json'));
+        schema.shadow.should.deep.equal(from('text.nested-shadow.json'));
     });
 });

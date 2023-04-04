@@ -5,7 +5,7 @@ definition. Below is an example;
 
 `SCHEMA: greeting.service.json`
 
-```json
+```json name="greeting.service.json"
 {
     "sayHello": {
         "name": "string",
@@ -18,7 +18,7 @@ This schema can be validated against the following concepts definition;
 
 `CONCEPTS: service.concepts.json`
 
-```json
+```json name="service.concepts.json"
 {
     "$service": {
         "$parameter": "$type",
@@ -40,7 +40,7 @@ Below is a schema that refers to `service.concepts.json` file locally;
 
 `SCHEMA: greeting.service.json`
 
-```json
+```json name="self-validating/greeting.service.json"
 {
     "sayHello": {
         "name": "string",
@@ -64,7 +64,7 @@ example;
 
 `SCHEMA: greeting.service.json`
 
-```json
+```json name="referring/greeting.service.json"
 {
     "sayHello": {
         "name": "string",

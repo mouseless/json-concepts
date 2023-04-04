@@ -1,34 +1,23 @@
 const { Concepts } = require('../../..');
 const { should } = require('chai');
+const { readTestCase } = require('../../lib');
 
 should();
 
 describe('specs/basics/variables', function () {
-    it('should validate schema 1', function () {
-        const concepts = new Concepts({
-            "sayHello": {
-                "name": "$type"
-            }
-        });
+    const from = (path) => readTestCase(this, path);
 
-        (() => concepts.validate({
-            "sayHello": {
-                "name": "string"
-            }
-        })).should.not.throw();
+    it('should validate schema 1', function () {
+        const concepts = new Concepts(from('service.concepts.json'));
+
+        (() => concepts.validate(from('greeting-1.service.json')))
+            .should.not.throw();
     });
 
-    it('should validate schema 2',  function () {
-        const concepts = new Concepts({
-            "sayHello": {
-                "name": "$type"
-            }
-        });
+    it('should validate schema 2', function () {
+        const concepts = new Concepts(from('service.concepts.json'));
 
-        (() => concepts.validate({
-            "sayHello": {
-                "name": "text"
-            }
-        })).should.not.throw();
+        (() => concepts.validate(from('greeting-2.service.json')))
+            .should.not.throw();
     });
 });

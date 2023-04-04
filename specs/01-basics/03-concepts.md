@@ -6,7 +6,7 @@ concepts: `$service` and `$parameter`.
 
 `CONCEPTS: service.concepts.json`
 
-```json
+```json name="service.concepts.json"
 {
     "$service": {
         "$parameter": "$type"
@@ -18,7 +18,7 @@ Below schema is a valid schema against above concepts file;
 
 `SCHEMA: greeting.service.json`
 
-```json
+```json name="greeting.service.json"
 {
     "sayGoodbye": {
         "cry": "boolean"
@@ -33,7 +33,7 @@ definition `response` is a key literal under `$service` concept;
 
 `CONCEPTS: service.concepts.json`
 
-```json
+```json name="key-literals/service.concepts.json"
 {
     "$service": {
         "$parameter": "$type",
@@ -46,7 +46,7 @@ Below is a valid schema for above concepts file;
 
 `SCHEMA: greeting.service.json`
 
-```json
+```json name="key-literals/greeting.service.json"
 {
     "sayGoodbye": {
         "cry": "boolean",
@@ -62,7 +62,7 @@ because this definition already expects a key literal with that name;
 
 `CONCEPTS: service.concepts.json`
 
-```json
+```json name="conflicts/service.concepts.json"
 {
     "$service": {
         "$parameter": "$type",
@@ -76,7 +76,7 @@ invalid schema;
 
 `SCHEMA: greeting.service.json`
 
-```json
+```json name="conflicts/greeting.service.json"
 {
     "sayGoodbye": {
         "response": "string",

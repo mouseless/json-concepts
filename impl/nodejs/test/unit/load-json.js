@@ -19,14 +19,14 @@ describe('#loadJSONData', async function () {
     it('should load if file exists and a valid json', async function () {
         fs({
             'test.json': JSON.stringify({
-                "test": "expected"
+                'test': 'expected'
             })
         });
 
         const actual = await loadJSONData('test.json');
 
         actual.should.be.an('object');
-        actual.test.should.equal("expected");
+        actual.test.should.equal('expected');
     });
 
     it('should give error if pathOrObject is not given', async function () {
@@ -92,7 +92,7 @@ describe('#loadJSON', async function () {
     it('should return loaded json object and resolved path', async function () {
         fs({
             '/path/test.json': JSON.stringify({
-                "test": "expected"
+                'test': 'expected'
             })
         });
 
@@ -100,13 +100,13 @@ describe('#loadJSON', async function () {
 
         actual.path.should.be.equal('/path/test.json');
         actual.data.should.be.an('object');
-        actual.data.test.should.equal("expected");
+        actual.data.test.should.equal('expected');
     });
 
     describe('absolute paths', function () {
         before(function () {
             fs({
-                '/absolute/test.json': "{}"
+                '/absolute/test.json': '{}'
             });
         });
 
@@ -124,8 +124,8 @@ describe('#loadJSON', async function () {
     describe('relative paths', function () {
         before(function () {
             fs({
-                '/absolute/test.json': "{}",
-                'relative/test.json': "{}"
+                '/absolute/test.json': '{}',
+                'relative/test.json': '{}'
             });
         });
 

@@ -1,47 +1,36 @@
 const { Concepts } = require('../../..');
 const { error } = require('../../../src/util');
 const { should } = require('chai');
+const { readTestCase } = require('../../lib');
 
 should();
 
 describe('specs/concepts/explicit-concepts', function () {
-    it('should set concept explicitly', function () {
-        const concepts = new Concepts({
-            "$class*": {
-                "$property*": {
-                    "returns": "$returnType"
-                },
-                "$method*": {
-                    "$parameter*": "$type",
-                    "returns": "$returnType"
-                }
-            }
-        });
+    const from = (path) => readTestCase(this, path);
 
-        const schema = concepts.create({
-            "user": {
-                "logout:method": {
-                    "returns": "number"
-                }
-            }
-        });
+    it('should set concept explicitly', function () {
+        const concepts = new Concepts(from('class.concepts.json'));
+
+        const schema = concepts.create(from('user.class.json'));
 
         schema.shadow.class[0].method[0].name.should.be.equal('logout');
     });
 
+    it('should not give error when concept does not exist, 09:30-10:30 should be able to be valid');
+
     it('should give error when concept does not exist', function () {
         const concepts = new Concepts({
-            "$class*": {
-                "$property*": {
-                    "returns": "$returnType"
+            '$class*': {
+                '$property*': {
+                    'returns': '$returnType'
                 }
             }
         });
 
         (() => concepts.create({
-            "user": {
-                "logout:method": {
-                    "returns": "number"
+            'user': {
+                'logout:method': {
+                    'returns': 'number'
                 }
             }
         })).should.throw(
@@ -55,17 +44,17 @@ describe('specs/concepts/explicit-concepts', function () {
 
     it('should give syntax error when nothing follows type symbol', function () {
         const concepts = new Concepts({
-            "$class*": {
-                "$property*": {
-                    "returns": "$returnType"
+            '$class*': {
+                '$property*': {
+                    'returns': '$returnType'
                 }
             }
         });
 
         (() => concepts.create({
-            "user": {
-                "logout:": {
-                    "returns": "number"
+            'user': {
+                'logout:': {
+                    'returns': 'number'
                 }
             }
         })).should.throw(
@@ -77,20 +66,13 @@ describe('specs/concepts/explicit-concepts', function () {
         );
     });
 
-    describe('resolving literal conflicts', function () {
-        it('should set concept explicitly', function () {
-            const concepts = new Concepts({
-                "$service+": {
-                    "$parameter*": "$type",
-                    "response?": "$responseType"
-                }
-            });
+    describe('resolve', function () {
+        const from = (path) => readTestCase(this, path);
 
-            const schema = concepts.create({
-                "writeLog": {
-                    "response:parameter": "string"
-                }
-            });
+        it('should set concept explicitly', function () {
+            const concepts = new Concepts(from('service.concepts.json'));
+
+            const schema = concepts.create(from('log.service.json'));
 
             schema.shadow.service[0].parameter[0].name.should.be.equal('response');
         });

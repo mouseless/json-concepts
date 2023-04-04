@@ -4,7 +4,7 @@ Concepts definition can have nested object arrays like below;
 
 `CONCEPTS: service.concepts.json`
 
-```json
+```json name="service.concepts.json"
 {
     "$service+": {
         "parameters?": [ {
@@ -22,7 +22,7 @@ An example valid schema is as follows;
 
 `SCHEMA: greeting.service.json`
 
-```json
+```json name="greeting.service.json"
 {
     "sayHello": {
         "parameters": [
@@ -57,7 +57,7 @@ Concepts and schema shadows are as follows;
 
 `CONCEPTS SHADOW`
 
-```json
+```json name="service.concepts-shadow.json"
 {
     "concept": {
         "name": "service",
@@ -100,7 +100,7 @@ Concepts and schema shadows are as follows;
 
 `SCHEMA SHADOW`
 
-```json
+```json name="greeting.service-shadow.json"
 {
     "service": [
         {

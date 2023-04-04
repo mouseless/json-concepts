@@ -5,7 +5,7 @@ Custom types are defined under `@types` meta-data. In below definition,
 
 `CONCEPTS: service.concepts.json`
 
-```json
+```json name="service.concepts.json"
 {
     "$service+": {
         "name": "$name:identifier"
@@ -28,7 +28,7 @@ Concepts shadow does not reflect meta-data, however it still sets the type of
 
 `CONCEPTS SHADOW`
 
-```json
+```json name="service.concepts-shadow.json"
 {
     "concept": {
         "name": "service",
@@ -51,7 +51,7 @@ definition.
 
 `CONCEPTS: service.concepts.json`
 
-```json
+```json name="base-type/service.concepts.json"
 {
     "$service+": {
         "name": "$name:identifier"

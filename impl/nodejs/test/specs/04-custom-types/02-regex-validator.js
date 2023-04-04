@@ -1,48 +1,37 @@
 const { Concepts } = require('../../..');
 const { error } = require('../../../src/util');
 const { should } = require('chai');
+const { readTestCase } = require('../../lib');
 
 should();
 
 describe('specs/custom-types/regex-validator', function () {
+    const from = (path) => readTestCase(this, path);
+
     it('should validate value against given regex pattern', function () {
-        const concepts = new Concepts({
-            "$service+": {
-                "name": "$name:identifier"
-            },
-            "@types": {
-                "identifier": {
-                    "type": "string",
-                    "regex": "^[a-zA-Z]*$"
-                }
-            }
-        });
+        const concepts = new Concepts(from('service.concepts.json'));
 
-        (() => concepts.validate({
-            "service": {
-                "name": "sayHello"
-            }
-        })).should.not.throw();
-
-        (() => concepts.validate({
-            "service": {
-                "name": "say hello"
-            }
-        })).should.throw(
+        (() => concepts.validate(from('greeting.service.json'))).should.throw(
             error.Schema_definition_is_not_valid__REASON(
                 because => because.VALUE_is_not_a_valid_TYPE(
                     'say hello', 'identifier'
                 )
             ).message
         );
+
+        (() => concepts.validate({
+            'service': {
+                'name': 'sayHello'
+            }
+        })).should.not.throw();
     });
 
-    it('should only allow regex for string based custom types', function () {
+    it('should allow regex only for string based custom types', function () {
         (() => new Concepts({
-            "@types": {
-                "identifier": {
-                    "type": "number",
-                    "regex": "^[a-zA-Z]*$"
+            '@types': {
+                'identifier': {
+                    'type': 'number',
+                    'regex': '^[a-zA-Z]*$'
                 }
             }
         })).should.throw(
@@ -54,9 +43,9 @@ describe('specs/custom-types/regex-validator', function () {
         );
 
         (() => new Concepts({
-            "@types": {
-                "identifier": {
-                    "regex": "^[a-zA-Z]*$"
+            '@types': {
+                'identifier': {
+                    'regex': '^[a-zA-Z]*$'
                 }
             }
         })).should.throw(
@@ -70,10 +59,10 @@ describe('specs/custom-types/regex-validator', function () {
 
     it('should give error for an unknown validator', function () {
         (() => new Concepts({
-            "@types": {
-                "identifier": {
-                    "type": "number",
-                    "non-existing-validator": null
+            '@types': {
+                'identifier': {
+                    'type': 'number',
+                    'non-existing-validator': null
                 }
             }
         })).should.throw(
@@ -85,34 +74,21 @@ describe('specs/custom-types/regex-validator', function () {
         );
     });
 
-    describe('short-hand usage', function () {
-        it('should validate against regex', function () {
-            const concepts = new Concepts({
-                "$service+": {
-                    "name": "$name:identifier"
-                },
-                "@types": {
-                    "identifier": "^[a-zA-Z]*$"
-                }
-            });
+    describe('short-hand', function () {
+        const from = (path) => readTestCase(this, path);
 
-            (() => concepts.validate({
-                "service": {
-                    "name": "say hello"
-                }
-            })).should.throw(
-                error.Schema_definition_is_not_valid__REASON(
-                    because => because.VALUE_is_not_a_valid_TYPE(
-                        'say hello', 'identifier'
-                    )
-                ).message
-            );
+        it('should validate against regex', function () {
+            const longHand = new Concepts(from('../service.concepts.json'));
+
+            const shortHand = new Concepts(from('service.concepts.json'));
+
+            shortHand.definition.should.deep.equal(longHand.definition);
         });
 
         it('should give error for an unsupported shortcut', function () {
             (() => new Concepts({
-                "@types": {
-                    "identifier": 0
+                '@types': {
+                    'identifier': 0
                 }
             })).should.throw(
                 error.Concepts_definition_is_not_valid__REASON(

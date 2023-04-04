@@ -1,0 +1,27 @@
+name: build impl nodejs
+on:
+  push:
+    branches: 
+      - main
+  workflow_dispatch:
+jobs:
+  build-impl-nodejs:
+    runs-on: ubuntu-latest
+    env:
+      COVERALLS_REPO_TOKEN: "${{ secrets.COVERALLS_REPO_TOKEN }}"
+      COVERALLS_GIT_BRANCH: "${{ github.ref }}"
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v2
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v2.1.5
+        with:
+          node-version: 12.x
+      - name: Build nodejs implementation
+        run: |
+          npm install
+          cd impl/nodejs
+          npm install
+          npm run build
+          npm test
+          npm run coverage

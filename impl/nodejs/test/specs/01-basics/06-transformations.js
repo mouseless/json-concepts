@@ -3,60 +3,27 @@ const { error } = require('../../../src/util');
 const fs = require('mock-fs');
 const { use, should } = require('chai');
 const chaiAsPromised = require('chai-as-promised');
+const { readTestCase } = require('../../lib');
 
 use(chaiAsPromised);
 should();
 
 describe('specs/basics/transformations', function () {
+    const from = (path) => readTestCase(this, path);
+
     after(function () {
         fs.restore();
     });
 
     it('should transform', function () {
-        const source = new Concepts({
-            "$service": {
-                "$parameter": "$type",
-                "response": "$responseType"
-            }
-        });
-
-        const target = new Concepts({
-            "$function": {
-                "$argument": "$type",
-                "return": "$returnType"
-            }
-        });
-
-        const transformation = new Transformation({
-            "function": {
-                "from": "service",
-                "select": {
-                    "returnType": "responseType"
-                }
-            },
-            "argument": {
-                "from": "parameter",
-                "select": {
-                    "type": "type"
-                }
-            }
-        }, source, target);
-
-        const input = source.create({
-            "sayHello": {
-                "name": "string",
-                "response": "string"
-            }
-        });
+        const source = new Concepts(from('service.concepts.json'));
+        const target = new Concepts(from('client.concepts.json'));
+        const transformation = new Transformation(from('client.from.service.json'), source, target);
+        const input = source.create(from('greeting.service.json'));
 
         const output = transformation.transform(input);
 
-        output.definition.should.deep.equal({
-            "sayHello": {
-                "name": "string",
-                "return": "string"
-            }
-        });
+        output.definition.should.deep.equal(from('greeting.client.json'));
     });
 
     it('should give error when path is not supplied', async function () {
@@ -81,65 +48,40 @@ describe('specs/basics/transformations', function () {
     });
 
     it('should create schema from source concepts when schema is an object', function () {
-        const source = new Concepts({
-            "$service": {
-                "response": "$responseType"
-            }
-        });
+        const source = new Concepts(from('service.concepts.json'));
+        const target = new Concepts(from('client.concepts.json'));
+        const transformation = new Transformation(from('client.from.service.json'), source, target);
+        
+        const output = transformation.transform(from('greeting.service.json'));
 
-        const target = new Concepts({
-            "$function": {
-                "return": "$returnType"
-            }
-        });
-
-        const transformation = new Transformation({
-            "function": {
-                "from": "service",
-                "select": {
-                    "returnType": "responseType"
-                }
-            }
-        }, source, target);
-
-        const output = transformation.transform({
-            "sayHello": {
-                "response": "string"
-            }
-        });
-
-        output.definition.should.deep.equal({
-            "sayHello": {
-                "return": "string"
-            }
-        });
+        output.definition.should.deep.equal(from('greeting.client.json'));
     });
 
     it('should validate given schema against source concepts', function () {
         const source = new Concepts({
-            "$service": {
-                "response": "$responseType"
+            '$service': {
+                'response': '$responseType'
             }
         });
 
         const target = new Concepts({
-            "$function": {
-                "return": "$returnType"
+            '$function': {
+                'return': '$returnType'
             }
         });
 
         const transformation = new Transformation({
-            "function": {
-                "from": "service",
-                "select": {
-                    "returnType": "responseType"
+            'function': {
+                'from': 'service',
+                'select': {
+                    'returnType': 'responseType'
                 }
             }
         }, source, target);
 
         const targetInput = target.create({
-            "sayHello": {
-                "return": "string"
+            'sayHello': {
+                'return': 'string'
             }
         });
 
@@ -153,22 +95,22 @@ describe('specs/basics/transformations', function () {
 
     it('should verify that given source and target are compatible with transformation', function () {
         const source = new Concepts({
-            "$service": {
-                "response": "$responseType"
+            '$service': {
+                'response': '$responseType'
             }
         });
 
         const target = new Concepts({
-            "$function": {
-                "return": "$returnType"
+            '$function': {
+                'return': '$returnType'
             }
         });
 
         (() => new Transformation({
-            "function": {
-                "from": "service_",
-                "select": {
-                    "returnType": "responseType"
+            'function': {
+                'from': 'service_',
+                'select': {
+                    'returnType': 'responseType'
                 }
             }
         }, source, target)).should.throw(error
@@ -178,10 +120,10 @@ describe('specs/basics/transformations', function () {
         );
 
         (() => new Transformation({
-            "function": {
-                "from": "service",
-                "select": {
-                    "returnType": "responseType_"
+            'function': {
+                'from': 'service',
+                'select': {
+                    'returnType': 'responseType_'
                 }
             }
         }, source, target)).should.throw(error
@@ -191,10 +133,10 @@ describe('specs/basics/transformations', function () {
         );
 
         (() => new Transformation({
-            "function_": {
-                "from": "service",
-                "select": {
-                    "returnType": "responseType"
+            'function_': {
+                'from': 'service',
+                'select': {
+                    'returnType': 'responseType'
                 }
             }
         }, source, target)).should.throw(error
@@ -204,10 +146,10 @@ describe('specs/basics/transformations', function () {
         );
 
         (() => new Transformation({
-            "function": {
-                "from": "service",
-                "select": {
-                    "returnType_": "responseType"
+            'function': {
+                'from': 'service',
+                'select': {
+                    'returnType_': 'responseType'
                 }
             }
         }, source, target)).should.throw(error
@@ -220,20 +162,20 @@ describe('specs/basics/transformations', function () {
     it('should include path in error message when it is loaded', async function () {
         fs({
             'service.concepts.json': JSON.stringify({
-                "$service": {
-                    "response": "$responseType"
+                '$service': {
+                    'response': '$responseType'
                 }
             }),
             'client.concepts.json': JSON.stringify({
-                "$function": {
-                    "return": "$returnType"
+                '$function': {
+                    'return': '$returnType'
                 }
             }),
             'client.from.service.json': JSON.stringify({
-                "function": {
-                    "from": "service",
-                    "select": {
-                        "returnType_": "responseType"
+                'function': {
+                    'from': 'service',
+                    'select': {
+                        'returnType_': 'responseType'
                     }
                 }
             })

@@ -5,7 +5,7 @@ definition has `services` and `models` literals at the root;
 
 `CONCEPTS: service.concepts.json`
 
-```json
+```json name="service.concepts.json"
 {
     "services?": {
         "$service+": "$response"
@@ -23,7 +23,7 @@ literal object;
 
 `CONCEPTS SHADOW`
 
-```json
+```json name="service.concepts-shadow.json"
 {
     "literal": [
         {
@@ -56,7 +56,7 @@ Below is a valid schema;
 
 `SCHEMA: greeting.service.json`
 
-```json
+```json name="greeting.service.json"
 {
     "services": {
         "sayHello": "message",
@@ -76,7 +76,7 @@ Schema shadow is expected to be as the following;
 
 `SCHEMA SHADOW`
 
-```json
+```json name="greeting.service-shadow.json"
 {
     "service": [
         {
@@ -113,7 +113,7 @@ demonstrates that `$filter` concept has `$input` and `$output` variables;
 
 `CONCEPTS: filters.concepts.json`
 
-```json
+```json name="multiple-variables/filters.concepts.json"
 {
     "$filter+": {
         "input": "$input",
@@ -126,7 +126,7 @@ A valid schema with multiple variables;
 
 `SCHEMA: default.filters.json`
 
-```json
+```json name="multiple-variables/default.filters.json"
 {
     "append": {
         "input": "string",
@@ -143,7 +143,7 @@ Schema shadow lists all variables of a concept next to each other.
 
 `SCHEMA SHADOW`
 
-```json
+```json name="multiple-variables/default.filters-shadow.json"
 {
     "filter": [
         {

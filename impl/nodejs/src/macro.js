@@ -1,4 +1,4 @@
-class Macro {
+/** @private */ class Macro {
     /**
      * Recursively loads definition file at path with all included files loaded
      * and placed next to #include keys. This does not process `#include`s, only
@@ -13,7 +13,7 @@ class Macro {
         definitionPath = required('definitionPath'),
         relativeTo
     ) {
-        return _load(undefined, definitionPath, relativeTo);
+        return await _load(undefined, definitionPath, relativeTo);
     }
 
     /**
@@ -52,7 +52,7 @@ class Macro {
             for (const key in this.#definition) {
                 if (!_expressionIsMacro(key)) { continue; }
 
-                if (key.substring(SC.MACRO.length) == "") {
+                if (key.substring(SC.MACRO.length) == '') {
                     throw error.Concepts_definition_is_not_valid__REASON(
                         because => because.Reference_EXPRESSION_must_have_a_name(this.#definition[key])
                     );
@@ -99,6 +99,8 @@ class Macro {
      * @param {Object} definition 
      * 
      * @returns {Object} 
+     * 
+     * @private
      */
     _process(definition) {
         if (typeof definition !== 'object') {
@@ -135,6 +137,8 @@ class Macro {
      * @param {String} reference 
      * 
      * @returns {Object}
+     * 
+     * @private
      */
     _get(reference) {
         if (!this.#macros[reference]) {
@@ -150,6 +154,8 @@ class Macro {
      * @param {Array} array 
      * 
      * @returns {Object|String}
+     * 
+     * @private
      */
     _merge(array) {
         const merged = {};
@@ -184,6 +190,8 @@ class Macro {
  * @param {*} definition 
  * 
  * @returns {*}
+ * 
+ * @private
  */
 async function _load(definition, path, relativeTo) {
     if (!definition) {
@@ -211,6 +219,8 @@ async function _load(definition, path, relativeTo) {
  * @param {*} definition 
  * 
  * @returns {*}
+ * 
+ * @private
  */
 function _include(definition) {
     if (typeof definition !== 'object') {
@@ -222,7 +232,7 @@ function _include(definition) {
             const include = Macro.process(definition[key]);
 
             delete definition[key];
-            _assign(definition, include)
+            _assign(definition, include);
         } else {
             _include(definition[key]);
         }
@@ -235,6 +245,8 @@ function _include(definition) {
  * @param {*} expression 
  * 
  * @returns {Boolean}
+ * 
+ * @private
  */
 function _expressionIsMacro(expression) {
     return typeof expression === 'string' && expression.startsWith(SC.MACRO);
@@ -244,6 +256,8 @@ function _expressionIsMacro(expression) {
  * @param {String} expression 
  * 
  * @returns {Array.<String>}
+ * 
+ * @private
  */
 function _parse(expression) {
     const result = expression.split(SC.AND).map(item => item.trim());
@@ -260,6 +274,8 @@ function _parse(expression) {
 /**
  * @param {Object} target
  * @param {Object} source 
+ * 
+ * @private
  */
 function _assign(target, source) {
     for (const key in source) {

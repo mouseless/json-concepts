@@ -6,7 +6,7 @@ under the `$service` concept;
 
 `CONCEPTS: service.concepts.json`
 
-```json
+```json name="service.concepts.json"
 {
     "$service": {
         "$parameter?": "$type"
@@ -16,17 +16,17 @@ under the `$service` concept;
 
 So both of below schemas are valid now;
 
-`SCHEMA 1: greeting.service.json`
+`SCHEMA: greeting-1.service.json`
 
-```json
+```json name="greeting-1.service.json"
 {
     "sayHello": { }
 }
 ```
 
-`SCHEMA 2: greeting.service.json`
+`SCHEMA: greeting-2.service.json`
 
-```json
+```json name="greeting-2.service.json"
 {
     "sayHello": { 
         "name": "string"
@@ -40,7 +40,7 @@ Below schema is **not** valid, because at most one parameter was expected;
 
 `SCHEMA: greeting.service.json`
 
-```json
+```json name="more-than-one/greeting.service.json"
 {
     "sayHello": { 
         "name": "string",
@@ -60,7 +60,7 @@ A key literal also becomes optional with `?` at the end;
 
 `CONCEPTS: service.concepts.json`
 
-```json
+```json name="key-literals/service.concepts.json"
 {
     "$service": {
         "$parameter?": "$type",
@@ -73,7 +73,7 @@ Below schema becomes valid;
 
 `SCHEMA: greeting.service.json`
 
-```json
+```json name="key-literals/greeting.service.json"
 {
     "sayHello": {
         "name": "string"
@@ -87,7 +87,7 @@ Concepts shadow include quantifier information. For below concepts definition;
 
 `CONCEPTS: service.concepts.json`
 
-```json
+```json name="concepts-shadow/service.concepts.json"
 {
     "$service": {
         "$parameter?": "$type",
@@ -100,7 +100,7 @@ Concepts shadow is as follows;
 
 `CONCEPTS SHADOW`
 
-```json
+```json name="concepts-shadow/service.concepts-shadow.json"
 {
     "concept": {
         "name": "service",
@@ -130,7 +130,7 @@ schema shadow have `null` for that concept;
 
 `SCHEMA: greeting.service.json`
 
-```json
+```json name="schema-shadow/greeting.service.json"
 {
     "sayHello": { }
 }
@@ -138,7 +138,7 @@ schema shadow have `null` for that concept;
 
 `SCHEMA SHADOW`
 
-```json
+```json name="schema-shadow/greeting.service-shadow.json"
 {
     "service": {
         "name": "sayHello",
@@ -154,7 +154,7 @@ Below schema is also valid;
 
 `SCHEMA: greeting.service.json`
 
-```json
+```json name="null/greeting.service.json"
 {
     "sayHello": null
 }
@@ -164,7 +164,7 @@ It casts the same shadow above;
 
 `SCHEMA SHADOW`
 
-```json
+```json name="null/greeting.service-shadow.json"
 {
     "service": {
         "name": "sayHello",

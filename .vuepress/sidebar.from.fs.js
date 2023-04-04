@@ -1,43 +1,51 @@
 const jc = require('../impl/nodejs');
 const pj = require('prettyjson');
 
-function files(root, filter) {
-  const entries = fs
-    .readdirSync(root, { withFileTypes: true })
-    .filter(file => filter(file));
+function files(root, filter, _parent) {
+    const entries = fs
+        .readdirSync(root, { withFileTypes: true })
+        .filter(file => filter(file));
 
-  if (entries.length == 0) {
-    return {};
-  }
-  const result = {};
-  for (const file of entries) {
-    if (file.isDirectory()) {
-      result[file.name] = {
-        type: 'directory',
-        children: files(`${root}/${file.name}`, filter)
-      };
-    } else {
-      result[file.name] = {
-        type: 'file'
-      };
+    if (entries.length == 0) {
+        return {};
     }
-  }
 
-  return result;
+    const result = {};
+    for (const file of entries) {
+        if (file.isDirectory()) {
+            result[file.name] = {
+                type: 'directory',
+                path: `${root}/${file.name}`,
+                name: file.name,
+                parent: _parent
+            };
+
+            result[file.name].children = files(`${root}/${file.name}`, filter, result[file.name]);
+        } else {
+            result[file.name] = {
+                type: 'file',
+                path: `${root}/${file.name}`,
+                name: file.name,
+                parent: _parent
+            };
+        }
+    }
+
+    return result;
 }
 
 async function load() {
-  const fsConcepts = await jc.Concepts.load('./.vuepress/fs.concepts.json');
-  const schema = fsConcepts.create(
-    files('.', f => f.name != "node_modules" && /^[^.].*$/.test(f.name)),
-    fsConcepts
-  );
+    const fsConcepts = await jc.Concepts.load('./.vuepress/fs.concepts.json');
+    const schema = fsConcepts.create(
+        files('.', f => f.name != "node_modules" && /^[^.].*$/.test(f.name)),
+        fsConcepts
+    );
 
-  const sidebarConcepts = await jc.Concepts.load('./.vuepress/sidebar.concepts.json');
+    const sidebarConcepts = await jc.Concepts.load('./.vuepress/sidebar.concepts.json');
 
-  process.exit(1);
+    process.exit(1);
 
-  const transformation = await jc.Transformation.load('./.vuepress/sidebar.from.fs.json', fsConcepts, sidebarConcepts);
+    const transformation = await jc.Transformation.load('./.vuepress/sidebar.from.fs.json', fsConcepts, sidebarConcepts);
 }
 
 load();

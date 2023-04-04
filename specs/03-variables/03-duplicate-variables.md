@@ -5,7 +5,7 @@ concepts definition is **not** valid
 
 `CONCEPTS: example.concepts.json`
 
-```json
+```json name="example.concepts.json"
 {
     "$concept": {
         "literal1": "$value",

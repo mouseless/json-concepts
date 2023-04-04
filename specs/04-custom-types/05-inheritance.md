@@ -5,7 +5,7 @@ type is going to be validated against all validators in the inheritance chain.
 
 `CONCEPTS: service.concepts.json`
 
-```json
+```json name="service.concepts.json"
 {
     "$service+": {
         "$parameter*": "$type:primitive"
@@ -30,7 +30,7 @@ not a valid `primitive` either.
 
 `SCHEMA: greeting.service.json`
 
-```json
+```json name="greeting.service.json"
 {
     "sayHello": {
         "name": "float"
@@ -45,9 +45,9 @@ not a valid `primitive` either.
 Inheritance chain cannot cause a circular dependency. Following concepts
 definition is not valid;
 
-`CONCEPTS: service.concepts.json`
+`CONCEPTS: circular.concepts.json`
 
-```json
+```json name="circular/circular.concepts.json"
 {
     "circular": "$type:a",
     
@@ -59,4 +59,4 @@ definition is not valid;
 }
 ```
 
-`ERROR: 'service.concepts.json' is not valid, 'c' cannot inherit from 'a'.`
+`ERROR: 'circular.concepts.json' is not valid, 'c' cannot inherit from 'a'.`

@@ -148,6 +148,15 @@ function doSomething() {
 const AVLN = require('./a-very-long-name');
 ```
 
+### Require only for JSDoc
+
+Put an underscore to indicate that this require was called for JSDoc, which
+also helps refactoring.
+
+```javascript
+const Class_ = require('./class');
+```
+
 ## Boolean Parameters
 
 ```javascript
@@ -345,11 +354,17 @@ class Example {
 
     }
 
+    /**
+     * @private
+     */
     _privateMethods() {
 
     }
 }
 
+/**
+ * @private
+ */
 function _privateStaticMethods() {
     
 }
@@ -361,7 +376,7 @@ function _privateStaticMethods() {
 `src/example.js`
 
 ```javascript
-/* exported */ class Example {
+/** @public */ class Example {
 
 }
 
@@ -385,7 +400,7 @@ module.exports = {
 `src/example.js`
 
 ```javascript
-class Example {
+/** @private */ class Example {
 
 }
 

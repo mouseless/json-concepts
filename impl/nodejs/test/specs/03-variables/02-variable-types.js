@@ -1,37 +1,23 @@
 const { Concepts } = require('../../..');
 const { error } = require('../../../src/util');
 const { should: buildShould } = require('chai');
+const { readTestCase } = require('../../lib');
 
 const should = buildShould();
 
 describe('specs/variables/variable-types', function () {
-    it('should parse variable type', function () {
-        const concepts = new Concepts({
-            "$service+": {
-                "$flag*": "$enabled:boolean"
-            }
-        });
+    const from = (path) => readTestCase(this, path);
 
-        concepts.shadow.should.deep.equal({
-            "concept": {
-                "name": "service",
-                "quantifier": { "min": 1 },
-                "concept": {
-                    "name": "flag",
-                    "quantifier": { "min": 0 },
-                    "variable": {
-                        "name": "enabled",
-                        "type": "boolean"
-                    }
-                }
-            }
-        });
+    it('should parse variable type', function () {
+        const concepts = new Concepts(from('service.concepts.json'));
+
+        concepts.shadow.should.deep.equal(from('service.concepts-shadow.json'));
     });
 
     it('should give error when type is not defined after :', function () {
         (() => new Concepts({
-            "$service+": {
-                "$flag*": "$enabled:"
+            '$service+': {
+                '$flag*': '$enabled:'
             }
         })).should.throw(
             error.Concepts_definition_is_not_valid__REASON(
@@ -42,30 +28,43 @@ describe('specs/variables/variable-types', function () {
         );
     });
 
-    describe('available variable types', function () {
+    describe('available', function () {
+        const from = (path) => readTestCase(this, path);
+
         it('should support any', function () {
+            const explicit = new Concepts(from('explicit.concepts.json'));
+
+            explicit.shadow.concept.literal.variable.type
+                .should.equal('any');
+
+            const implicit = new Concepts(from('implicit.concepts.json'));
+
+            should.not.exist(implicit.shadow.concept.literal.variable.type);
+        });
+
+        it('should support string, boolean or number when type is any', function () {
             const concepts = new Concepts({
-                "$key*": "$any:any"
+                '$key*': '$any:any'
             });
 
             (() => concepts.validate({
-                "boolean": true,
-                "number": 1,
-                "string": "text"
+                'boolean': true,
+                'number': 1,
+                'string': 'text'
             })).should.not.throw();
         });
 
         it('should support string', function () {
             const concepts = new Concepts({
-                "key": "$string:string"
+                'key': '$string:string'
             });
 
             (() => concepts.validate({
-                "key": "text"
+                'key': 'text'
             })).should.not.throw();
 
             (() => concepts.validate({
-                "key": true
+                'key': true
             })).should.throw(
                 error.Schema_definition_is_not_valid__REASON(
                     because => because.VALUE_is_not_a_valid_TYPE(
@@ -77,15 +76,15 @@ describe('specs/variables/variable-types', function () {
 
         it('should support boolean', function () {
             const concepts = new Concepts({
-                "key": "$boolean:boolean"
+                'key': '$boolean:boolean'
             });
 
             (() => concepts.validate({
-                "key": true
+                'key': true
             })).should.not.throw();
 
             (() => concepts.validate({
-                "key": "string"
+                'key': 'string'
             })).should.throw(
                 error.Schema_definition_is_not_valid__REASON(
                     because => because.VALUE_is_not_a_valid_TYPE(
@@ -97,15 +96,15 @@ describe('specs/variables/variable-types', function () {
 
         it('should support number', function () {
             const concepts = new Concepts({
-                "key": "$number:number"
+                'key': '$number:number'
             });
 
             (() => concepts.validate({
-                "key": 0
+                'key': 0
             })).should.not.throw();
 
             (() => concepts.validate({
-                "key": "string"
+                'key': 'string'
             })).should.throw(
                 error.Schema_definition_is_not_valid__REASON(
                     because => because.VALUE_is_not_a_valid_TYPE(
@@ -117,8 +116,8 @@ describe('specs/variables/variable-types', function () {
 
         it('should give error when given type is not supported', function () {
             (() => new Concepts({
-                "$service+": {
-                    "$flag*": "$enabled:text"
+                '$service+': {
+                    '$flag*': '$enabled:text'
                 }
             })).should.throw(
                 error.Concepts_definition_is_not_valid__REASON(
@@ -131,20 +130,20 @@ describe('specs/variables/variable-types', function () {
 
         it('should allow any value when type is not specified', function () {
             const concepts = new Concepts({
-                "$key*": "$any"
+                '$key*': '$any'
             });
 
             (() => concepts.validate({
-                "boolean": true,
-                "number": 1,
-                "string": "text"
+                'boolean': true,
+                'number': 1,
+                'string': 'text'
             })).should.not.throw();
         });
 
         it('should include type only when type is given explicitly', function () {
             const concepts = new Concepts({
-                "implicit": "$implicit",
-                "explicit": "$explicit:any"
+                'implicit': '$implicit',
+                'explicit': '$explicit:any'
             });
 
             should.not.exist(concepts.shadow.literal[0].variable.type);
@@ -153,33 +152,33 @@ describe('specs/variables/variable-types', function () {
 
         it('should not allow objects for any type', function () {
             const concepts = new Concepts({
-                "implicit?": "$implicit",
-                "explicit?": "$explicit:any"
+                'implicit?': '$implicit',
+                'explicit?': '$explicit:any'
             });
 
             (() => concepts.validate({
-                "implicit": {
-                    "is": "invalid"
+                'implicit': {
+                    'is': 'invalid'
                 }
             })).should.throw(
                 error.Schema_definition_is_not_valid__REASON(
                     because => because.Object_not_expected(
-                        { "is": "invalid" }
+                        { 'is': 'invalid' }
                     )
                 ).message
             );
 
             (() => concepts.validate({
-                "explicit": {
-                    "is": "invalid"
+                'explicit': {
+                    'is': 'invalid'
                 }
             })).should.throw(
                 error.Schema_definition_is_not_valid__REASON(
                     because => because.Object_not_expected(
-                        { "is": "invalid" }
+                        { 'is': 'invalid' }
                     )
                 ).message
             );
-        })
+        });
     });
 });

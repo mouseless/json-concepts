@@ -6,7 +6,7 @@ literals.
 
 `CONCEPTS: service.concepts.json`
 
-```json
+```json name="service.concepts.json"
 {
     "sayHello": {
         "name": "string"
@@ -23,7 +23,7 @@ itself;
 
 `SCHEMA: greeting.service.json`
 
-```json
+```json name="greeting.service.json"
 {
     "sayHello": {
         "name": "string"

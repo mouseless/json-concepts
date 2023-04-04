@@ -30,7 +30,7 @@ jobs:
         run: |
           cd ./_website
           npm install
-          npm run build
+          npm run build:website
           rm -rdvf ./docs
           mv ./.vuepress/dist ./docs
           git config user.name 'github-actions[bot]'

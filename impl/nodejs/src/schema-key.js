@@ -5,14 +5,18 @@
  * @property {String} name Name part of the key
  * @property {mightBelongTo} mightBelongTo Method to check for an explicit
  * concept declaration.
+ * 
+ * @private
  */
 /**
  * Checks if a schema key object might belong to a concept or not.
  * 
  * @callback mightBelongTo
- * @param {ConceptsShadow} concept Concept to check against
+ * @param {ConceptsShadow_} concept Concept to check against
  * 
  * @returns {Boolean} `true` if it might, `false` otherwise
+ * 
+ * @private
  */
 
 /**
@@ -21,10 +25,12 @@
  * it throws an error.
  * 
  * @param {Object} definition (Required) Schema definition to iterate
- * @param {ConceptsShadow} concepts (Required) Parent concepts shadow node of
+ * @param {ConceptsShadow_} concepts (Required) Parent concepts shadow node of
  * given schema definition.
  * 
  * @returns {Object.<String,SchemaKeyObject>} Schema keys objects by key
+ * 
+ * @private
  */
 function parseKeys(
     definition = require('definition'),
@@ -66,17 +72,19 @@ function parseKeys(
 }
 
 /**
- * @param {ConceptsShadow} concept 
+ * @param {ConceptsShadow_} concept 
  * 
  * @returns {Boolean}
+ * 
+ * @private
  */
 function _mightBelongTo(concept) {
-    return !this._concept || this._concept == concept.name
+    return !this._concept || this._concept == concept.name;
 }
 
 module.exports = {
     parseKeys
 };
 
-const ConceptsShadow = require('./concepts-shadow');
+const ConceptsShadow_ = require('./concepts-shadow');
 const { SpecialCharacters: SC, error, required } = require('./util');
